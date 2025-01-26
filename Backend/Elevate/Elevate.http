@@ -1,0 +1,6 @@
+@Elevate_HostAddress = http://localhost:5276
+
+GET {{Elevate_HostAddress}}
+Accept: application/json
+
+###
