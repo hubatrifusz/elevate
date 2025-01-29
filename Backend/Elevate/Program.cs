@@ -1,4 +1,8 @@
 
+using Elevate.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace Elevate
 {
     public class Program
@@ -13,6 +17,12 @@ namespace Elevate
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Register DbContext with MySQL
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<ElevateDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            );
 
             var app = builder.Build();
 

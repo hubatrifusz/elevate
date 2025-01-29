@@ -1,4 +1,6 @@
-﻿using Elevate.Models;
+﻿using Elevate.Models.Achievement;
+using Elevate.Models.Habit;
+using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
 using System;
 
