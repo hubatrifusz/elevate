@@ -12,5 +12,6 @@
         public required bool IsPositive { get; set; }
         public int Streak { get; set; } = 0;
         public DateTime StreakStart { get; set; } = DateTime.UtcNow;
+        public required bool Deleted { get; set; }
     }
 }

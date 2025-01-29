@@ -1,5 +1,6 @@
 
 using Elevate.Data;
+using Elevate.Profiles;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -23,6 +24,9 @@ namespace Elevate
             builder.Services.AddDbContext<ElevateDbContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             );
+
+            // Add AutoMapper with profiles
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
 

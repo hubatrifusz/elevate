@@ -4,10 +4,12 @@ namespace Elevate.Models.User
 {
     public class UserUpdateDto
     {
+        [Required(ErrorMessage = "First Name is required")]
         [MaxLength(20)]
-        public string? FirstName { get; set; }
+        public required string FirstName { get; set; }
 
+        [Required(ErrorMessage = "Last Name is required")]
         [MaxLength(20)]
-        public string? LastName { get; set; }
+        public required string LastName { get; set; }
     }
 }
