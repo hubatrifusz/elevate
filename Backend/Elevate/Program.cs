@@ -22,17 +22,17 @@ namespace Elevate
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Register DbContext with MySQL
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ElevateDbContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-            );
-
-            // Add AutoMapper with profiles
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+            // Add configuration
+            builder.Services.AddSingleton(builder.Configuration);
 
             //Add ConnectionManager
             builder.Services.AddTransient<DbConnectionManager>();
+
+            // Register DbContext with MySQL
+            builder.Services.AddDbContext<ElevateDbContext>();
+
+            // Add AutoMapper with profiles
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             //Add API versioning and explorer
             builder.Services.AddApiVersioning(options =>
