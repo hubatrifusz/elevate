@@ -31,6 +31,9 @@ namespace Elevate
             // Add AutoMapper with profiles
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
+            //Add ConnectionManager
+            builder.Services.AddTransient<DbConnectionManager>();
+
             //Add API versioning and explorer
             builder.Services.AddApiVersioning(options =>
             {
