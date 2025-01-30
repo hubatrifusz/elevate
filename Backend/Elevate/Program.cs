@@ -1,3 +1,11 @@
+using Asp.Versioning;
+using Elevate.Data;
+using Elevate.Extensions;
+using Elevate.Profiles;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 
 namespace Elevate
 {
@@ -14,6 +22,32 @@ namespace Elevate
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Register DbContext with MySQL
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<ElevateDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            );
+
+            // Add AutoMapper with profiles
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            //Add API versioning and explorer
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            }).AddApiExplorer(opt =>
+            {
+                opt.GroupNameFormat = "'v'VVV";
+                opt.SubstituteApiVersionInUrl = true;
+            });
+
+            //Configure Swagger
+            builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            builder.Services.AddSwaggerGen();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,7 +58,6 @@ namespace Elevate
             }
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
