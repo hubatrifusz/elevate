@@ -2,7 +2,6 @@
 using Elevate.Models.Habit;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Elevate.Data
 {

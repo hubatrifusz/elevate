@@ -1,0 +1,13 @@
+D:\Jedlik\Elevate\Backend\Elevate.Data\bin\Debug\net8.0\Elevate.Data.deps.json
+D:\Jedlik\Elevate\Backend\Elevate.Data\bin\Debug\net8.0\Elevate.Data.dll
+D:\Jedlik\Elevate\Backend\Elevate.Data\bin\Debug\net8.0\Elevate.Data.pdb
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.csproj.AssemblyReference.cache
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.AssemblyInfoInputs.cache
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.AssemblyInfo.cs
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.csproj.CoreCompileInputs.cache
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.sourcelink.json
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.dll
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\refint\Elevate.Data.dll
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\Elevate.Data.pdb
+D:\Jedlik\Elevate\Backend\Elevate.Data\obj\Debug\net8.0\ref\Elevate.Data.dll

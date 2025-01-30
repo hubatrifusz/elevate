@@ -2,10 +2,8 @@ using Asp.Versioning;
 using Elevate.Data;
 using Elevate.Extensions;
 using Elevate.Profiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 
 namespace Elevate
 {
