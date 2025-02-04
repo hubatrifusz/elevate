@@ -9,9 +9,9 @@ namespace Elevate.Data
 {
     public class ElevateDbContext(DbContextOptions<ElevateDbContext> options, DbConnectionManager connectionManager) : DbContext(options)
     {
-        DbSet<UserModel> Users { get; set; }
-        DbSet<HabitModel> Habit { get; set; }
-        DbSet<AchievementModel> Achievements { get; set; }
+        public DbSet<UserModel> Users { get; set; }
+        public DbSet<HabitModel> Habit { get; set; }
+        public DbSet<AchievementModel> Achievements { get; set; }
 
         private readonly DbConnectionManager _connectionManager = connectionManager;
 

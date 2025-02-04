@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "xIj8FtD8vT8=",
+  "dgSpecHash": "+pJfAtjZgXI=",
   "success": true,
   "projectFilePath": "D:\\Jedlik\\Elevate\\Backend\\Elevate.Data\\Elevate.Data.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\somlo\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\somlo\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.1\\microsoft.entityframeworkcore.9.0.1.nupkg.sha512",
     "C:\\Users\\somlo\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.1\\microsoft.entityframeworkcore.abstractions.9.0.1.nupkg.sha512",
     "C:\\Users\\somlo\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.1\\microsoft.entityframeworkcore.analyzers.9.0.1.nupkg.sha512",

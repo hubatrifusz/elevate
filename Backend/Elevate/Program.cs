@@ -26,8 +26,8 @@ namespace Elevate
             //Add ConnectionManager
             builder.Services.AddTransient<DbConnectionManager>();
 
-            // Register DbContext with MySQL
-            builder.Services.AddDbContext<ElevateDbContext>();
+            // Register Repositories and DbContext with MySQL
+            builder.Services.AddRepositories();
 
             // Add AutoMapper with profiles
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
