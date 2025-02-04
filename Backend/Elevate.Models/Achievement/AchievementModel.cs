@@ -1,4 +1,4 @@
-﻿namespace Elevate.Data.Models.Achievement
+﻿namespace Elevate.Models.Achievement
 {
     public class AchievementModel()
     {

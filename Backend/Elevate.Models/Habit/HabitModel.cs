@@ -1,6 +1,4 @@
-﻿using Elevate.Models;
-
-namespace Elevate.Data.Models.Habit
+﻿namespace Elevate.Models.Habit
 {
     public class HabitModel
     {

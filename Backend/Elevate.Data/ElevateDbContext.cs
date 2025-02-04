@@ -1,9 +1,9 @@
-﻿using Elevate.Data.Models.AchievementUnlocks;
-using Elevate.Models.Achievement;
+﻿using Elevate.Models.Achievement;
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
+using Elevate.Data.Models.AchievementProgress;
 
 namespace Elevate.Data
 {
@@ -29,7 +29,7 @@ namespace Elevate.Data
             modelBuilder.Entity<UserModel>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => new { h.UserId, h.HabitId });
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => h.DueDate);
-            modelBuilder.Entity<AchievementUnlockModel>().HasIndex(a => a.UserId);
+            modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
         }
     }
 }

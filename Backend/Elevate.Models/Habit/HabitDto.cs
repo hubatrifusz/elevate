@@ -1,7 +1,6 @@
-﻿using Elevate.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Elevate.Data.Models.Habit
+namespace Elevate.Models.Habit
 {
     public class HabitDto
     {

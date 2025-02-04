@@ -1,4 +1,4 @@
-﻿namespace Elevate.Data.Models.User
+﻿namespace Elevate.Models.User
 {
     public class UserModel
     {

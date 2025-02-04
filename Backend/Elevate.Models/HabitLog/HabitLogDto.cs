@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Elevate.Data.Models.HabitLog
+namespace Elevate.Models.HabitLog
 {
     public class HabitLogDto
     {
