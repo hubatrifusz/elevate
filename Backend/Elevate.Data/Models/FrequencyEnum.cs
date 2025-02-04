@@ -1,4 +1,4 @@
-﻿namespace Elevate.Models
+﻿namespace Elevate.Data.Models
 {
     public class FrequencyEnum
     {

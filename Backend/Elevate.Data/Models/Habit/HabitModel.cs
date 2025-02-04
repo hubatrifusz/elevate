@@ -1,8 +1,10 @@
-﻿namespace Elevate.Models.Habit
+﻿using Elevate.Models;
+
+namespace Elevate.Data.Models.Habit
 {
     public class HabitModel
     {
-        public Guid Id { get; set; }
+        public required Guid Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public required string Title { get; set; }
         public string? Description { get; set; }

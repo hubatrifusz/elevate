@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Elevate.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+908b37639b537bf88b12bca6947a78a8920bfbf9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69ac0df3524825fdbe2dd62f5fa521dfaf1d1144")]
 [assembly: System.Reflection.AssemblyProductAttribute("Elevate.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Elevate.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Elevate.Models.User
+namespace Elevate.Data.Models.User
 {
     public class UserUpdateDto
     {

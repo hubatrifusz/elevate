@@ -1,20 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Elevate.Models.HabitLog
+namespace Elevate.Data.Models.HabitLog
 {
     public class HabitLogCreateDto
     {
         [Required]
-        public Guid HabitId { get; set; }
+        public required Guid UserId { get; set; }
+
+        [Required]
+        public required Guid HabitId { get; set; }
 
         public DateTime? DueDate { get; set; }
 
         [Required]
-        public bool Completed { get; set; }
+        public required bool Completed { get; set; }
 
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(255)]
         public string? Notes { get; set; }
+
+        [Required]
+        public required bool IsPublic { get; set; } = false;
     }
 }

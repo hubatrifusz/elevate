@@ -1,14 +1,19 @@
-﻿namespace Elevate.Models.User
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Elevate.Data.Models.User
 {
     public class UserDto
     {
-            public required Guid Id { get; set; }
-            public required DateTime CreatedAt { get; set; }
-            public required string Email { get; set; }
-            public required string FirstName { get; set; }
-            public required string LastName { get; set; }
-            public required int TotalStreak { get; set; }
-            public required DateTime? StreakStart { get; set; }
-            public required int LongestStreak { get; set; }
+        [Required]
+        public required Guid Id { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        [Required, EmailAddress, MaxLength(30)]
+        public required string Email { get; set; }
+        [Required, MaxLength(20)]
+        public required string FirstName { get; set; }
+        [Required, MaxLength(20)]
+        public required string LastName { get; set; }
+        [Required]
+        public required int LongestStreak { get; set; } = 0;
     }
 }
