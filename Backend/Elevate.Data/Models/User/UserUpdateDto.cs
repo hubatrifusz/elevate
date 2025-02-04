@@ -11,5 +11,8 @@ namespace Elevate.Data.Models.User
         [Required(ErrorMessage = "Last Name is required")]
         [MaxLength(20)]
         public required string LastName { get; set; }
+
+        //limit file size
+        public byte[]? ProfilePicture { get; set; }
     }
 }

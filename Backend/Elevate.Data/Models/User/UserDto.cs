@@ -13,6 +13,8 @@ namespace Elevate.Data.Models.User
         public required string FirstName { get; set; }
         [Required, MaxLength(20)]
         public required string LastName { get; set; }
+        //limit file size
+        public byte[]? ProfilePicture { get; set; }
         [Required]
         public required int LongestStreak { get; set; } = 0;
     }

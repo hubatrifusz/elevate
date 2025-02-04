@@ -8,6 +8,7 @@
         public required string LastName { get; set; }
         public required string Email { get; set; }
         public required string PasswordHash { get; set; }
+        public byte[]? ProfilePicture { get; set; }
         public int? LongestStreak { get; set; } = 0;
     }
 }
