@@ -14,9 +14,36 @@ namespace Elevate.Data.Repository
 
         public HabitModel? AddHabit(HabitModel habit)
         {
-            UserModel savedHabit = _context.Set<HabitModel>().Add(habit).Entity;
+            HabitModel savedHabit = _context.Set<HabitModel>().Add(habit).Entity;
             _context.SaveChanges();
             return savedHabit;
+        }
+
+        public HabitModel? UpdateHabit(Guid id, HabitModel habit)
+        {
+            if (id != habit.Id)
+            {
+                throw new Exception("Habit ID does not match");
+            }
+            if (!_context.Set<HabitModel>().Any(h => h.Id == id))
+            {
+                throw new Exception("No such habit");
+            }
+            HabitModel updatedHabit = _context.Set<HabitModel>().Update(habit).Entity;
+            _context.SaveChanges();
+            return updatedHabit;
+        }
+
+        public HabitModel? DeleteHabit(Guid habitId) 
+        {
+            HabitModel? habit = _context.Set<HabitModel>().SingleOrDefault(h => h.Id == habitId);
+            if (habit == null)
+            {
+                throw new Exception("No such habit");
+            }
+            _context.Set<HabitModel>().Remove(habit);
+            _context.SaveChanges();
+            return habit;
         }
     }
 }
