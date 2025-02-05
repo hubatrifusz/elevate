@@ -7,6 +7,8 @@ namespace Elevate.Models.Habit
         [Required]
         public required Guid Id { get; set; }
         [Required]
+        public required Guid UserId { get; set; }
+        [Required]
         public required DateTime CreatedAt { get; set; }
         [Required, MaxLength(20)]
         public required string Title { get; set; }

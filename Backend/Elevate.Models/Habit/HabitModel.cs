@@ -3,6 +3,7 @@
     public class HabitModel
     {
         public required Guid Id { get; set; }
+        public required Guid UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public required string Title { get; set; }
         public string? Description { get; set; }

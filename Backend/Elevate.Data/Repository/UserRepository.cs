@@ -1,4 +1,5 @@
 ﻿using Elevate.Models.User;
+using Elevate.Extensions;
 
 namespace Elevate.Data.Repository
 {
@@ -11,9 +12,12 @@ namespace Elevate.Data.Repository
             return _context.Set<UserModel>().SingleOrDefault(u => u.Id == userId);
         }
 
-        public UserModel? GetUserByEmail(string email)
+        public List<UserModel>? GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
-            return _context.Set<UserModel>().SingleOrDefault(u => u.Email == email);
+            return _context.Set<UserModel>()
+                .Where(u => u.Email.Contains(email))
+                .ApplyPagination(pageNumber, pageSize)
+                .ToList();
         }
 
         public UserModel? AddUser(UserModel user)

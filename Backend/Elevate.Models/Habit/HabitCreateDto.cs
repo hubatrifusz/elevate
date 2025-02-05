@@ -7,6 +7,9 @@ namespace Elevate.Models.Habit
         [Required, MaxLength(20)]
         public required string Title { get; set; }
 
+        [Required]
+        public required Guid UserID { get; set; }
+
         [MaxLength(100)]
         public string? Description { get; set; }
 

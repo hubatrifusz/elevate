@@ -1,11 +1,22 @@
-﻿using Elevate.Models.Habit;
-using Elevate.Models.User;
+﻿using Elevate.Extensions;
+using Elevate.Models.Habit;
 
 namespace Elevate.Data.Repository
 {
     public class HabitRepository(ElevateDbContext context)
     {
         readonly ElevateDbContext _context = context;
+
+        public List<HabitModel> GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)
+        {
+            pageSize = Math.Min(pageSize, 20);
+            pageSize = Math.Max(pageSize, 1);
+            return _context.Set<HabitModel>()
+                .Where(h => h.UserId == userId)
+                .OrderBy(h => h.CreatedAt)
+                .ApplyPagination(pageNumber, pageSize)
+                .ToList();
+        }
 
         public HabitModel? GetHabitById(Guid habitId)
         {
