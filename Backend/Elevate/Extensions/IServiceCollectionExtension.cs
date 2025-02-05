@@ -8,6 +8,8 @@ namespace Elevate.Extensions
         public static void AddRepositories(this IServiceCollection service)
         {
             service.AddScoped<UserRepository>();
+            service.AddScoped<HabitRepository>();
+            service.AddScoped<HabitLogRepository>();
             service.AddDbContext<ElevateDbContext>();
         }
     }

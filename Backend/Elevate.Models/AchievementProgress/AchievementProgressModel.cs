@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elevate.Data.Models.AchievementProgress
+namespace Elevate.Models.AchievementProgress
 {
     public class AchievementProgressModel
     {
