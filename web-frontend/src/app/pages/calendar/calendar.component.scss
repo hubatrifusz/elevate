@@ -1,0 +1,8 @@
+@import '../../../assets/styles/variables';
+
+#calendar {
+  width: 100vw;
+  height: 50vh;
+
+  margin-left: $sidebar_width;
+}
