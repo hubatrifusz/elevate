@@ -3,7 +3,7 @@ using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
-using Elevate.Data.Models.AchievementProgress;
+using Elevate.Models.AchievementProgress;
 
 namespace Elevate.Data
 {
