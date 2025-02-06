@@ -6,9 +6,9 @@ namespace Elevate.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HabitLogController(HabitLogService habitLogService) : ControllerBase
+    public class HabitLogController(IHabitLogService habitLogService) : ControllerBase
     {
-        private readonly HabitLogService _habitLogService = habitLogService;
+        private readonly IHabitLogService _habitLogService = habitLogService;
 
         [HttpGet]
         public ActionResult<IEnumerable<HabitLogModel>> GetHabitLogsByHabitId(Guid id, int pageNumber, int pageSize)

@@ -6,9 +6,9 @@ namespace Elevate.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HabitController(HabitService habitService) : ControllerBase
+    public class HabitController(IHabitService habitService) : ControllerBase
     {
-        private readonly HabitService _habitService = habitService;
+        private readonly IHabitService _habitService = habitService;
 
         [HttpGet]
         public ActionResult<IEnumerable<HabitModel>> GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)

@@ -29,6 +29,9 @@ namespace Elevate
             // Register Repositories and DbContext with MySQL
             builder.Services.AddRepositories();
 
+            // Register Services
+            builder.Services.AddServices();
+
             // Add AutoMapper with profiles
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
