@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MySqlConnector;
+using MySql.Data.MySqlClient;
 
 namespace Elevate.Data
 {

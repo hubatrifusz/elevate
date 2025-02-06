@@ -20,7 +20,15 @@ namespace Elevate.Data
             if (!optionsBuilder.IsConfigured)
             {
                 string? connectionString = _connectionManager.GetConnectionString();
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                if (connectionString != null)
+                {
+                    optionsBuilder.UseMySQL(connectionString);
+                    
+                }
+                else
+                {
+                    throw new InvalidOperationException("Connection string is null");
+                }
             }
         }
 

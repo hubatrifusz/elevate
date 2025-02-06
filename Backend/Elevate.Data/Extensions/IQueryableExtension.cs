@@ -1,15 +1,17 @@
-﻿namespace Elevate.Extensions
+﻿using System.Linq;
+
+namespace Elevate.Extensions
 {
     public static class IQueryableExtension
     {
-        public static IQueryable<T> ApplyPagination<T>(this IQueryable<T> query, int pageNumber, int pageSize, int maxPageSize = 20)
+        public static IQueryable<T> ApplyPagination<T>(this IQueryable<T> query, int? pageNumber, int? pageSize)
         {
-            pageSize = Math.Min(pageSize, maxPageSize);
-            pageSize = Math.Max(pageSize, 1);
+            pageNumber = pageNumber.HasValue && pageNumber > 0 ? pageNumber : 1;
+            pageSize = pageSize.HasValue && pageSize > 0 && pageSize <= 20 ? pageSize : 20;
 
             return query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize);
+                .Skip((pageNumber.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value);
         }
     }
 }
