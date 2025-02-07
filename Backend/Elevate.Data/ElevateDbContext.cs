@@ -3,15 +3,15 @@ using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
-using Elevate.Data.Models.AchievementProgress;
+using Elevate.Models.AchievementProgress;
 
 namespace Elevate.Data
 {
     public class ElevateDbContext(DbContextOptions<ElevateDbContext> options, DbConnectionManager connectionManager) : DbContext(options)
     {
-        DbSet<UserModel> Users { get; set; }
-        DbSet<HabitModel> Habit { get; set; }
-        DbSet<AchievementModel> Achievements { get; set; }
+        public DbSet<UserModel> Users { get; set; }
+        public DbSet<HabitModel> Habit { get; set; }
+        public DbSet<AchievementModel> Achievements { get; set; }
 
         private readonly DbConnectionManager _connectionManager = connectionManager;
 
@@ -20,7 +20,15 @@ namespace Elevate.Data
             if (!optionsBuilder.IsConfigured)
             {
                 string? connectionString = _connectionManager.GetConnectionString();
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                if (connectionString != null)
+                {
+                    optionsBuilder.UseMySQL(connectionString);
+                    
+                }
+                else
+                {
+                    throw new InvalidOperationException("Connection string is null");
+                }
             }
         }
 

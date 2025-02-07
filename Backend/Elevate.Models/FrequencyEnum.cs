@@ -1,13 +1,10 @@
 ﻿namespace Elevate.Models
 {
-    public class FrequencyEnum
+    public enum FrequencyEnum
     {
-        enum Frequency
-        {
-            Daily,
-            Weekly,
-            Monthly,
-            Custom
-        }
+        Daily,
+        Weekly,
+        Monthly,
+        Custom
     }
 }

@@ -2,6 +2,7 @@
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
+using Elevate.Models.AchievementProgress;
 
 namespace Elevate.Profiles
 {
@@ -19,8 +20,10 @@ namespace Elevate.Profiles
 
             CreateMap<HabitLogModel, HabitLogDto>();
             CreateMap<HabitLogCreateDto, HabitLogModel>();
+            CreateMap<HabitLogUpdateDto, HabitLogModel>();
 
             CreateMap<AchievementModel, AchievementDto>();
+            CreateMap<AchievementProgressModel, AchievementProgressDto>();
         }
     }
 }
