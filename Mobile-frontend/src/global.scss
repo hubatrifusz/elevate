@@ -42,7 +42,13 @@
   text-align: center;
 }
 
+.center{
+  display: block;
+  margin: auto;
+}
 
-
+:root {
+  --ion-background-color: linear-gradient(35deg, #9a8af68c, #ffffff, #ffffff75, #9a8af669);
+}
 
 
