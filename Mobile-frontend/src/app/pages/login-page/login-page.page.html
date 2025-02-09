@@ -5,12 +5,12 @@
 
     <fieldset class="input-container">
       <legend>Enter your email</legend>
-      <input type="text" class="input" placeholder="gipzsjakab@kukac.com">
+      <input type="email" class="input" placeholder="gipzsjakab@kukac.com">
     </fieldset>
 
     <fieldset class="input-container">
       <legend>Enter your password</legend>
-      <input type="text" class="input">
+      <input type="password" class="input">
     </fieldset>
 
     <div id="checkbox">
@@ -18,7 +18,7 @@
       <label for="RememberMe">Remember me</label>
     </div>
 
-    <button class="button">Sign in</button>
+    <button class="button" (click)="login()">Sign in</button>
 
     <hr class="devider">
 
@@ -48,6 +48,6 @@
       </div>
     </button>
 
-    <p class="signup-text text-center">Don't have an account? <a href="#">Create one here!</a></p>
+    <p class="signup-text text-center">Don't have an account? <a href="/create-account-page" >Create one here!</a></p>
   </div>
 </ion-content>
