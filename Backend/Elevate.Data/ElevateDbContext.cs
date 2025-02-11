@@ -23,7 +23,6 @@ namespace Elevate.Data
                 if (connectionString != null)
                 {
                     optionsBuilder.UseMySQL(connectionString);
-                    
                 }
                 else
                 {
