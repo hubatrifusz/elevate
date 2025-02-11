@@ -1,0 +1,16 @@
+@use "../../../theme/variables" as *;
+
+
+ion-header {
+  --background: transparent;
+  --ion-background-color: transparent;
+}
+.menu-button{
+  background-color: red;
+  font-size: medium;
+  color: $text-color-dark;
+  width: 150px;
+  height: 35px;
+  text-align: center;
+  padding: 10px;
+}
