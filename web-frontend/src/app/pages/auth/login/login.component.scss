@@ -1,0 +1,21 @@
+#form_container {
+  width: 50vw;
+
+  display: flex;
+  justify-content: center;
+
+  form{
+    width: 50%;
+
+    #password_text_input_container {
+      img {
+        position: absolute;
+
+        right: 15px;
+        height: 18px;
+
+        cursor: pointer;
+      }
+    }
+  }
+}

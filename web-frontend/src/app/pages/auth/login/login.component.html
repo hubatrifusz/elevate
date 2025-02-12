@@ -1,0 +1,42 @@
+<div id="form_container">
+  <form action="">
+    <!-- Email Input (email) -->
+    <div class="input_container" id="email_email_input_container">
+      <input
+        type="email"
+        name="email_text_input"
+        id="email_text_input"
+        placeholder=" "
+      />
+      <label for="email_text_input" class="input_title">Enter your email</label>
+    </div>
+
+    <!-- Password Input (text) -->
+    <div class="input_container" id="password_text_input_container">
+      <input
+        type="text"
+        name="password_text_input"
+        id="password_text_input"
+        placeholder=" "
+      />
+      <label for="password_text_input" class="input_title"
+        >Enter your password</label
+      >
+      <img src="icons/eye.png" alt="" id="toggle_password_icon" (click)="togglePassword()">
+    </div>
+
+    <!-- Remember me Input (checkbox) -->
+    <div class="input_container" id="remember_me_checkbox_input_container">
+      <input
+        type="checkbox"
+        name="remember_me_checkbox_input"
+        id="remember_me_checkbox_input"
+      />
+      <label for="remember_me_checkbox_input" class="checkbox">
+        <div class="checkmark"></div>
+      </label>
+      <label for="remember_me_checkbox_input" class="checkbox_label">Remember me</label>
+    </div>
+
+  </form>
+</div>

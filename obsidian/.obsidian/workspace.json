@@ -40,7 +40,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -162,7 +163,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b1543aa86ed4ceba",
+  "active": "5bb814250d69741a",
   "lastOpenFiles": [
     "Authentication/Password Recovery.md",
     "Authentication/Login.md",

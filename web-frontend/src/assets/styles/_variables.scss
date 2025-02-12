@@ -17,10 +17,39 @@ $main-color-200: hsl(248, 10%, 90%);
 $main-color-300: hsl(248, 10%, 80%);
 $main-color-400: hsl(248, 10%, 70%);
 $main-color-500: hsl(248, 10%, 60%);
-$main-color-600: hsl(248, 10%, 50%);
+$main-color-600: hsl(247, 10%, 50%);
 $main-color-700: hsl(248, 10%, 40%);
 $main-color-800: hsl(248, 10%, 30%);
 $main-color-900: hsl(248, 10%, 20%);
 
-// * Dimensions
+//Text colors
+$text-color-100: hsl(248, 0%, 100%);
+$text-color-200: hsl(248, 0%, 90%);
+$text-color-300: hsl(248, 0%, 80%);
+$text-color-400: hsl(248, 0%, 70%);
+$text-color-500: hsl(248, 0%, 60%);
+$text-color-600: hsl(248, 0%, 50%);
+$text-color-700: hsl(248, 0%, 40%);
+$text-color-800: hsl(248, 0%, 30%);
+$text-color-900: hsl(248, 0%, 20%);
+
+//* Dimensions
 $sidebar_width: 5rem;
+$border_radius: 10px;
+
+
+//* Fonts
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+}
+
+//* Font sizes
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-md: 18px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 32px;
+$font-size-3xl: 48px;
