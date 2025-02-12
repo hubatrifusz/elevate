@@ -2,7 +2,9 @@ using Asp.Versioning;
 using Elevate.Data;
 using Elevate.Extensions;
 using Elevate.Profiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Elevate
@@ -64,6 +66,26 @@ namespace Elevate
             app.UseAuthorization();
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ElevateDbContext>();
+
+                // Retry logic
+                var retryCount = 5;
+                for (int i = 0; i < retryCount; i++)
+                {
+                    try
+                    {
+                        dbContext.Database.Migrate();
+                        break;
+                    }
+                    catch (MySqlException)
+                    {
+                        Thread.Sleep(2000);
+                    }
+                }
+            }
 
             app.Run();
         }
