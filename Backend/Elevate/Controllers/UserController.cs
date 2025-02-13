@@ -11,14 +11,14 @@ namespace Elevate.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet]
-        private ActionResult<IEnumerable<UserModel>> GetUsersByEmail(string email, int pageNumber, int pageSize)
+        private ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
             var users = _userService.GetUsersByEmail(email, pageNumber, pageSize);
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<UserModel> GetUserById(Guid id)
+        public ActionResult<ApplicationUser> GetUserById(Guid id)
         {
             var user = _userService.GetUserById(id);
             if (user == null)
@@ -29,7 +29,7 @@ namespace Elevate.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UserModel> AddUser(UserCreateDto userCreateDto)
+        public ActionResult<ApplicationUser> AddUser(UserCreateDto userCreateDto)
         {
             var createdUser = _userService.AddUser(userCreateDto);
             if (createdUser == null)
@@ -40,7 +40,7 @@ namespace Elevate.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult<UserModel> UpdateUser(Guid id, UserUpdateDto userUpdateDto)
+        public ActionResult<ApplicationUser> UpdateUser(Guid id, UserUpdateDto userUpdateDto)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Elevate.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<UserModel> DeleteUser(Guid id)
+        public ActionResult<ApplicationUser> DeleteUser(Guid id)
         {
             var deletedUser = _userService.DeleteUser(id);
             if (deletedUser == null)

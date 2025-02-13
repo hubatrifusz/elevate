@@ -28,17 +28,6 @@ namespace Elevate.Controllers
             return Ok(habitLog);
         }
 
-        [HttpPost]
-        public ActionResult<HabitLogModel> AddHabitLog(HabitLogCreateDto habitLogCreateDto)
-        {
-            var createdHabitLog = _habitLogService.AddHabitLog(habitLogCreateDto);
-            if (createdHabitLog == null)
-            {
-                return BadRequest("Habit log could not be created.");
-            }
-            return CreatedAtAction(nameof(GetHabitLogById), new { id = createdHabitLog.Id }, createdHabitLog);
-        }
-
         [HttpPatch("{id}")]
         public ActionResult<HabitLogModel> UpdateHabitLog(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {

@@ -3,6 +3,8 @@ using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
 using Elevate.Models.AchievementProgress;
+using AutoMapper;
+using Elevate.Models.Friendship;
 
 namespace Elevate.Profiles
 {
@@ -10,9 +12,13 @@ namespace Elevate.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<UserModel, UserDto>();
-            CreateMap<UserCreateDto, UserModel>()
+            CreateMap<ApplicationUser, UserDto>();
+            CreateMap<UserCreateDto, ApplicationUser>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+            CreateMap<UserUpdateDto, ApplicationUser>();
+
+            CreateMap<Friendship, FriendshipDto>();
+            CreateMap<FriendshipCreateDto, Friendship>();
 
             CreateMap<HabitModel, HabitDto>();
             CreateMap<HabitCreateDto, HabitModel>();
