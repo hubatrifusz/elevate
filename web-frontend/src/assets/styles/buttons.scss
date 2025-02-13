@@ -1,0 +1,33 @@
+@import "../styles/variables";
+
+// All button container
+.button_container {
+
+  // General Button
+  button {
+  }
+
+  // Primary Button
+  .button_primary {
+  }
+
+  // Secondary Button
+  .button_secondary {
+  }
+
+  // Tertiary Button
+  .button_tertiary {
+  }
+
+  // Quaternary Button
+  .button_quaternary {
+    color: $text-color-800;
+    background-color: transparent;
+
+    cursor: pointer;
+
+    text-decoration: underline;
+
+    border: none;
+  }
+}

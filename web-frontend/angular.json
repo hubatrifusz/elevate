@@ -34,7 +34,8 @@
             "styles": [
               "src/assets/styles/_variables.scss",
               "src/styles.scss",
-              "src/assets/styles/inputs.scss"
+              "src/assets/styles/inputs.scss",
+              "src/assets/styles/buttons.scss"
             ],
             "scripts": []
           },
@@ -100,5 +101,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
