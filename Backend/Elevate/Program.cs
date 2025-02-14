@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Elevate.Data;
+using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Profiles;
 using Microsoft.EntityFrameworkCore;

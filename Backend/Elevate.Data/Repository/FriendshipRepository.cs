@@ -1,4 +1,5 @@
-﻿using Elevate.Models.Friendship;
+﻿using Elevate.Data.Database;
+using Elevate.Models.Friendship;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
 

@@ -7,15 +7,16 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
-using System;
 
-namespace Elevate.Data
+namespace Elevate.Data.Database
 {
     public class ElevateDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         private readonly DbConnectionManager _connectionManager;
 
-        public ElevateDbContext(DbContextOptions<ElevateDbContext> options, DbConnectionManager connectionManager)
+        public ElevateDbContext(
+            DbContextOptions<ElevateDbContext> options,
+            DbConnectionManager connectionManager)
             : base(options)
         {
             _connectionManager = connectionManager;
@@ -30,17 +31,18 @@ namespace Elevate.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            string? connectionString = _connectionManager.GetConnectionString();
+
+            if (connectionString != null)
             {
-                string? connectionString = _connectionManager.GetConnectionString();
-                if (connectionString != null)
-                {
-                    optionsBuilder.UseMySQL(connectionString);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Connection string is null");
-                }
+                var serverVersion = ServerVersion.AutoDetect(connectionString);
+
+                optionsBuilder.UseMySql(connectionString, serverVersion, mySqlOptions =>
+                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
+            }
+            else
+            {
+                throw new Exception("Failed to retrieve connection string");
             }
         }
 

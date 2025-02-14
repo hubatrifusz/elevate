@@ -1,5 +1,6 @@
 ﻿using Elevate.Models.User;
 using Elevate.Extensions;
+using Elevate.Data.Database;
 
 namespace Elevate.Data.Repository
 {
