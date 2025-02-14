@@ -11,7 +11,7 @@ namespace Elevate.Extensions
             service.AddScoped<UserRepository>();
             service.AddScoped<HabitRepository>();
             service.AddScoped<HabitLogRepository>();
-            service.AddScoped<FriendshipRepository>;
+            service.AddScoped<FriendshipRepository>();
             service.AddDbContext<ElevateDbContext>();
         }
 
