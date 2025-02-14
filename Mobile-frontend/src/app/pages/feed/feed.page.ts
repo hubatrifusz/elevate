@@ -1,16 +1,8 @@
 import { Component } from '@angular/core';
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenu,
-  IonMenuButton,
-  IonTitle,
-  IonToolbar,
-  IonMenuToggle, IonButton, IonTabButton, IonIcon } from '@ionic/angular/standalone';
-
+import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
+import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { list, calendar, people, menu, settings } from 'ionicons/icons';
+import { list, calendar, people, menu, settings, person, personCircle, personCircleOutline } from 'ionicons/icons';
 import { FootertabsComponent } from "../../components/footertabs/footertabs.component";
 
 
@@ -19,13 +11,17 @@ import { FootertabsComponent } from "../../components/footertabs/footertabs.comp
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonTabButton, IonButton, IonButtons,IonMenuToggle, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, FootertabsComponent]
+  imports: [IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar]
 })
 export class FeedPage {
 
-  constructor() {
-      addIcons({settings,people,menu}); }
 
+  constructor(private menuCtrl: MenuController) {
+    addIcons({personCircleOutline,personCircle,person,settings,people,menu});
+  }
 
+  openMenu() {
+    this.menuCtrl.toggle('');
+  }
 
 }

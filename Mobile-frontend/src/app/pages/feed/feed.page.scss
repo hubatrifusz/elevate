@@ -1,16 +1,22 @@
 @use "../../../theme/variables" as *;
 
 
-ion-header {
-  --background: transparent;
-  --ion-background-color: transparent;
+ion-content {
+
+  .menu-content {
+    --ion-background-color: black !important;
+  }
 }
-.menu-button{
-  background-color: red;
-  font-size: medium;
-  color: $text-color-dark;
-  width: 150px;
-  height: 35px;
-  text-align: center;
-  padding: 10px;
+
+.white-background{
+  --ion-background-color: $background-color-light;
+}
+ion-header{
+  height: 60px;
+  ion-title{
+    color: $text-color-dark;
+    font-size: 20;
+    padding: 10px;
+    letter-spacing: 0.6px;
+  }
 }
