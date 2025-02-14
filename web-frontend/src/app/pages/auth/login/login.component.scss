@@ -1,21 +1,63 @@
-#form_container {
-  width: 50vw;
+@import "../../../../assets/styles/variables";
 
+#login_page_container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
 
-  form{
-    width: 50%;
+  #form_container {
+    width: 50vw;
 
-    #password_text_input_container {
-      img {
-        position: absolute;
+    display: flex;
+    justify-content: center;
 
-        right: 15px;
-        height: 18px;
+    form {
+      width: 50%;
 
-        cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      #password_text_input_container {
+        img {
+          position: absolute;
+
+          right: 15px;
+          height: 18px;
+
+          cursor: pointer;
+        }
       }
+
+      .line_container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  #button_divider {
+    width: 50vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      position: absolute;
+      padding: 0rem 1rem;
+
+      color: $text-color-400;
+      background-color: $main-color-100;
+
+      font-size: $font-size-sm;
+    }
+
+    div {
+      width: 50%;
+      height: 1px;
+      background-color: $text-color-300;
     }
   }
 }

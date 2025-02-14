@@ -5,6 +5,8 @@ import { PasswordRecoveryComponent } from './pages/auth/password-recovery/passwo
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'}, //TODO: Simple redirect to Login Page, later use Auth Guard
+
+  // Authentication
   { path: 'login', component: LoginComponent }, // Login Page
   { path: 'create-account', component: CreateAccountComponent }, // Create Account Page
   { path: 'password-recovery', component: PasswordRecoveryComponent }, // Password Recovery Page

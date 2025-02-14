@@ -1,47 +1,67 @@
-<div id="form_container">
-  <form action="">
-    <!-- Email Input (email) -->
-    <div class="input_container" id="email_email_input_container">
-      <input
-        type="email"
-        name="email_text_input"
-        id="email_text_input"
-        placeholder=" "
-      />
-      <label for="email_text_input" class="input_title">Enter your email</label>
-    </div>
+<div id="login_page_container">
+  <div id="form_container">
+    <form action="">
+      <!-- Email Input (email) -->
+      <div class="input_container" id="email_email_input_container">
+        <input type="email" name="email_text_input" id="email_text_input" placeholder=" " />
+        <label for="email_text_input" class="input_title">Enter your email</label>
+      </div>
 
-    <!-- Password Input (text) -->
-    <div class="input_container" id="password_text_input_container">
-      <input
-        type="text"
-        name="password_text_input"
-        id="password_text_input"
-        placeholder=" "
-      />
-      <label for="password_text_input" class="input_title"
-        >Enter your password</label
-      >
-      <img src="icons/eye.png" alt="" id="toggle_password_icon" (click)="togglePassword()">
-    </div>
+      <!-- Password Input (text) -->
+      <div class="input_container" id="password_text_input_container">
+        <input type="password" name="password_text_input" id="password_text_input" placeholder=" " />
+        <label for="password_text_input" class="input_title">Enter your password</label>
+        <img
+          src="icons/eye.png"
+          alt="Show Password"
+          title="Show Password"
+          id="toggle_password_icon"
+          (click)="togglePassword()"
+        />
+      </div>
 
-    <!-- Remember me Input (checkbox) -->
-    <div class="input_container" id="remember_me_checkbox_input_container">
-      <input
-        type="checkbox"
-        name="remember_me_checkbox_input"
-        id="remember_me_checkbox_input"
-      />
-      <label for="remember_me_checkbox_input" class="checkbox">
-        <div class="checkmark"></div>
-      </label>
-      <label for="remember_me_checkbox_input" class="checkbox_label">Remember me</label>
-    </div>
+      <div class="line_container">
+        <!-- Remember me Input (checkbox) -->
+        <div class="input_container" id="remember_me_checkbox_input_container">
+          <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" />
+          <label for="remember_me_checkbox_input" class="checkbox">
+            <div class="checkmark"></div>
+          </label>
+          <label for="remember_me_checkbox_input" class="checkbox_label">Remember me</label>
+        </div>
 
-    <!-- Forgot password? button (quaternary) -->
-     <div class="button_container">
-      <button class="button button_quaternary" type="button">Forgot password?</button>
-     </div>
+        <!-- Forgot password? button (quaternary) -->
+        <div class="button_container">
+          <button
+            class="button button_quaternary"
+            type="button"
+            [routerLink]="'/password-recovery'"
+            id="forgot_password_button"
+          >
+            Forgot password?
+          </button>
+        </div>
+      </div>
 
-  </form>
+      <div class="button_container" id="login_button_container">
+        <button class="button button_primary" type="button" id="login_button" [routerLink]="'/dashboard'">
+          <span>Login</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div id="button_divider">
+    <div class="divider_line"></div>
+    <span>Or</span>
+  </div>
+
+  <div class="button_container" id="google_sign_in_button_container">
+    <button class="button button_secondary" type="button" id="google_sign_in_button" [routerLink]="'/??'">
+      <span>
+        <img src="icons/google.png" alt="google_logo" />
+        <p>Sign in with Google</p>
+      </span>
+    </button>
+  </div>
 </div>
