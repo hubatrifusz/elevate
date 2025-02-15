@@ -4,10 +4,10 @@ namespace Elevate.Services
 {
     public interface IUserService
     {
-        UserModel? GetUserById(Guid userId);
-        List<UserModel>? GetUsersByEmail(string email, int pageNumber, int pageSize);
-        UserModel? AddUser(UserCreateDto user);
-        UserModel? UpdateUser(Guid id, UserUpdateDto user);
-        UserModel? DeleteUser(Guid userId);
+        ApplicationUser? GetUserById(Guid userId);
+        List<ApplicationUser>? GetUsersByEmail(string email, int pageNumber, int pageSize);
+        ApplicationUser? AddUser(UserCreateDto user);
+        ApplicationUser? UpdateUser(Guid id, UserUpdateDto user);
+        ApplicationUser? DeleteUser(Guid userId);
     }
 }

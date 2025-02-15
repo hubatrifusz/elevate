@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Elevate.Data;
+using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Profiles;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,8 @@ namespace Elevate
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Configuration.AddEnvironmentVariables();
 
             // Add services to the container.
 

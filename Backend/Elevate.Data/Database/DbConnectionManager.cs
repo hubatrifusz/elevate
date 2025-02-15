@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Elevate.Data
+namespace Elevate.Data.Database
 {
     public class DbConnectionManager(IConfiguration configuration)
     {

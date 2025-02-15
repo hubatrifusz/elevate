@@ -1,5 +1,6 @@
 ﻿using Elevate.Models.User;
 using Elevate.Extensions;
+using Elevate.Data.Database;
 
 namespace Elevate.Data.Repository
 {
@@ -7,33 +8,33 @@ namespace Elevate.Data.Repository
     {
         readonly ElevateDbContext _context = context;
 
-        public UserModel? GetUserById(Guid userId)
+        public ApplicationUser? GetUserById(Guid userId)
         {
-            return _context.Set<UserModel>().SingleOrDefault(u => u.Id == userId);
+            return _context.Set<ApplicationUser>().SingleOrDefault(u => u.Id == userId);
         }
 
-        public List<UserModel>? GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public List<ApplicationUser>? GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
-            return _context.Set<UserModel>()
-                .Where(u => u.Email.Contains(email))
+            return _context.Set<ApplicationUser>()
+                .Where(u => u.Email != null && u.Email.Contains(email))
                 .ApplyPagination(pageNumber, pageSize)
                 .ToList();
         }
 
-        public UserModel? AddUser(UserModel user)
+        public ApplicationUser? AddUser(ApplicationUser user)
         {
-            UserModel savedUser = _context.Set<UserModel>().Add(user).Entity;
+            ApplicationUser savedUser = _context.Set<ApplicationUser>().Add(user).Entity;
             _context.SaveChanges();
             return savedUser;
         }
 
-        public UserModel? UpdateUser(Guid id, UserModel user)
+        public ApplicationUser? UpdateUser(Guid id, ApplicationUser user)
         {
             if (id != user.Id)
             {
                 throw new Exception("User ID does not match");
             }
-            if (!_context.Set<UserModel>().Any(u => u.Id == id))
+            if (!_context.Set<ApplicationUser>().Any(u => u.Id == id))
             {
                 throw new Exception("No such user");
             }
@@ -42,14 +43,14 @@ namespace Elevate.Data.Repository
             return user;
         }
 
-        public UserModel? DeleteUser(Guid userId)
+        public ApplicationUser? DeleteUser(Guid userId)
         {
-            UserModel? user = _context.Set<UserModel>().SingleOrDefault(u => u.Id == userId);
+            ApplicationUser? user = _context.Set<ApplicationUser>().SingleOrDefault(u => u.Id == userId);
             if (user == null)
             {
                 throw new Exception("No such user");
             }
-            _context.Set<UserModel>().Remove(user);
+            _context.Set<ApplicationUser>().Remove(user);
             _context.SaveChanges();
             return user;
         }

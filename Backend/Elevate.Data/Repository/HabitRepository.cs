@@ -1,4 +1,5 @@
-﻿using Elevate.Extensions;
+﻿using Elevate.Data.Database;
+using Elevate.Extensions;
 using Elevate.Models.Habit;
 
 namespace Elevate.Data.Repository
