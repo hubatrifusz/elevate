@@ -39,6 +39,8 @@
 .input-container:hover,
 .input-container:focus-within {
   border: 2px solid $accent-color-600;
+  scale: 1.05;
+  transition: 0.2s;
 }
 
 .input-container:nth-child(2) {

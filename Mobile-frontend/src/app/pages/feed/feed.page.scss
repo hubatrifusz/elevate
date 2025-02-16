@@ -8,15 +8,82 @@ ion-content {
   }
 }
 
-.white-background{
+.white-background {
   --ion-background-color: $background-color-light;
 }
-ion-header{
-  height: 60px;
-  ion-title{
-    color: $text-color-dark;
-    font-size: 20;
-    padding: 10px;
+
+ion-header {
+  height: fit-content;
+
+  ion-title {
+    color: black;
+    font-size: 25px;
+    padding: 15px;
     letter-spacing: 0.6px;
   }
+}
+
+.profile-pic {
+  margin-top: 40px;
+}
+
+h2 {
+  color: black;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.menu-item {
+  width: fit-content;
+  height: 55px;
+  display: block;
+  margin: auto;
+  margin-top: 25px;
+  border-radius: 15px;
+
+  ion-icon {
+    height: 35px;
+    width: 35px;
+    align-items: left;
+    color: $text-color-dark;
+    margin: 0px 5px;
+  }
+
+  span {
+    font-size: 20px;
+    border-radius: 15px;
+    text-transform: lowercase;
+    color: $text-color-dark;
+    text-align: center;
+    margin: auto;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.menu-item:nth-child(6) {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  font-size: 20px;
+
+  span {
+    color: red;
+  }
+
+  ion-icon {
+    color: red;
+  }
+
+}
+
+.devider {
+  width: 80%;
+  height: 1px;
+  background-color: $text-color-dark;
+  margin: 2vh auto;
 }
