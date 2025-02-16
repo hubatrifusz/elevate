@@ -18,8 +18,8 @@ The **Login Page** is responsible for user authentication. It allows users to lo
 | ------------------- | ------------------------------------------------------------------ | --------------------------------- |
 | Login               | Validates and submits the login form, and attempts authentication. | login_button                      |
 | Sign in with Google | Attempts login with a Google account.                              | google_sign_in_button             |
-| Forgot password?    | Redirects to the [[Password Recovery]] page.                       | forgot_password_button            |
-| Create one here!    | Redirects to the [[Create Account]] page.                          | redirect_to_create_account_button |
+| Forgot password?    | Redirects to the [[Password Recovery]] page (/password-recovery).  | forgot_password_button            |
+| Create one here!    | Redirects to the [[Create Account]] page (/create-account).        | redirect_to_create_account_button |
 ##### **Error Messages**
 
 | Scenario               | Message                                   |

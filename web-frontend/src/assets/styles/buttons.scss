@@ -7,6 +7,7 @@
 
   // General Button
   button {
+    cursor: pointer;
   }
 
   // Primary Button
@@ -18,8 +19,6 @@
 
     border-radius: 100rem;
     border: none;
-
-    cursor: pointer;
 
     transition: background-color 100ms ease-in-out;
 
@@ -42,18 +41,16 @@
 
     height: 3rem;
 
-    color: $text-color-800;
+    color: $text-color-700;
     background-color: $main-color-200;
 
     border-radius: 100rem;
     border: 2px solid $main-color-300;
 
-    cursor: pointer;
-
     transition: background-color 100ms ease-in-out;
 
     &:hover {
-      background-color: $accent-color-700;
+      background-color: $main-color-100;
     }
 
     // Text and Icon container
@@ -73,7 +70,7 @@
       p {
         display: inline-block;
         font-size: $font-size-md;
-        color: $text-color-800;
+        color: $text-color-700;
         font-weight: 500;
       }
     }
@@ -81,14 +78,18 @@
 
   // Tertiary Button
   .button_tertiary {
+    color: $accent-color-500;
+    background-color: transparent;
+
+    text-decoration: underline;
+
+    border: none;
   }
 
   // Quaternary Button
   .button_quaternary {
-    color: $text-color-800;
+    color: $text-color-700;
     background-color: transparent;
-
-    cursor: pointer;
 
     text-decoration: underline;
 
