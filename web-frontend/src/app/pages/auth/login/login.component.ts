@@ -1,10 +1,11 @@
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { toArray } from 'rxjs';
+import { inputValidator } from '../../../shared/input-validator';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterModule],
+  imports: [RouterModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -71,5 +72,15 @@ export class LoginComponent {
     }
 
     navDots.children[navDots.children.length - 1].classList.add('nav_dot_in_focus');
+  }
+
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, inputValidator(/^[a-zA-Z0-9!#$%&'*+-=?^_{|}~.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/)]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{8,}$/)]),
+    rememberMe: new FormControl(false, Validators.required),
+  });
+
+  onSubmit() {
+    console.log(this.loginForm.value);
   }
 }

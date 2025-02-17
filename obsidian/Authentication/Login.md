@@ -6,11 +6,11 @@ The **Login Page** is responsible for user authentication. It allows users to lo
 
 ##### **Login Form**
  
-| Field (input)     | Type   | Validation Rules                                              | id                         |
-| ----------------- | ------ | ------------------------------------------------------------- | -------------------------- |
-| Email             | String | Regex: `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`<br> | email_text_input           |
-| Password          | String | Regex: `^(?=.*\d).{8,}$`<br>                                  | password_text_input        |
-| Remember password | Bool   |                                                               | remember_me_checkbox_input |
+| Field (input)     | Type   | Validation Rules                                                              | id                         |
+| ----------------- | ------ | ----------------------------------------------------------------------------- | -------------------------- |
+| Email             | String | Regex: `/^[a-zA-Z0-9!#$%&'*+-=?^_{\|}~.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/`<br> | email_text_input           |
+| Password          | String | Regex: `^(?=.*\d).{8,}$`<br>                                                  | password_text_input        |
+| Remember password | Bool   |                                                                               | remember_me_checkbox_input |
 
 ##### **Buttons**
 

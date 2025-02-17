@@ -26,6 +26,12 @@
       background-color: $accent-color-700;
     }
 
+    &:disabled {
+      background-color: $text-color-700;
+      color: $text-color-300;
+      cursor: not-allowed;
+    }
+
     span {
       padding: 0rem 3rem;
       font-size: $font-size-md;

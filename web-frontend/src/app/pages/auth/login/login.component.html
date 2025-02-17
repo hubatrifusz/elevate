@@ -8,16 +8,16 @@
     </div>
     <!-- Form container -->
     <div id="form_container">
-      <form action="">
+      <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Input (email) -->
         <div class="input_container" id="email_email_input_container">
-          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " />
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required/>
           <label for="email_text_input" class="input_title">Enter your email</label>
         </div>
 
         <!-- Password Input (text) -->
         <div class="input_container" id="password_text_input_container">
-          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " />
+          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required/>
           <label for="password_text_input" class="input_title">Enter your password</label>
           <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="togglePasswordView()" />
         </div>
@@ -25,7 +25,7 @@
         <div class="line_container">
           <!-- Remember me Input (checkbox) -->
           <div class="input_container" id="remember_me_checkbox_input_container">
-            <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" />
+            <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" formControlName="rememberMe"/>
             <label for="remember_me_checkbox_input" class="checkbox">
               <div class="checkmark"></div>
             </label>
@@ -42,7 +42,7 @@
 
         <!-- Login button (primary) -->
         <div class="button_container" id="login_button_container">
-          <button class="button button_primary" type="button" id="login_button" [routerLink]="'/dashboard'">
+          <button class="button button_primary" type="submit" id="login_button" [disabled]="!loginForm.valid">
             <span>Login</span>
           </button>
         </div>
