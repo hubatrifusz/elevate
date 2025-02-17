@@ -39,7 +39,7 @@ namespace Elevate.Data.Database
                 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
                 optionsBuilder.UseMySql(connectionString, serverVersion, mySqlOptions =>
-                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory")).EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
+                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
             }
             else
             {
@@ -54,9 +54,6 @@ namespace Elevate.Data.Database
             modelBuilder.Entity<ApplicationUser>(b =>
             {
                 b.HasKey(u => u.Id);
-                b.Property(u => u.Id)
-                    .HasDefaultValueSql("UUID()")
-                    .ValueGeneratedOnAdd();
                 b.HasIndex(u => u.Email).IsUnique();
             });
             modelBuilder.Entity<ApplicationUser>().HasIndex(u => u.Email).IsUnique();
