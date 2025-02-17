@@ -76,11 +76,21 @@ export class LoginComponent {
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, inputValidator(/^[a-zA-Z0-9!#$%&'*+-=?^_{|}~.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/)]),
-    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{8,}$/)]),
+    password: new FormControl('', [Validators.required]),
     rememberMe: new FormControl(false, Validators.required),
   });
 
   onSubmit() {
-    console.log(this.loginForm.value);
+    this.checkValidationErrors();
+
+    console.log(this.loginForm.get('email')?.errors);
+
+  }
+
+  checkValidationErrors() {
+    if (this.loginForm.get('email')?.hasError('required')) {
+      console.log('email field is required');
+
+    }
   }
 }
