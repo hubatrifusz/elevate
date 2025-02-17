@@ -6,6 +6,7 @@
 
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
   // General input
   input {
@@ -23,7 +24,8 @@
   .input_title {
     position: absolute;
     left: 1rem;
-    top: 30%;
+    top: calc($input_height / 2);
+    transform: translateY(-1px);
 
     padding: 0 0.5rem;
 
@@ -37,7 +39,7 @@
 
   // Text input
   input[type="text"] {
-    height: 2rem;
+    height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
 
@@ -67,7 +69,7 @@
 
   // Email input
   input[type="email"] {
-    height: 2rem;
+    height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
 
@@ -97,7 +99,7 @@
 
   // Password input
   input[type="password"] {
-    height: 2rem;
+    height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
 
@@ -173,6 +175,12 @@
   }
 }
 
-// .input_container::after {
-// content: 'jaaaj';
-// }
+.input_container::after {
+  position: absolute;
+  padding-left: 1rem;
+
+  color: $alert-color-600;
+  font-size: $font-size-sm;
+
+  transform: translateY(calc($input_height + 3px));
+}

@@ -82,15 +82,13 @@ export class LoginComponent {
 
   onSubmit() {
     this.checkValidationErrors();
-
-    console.log(this.loginForm.get('email')?.errors);
-
+    console.log('asds');
   }
 
   checkValidationErrors() {
+    let emailInput = document.querySelector('#email_email_input_container') as HTMLElement;
     if (this.loginForm.get('email')?.hasError('required')) {
-      console.log('email field is required');
-
+      emailInput.style.setProperty('--after-content', '"Dynamic After Element"');
     }
   }
 }
