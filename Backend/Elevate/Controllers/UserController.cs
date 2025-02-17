@@ -11,7 +11,7 @@ namespace Elevate.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet]
-        private ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
             var users = _userService.GetUsersByEmail(email, pageNumber, pageSize);
             return Ok(users);
@@ -31,12 +31,12 @@ namespace Elevate.Controllers
         [HttpPost]
         public ActionResult<ApplicationUser> AddUser(UserCreateDto userCreateDto)
         {
-            var createdUser = _userService.AddUser(userCreateDto);
-            if (createdUser == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("User could not be created.");
+                return BadRequest(ModelState);
             }
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+            var user = _userService.AddUser(userCreateDto);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         [HttpPatch("{id}")]

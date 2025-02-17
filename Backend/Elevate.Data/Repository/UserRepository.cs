@@ -23,9 +23,15 @@ namespace Elevate.Data.Repository
 
         public ApplicationUser? AddUser(ApplicationUser user)
         {
-            ApplicationUser savedUser = _context.Set<ApplicationUser>().Add(user).Entity;
+            ApplicationUser savedUser = _context.Set<ApplicationUser>().Add(user);
             _context.SaveChanges();
-            return savedUser;
+
+            if (savedUser.State == EntityState.Added)
+            {
+                return savedUser.Entity;
+            }
+
+            return null;
         }
 
         public ApplicationUser? UpdateUser(Guid id, ApplicationUser user)
