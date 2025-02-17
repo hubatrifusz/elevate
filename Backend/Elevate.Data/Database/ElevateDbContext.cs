@@ -7,6 +7,7 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
+using Microsoft.Extensions.Logging;
 
 namespace Elevate.Data.Database
 {
@@ -38,7 +39,7 @@ namespace Elevate.Data.Database
                 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
                 optionsBuilder.UseMySql(connectionString, serverVersion, mySqlOptions =>
-                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
+                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory")).EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
             }
             else
             {
@@ -50,9 +51,19 @@ namespace Elevate.Data.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                b.HasKey(u => u.Id);
+                b.Property(u => u.Id)
+                    .HasDefaultValueSql("UUID()")
+                    .ValueGeneratedOnAdd();
+                b.HasIndex(u => u.Email).IsUnique();
+            });
             modelBuilder.Entity<ApplicationUser>().HasIndex(u => u.Email).IsUnique();
+
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => new { h.UserId, h.HabitId });
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => h.DueDate);
+
             modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
 
             modelBuilder.Entity<Friendship>()

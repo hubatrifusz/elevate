@@ -1,4 +1,5 @@
 ﻿using Elevate.Models.User;
+using Elevate.Utilities;
 
 namespace Elevate.Services
 {
@@ -6,7 +7,7 @@ namespace Elevate.Services
     {
         ApplicationUser? GetUserById(Guid userId);
         List<ApplicationUser>? GetUsersByEmail(string email, int pageNumber, int pageSize);
-        ApplicationUser? AddUser(UserCreateDto user);
+        Task<IdentityResultWithUser> AddUserAsync(UserCreateDto user);
         ApplicationUser? UpdateUser(Guid id, UserUpdateDto user);
         ApplicationUser? DeleteUser(Guid userId);
     }

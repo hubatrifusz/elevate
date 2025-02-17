@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Elevate.Data.Repository;
 using Elevate.Models.User;
+using Elevate.Utilities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Elevate.Services
@@ -21,20 +22,17 @@ namespace Elevate.Services
             return _userRepository.GetUsersByEmail(email, pageNumber, pageSize);
         }
 
-        public async Task<IdentityResult> AddUserAsync(ApplicationUser user, string password)
+        public async Task<IdentityResultWithUser> AddUserAsync(UserCreateDto userCreateDto)
         {
-            var result = await _userManager.CreateAsync(user, password);
+            var user = _mapper.Map<ApplicationUser>(userCreateDto);
+            user.UserName = user.Email;
+            var result = await _userManager.CreateAsync(user, userCreateDto.Password);
 
             if(result.Succeeded)
             {
-                var addedUser = _userRepository.AddUser(user);
-
-                if (addedUser == null)
-                {
-                    return IdentityResult.Failed(new IdentityError { Code = "RepositoryError", Description = "Failed to save user in repository." })
-                }
+                return new IdentityResultWithUser { Result = result, User = user };
             }
-            return result;
+            return new IdentityResultWithUser { Result = result, User = null };
         }
 
         public ApplicationUser? UpdateUser(Guid id, UserUpdateDto userUpdateDto)

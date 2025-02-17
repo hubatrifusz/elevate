@@ -26,9 +26,9 @@ namespace Elevate.Extensions
             services.AddScoped<IFriendshipService, FriendshipService>();
         }
 
-        public static void AddIdentity(this IServiceCollection services, IConfiguration configuration)
+        public static void AddIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -42,6 +42,8 @@ namespace Elevate.Extensions
                 options.Lockout.AllowedForNewUsers = true;
 
                 options.User.RequireUniqueEmail = true;
+
+                options.User.AllowedUserNameCharacters = "";
 
                 //options.SignIn.RequireConfirmedAccount = true;
             })

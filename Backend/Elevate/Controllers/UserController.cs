@@ -1,14 +1,17 @@
-﻿using Elevate.Models.User;
+﻿using AutoMapper;
+using Elevate.Models.User;
 using Elevate.Services;
+using Elevate.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elevate.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserService userService) : ControllerBase
+    public class UserController(IUserService userService, IMapper mapper) : ControllerBase
     {
         private readonly IUserService _userService = userService;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
         public ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
@@ -29,14 +32,31 @@ namespace Elevate.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ApplicationUser> AddUser(UserCreateDto userCreateDto)
+        public async Task<IActionResult> AddUser(UserCreateDto userCreateDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var user = _userService.AddUser(userCreateDto);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+
+            IdentityResultWithUser resultWithUser = await _userService.AddUserAsync(userCreateDto);
+
+            if (resultWithUser.Result != null) 
+            {
+                if (resultWithUser.Result.Succeeded)
+                {
+                    var userDto = _mapper.Map<UserDto>(resultWithUser.User);
+                    return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto);
+                }
+                else
+                {
+                    foreach (var error in resultWithUser.Result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPatch("{id}")]
