@@ -81,14 +81,45 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    this.checkValidationErrors();
-    console.log('asds');
+    if (this.checkValidationErrors()) return;
+    console.log('Successful login!');
   }
 
-  checkValidationErrors() {
-    let emailInput = document.querySelector('#email_email_input_container') as HTMLElement;
-    if (this.loginForm.get('email')?.hasError('required')) {
-      emailInput.style.setProperty('--after-content', '"Dynamic After Element"');
-    }
+  checkValidationErrors(): boolean {
+    const validationMapping: Record<string, { elementId: string; errors: Record<string, string> }> = {
+      email: {
+        elementId: '#email_email_input_container',
+        errors: {
+          required: 'Email is required.',
+          forbiddenPattern: 'Invalid email.',
+        },
+      },
+      password: {
+        elementId: '#password_text_input_container',
+        errors: {
+          required: 'Password is required.',
+        },
+      },
+    };
+
+    let hasErrors = false;
+
+    Object.entries(validationMapping).forEach(([field, config]) => {
+      const inputElement = document.querySelector(config.elementId) as HTMLElement;
+      const control = this.loginForm.get(field);
+
+      if (inputElement && control) {
+        const errorKey = Object.keys(config.errors).find((error) => control.hasError(error)) as keyof typeof config.errors | undefined;
+
+        if (errorKey) {
+          inputElement.style.setProperty('--after-content', `"${config.errors[errorKey]}"`);
+          hasErrors = true;
+        } else {
+          inputElement.style.setProperty('--after-content', '""');
+        }
+      }
+    });
+
+    return !hasErrors;
   }
 }

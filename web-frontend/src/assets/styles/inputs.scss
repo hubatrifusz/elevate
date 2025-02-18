@@ -176,6 +176,8 @@
 }
 
 .input_container::after {
+  content: var(--after-content, "");
+
   position: absolute;
   padding-left: 1rem;
 
