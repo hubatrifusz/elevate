@@ -30,5 +30,18 @@ services:
       db:
         condition: service_healthy
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=yourpassword
+      - PMA_ABSOLUTE_URI=http://localhost:8000/
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+
 volumes:
   db_data:
