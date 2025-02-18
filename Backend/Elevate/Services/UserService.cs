@@ -12,14 +12,19 @@ namespace Elevate.Services
         private readonly IMapper _mapper = mapper;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public ApplicationUser? GetUserById(Guid userId)
+        public async Task<ApplicationUser?> GetUserByIdAsync(Guid userId)
         {
-            return _userRepository.GetUserById(userId);
+            return await _userRepository.GetUserByIdAsync(userId);
         }
 
-        public List<ApplicationUser>? GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public async Task<ApplicationUser?> GetUserByEmailAsync(string email)
         {
-            return _userRepository.GetUsersByEmail(email, pageNumber, pageSize);
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<List<ApplicationUser>?> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
+        {
+            return await _userRepository.GetUsersByEmailAsync(email, pageNumber, pageSize);
         }
 
         public async Task<IdentityResultWithUser> AddUserAsync(UserCreateDto userCreateDto)
@@ -35,14 +40,14 @@ namespace Elevate.Services
             return new IdentityResultWithUser { Result = result, User = null };
         }
 
-        public ApplicationUser? UpdateUser(Guid id, UserUpdateDto userUpdateDto)
+        public async Task<ApplicationUser?> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
         {
-            var ApplicationUser = _userRepository.GetUserById(id)
+            var ApplicationUser = await _userRepository.GetUserByIdAsync(id)
                 ?? throw new Exception("User not found");
 
             _mapper.Map(userUpdateDto, ApplicationUser);
 
-            return _userRepository.UpdateUser(id, ApplicationUser);
+            return await _userRepository.UpdateUserAsync(id, ApplicationUser);
         }
 
         public ApplicationUser? DeleteUser(Guid userId)
