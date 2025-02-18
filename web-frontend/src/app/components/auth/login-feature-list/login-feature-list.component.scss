@@ -1,0 +1,63 @@
+@import "../../../../assets/styles/variables";
+
+#login_feature_list_container {
+  display: flex;
+  flex-direction: row;
+
+  height: 100vh;
+
+  #feature_list_container {
+    flex-grow: 1;
+
+    position: relative;
+    margin: 2rem 0;
+
+    border-radius: calc($border-radius * 4) 0 0 calc($border-radius * 4);
+
+    background-color: $main-color-400;
+    overflow: hidden;
+
+    #features_container {
+      height: 100%;
+      width: 100%;
+
+      overflow: hidden;
+
+      display: flex;
+      position: relative;
+
+      div {
+        height: 100%;
+        width: 100%;
+        flex-shrink: 0;
+      }
+    }
+
+    #nav_dots {
+      display: flex;
+      gap: 1rem;
+
+      position: absolute;
+
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .nav_dot {
+        width: 10px;
+        aspect-ratio: 1/1;
+
+        border-radius: 100rem;
+        border: none;
+
+        background-color: $accent-color-300;
+
+        cursor: pointer;
+      }
+
+      .nav_dot_in_focus {
+        background-color: $accent-color-500;
+      }
+    }
+  }
+}

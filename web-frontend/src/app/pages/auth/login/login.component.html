@@ -11,13 +11,13 @@
       <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Input (email) -->
         <div class="input_container" id="email_email_input_container">
-          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required/>
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required />
           <label for="email_text_input" class="input_title">Enter your email</label>
         </div>
 
         <!-- Password Input (text) -->
         <div class="input_container" id="password_text_input_container">
-          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required/>
+          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required />
           <label for="password_text_input" class="input_title">Enter your password</label>
           <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="togglePasswordView()" />
         </div>
@@ -25,7 +25,7 @@
         <div class="line_container">
           <!-- Remember me Input (checkbox) -->
           <div class="input_container" id="remember_me_checkbox_input_container">
-            <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" formControlName="rememberMe"/>
+            <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" formControlName="rememberMe" />
             <label for="remember_me_checkbox_input" class="checkbox">
               <div class="checkmark"></div>
             </label>
@@ -76,17 +76,7 @@
     </div>
   </div>
 
-  <div id="feature_list_container">
-    <div id="features_container">
-      <div style="background-color: red"></div>
-      <div style="background-color: green"></div>
-      <div style="background-color: blue"></div>
-      <div style="background-color: red">last</div>
-    </div>
-
-    <div id="nav_dots">
-    </div>
-  </div>
+  <app-login-feature-list></app-login-feature-list>
 
   <div id="blured_circle_container">
     <div id="blured_circle"></div>
