@@ -61,5 +61,19 @@ namespace Elevate.Extensions
 
             // Add email sending service (example using built-in but consider a library)
         }
+
+        public static void AddCorsPolicies(this IServiceCollection services) 
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DevelopmentPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
+        }
     }
 }
