@@ -58,6 +58,8 @@ namespace Elevate
             builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCorsPolicies();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -67,7 +69,6 @@ namespace Elevate
                 app.UseSwaggerUI();
             }
 
-            builder.Services.AddCorsPolicies();
             app.UseCors("DevelopmentPolicy");
 
             app.UseAuthorization();
