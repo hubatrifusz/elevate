@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { inputValidator } from '../../../shared/input-validator';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-account',
@@ -10,15 +12,23 @@ import { RouterModule } from '@angular/router';
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent {
+  constructor(private http: HttpClient) {}
+
   loginForm = new FormGroup({
-    name: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, inputValidator(/^[a-zA-Z0-9!#$%&'*+-=?^_{|}~.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/)]),
     password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
+    confirmPassword: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
   });
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    console.log('Successful account creation!');
+    this.postNewUser(this.loginForm.value).subscribe({
+      next: (v) => console.log(v),
+      error: (e) => console.error(e),
+      complete: () => console.info('complete'),
+    });
   }
 
   checkValidationErrors(): boolean {
@@ -66,18 +76,20 @@ export class CreateAccountComponent {
     return hasErrors;
   }
 
-  togglePasswordView(): void {
-    const icon = document.querySelector('#toggle_password_icon') as HTMLImageElement;
-    const input = document.querySelector('#password_text_input') as HTMLInputElement;
+  togglePasswordView(event: MouseEvent): void {
+    const icon = event.target as HTMLImageElement;
+    const input = icon.parentElement?.children[0] as HTMLInputElement;
 
-    if (input.type == 'password') {
-      input.type = 'text';
-      icon.src = 'icons/eye-crossed.png';
-      icon.title = 'Hide Password';
-    } else if (input.type == 'text') {
-      input.type = 'password';
-      icon.src = 'icons/eye.png';
-      icon.title = 'Show Password';
-    }
+    const isPassword = input.type === 'password';
+
+    input.type = isPassword ? 'text' : 'password';
+    icon.src = isPassword ? 'icons/eye-crossed.png' : 'icons/eye.png';
+    icon.title = isPassword ? 'Hide Password' : 'Show Password';
+  }
+
+  private apiUrl = 'http://localhost:8080/api';
+
+  postNewUser(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/User`, formResult);
   }
 }
