@@ -120,6 +120,6 @@ export class LoginComponent {
       }
     });
 
-    return !hasErrors;
+    return hasErrors;
   }
 }
