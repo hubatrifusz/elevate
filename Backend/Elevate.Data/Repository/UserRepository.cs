@@ -9,44 +9,32 @@ namespace Elevate.Data.Repository
     {
         readonly ElevateDbContext _context = context;
 
-        public ApplicationUser? GetUserById(Guid userId)
+        public async Task<ApplicationUser?> GetUserByIdAsync(Guid userId)
         {
-            return _context.Set<ApplicationUser>().SingleOrDefault(u => u.Id == userId);
+            return await _context.Set<ApplicationUser>().SingleOrDefaultAsync(u => u.Id == userId);
         }
 
-        public List<ApplicationUser>? GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public async Task<List<ApplicationUser>?> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
         {
-            return _context.Set<ApplicationUser>()
+            return await _context.Set<ApplicationUser>()
                 .Where(u => u.Email != null && u.Email.Contains(email))
                 .ApplyPagination(pageNumber, pageSize)
-                .ToList();
+                .ToListAsync();
         }
 
-        //public ApplicationUser? AddUser(ApplicationUser user)
-        //{
-        //    var entityEntry = _context.Set<ApplicationUser>().Add(user);
-        //    _context.SaveChanges();
-
-        //    if (entityEntry.State == EntityState.Added)
-        //    {
-        //        return entityEntry.Entity;
-        //    }
-
-        //    return null;
-        //}
-
-        public ApplicationUser? UpdateUser(Guid id, ApplicationUser user)
+        public async Task<ApplicationUser?> UpdateUserAsync(Guid id, ApplicationUser user)
         {
             if (id != user.Id)
             {
                 throw new Exception("User ID does not match");
             }
-            if (!_context.Set<ApplicationUser>().Any(u => u.Id == id))
+            var updatedUser = await _context.Set<ApplicationUser>().AnyAsync(u => u.Id == id);
+            if (!updatedUser)
             {
                 throw new Exception("No such user");
             }
             _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return user;
         }
 

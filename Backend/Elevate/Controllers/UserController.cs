@@ -8,22 +8,21 @@ namespace Elevate.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserService userService, IMapper mapper) : ControllerBase
+    public class UserController(IUserService userService) : ControllerBase
     {
         private readonly IUserService _userService = userService;
-        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
         public ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
-            var users = _userService.GetUsersByEmail(email, pageNumber, pageSize);
+            var users = _userService.GetUsersByEmailAsync(email, pageNumber, pageSize);
             return Ok(users);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<ApplicationUser> GetUserById(Guid id)
+        [HttpGet("{id}", Name = "GetUserByIdAsyncRoute")]
+        public async Task<ActionResult<ApplicationUser>> GetUserByIdAsync(Guid id)
         {
-            var user = _userService.GetUserById(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -31,40 +30,12 @@ namespace Elevate.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddUser(UserCreateDto userCreateDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResultWithUser resultWithUser = await _userService.AddUserAsync(userCreateDto);
-
-            if (resultWithUser.Result != null) 
-            {
-                if (resultWithUser.Result.Succeeded)
-                {
-                    var userDto = _mapper.Map<UserDto>(resultWithUser.User);
-                    return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto);
-                }
-                else
-                {
-                    foreach (var error in resultWithUser.Result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            return BadRequest(ModelState);
-        }
-
         [HttpPatch("{id}")]
-        public ActionResult<ApplicationUser> UpdateUser(Guid id, UserUpdateDto userUpdateDto)
+        public async Task<ActionResult<ApplicationUser>> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
         {
             try
             {
-                var updatedUser = _userService.UpdateUser(id, userUpdateDto);
+                var updatedUser = await _userService.UpdateUserAsync(id, userUpdateDto);
                 if (updatedUser == null)
                 {
                     return NotFound();

@@ -67,6 +67,9 @@ namespace Elevate
                 app.UseSwaggerUI();
             }
 
+            builder.Services.AddCorsPolicies();
+            app.UseCors("DevelopmentPolicy");
+
             app.UseAuthorization();
 
             app.MapControllers();
