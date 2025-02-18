@@ -23,6 +23,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__LocalConnection: Server=db;Database=elevate;User=root;Password=yourpassword;
+    mem_limit: 512m
     ports:
       - "8080:8080"
     depends_on:
