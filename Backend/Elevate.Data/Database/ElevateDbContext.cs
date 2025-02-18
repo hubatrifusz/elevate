@@ -7,6 +7,7 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
+using Microsoft.Extensions.Logging;
 
 namespace Elevate.Data.Database
 {
@@ -50,9 +51,16 @@ namespace Elevate.Data.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                b.HasKey(u => u.Id);
+                b.HasIndex(u => u.Email).IsUnique();
+            });
             modelBuilder.Entity<ApplicationUser>().HasIndex(u => u.Email).IsUnique();
+
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => new { h.UserId, h.HabitId });
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => h.DueDate);
+
             modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
 
             modelBuilder.Entity<Friendship>()

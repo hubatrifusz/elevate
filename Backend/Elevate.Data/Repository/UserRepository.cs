@@ -1,6 +1,7 @@
 ﻿using Elevate.Models.User;
 using Elevate.Extensions;
 using Elevate.Data.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
 {
@@ -21,12 +22,18 @@ namespace Elevate.Data.Repository
                 .ToList();
         }
 
-        public ApplicationUser? AddUser(ApplicationUser user)
-        {
-            ApplicationUser savedUser = _context.Set<ApplicationUser>().Add(user).Entity;
-            _context.SaveChanges();
-            return savedUser;
-        }
+        //public ApplicationUser? AddUser(ApplicationUser user)
+        //{
+        //    var entityEntry = _context.Set<ApplicationUser>().Add(user);
+        //    _context.SaveChanges();
+
+        //    if (entityEntry.State == EntityState.Added)
+        //    {
+        //        return entityEntry.Entity;
+        //    }
+
+        //    return null;
+        //}
 
         public ApplicationUser? UpdateUser(Guid id, ApplicationUser user)
         {

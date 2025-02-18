@@ -1,17 +1,20 @@
-﻿using Elevate.Models.User;
+﻿using AutoMapper;
+using Elevate.Models.User;
 using Elevate.Services;
+using Elevate.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elevate.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IUserService userService) : ControllerBase
+    public class UserController(IUserService userService, IMapper mapper) : ControllerBase
     {
         private readonly IUserService _userService = userService;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
-        private ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
         {
             var users = _userService.GetUsersByEmail(email, pageNumber, pageSize);
             return Ok(users);
@@ -29,14 +32,31 @@ namespace Elevate.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ApplicationUser> AddUser(UserCreateDto userCreateDto)
+        public async Task<IActionResult> AddUser(UserCreateDto userCreateDto)
         {
-            var createdUser = _userService.AddUser(userCreateDto);
-            if (createdUser == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("User could not be created.");
+                return BadRequest(ModelState);
             }
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+
+            IdentityResultWithUser resultWithUser = await _userService.AddUserAsync(userCreateDto);
+
+            if (resultWithUser.Result != null) 
+            {
+                if (resultWithUser.Result.Succeeded)
+                {
+                    var userDto = _mapper.Map<UserDto>(resultWithUser.User);
+                    return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto);
+                }
+                else
+                {
+                    foreach (var error in resultWithUser.Result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPatch("{id}")]
