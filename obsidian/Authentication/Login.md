@@ -55,6 +55,6 @@ The **Login Page** is responsible for user authentication. It allows users to lo
 
 | Action                   | Next Step                              |
 | ------------------------ | -------------------------------------- |
-| Successful login         | Redirect to [[Calendar]] page          |
+| Successful login         | Redirect to [[Dashboard]] page         |
 | Incorrect email/password | Show error message                     |
 | Click "Forgot password?" | Redirect to [[Password Recovery]] page |
