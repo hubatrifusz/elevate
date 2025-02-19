@@ -1,5 +1,5 @@
 ﻿using Elevate.Models.User;
-using Elevate.Utilities;
+using Elevate.Models;
 
 namespace Elevate.Services
 {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Elevate.Models.User;
 using Elevate.Services;
-using Elevate.Utilities;
+using Elevate.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,11 @@ namespace Elevate.Controllers
                 if (resultWithUser.Result.Succeeded)
                 {
                     var userDto = _mapper.Map<UserDto>(resultWithUser.User);
-                    return CreatedAtAction("GetUserByIdRoute", new { id = userDto.Id }, userDto);
+                    return CreatedAtRoute(
+                        "GetUserByIdAsyncRoute",
+                        new { id = userDto.Id },
+                        userDto
+                    );
                 }
                 else
                 {
