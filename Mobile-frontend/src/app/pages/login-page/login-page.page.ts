@@ -15,9 +15,9 @@ export class LoginPagePage implements OnInit {
 
   constructor(private router: Router) { }
 
-  
+
   login(){
-    this.router.navigate(['/tasks']);
+    this.router.navigate(['/footertabs/feed']);
   }
 
   ngOnInit() {
