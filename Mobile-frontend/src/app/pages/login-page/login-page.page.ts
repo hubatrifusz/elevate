@@ -1,23 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonCheckbox } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { add, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.page.html',
   styleUrls: ['./login-page.page.scss'],
   standalone: true,
-  imports: [ IonContent, CommonModule, FormsModule]
+  imports: [IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
 })
 export class LoginPagePage implements OnInit {
+  showPassword = false;
 
-  constructor(private router: Router) { }
+  fb = inject(NonNullableFormBuilder)
+  form = this.fb.group({
+    email: this.fb.control('', { validators: [Validators.required, Validators.email] }),
+    password: this.fb.control('', {
+      validators: [Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/)]
+    })
+  });
 
 
-  login(){
-    this.router.navigate(['/footertabs/feed']);
+
+  togglePasswordVisibility(field: 'password' | 'confirm') {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+
+    }
+  }
+
+  constructor(private router: Router) {
+    addIcons({ eyeOffOutline, eyeOutline })
+  }
+
+
+  onSubmit() {
+    console.log(this.form.value);
+    if(this.form.valid) {
+      // Call the login method from the AuthService
+      this.router.navigate(['/footertabs/feed']);
+    }
+
   }
 
   ngOnInit() {

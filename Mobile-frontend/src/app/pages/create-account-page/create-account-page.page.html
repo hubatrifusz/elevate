@@ -3,29 +3,87 @@
     <h1 class="text-center welcomeh1">Welcome to Elevate!</h1>
     <p class="text-center subtitle">Small steps lead to big changes.<br>Let's go!</p>
 
-    <fieldset class="input-container">
-      <legend>Enter your first name</legend>
-      <input type="text" class="input" name="firstName" placeholder="Jakab">
-    </fieldset>
+    <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- === {{form.controls.confirmPassword.errors | json}} === -->
 
-    <fieldset class="input-container">
-      <legend>Enter your last name</legend>
-      <input type="text" class="input" name="lastname" placeholder="Gipsz">
-    </fieldset>
+      <fieldset class="input-container">
+        <legend>Enter your first name</legend>
+        <input type="text" class="input" formControlName="firstName" name="firstName" placeholder="Jakab">
+        @if(form.controls.firstName.invalid && (form.controls.firstName.touched || form.controls.firstName.dirty)){
+        @if(form.controls.firstName.errors?.["required"]){
+        <small>First name is required</small>
+        }
+        }
+      </fieldset>
 
-    <fieldset class="input-container">
-      <legend>Enter your email</legend>
-      <input type="email" class="input" name="email" placeholder="gipzsjakab@kukac.com">
-    </fieldset>
+      <fieldset class="input-container">
+        <legend>Enter your last name</legend>
+        <input type="text" class="input" formControlName="lastName" name="lastname" placeholder="Gipsz">
+        @if(form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)){
+        @if(form.controls.lastName.errors?.["required"]){
+        <small>Last name is required</small>
+        }
+        }
+      </fieldset>
 
-    <fieldset class="input-container">
-      <legend>Enter your password</legend>
-      <input type="password" class="input">
-    </fieldset>
+      <fieldset class="input-container">
+        <legend>Enter your email</legend>
+        <input type="email" class="input" name="email" formControlName="email" placeholder="gipzsjakab@kukac.com">
+        @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
+        @if(form.controls.email.errors?.["required"]){
+        <small>Email is required</small>
+        }
+        @else if(form.controls.email.errors?.["email"]){
+        <small>Invalid email format</small>
+        }
+        }
+      </fieldset>
 
-    <button class="button" href="/tasks">Create account</button>
+      <fieldset class="input-container">
+        <legend>Enter your password</legend>
+        <div class="password-input-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="input">
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+            (click)="togglePasswordVisibility('password')">
+          </ion-icon>
+        </div>
+        @if(form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)){
+        @if(form.controls.password.errors?.["minlength"]){
+        <small>Password must be at least 8 characters long </small>
+        }
+        @else if(form.controls.password.errors?.["required"]){
+        <small>Password is required</small>
+        }
+        @else if(form.controls.password.errors?.["pattern"]){
+        <small>Password must contain at least one uppercase letter, one lowercase letter, one number and one special
+          character
+        </small>
+        }
+        }
+      </fieldset>
 
-    
+      <fieldset class="input-container">
+        <legend>Confirm your password</legend>
+        <div class="password-input-wrapper">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" class="input">
+          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+            (click)="togglePasswordVisibility('confirm')">
+          </ion-icon>
+        </div>
+        @if(form.controls.confirmPassword.invalid && (form.controls.confirmPassword.touched ||
+        form.controls.confirmPassword.dirty)){
+        @if(form.controls.confirmPassword.errors?.["passwordMatch"]){
+        <small>Password don't match </small>
+        }
+        @else if (form.controls.confirmPassword.errors?.["required"]) {
+        <small>Confirm password is required</small>
+        }
+        }
+      </fieldset>
+
+      <button class="button" type="submit">Create account</button>
+    </form>
+
 
   </div>
 </ion-content>
