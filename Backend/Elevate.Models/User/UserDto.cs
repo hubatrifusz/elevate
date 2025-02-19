@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elevate.Common.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elevate.Models.User
 {
@@ -6,7 +7,7 @@ namespace Elevate.Models.User
     {
         [Required]
         public required Guid Id { get; set; }
-        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedAt { get; set; } = DateTimeConverter.GetCetTime();
         [Required, EmailAddress, MaxLength(30)]
         public required string Email { get; set; }
         [Required, MaxLength(20)]

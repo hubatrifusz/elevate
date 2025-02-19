@@ -1,7 +1,6 @@
-﻿using Elevate.Models.User;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace Elevate.Utilities
+namespace Elevate.Models.User
 {
     public class IdentityResultWithUser
     {

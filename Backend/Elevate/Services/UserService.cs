@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Elevate.Data.Repository;
 using Elevate.Models.User;
-using Elevate.Utilities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Elevate.Services
@@ -33,7 +32,7 @@ namespace Elevate.Services
             user.UserName = user.Email;
             var result = await _userManager.CreateAsync(user, userCreateDto.Password);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new IdentityResultWithUser { Result = result, User = user };
             }

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Elevate.Common\Elevate.Common.csproj" />
     <ProjectReference Include="..\Elevate.Models\Elevate.Models.csproj" />
   </ItemGroup>
 

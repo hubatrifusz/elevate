@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Elevate.Models.User;
 using Elevate.Services;
-using Elevate.Utilities;
+using Elevate.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elevate.Controllers
