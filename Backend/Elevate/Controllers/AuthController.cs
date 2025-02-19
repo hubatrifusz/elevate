@@ -21,7 +21,7 @@ namespace Elevate.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly IConfiguration _configuration = configuration;
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(UserCreateDto userCreateDto)
         {
             if (!ModelState.IsValid)

@@ -2,6 +2,8 @@ using Asp.Versioning;
 using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Profiles;
+using Elevate.Utilities;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
@@ -19,7 +21,12 @@ namespace Elevate
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(
+                    new LowerCaseParameterTransformer())
+                );
+            });
 
             builder.Services.AddIdentity();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
