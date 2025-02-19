@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elevate.Common.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elevate.Models.User
 {
     public class UserCreateDto
     {
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedAt { get; set; } = DateTimeConverter.GetCetTime();
 
         [Required, EmailAddress, MaxLength(30)]
         public required string Email { get; set; }

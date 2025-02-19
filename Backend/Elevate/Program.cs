@@ -2,12 +2,13 @@ using Asp.Versioning;
 using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Profiles;
-using Elevate.Utilities;
+using Elevate.Models;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Elevate.Common.Utilities;
 
 namespace Elevate
 {
