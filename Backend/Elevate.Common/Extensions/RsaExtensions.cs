@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Crypto.Parameters;
 using System.Text.RegularExpressions;
+using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Asn1;
 
 namespace Elevate.Common.Extensions
 {
@@ -16,11 +16,14 @@ namespace Elevate.Common.Extensions
                                 .Replace("\n", "")
                                 .Replace("\r", "")
                                 .Replace(" ", "");
-                base64 = Regex.Replace(pem, "[^a-zA-Z0-9+/=]", "");
+                base64 = Regex.Replace(base64, "[^a-zA-Z0-9+/=]", "");
                 rsa.ImportPkcs8PrivateKey(Convert.FromBase64String(base64), out _);
                 return;
             }
-            catch (Exception) { /* Ignore and try PKCS#1 */ }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to import PKCS#8 private key: {ex.Message}");
+            }
 
             try
             {
@@ -29,7 +32,7 @@ namespace Elevate.Common.Extensions
                                 .Replace("\n", "")
                                 .Replace("\r", "")
                                 .Replace(" ", "");
-                base64 = Regex.Replace(pem, "[^a-zA-Z0-9+/=]", "");
+                base64 = Regex.Replace(base64, "[^a-zA-Z0-9+/=]", "");
                 var rsaParams = DecodePKCS1PrivateKey(Convert.FromBase64String(base64));
 
                 rsa.ImportParameters(rsaParams);
@@ -43,27 +46,26 @@ namespace Elevate.Common.Extensions
 
         private static RSAParameters DecodePKCS1PrivateKey(byte[] privateKeyBytes)
         {
-            using (var reader = new StreamReader(new MemoryStream(privateKeyBytes)))
+            try
             {
-                var pemReader = new PemReader(reader);
-                var pkcs1 = pemReader.ReadObject() as RsaPrivateCrtKeyParameters;
-                if (pkcs1 == null)
-                {
-                    throw new CryptographicException("Invalid PKCS#1 private key.");
-                }
+                var asn1 = Asn1Object.FromByteArray(privateKeyBytes);
+                var privateKeyStructure = RsaPrivateKeyStructure.GetInstance(asn1);
 
-                var rsaParams = new RSAParameters
+                return new RSAParameters
                 {
-                    Modulus = pkcs1.Modulus.ToByteArrayUnsigned(),
-                    Exponent = pkcs1.PublicExponent.ToByteArrayUnsigned(),
-                    D = pkcs1.Exponent.ToByteArrayUnsigned(),
-                    P = pkcs1.P.ToByteArrayUnsigned(),
-                    Q = pkcs1.Q.ToByteArrayUnsigned(),
-                    DP = pkcs1.DP.ToByteArrayUnsigned(),
-                    DQ = pkcs1.DQ.ToByteArrayUnsigned(),
-                    InverseQ = pkcs1.QInv.ToByteArrayUnsigned()
+                    Modulus = privateKeyStructure.Modulus.ToByteArrayUnsigned(),
+                    Exponent = privateKeyStructure.PublicExponent.ToByteArrayUnsigned(),
+                    D = privateKeyStructure.PrivateExponent.ToByteArrayUnsigned(),
+                    P = privateKeyStructure.Prime1.ToByteArrayUnsigned(),
+                    Q = privateKeyStructure.Prime2.ToByteArrayUnsigned(),
+                    DP = privateKeyStructure.Exponent1.ToByteArrayUnsigned(),
+                    DQ = privateKeyStructure.Exponent2.ToByteArrayUnsigned(),
+                    InverseQ = privateKeyStructure.Coefficient.ToByteArrayUnsigned()
                 };
-                return rsaParams;
+            }
+            catch
+            {
+                throw new CryptographicException("Invalid PKCS#1 private key.");
             }
         }
 
