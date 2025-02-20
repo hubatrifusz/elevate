@@ -90,6 +90,6 @@ export class CreateAccountComponent {
   private apiUrl = 'http://localhost:8080/api';
 
   postNewUser(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/User`, formResult);
+    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
   }
 }
