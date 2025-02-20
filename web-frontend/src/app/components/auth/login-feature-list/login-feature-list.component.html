@@ -1,12 +1,13 @@
 <div id="login_feature_list_container">
-  <div id="feature_list_container">
-    <div id="features_container">
-      <div style="background-color: red"></div>
-      <div style="background-color: green"></div>
-      <div style="background-color: blue"></div>
-      <div style="background-color: red">last</div>
+  <div id="login_feature_list">
+    <!-- <video autoplay muted loop id="myVideo">
+      <source src="videos/stock.mp4" type="video/mp4" />
+    </video> -->
+    <div class="video"></div>
+    <div class="grid">
+      @for(item of gridItems; track item) {
+      <div class="grid-item"></div>
+      }
     </div>
-
-    <div id="nav_dots"></div>
   </div>
 </div>
