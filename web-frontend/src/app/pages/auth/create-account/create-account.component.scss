@@ -90,10 +90,18 @@
       left: 3rem;
     }
   }
+
+  app-login-feature-list {
+    flex-grow: 1;
+  }
 }
 
 @media (max-width: 1400px) {
   #create_account_page_container {
     justify-content: center;
+
+    app-login-feature-list {
+      display: none;
+    }
   }
 }

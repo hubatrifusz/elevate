@@ -4,7 +4,7 @@
     <div id="title_container">
       <h1 class="header_highlight">Create Account</h1>
       <p>Take the first step towards something great. Let's get started!</p>
-      <br>
+      <br />
     </div>
     <!-- Form container -->
     <div id="form_container">
@@ -36,7 +36,14 @@
 
         <!-- Confirm Password Input (text) -->
         <div class="input_container" id="confirm_password_text_input_container">
-          <input type="password" name="confirm_password_text_input" id="confirm_password_text_input" placeholder=" " formControlName="confirmPassword" required />
+          <input
+            type="password"
+            name="confirm_password_text_input"
+            id="confirm_password_text_input"
+            placeholder=" "
+            formControlName="confirmPassword"
+            required
+          />
           <label for="confirm_password_text_input" class="input_title">Confirm your password</label>
           <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="togglePasswordView($event)" />
         </div>
@@ -73,4 +80,6 @@
       </button>
     </div>
   </div>
+
+  <app-login-feature-list></app-login-feature-list>
 </div>

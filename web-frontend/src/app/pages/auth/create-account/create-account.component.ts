@@ -4,10 +4,11 @@ import { inputValidator } from '../../../shared/input-validator';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
 
 @Component({
   selector: 'app-create-account',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, LoginFeatureListComponent],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss',
 })
