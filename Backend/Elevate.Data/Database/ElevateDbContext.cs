@@ -7,7 +7,6 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
-using Microsoft.Extensions.Logging;
 
 namespace Elevate.Data.Database
 {
