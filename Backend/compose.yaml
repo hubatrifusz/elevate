@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:9.2.0
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword
+      MYSQL_DATABASE: elevate
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__LocalConnection: Server=db;Database=elevate;User=root;Password=yourpassword;
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=yourpassword
+      - PMA_ABSOLUTE_URI=http://localhost:8000/
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
