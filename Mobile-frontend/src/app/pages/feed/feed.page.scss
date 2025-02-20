@@ -14,13 +14,14 @@ ion-content {
 
 ion-header {
   height: fit-content;
-
+  // border-radius: 80px;
   ion-title {
     color: black;
     font-size: 25px;
     padding: 15px;
     letter-spacing: 0.6px;
   }
+
 }
 
 .profile-pic {
