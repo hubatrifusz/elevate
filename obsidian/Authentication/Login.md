@@ -22,11 +22,11 @@ The **Login Page** is responsible for user authentication. It allows users to lo
 | Create one here!    | Redirects to the [[Create Account]] page (/create-account).        | redirect_to_create_account_button |
 ##### **Error Messages**
 
-| Scenario               | Message                                   |
-| ---------------------- | ----------------------------------------- |
-| Invalid email/password | "Invalid email or password"               |
-| Empty fields           | "Please fill out all fields"              |
-| Server error           | "Something went wrong, please try again!" |
+| Scenario      | Message                                        |
+| ------------- | ---------------------------------------------- |
+| Invalid email | "Invalid email."                               |
+| Empty fields  | "Email is required." / "Password is required." |
+| Server error  | "Something went wrong, please try again!"      |
 ### 3. Components & File Structure
 
 - Login component
@@ -40,11 +40,6 @@ The **Login Page** is responsible for user authentication. It allows users to lo
 │  ├── login.component.html
 │  ├── login.component.scss
 │  ├── login.component.spec.ts
-├──create-account/
-│  ├── create-account.component.ts
-│  ├── create-account.component.html
-│  ├── create-account.component.scss
-│  ├── create-account.component.spec.ts
 ├──password-recovery/
 │  ├── password-recovery.component.ts
 │  ├── password-recovery.component.html

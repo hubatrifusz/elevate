@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Authentication/Login.md",
+                "file": "Authentication/Create Account.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Login"
+              "title": "Create Account"
             }
           }
         ]
@@ -165,11 +165,11 @@
   },
   "active": "5bb814250d69741a",
   "lastOpenFiles": [
-    "Authentication/Create Account.md",
-    "Calendar.md",
-    "Documentation.md",
     "Authentication/Login.md",
+    "Authentication/Create Account.md",
     "Authentication/Password Recovery.md",
+    "Documentation.md",
+    "Calendar.md",
     "Authentication",
     "Account Creation.md",
     "Login View.md",
