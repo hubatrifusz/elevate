@@ -68,7 +68,7 @@ namespace Elevate.Extensions
             {
                 options.AddPolicy("DevelopmentPolicy", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
+                    builder.WithOrigins(["http://localhost", "http://localhost:80", "http://frontend"])
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
