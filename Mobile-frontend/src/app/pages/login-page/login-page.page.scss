@@ -1,4 +1,5 @@
 @use "../../../theme/variables" as *;
+@use "../../../theme/inputs.scss" as *;
 
 
 
@@ -7,6 +8,7 @@
   min-height: 80px;
   font-size: 32pt;
   margin: 0 auto 10px auto;
+  padding: 4rem 0 0 0;
 }
 
 .subtitle {
@@ -19,90 +21,90 @@
 
 }
 
-.input-container {
-  width: 350px;
-  height: 50px;
-  margin: auto;
-  border: 2px solid $accent-color-400;
-  border-radius: 15px;
-  margin-bottom: 4vh;
+// .input-container {
+//   width: 350px;
+//   height: 50px;
+//   margin: auto;
+//   border: 2px solid $accent-color-400;
+//   border-radius: 15px;
+//   margin-bottom: 4vh;
 
-  legend {
-    color: $accent-color-400;
-  }
+//   legend {
+//     color: $accent-color-400;
+//   }
 
-  @media (max-width: 370px) {
-    width: 300px;
-  }
-}
-
-.input-container:hover,
-.input-container:focus-within {
-  border: 2px solid $accent-color-600;
-  scale: 1.05;
-  transition: 0.2s;
-}
-
-// .input-container:nth-child(2) {
-//   dont work
-//   margin-bottom: 0;
+//   @media (max-width: 370px) {
+//     width: 300px;
+//   }
 // }
 
-.input {
-  background-color: transparent;
-  border: none;
-  width: 100%;
-  height: 40px;
-  position: relative;
-  top: -15px;
+// .input-container:hover,
+// .input-container:focus-within {
+//   border: 2px solid $accent-color-600;
+//   scale: 1.05;
+//   transition: 0.2s;
+// }
 
-}
+// // .input-container:nth-child(2) {
+// //   dont work
+// //   margin-bottom: 0;
+// // }
 
-input[type="text"]:-webkit-autofill,
-input[type="password"]:-webkit-autofill,
-input[type="email"]:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px $main-color-100 inset;
-  -webkit-text-fill-color: $text-color-dark;
-}
+// .input {
+//   background-color: transparent;
+//   border: none;
+//   width: 100%;
+//   height: 40px;
+//   position: relative;
+//   top: -15px;
+
+// }
+
+// input[type="text"]:-webkit-autofill,
+// input[type="password"]:-webkit-autofill,
+// input[type="email"]:-webkit-autofill {
+//   -webkit-box-shadow: 0 0 0 30px $main-color-100 inset;
+//   -webkit-text-fill-color: $text-color-dark;
+// }
 
 
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-}
+// input:focus,
+// textarea:focus,
+// select:focus {
+//   outline: none;
+// }
 
-.password-input-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
+// .password-input-wrapper {
+//   position: relative;
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
 
-  .password-toggle {
-    position: absolute;
-    right: 5px;
-    top: 15%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    padding: 5px;
-    font-size: 1.2rem;
-    color: var(--ion-color-medium);
+//   .password-toggle {
+//     position: absolute;
+//     right: 5px;
+//     top: 15%;
+//     transform: translateY(-50%);
+//     cursor: pointer;
+//     padding: 5px;
+//     font-size: 1.2rem;
+//     color: var(--ion-color-medium);
 
-    &:hover {
-      color: var(--ion-color-primary);
-    }
-  }
+//     &:hover {
+//       color: var(--ion-color-primary);
+//     }
+//   }
 
-  .input {
-    padding-right: 35px; // Make space for the icon
-  }
-}
+//   .input {
+//     padding-right: 35px; // Make space for the icon
+//   }
+// }
 
 small {
   color: #ff4444; // Error red color
   font-size: 12px;
   position: relative;
-  top: -25px; // Adjusted to be closer to input
+  top: -10px; // Adjusted to be closer to input
   left: 15px; // Add some left padding
   background-color: transparent;
   text-shadow: 2px black;

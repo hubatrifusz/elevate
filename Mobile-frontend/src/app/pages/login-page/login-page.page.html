@@ -4,8 +4,21 @@
     <p class="text-center subtitle">Small steps lead to big changes.<br>Let's go!</p>
     <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
 
+      <div class="input_container" id="email_email_input_container">
+        <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required />
+        <label for="email_text_input" class="input_title">Enter your email</label>
+        @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
+        @if(form.controls.email.errors?.["required"]){
+        <small>Email is required</small>
+        }
+        @else if(form.controls.email.errors?.["email"]){
+        <small>Invalid email format</small>
+        }
+        }
+      </div>
 
-      <fieldset class="input-container">
+
+      <!-- <fieldset class="input-container">
         <legend>Enter your email</legend>
         <input type="email" class="input" name="email" formControlName="email" placeholder="gipzsjakab@kukac.com">
         @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
@@ -16,9 +29,31 @@
         <small>Invalid email format</small>
         }
         }
-      </fieldset>
+      </fieldset> -->
 
-      <fieldset class="input-container">
+      <div class="input_container" id="password_text_input_container">
+        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'" id="password_text_input" placeholder=" " formControlName="password"
+          required />
+        <label for="password_text_input" class="input_title">Enter your password</label>
+        <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+          (click)="togglePasswordVisibility('password')">
+        </ion-icon>
+          @if(form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)){
+          @if(form.controls.password.errors?.["minlength"]){
+          <small>Password must be at least 8 characters long </small>
+          }
+          @else if(form.controls.password.errors?.["required"]){
+          <small>Password is required</small>
+          }
+          @else if(form.controls.password.errors?.["pattern"]){
+          <small>Password must contain at least one uppercase letter, one lowercase letter and one special
+            character
+          </small>
+          }
+          }
+      </div>
+
+      <!-- <fieldset class="input-container">
         <legend>Enter your password</legend>
         <div class="password-input-wrapper">
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="input">
@@ -39,7 +74,7 @@
         </small>
         }
         }
-      </fieldset>
+      </fieldset> -->
 
       <div id="checkbox">
         <input type="checkbox" name="RememberMe" id="RememberMe">
