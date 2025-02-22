@@ -20,8 +20,6 @@ namespace Elevate
 
             builder.Configuration.AddEnvironmentVariables();
 
-            // Add services to the container.
-
             builder.Services.AddControllers(options =>
             {
                 options.Conventions.Add(new RouteTokenTransformerConvention(
@@ -30,7 +28,6 @@ namespace Elevate
             });
 
             builder.Services.AddIdentity();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -79,6 +76,10 @@ namespace Elevate
 
             app.UseCors("DevelopmentPolicy");
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddJwtAuthentication(builder.Configuration);
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
@@ -87,7 +88,6 @@ namespace Elevate
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ElevateDbContext>();
 
-                // Retry logic
                 var retryCount = 5;
                 for (int i = 0; i < retryCount; i++)
                 {
