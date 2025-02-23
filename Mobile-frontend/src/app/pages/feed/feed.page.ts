@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -6,7 +6,6 @@ import { list, calendar, people, menu, settings, person, personCircle, personCir
 import { FootertabsComponent } from "../../components/footertabs/footertabs.component";
 import { Router, RouterLink } from '@angular/router';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
-
 
 @Component({
   selector: 'app-feed',
@@ -18,17 +17,17 @@ import { TaskCardComponent } from "../../components/task-card/task-card.componen
 export class FeedPage {
   tasks: { title: string }[] = [];
 
-
-
   constructor(private menuCtrl: MenuController, private router: Router) {
-    addIcons({ribbonOutline,settings,logOutOutline,add,ribbon,personOutline,personCircleOutline,personCircle,person,people,menu});
+    addIcons({ ribbonOutline, settings, logOutOutline, add, ribbon, personOutline, personCircleOutline, personCircle, person, people, menu });
 
     this.generateTasks();
   }
+
+
+
   Logout() {
     this.router.navigate(['/login-page']);
   }
-
 
   generateTasks() {
     for (let i = 1; i <= 40; i++) {
@@ -39,7 +38,4 @@ export class FeedPage {
   openMenu() {
     this.menuCtrl.toggle('');
   }
-   
-
-
 }

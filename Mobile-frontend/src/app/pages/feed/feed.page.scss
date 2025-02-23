@@ -9,7 +9,10 @@ ion-content {
 }
 
 .white-background {
-  --ion-background-color: $background-color-light;
+  --ion-background-color: hsl(248, 10%, 80%);
+  @media(prefers-color-scheme: dark) {
+    --ion-background-color: hsl(248, 10%, 20%);
+  }
 }
 
 ion-header {
@@ -26,6 +29,7 @@ ion-header {
       color: $text-color-200;
     }
   }
+
   --ion-toolbar-background: transparent;
 
 
@@ -40,15 +44,27 @@ ion-toolbar {
 }
 
 .profile-pic {
-  margin-top: 40px;
+  display: flex;
+  justify-content: center; // Center horizontally
+  align-items: center; // Center vertically
+  height: 100px; // Adjust the height as needed
+  padding-top: 10px;
+}
+
+.icon {
+  font-size: 50px; // Adjust the size of the icon as needed
 }
 
 h2 {
-  color: black;
-  font-size: 22px;
+  color: $text-color-900;
+  font-size: $font-size-xl;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 60px;
+
+  @media(prefers-color-scheme: dark) {
+    color: $text-color-200;
+  }
 }
 
 .menu-item {
@@ -59,12 +75,18 @@ h2 {
   margin-top: 25px;
   border-radius: 15px;
 
+
+
   ion-icon {
     height: 35px;
     width: 35px;
     align-items: left;
     color: $text-color-dark;
     margin: 0px 5px;
+
+    @media(prefers-color-scheme: dark) {
+      color: $text-color-400;
+    }
   }
 
   span {
@@ -74,6 +96,10 @@ h2 {
     color: $text-color-dark;
     text-align: center;
     margin: auto;
+
+    @media(prefers-color-scheme: dark) {
+      color: $text-color-400;
+    }
 
     &::first-letter {
       text-transform: uppercase;
@@ -103,8 +129,9 @@ h2 {
   background-color: $text-color-dark;
   margin: 2vh auto;
 }
-.icon{
+
+.icon {
   height: 45px;
   width: 45px;
-  --ion-margin:auto
+  --ion-margin: auto
 }

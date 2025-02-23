@@ -17,7 +17,7 @@
       </fieldset> -->
 
       <div class="input_container">
-        <input type="text" name="firstName" placeholder=" " formControlName="firstName" required />
+        <input id="firstName" type="text" name="firstName" placeholder=" " formControlName="firstName" required />
         <label for="firstName" class="input_title">Enter your first name</label>
         @if(form.controls.firstName.invalid && (form.controls.firstName.touched || form.controls.firstName.dirty)){
         @if(form.controls.firstName.errors?.["required"]){
@@ -36,8 +36,8 @@
         }
       </fieldset> -->
       <div class="input_container">
-        <input type="text" placeholder=" " formControlName="lastName" required />
-        <label for="email_text_input" class="input_title">Enter your last name</label>
+        <input id="lastname" type="text" placeholder=" " formControlName="lastName" required />
+        <label for="lastname" class="input_title">Enter your last name</label>
         @if(form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)){
         @if(form.controls.lastName.errors?.["required"]){
         <small>Last name is required</small>
@@ -74,8 +74,8 @@
 
 
       <div class="input_container" id="password_text_input_container">
-        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'" id="password_text_input"
-          placeholder=" " formControlName="password" required />
+        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'"
+          id="password_text_input" placeholder=" " formControlName="password" required />
         <label for="password_text_input" class="input_title">Enter your password</label>
         <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
           (click)="togglePasswordVisibility('password')">
@@ -115,8 +115,8 @@
       </fieldset> -->
 
       <div class="input_container" id="password_text_input_container">
-        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'" id="password_text_input"
-          placeholder=" " formControlName="confirmPassword" required />
+        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'"
+          id="password_text_input" placeholder=" " formControlName="confirmPassword" required />
         <label for="password_text_input" class="input_title">Confirm your password</label>
         <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
           (click)="togglePasswordVisibility('password')">
@@ -132,7 +132,7 @@
         }
       </div>
 
-      <button class="button" type="submit">Create account</button>
+      <button class="button" [disabled]="form.invalid" type="submit">Create account</button>
     </form>
 
 
