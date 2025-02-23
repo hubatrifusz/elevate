@@ -21,6 +21,8 @@
 
 }
 
+
+
 // .input-container {
 //   width: 350px;
 //   height: 50px;
@@ -141,7 +143,7 @@ small {
   position: relative;
   margin: auto;
   top: 0px;
-  right: 95px;
+  right: 85px;
   width: 130px;
   height: 25px;
 
@@ -171,6 +173,22 @@ small {
   display: block;
   margin: 3vh auto;
 
+}
+
+.forgot_password {
+  color: $text-color-dark;
+  font-size: 13px;
+  width: 150px;
+  height: 30px;
+  background-color: transparent;
+  text-decoration: underline;
+  position: relative;
+  top: 0px;
+  display: block;
+  margin: auto;
+  position: relative;
+  top: -31px;
+  left: 95px;
 }
 
 .button:hover {

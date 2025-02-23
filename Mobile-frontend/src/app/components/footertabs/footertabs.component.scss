@@ -4,7 +4,6 @@
 ion-tab-bar{
     border-radius: 80px;
     --ion-background-color:hsl(248, 10%, 95%);
-    box-shadow: 0px 10px 10px 0px hsl(244, 10%, 69%);
-    // margin-bottom: 10px;
-    margin: 0 10px 10px 10px;
+    box-shadow: 0px 0px 10px 0px $shadow;
+    margin: 0 10px 15px 10px;
 }

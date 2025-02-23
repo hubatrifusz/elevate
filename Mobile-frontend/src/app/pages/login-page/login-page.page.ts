@@ -42,6 +42,7 @@ export class LoginPagePage implements OnInit {
 
   onSubmit() {
     console.log(this.form.value);
+    console.log(this.form.valid);
     if(this.form.valid) {
       // Call the login method from the AuthService
       this.router.navigate(['/footertabs/feed']);
