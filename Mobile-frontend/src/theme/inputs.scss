@@ -17,7 +17,19 @@
         &:-webkit-autofill {
             -webkit-box-shadow: 0 0 0 30px $main-color-100 inset;
             -webkit-text-fill-color: $text-color-900;
+
+            @media(prefers-color-scheme: dark) {
+                -webkit-box-shadow: 0 0 0 30px $main-color-700 inset;
+                -webkit-text-fill-color: $text-color-200;
+            }
         }
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-700;
+            color: $text-color-200;
+        }
+
     }
 
     // Input title
@@ -35,6 +47,14 @@
         pointer-events: none;
 
         transition: all 100ms ease-in-out;
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-700;
+            color: $text-color-200;
+        }
+
+
     }
 
     // Text input
@@ -59,6 +79,11 @@
             color: $accent-color-400;
             font-size: smaller;
             font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: black;
+                border-radius: 15px;
+            }
         }
 
         // Remove accent color if filled but not in focus
@@ -89,11 +114,21 @@
             color: $accent-color-400;
             font-size: smaller;
             font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: black;
+                border-radius: 15px;
+            }
         }
 
         // Remove accent color if filled but not in focus
         &:not(:focus):not(:placeholder-shown)+.input_title {
             color: $text-color-700;
+        }
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-700;
         }
     }
 
@@ -120,6 +155,11 @@
             color: $accent-color-400;
             font-size: smaller;
             font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: black;
+                border-radius: 15px;
+            }
         }
 
         // Remove accent color if filled but not in focus

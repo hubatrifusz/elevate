@@ -1,0 +1,61 @@
+@use "../../../theme/variables.scss" as *;
+
+.container {
+    background-color: $main-color-500;
+    width: 90%;
+    height: 70px;
+    margin: 25px auto ;
+    border-radius: 15px;
+    display: flex;
+    align-items: center; // Vertically center the children
+
+    @media(prefers-color-scheme: dark) {
+        background-color: $main-color-700;
+    }
+
+    .color {
+        background-color: $accent-color-400;
+        width: 5%;
+        height: 70px;
+        border-radius: 15px 0 0 15px;
+        margin-right: 10px;
+    }
+    .red{
+        background-color: $alert-color-400;
+    }
+
+    ion-checkbox {
+        width: 50px;
+        height: 50px;
+    }
+
+    ion-label {
+        font-size: $font-size-sm;
+        color: $text-color-200;
+
+    }
+
+    .time {
+        background-color: $main-color-700;
+        border-radius: 10px;
+        margin-left: auto; // Pushes the .time div to the right
+        margin-right: 10px;
+        padding: 5px;
+        display: flex; // Add Flexbox
+        align-items: center; // Center vertically
+        justify-content: center;
+
+        @media(prefers-color-scheme: dark) {
+            background-color: $main-color-800;
+        }
+
+        ion-label {
+            font-size: $font-size-xs;
+            color: $text-color-200;
+
+            @media(prefers-color-scheme: dark) {
+                color: $text-color-200;
+            }
+        }
+    }
+}

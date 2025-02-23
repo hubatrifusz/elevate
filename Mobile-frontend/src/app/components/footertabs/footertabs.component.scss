@@ -1,9 +1,20 @@
 @use "../../../theme/variables.scss" as *;
 
-
-ion-tab-bar{
+ion-tab-bar {
     border-radius: 80px;
-    --ion-background-color:hsl(248, 10%, 95%);
+    --ion-background-color: hsl(248, 10%, 95%);
     box-shadow: 0px 0px 10px 0px $shadow;
-    margin: 0 10px 15px 10px;
+    margin: 0 auto 10px auto;
+    width: calc(100% - 50px);
+    // ion-icon{
+    //     --ion-color-selected: hsl(249, 40%, 40%);
+
+    // }
+    ion-tab-button {
+        --color-selected: hsl(249, 40%, 50%);
+    }
+
+    @media(prefers-color-scheme: dark) {
+        box-shadow: 0px 0px 10px 0px black;
+    }
 }

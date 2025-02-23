@@ -14,14 +14,29 @@ ion-content {
 
 ion-header {
   height: fit-content;
+
   // border-radius: 80px;
   ion-title {
-    color: black;
+    color: $text-color-900;
     font-size: 25px;
     padding: 15px;
     letter-spacing: 0.6px;
-  }
 
+    @media(prefers-color-scheme: dark) {
+      color: $text-color-200;
+    }
+  }
+  --ion-toolbar-background: transparent;
+
+
+}
+
+ion-toolbar {
+  --ion-background-color: transparent;
+
+  @media(prefers-color-scheme: dark) {
+    --ion-background-color: transparent !important;
+  }
 }
 
 .profile-pic {
@@ -73,11 +88,11 @@ h2 {
   font-size: 20px;
 
   span {
-    color: red;
+    color: $alert-color-400;
   }
 
   ion-icon {
-    color: red;
+    color: $alert-color-400;
   }
 
 }
@@ -87,4 +102,9 @@ h2 {
   height: 1px;
   background-color: $text-color-dark;
   margin: 2vh auto;
+}
+.icon{
+  height: 45px;
+  width: 45px;
+  --ion-margin:auto
 }

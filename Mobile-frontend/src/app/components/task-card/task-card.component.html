@@ -1,0 +1,16 @@
+@for (habit of habits ; track $index) {
+<div class="container">
+  @if(habit.is_positive){
+  <div class="color"></div>
+  }
+  @else{
+  <div class="color red"></div>
+  }
+  <ion-checkbox></ion-checkbox>
+  <ion-label>{{habit.title}} </ion-label>
+  <div class="time">
+    <ion-icon name="time"></ion-icon>
+    <ion-label>{{habit.frequency}}</ion-label>
+  </div>
+</div>
+}

@@ -128,16 +128,6 @@ small {
   }
 }
 
-// Adjust input container spacing when error is present
-.input-container.has-error {
-  margin-bottom: 6vh; // Increase bottom margin to accommodate error message
-  border-color: #ff4444; // Change border color for error state
-
-  &:hover,
-  &:focus-within {
-    border-color: #ff6666; // Lighter red on hover/focus
-  }
-}
 
 #checkbox {
   position: relative;
@@ -172,6 +162,10 @@ small {
   font-size: 24px;
   display: block;
   margin: 3vh auto;
+
+  @media(prefers-color-scheme: dark) {
+    background-color: $accent-color-500;
+  }
 
 }
 
