@@ -1,8 +1,12 @@
-﻿using Elevate.Data.Database;
+﻿using Elevate.Common.Extensions;
+using Elevate.Data.Database;
 using Elevate.Data.Repository;
 using Elevate.Models.User;
 using Elevate.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace Elevate.Extensions
 {
@@ -74,6 +78,41 @@ namespace Elevate.Extensions
                            .AllowCredentials();
                 });
             });
+        }
+
+        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var publicKeyPem = configuration["Jwt:PublicKey"]
+                ?? throw new InvalidOperationException("Public key not configured.");
+
+            using var rsa = RSA.Create();
+            rsa.ImportRSAPublicKeyPem(publicKeyPem);
+
+            var rsaSecurityKey = new RsaSecurityKey(rsa);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;   //change to true in production
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = rsaSecurityKey,
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            services.AddAuthorization();
         }
     }
 }

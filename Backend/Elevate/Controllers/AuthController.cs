@@ -21,7 +21,6 @@ namespace Elevate.Controllers
         private readonly IUserService _userService = userService;
         private readonly IMapper _mapper = mapper;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-        private readonly IConfiguration _configuration = configuration;
         private readonly JwtUtility _jwtUtility = new(configuration);
 
         [HttpPost("register")]

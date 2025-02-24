@@ -2,9 +2,11 @@
 using Elevate.Models.Friendship;
 using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Elevate.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FriendshipController(IFriendshipService friendshipService) : ControllerBase

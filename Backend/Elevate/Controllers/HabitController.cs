@@ -1,9 +1,11 @@
 ﻿using Elevate.Models.Habit;
 using Elevate.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elevate.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class HabitController(IHabitService habitService) : ControllerBase
