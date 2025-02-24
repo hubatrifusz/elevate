@@ -65,6 +65,9 @@ namespace Elevate
 
             builder.Services.AddCorsPolicies();
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddJwtAuthentication(builder.Configuration);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -75,9 +78,6 @@ namespace Elevate
             }
 
             app.UseCors("DevelopmentPolicy");
-
-            builder.Services.AddAuthorization();
-            builder.Services.AddJwtAuthentication(builder.Configuration);
 
             app.UseAuthentication();
             app.UseAuthorization();
