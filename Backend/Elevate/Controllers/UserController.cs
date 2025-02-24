@@ -3,9 +3,11 @@ using Elevate.Models.User;
 using Elevate.Services;
 using Elevate.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Elevate.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController(IUserService userService) : ControllerBase

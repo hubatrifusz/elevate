@@ -77,12 +77,28 @@ namespace Elevate.Common.Extensions
                     pem.Replace("-----BEGIN PUBLIC KEY-----", "")
                        .Replace("-----END PUBLIC KEY-----", "")
                        .Replace("\n", "")
-                       .Replace("\r", ""));
+                       .Replace("\r", "")
+                       .Replace(" ", ""));
                 rsa.ImportSubjectPublicKeyInfo(publicKeyBytes, out int bytesRead);
             }
             catch (Exception ex)
             {
-                throw new CryptographicException("Invalid PEM public key.", ex);
+                Console.WriteLine($"Failed to import PKCS#8 public key: {ex.Message}");
+            }
+
+            try
+            {
+                byte[] publicKeyBytes = Convert.FromBase64String(
+                    pem.Replace("-----BEGIN RSA PUBLIC KEY-----", "")
+                       .Replace("-----END RSA PUBLIC KEY-----", "")
+                       .Replace("\n", "")
+                       .Replace("\r", "")
+                       .Replace(" ", ""));
+                rsa.ImportRSAPublicKey(publicKeyBytes, out int bytesRead);
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographicException("Invalid PEM public key. Tried both PKCS#8 and PKCS#1.", ex);
             }
         }
 
