@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-login-feature-list',
@@ -7,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrl: './login-feature-list.component.scss',
 })
 export class LoginFeatureListComponent {
-  gridItems = Array(16).fill(null);
+  gridItems = Array.from({ length: 16 });
+
+  @HostListener('window:load')
+  onLoad() {
+    let grid = Array.from((document.querySelector('.grid') as HTMLElement)?.children);
+
+    grid[9].children[0].classList.add('item-card');
+
+  }
 }

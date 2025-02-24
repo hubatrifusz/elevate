@@ -19,7 +19,6 @@
 
     overflow: hidden;
 
-
     .video {
       width: 100%;
       height: 100%;
@@ -43,11 +42,11 @@
       grid-template-columns: repeat(4, 4fr);
       grid-template-rows: repeat(4, 4fr);
 
-
       .grid-item {
         border: 5px solid $main-color-100;
 
         overflow: hidden;
+        position: relative;
 
         .border {
           width: 100%;
@@ -55,6 +54,17 @@
 
           outline: 100px solid $main-color-100;
           border-radius: 2rem;
+        }
+
+        .item-card {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+
+          background-color: blue;
+
+          border-radius: 2rem;
+
         }
       }
     }
