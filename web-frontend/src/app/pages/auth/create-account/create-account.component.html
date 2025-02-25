@@ -1,0 +1,85 @@
+<div id="create_account_page_container">
+  <div id="create_account_container">
+    <!-- Title and subtitle  -->
+    <div id="title_container">
+      <h1 class="header_highlight">Create Account</h1>
+      <p>Take the first step towards something great. Let's get started!</p>
+      <br />
+    </div>
+    <!-- Form container -->
+    <div id="form_container">
+      <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- First Name Input (text) -->
+        <div class="input_container" id="first_name_text_input_container">
+          <input type="text" name="first_name_text_input" id="first_name_text_input" placeholder=" " formControlName="firstname" required />
+          <label for="first_name_text_input" class="input_title">Enter your first name</label>
+        </div>
+
+        <!-- Last Name Input (text) -->
+        <div class="input_container" id="last_name_text_input_container">
+          <input type="text" name="last_name_text_input" id="last_name_text_input" placeholder=" " formControlName="lastname" required />
+          <label for="last_name_text_input" class="input_title">Enter your last name</label>
+        </div>
+
+        <!-- Email Input (email) -->
+        <div class="input_container" id="email_email_input_container">
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required />
+          <label for="email_text_input" class="input_title">Enter your email</label>
+        </div>
+
+        <!-- Password Input (text) -->
+        <div class="input_container" id="password_text_input_container">
+          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required />
+          <label for="password_text_input" class="input_title">Enter your password</label>
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="togglePasswordView($event)" />
+        </div>
+
+        <!-- Confirm Password Input (text) -->
+        <div class="input_container" id="confirm_password_text_input_container">
+          <input
+            type="password"
+            name="confirm_password_text_input"
+            id="confirm_password_text_input"
+            placeholder=" "
+            formControlName="confirmPassword"
+            required
+          />
+          <label for="confirm_password_text_input" class="input_title">Confirm your password</label>
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="togglePasswordView($event)" />
+        </div>
+
+        <!-- Create Account button (primary) -->
+        <div class="button_container" id="login_button_container">
+          <button class="button button_primary" type="submit" id="login_button">
+            <span>Create Account</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Divider line between login options -->
+    <div id="button_divider">
+      <div class="divider_line"></div>
+      <span>Or</span>
+    </div>
+
+    <!-- Sign in with Google button (secondary) -->
+    <div class="button_container" id="google_sign_in_button_container">
+      <button class="button button_secondary" type="button" id="google_sign_in_button">
+        <span>
+          <img src="icons/google.png" alt="google_logo" />
+          <p>Sign in with Google</p>
+        </span>
+      </button>
+    </div>
+
+    <!-- Return button (primary) -->
+    <div class="button_container" id="return_button_container">
+      <button class="button button_tertiary" type="submit" id="return_button" [routerLink]="'/login'">
+        <span><- go back</span>
+      </button>
+    </div>
+  </div>
+
+  <app-login-feature-list></app-login-feature-list>
+</div>

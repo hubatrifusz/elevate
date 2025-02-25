@@ -1,0 +1,67 @@
+//* Colors
+
+// Accent colors
+$accent-color-100: hsl(249, 100%, 85%);
+$accent-color-200: hsl(249, 86%, 75%);
+$accent-color-300: hsl(249, 55%, 63%);
+$accent-color-400: hsl(249, 40%, 50%);
+$accent-color-500: hsl(249, 40%, 40%);
+$accent-color-600: hsl(248, 40%, 35%);
+$accent-color-700: hsl(249, 40%, 30%);
+$accent-color-800: hsl(249, 40%, 25%);
+$accent-color-900: hsl(249, 45%, 20%);
+
+// Main colors
+$main-color-100: hsl(248, 10%, 98%);
+$main-color-200: hsl(248, 10%, 95%);
+$main-color-300: hsl(248, 10%, 80%);
+$main-color-400: hsl(248, 10%, 70%);
+$main-color-500: hsl(248, 10%, 60%);
+$main-color-600: hsl(247, 10%, 50%);
+$main-color-700: hsl(248, 10%, 40%);
+$main-color-800: hsl(248, 10%, 30%);
+$main-color-900: hsl(248, 10%, 20%);
+
+// Text colors
+$text-color-100: hsl(248, 0%, 100%);
+$text-color-200: hsl(248, 0%, 90%);
+$text-color-300: hsl(248, 0%, 80%);
+$text-color-400: hsl(248, 0%, 70%);
+$text-color-500: hsl(248, 0%, 60%);
+$text-color-600: hsl(248, 0%, 50%);
+$text-color-700: hsl(248, 0%, 40%);
+$text-color-800: hsl(248, 0%, 30%);
+$text-color-900: hsl(248, 0%, 20%);
+
+// Alert colors
+$alert-color-100: hsl(0, 100%, 90%);
+$alert-color-200: hsl(0, 100%, 80%);
+$alert-color-300: hsl(0, 100%, 71%);
+$alert-color-400: hsl(0, 85%, 61%);
+$alert-color-500: hsl(0, 65%, 50%);
+$alert-color-600: hsl(0, 60%, 40%);
+$alert-color-700: hsl(0, 60%, 30%);
+$alert-color-800: hsl(0, 65%, 20%);
+$alert-color-900: hsl(0, 70%, 15%);
+
+//* Dimensions
+$sidebar_width: 5rem;
+$border_radius: 10px;
+$input_height: 2rem;
+
+
+//* Fonts
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+}
+
+// Font sizes
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-md: 18px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-2xl: 32px;
+$font-size-3xl: 48px;
