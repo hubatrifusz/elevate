@@ -5,10 +5,11 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
+import { LoadingScreenComponent } from "../../../components/loading-screen/loading-screen.component";
 
 @Component({
   selector: 'app-create-account',
-  imports: [ReactiveFormsModule, RouterModule, LoginFeatureListComponent],
+  imports: [ReactiveFormsModule, RouterModule, LoginFeatureListComponent, LoadingScreenComponent],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss',
 })
