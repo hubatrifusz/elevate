@@ -1,0 +1,8 @@
+@import '../../../../assets/styles/variables';
+
+#task_container {
+  height: 3rem;
+  width: clamp(2rem, 10rem, 10rem);
+
+  background-color: $accent-color-400;
+}
