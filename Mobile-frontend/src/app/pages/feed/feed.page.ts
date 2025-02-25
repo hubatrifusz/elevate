@@ -6,6 +6,7 @@ import { list, calendar, people, menu, settings, person, personCircle, personCir
 import { FootertabsComponent } from "../../components/footertabs/footertabs.component";
 import { Router, RouterLink } from '@angular/router';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-feed',
@@ -26,7 +27,9 @@ export class FeedPage {
 
   }
 
-
+  setStatusBarStyleDark = async () => {
+    // await StatusBar.setStyle({ style: Style.Dark });
+  };
 
   Logout() {
     this.router.navigate(['/login-page']);
@@ -40,8 +43,8 @@ export class FeedPage {
   //Header scroll effect
   handleScroll(event: CustomEvent<ScrollDetail>) {
     const currentScrollPos = event.detail.scrollTop;
-    console.log('scroll', JSON.stringify(event.detail));
-    console.log(this.header);
+    // console.log('scroll', JSON.stringify(event.detail));
+    // console.log(this.header);
 
     if (this.header) {
       if (currentScrollPos > this.prevScrollPos) {
