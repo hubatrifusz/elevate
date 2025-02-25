@@ -15,13 +15,14 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "main": "src/main.ts",
             "outputPath": "dist/web-frontend",
             "index": "src/index.html",
-            "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "zone.js/testing"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -68,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "web-frontend:build:production"
+              "browserTarget": "web-frontend:build:production"
             },
             "development": {
-              "buildTarget": "web-frontend:build:development"
+              "browserTarget": "web-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
