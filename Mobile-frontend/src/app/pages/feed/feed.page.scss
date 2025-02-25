@@ -10,6 +10,7 @@ ion-content {
 
 .white-background {
   --ion-background-color: hsl(248, 10%, 80%);
+
   @media(prefers-color-scheme: dark) {
     --ion-background-color: hsl(248, 10%, 20%);
   }
@@ -30,17 +31,16 @@ ion-header {
     }
   }
 
-  --ion-toolbar-background: transparent;
-
+  // --ion-toolbar-background: transparent;
+  @media(prefers-color-scheme: dark) {
+ 
+  }
 
 }
 
 ion-toolbar {
-  --ion-background-color: transparent;
 
-  @media(prefers-color-scheme: dark) {
-    --ion-background-color: transparent !important;
-  }
+  @media(prefers-color-scheme: dark) {}
 }
 
 .profile-pic {

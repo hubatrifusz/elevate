@@ -1,5 +1,8 @@
 @use "./variables.scss" as *;
 
+
+
+
 .input_container {
     position: relative;
     width: 300px;
@@ -19,14 +22,14 @@
             -webkit-text-fill-color: $text-color-900;
 
             @media(prefers-color-scheme: dark) {
-                -webkit-box-shadow: 0 0 0 30px $main-color-700 inset;
+                -webkit-box-shadow: 0 0 0 30px $main-color-900 inset;
                 -webkit-text-fill-color: $text-color-200;
             }
         }
 
         @media (prefers-color-scheme: dark) {
 
-            background-color: $main-color-700;
+            background-color: $main-color-900;
             color: $text-color-200;
         }
 
@@ -50,8 +53,8 @@
 
         @media (prefers-color-scheme: dark) {
 
-            background-color: $main-color-700;
-            color: $text-color-200;
+            background-color: $main-color-900;
+            color: $text-color-100;
         }
 
 
@@ -66,10 +69,18 @@
         border: 1px solid $main-color-600;
         border-radius: $border_radius;
 
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
         // In focus
         &:focus {
             border: 2px solid $accent-color-400;
             outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
         }
 
         // Animate title on focus
@@ -81,14 +92,18 @@
             font-weight: 500;
 
             @media (prefers-color-scheme: dark) {
-                background-color: black;
+                background-color: $main-color-900;
                 border-radius: 15px;
+                color: $accent-color-100;
             }
         }
 
         // Remove accent color if filled but not in focus
         &:not(:focus):not(:placeholder-shown)+.input_title {
             color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                color: $text-color-300;
+            }
         }
     }
 
@@ -101,10 +116,18 @@
         border: 1px solid $main-color-600;
         border-radius: $border_radius;
 
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
         // In focus
         &:focus {
             border: 2px solid $accent-color-400;
             outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
         }
 
         // Animate title on focus
@@ -116,19 +139,23 @@
             font-weight: 500;
 
             @media (prefers-color-scheme: dark) {
-                background-color: black;
+                background-color: $main-color-900;
                 border-radius: 15px;
+                color: $accent-color-200;
             }
         }
 
         // Remove accent color if filled but not in focus
         &:not(:focus):not(:placeholder-shown)+.input_title {
             color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                    color: $text-color-300;
+                }
         }
 
         @media (prefers-color-scheme: dark) {
 
-            background-color: $main-color-700;
+            background-color: $main-color-900;
         }
     }
 
@@ -141,11 +168,19 @@
         border: 1px solid $main-color-600;
         border-radius: $border_radius;
 
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
 
         // In focus
         &:focus {
             border: 2px solid $accent-color-400;
             outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
         }
 
         // Animate title on focus
@@ -157,14 +192,18 @@
             font-weight: 500;
 
             @media (prefers-color-scheme: dark) {
-                background-color: black;
+                background-color: $main-color-900;
                 border-radius: 15px;
+                color: $accent-color-200;
             }
         }
 
         // Remove accent color if filled but not in focus
         &:not(:focus):not(:placeholder-shown)+.input_title {
             color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                    color: $text-color-300;
+                }
         }
     }
 }

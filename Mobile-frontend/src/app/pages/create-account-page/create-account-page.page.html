@@ -1,4 +1,4 @@
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" fullscreen="true">
   <div class="container">
     <h1 class="text-center welcomeh1">Welcome to Elevate!</h1>
     <p class="text-center subtitle">Small steps lead to big changes.<br>Let's go!</p>
@@ -115,11 +115,11 @@
       </fieldset> -->
 
       <div class="input_container" id="password_text_input_container">
-        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'"
+        <input type="password" name="password_text_input" [type]="showConfirmPassword ? 'text' : 'password'"
           id="password_text_input" placeholder=" " formControlName="confirmPassword" required />
         <label for="password_text_input" class="input_title">Confirm your password</label>
-        <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
-          (click)="togglePasswordVisibility('password')">
+        <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+          (click)="togglePasswordVisibility('confirm')">
         </ion-icon>
         @if(form.controls.confirmPassword.invalid && (form.controls.confirmPassword.touched ||
         form.controls.confirmPassword.dirty)){

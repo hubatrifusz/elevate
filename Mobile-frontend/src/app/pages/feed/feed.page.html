@@ -1,9 +1,9 @@
-<ion-menu side="end" contentId="main-content">
-  <ion-content class="ion-padding" color="light">
+<ion-menu side="end" contentId="main-content" fullscreen="true">
+  <ion-content class="ion-padding" color="light" fullscreen="true">
     <div class="profile-pic">
       <ion-icon name="person-circle-outline" class="icon"></ion-icon>
     </div>
-    <h2 class="text-center" >Somloi David</h2>
+    <h2 class="text-center">Somloi David</h2>
 
     <ion-button shape="round" fill="clear" class="menu-item">
       <ion-icon name="ribbon-outline"></ion-icon>
@@ -22,7 +22,7 @@
 </ion-menu>
 
 <div class="ion-page" id="main-content">
-  <ion-header class="ion-no-border" collapse="true" translucent="true">
+  <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-title>Hello <br> Somloi David!</ion-title>
       <ion-buttons slot="end">
@@ -34,8 +34,17 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding white-background" fullscreen="true">
+  <ion-content class="ion-padding white-background" fullscreen="true" [scrollEvents]="true"
+    (ionScrollStart)="handleScrollStart()" (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
+
+    <ion-menu-toggle>
+      <ion-button shape="round" fill="clear" class="menu-button" >dfgdfxcvxcvxcv
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-menu-toggle>
     <h1 class="text-center" style="margin-bottom: 30px;">Tasks</h1>
     <app-task-card></app-task-card>
+
+
   </ion-content>
 </div>
