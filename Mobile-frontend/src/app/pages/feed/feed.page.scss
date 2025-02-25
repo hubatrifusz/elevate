@@ -19,6 +19,7 @@ ion-content {
 ion-header {
   height: fit-content;
 
+
   // border-radius: 80px;
   ion-title {
     color: $text-color-900;
@@ -31,14 +32,21 @@ ion-header {
     }
   }
 
-  // --ion-toolbar-background: transparent;
-  @media(prefers-color-scheme: dark) {
- 
+  ion-searchbar {
+    --border-radius: 10px;
+    display: none;
   }
+
+
+  // --ion-toolbar-background: transparent;
+  @media(prefers-color-scheme: dark) {}
 
 }
 
 ion-toolbar {
+  // border-radius: 10px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 
   @media(prefers-color-scheme: dark) {}
 }
@@ -83,6 +91,7 @@ h2 {
     align-items: left;
     color: $text-color-dark;
     margin: 0px 5px;
+
 
     @media(prefers-color-scheme: dark) {
       color: $text-color-400;
