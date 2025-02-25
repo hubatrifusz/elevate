@@ -29,7 +29,7 @@ export class LoginComponent {
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/)]),
     rememberMe: new FormControl(false, Validators.required),
   });
 
@@ -44,13 +44,14 @@ export class LoginComponent {
         elementId: '#email_email_input_container',
         errors: {
           required: 'Email is required.',
-          forbiddenPattern: 'Invalid email.',
+          email: 'Invalid email.',
         },
       },
       password: {
         elementId: '#password_text_input_container',
         errors: {
           required: 'Password is required.',
+          forbiddenPattern: 'Invalid password.',
         },
       },
     };
