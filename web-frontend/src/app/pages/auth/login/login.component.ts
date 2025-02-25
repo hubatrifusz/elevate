@@ -1,8 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { inputValidator } from '../../../shared/input-validator';
-import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
+import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +15,8 @@ import { LoginFeatureListComponent } from "../../../components/auth/login-featur
   encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
+
   togglePasswordView(): void {
     const icon = document.querySelector('#toggle_password_icon') as HTMLImageElement;
     const input = document.querySelector('#password_text_input') as HTMLInputElement;
@@ -35,7 +40,11 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    console.log('Successful login!');
+    this.login(this.loginForm.value).subscribe({
+      next: (userToken) => this.authService.saveToken(userToken),
+      error: (e) => this.checkLoginErrors(e),
+      complete: () => this.router.navigate(['/dashboard']),
+    });
   }
 
   checkValidationErrors(): boolean {
@@ -75,5 +84,21 @@ export class LoginComponent {
     });
 
     return hasErrors;
+  }
+
+  checkLoginErrors(error: any) {
+    const passwordInput = document.querySelector('#password_text_input_container') as HTMLInputElement;
+
+    if (error.status === 401) {
+      passwordInput.style.setProperty('--after-content', '"Hibás email vagy jelszó."');
+    } else {
+      passwordInput.style.setProperty('--after-content', '""');
+    }
+  }
+
+  private apiUrl = 'http://localhost:8080/api';
+
+  login(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, formResult);
   }
 }

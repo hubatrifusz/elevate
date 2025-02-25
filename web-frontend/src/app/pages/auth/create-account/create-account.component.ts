@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { inputValidator } from '../../../shared/input-validator';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
@@ -13,7 +13,7 @@ import { LoginFeatureListComponent } from "../../../components/auth/login-featur
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   loginForm = new FormGroup({
     firstname: new FormControl('', Validators.required),
@@ -26,9 +26,8 @@ export class CreateAccountComponent {
   onSubmit() {
     if (this.checkValidationErrors()) return;
     this.postNewUser(this.loginForm.value).subscribe({
-      next: (v) => console.log(v),
-      error: (e) => console.error(e),
-      complete: () => console.info('complete'),
+      next: (v) => this.router.navigate(['/login']),
+      error: (e) => console.error(e)
     });
   }
 
