@@ -35,16 +35,15 @@ namespace Elevate.Common.Utilities
                 throw new InvalidOperationException("Missing JWT configuration (private key, issuer, or audience).");
             }
 
-            using (var rsa = RSA.Create())
-            {
-                rsa.ImportRSAPrivateKeyPem(privateKey);
-                var securityKey = new RsaSecurityKey(rsa);
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
+            var rsa = RSA.Create();
+            rsa.ImportRSAPrivateKeyPem(privateKey);
+            var securityKey = new RsaSecurityKey(rsa);
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
 
-                var token = new JwtSecurityToken(issuer, audience, claims as IEnumerable<Claim>, null, DateTime.Now.AddDays(1), credentials);
+            var token = new JwtSecurityToken(issuer, audience, claims as IEnumerable<Claim>, null, DateTime.Now.AddDays(1), credentials);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new JwtSecurityTokenHandler().WriteToken(token);
-            }
+            return tokenString;
         }
 
         public static bool ValidateJwtRsa(string token, string publicKey, string issuer, string audience)
