@@ -26,7 +26,7 @@ export class LoginPagePage implements OnInit {
     email: this.fb.control('', { validators: [Validators.required, Validators.email] }),
     password: this.fb.control('', {
       validators: [Validators.required,
-      Validators.minLength(8),
+      Validators.minLength(12),
       Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/)]
     })
   });
