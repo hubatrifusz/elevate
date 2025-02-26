@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using Elevate.Models.User;
+﻿using Elevate.Models.User;
 using Elevate.Services;
-using Elevate.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Elevate.Common.Utilities;
 
 namespace Elevate.Controllers
 {
@@ -35,30 +34,26 @@ namespace Elevate.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<ApplicationUser>> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
         {
-            try
+            if (UserPermissionUtility.IsCurrentUser(id, User))
             {
-                var updatedUser = await _userService.UpdateUserAsync(id, userUpdateDto);
-                if (updatedUser == null)
+                try
                 {
-                    return NotFound();
+                    var updatedUser = await _userService.UpdateUserAsync(id, userUpdateDto);
+                    if (updatedUser == null)
+                    {
+                        return NotFound();
+                    }
+                    return NoContent();
                 }
-                return NoContent();
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(ex.Message);
+                return Forbid();
             }
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult<ApplicationUser> DeleteUser(Guid id)
-        {
-            var deletedUser = _userService.DeleteUser(id);
-            if (deletedUser == null)
-            {
-                return NotFound();
-            }
-            return NoContent();
         }
     }
 }
