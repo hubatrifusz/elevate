@@ -32,7 +32,7 @@ services:
   frontend:
     build: ./web-frontend
     ports:
-      - "80:80"
+      - "81:80"
     depends_on:
       - backend
 

@@ -4,10 +4,20 @@ namespace Elevate.Common.Utilities
 {
     public static class UserPermissionUtility
     {
-        public static bool IsCurrentUser(Guid actingUserId, ClaimsPrincipal ownerUser)
+        public static bool IsCurrentUser(Guid resourceUserId, ClaimsPrincipal user)
         {
-            var currentUserId = ownerUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return currentUserId == actingUserId.ToString();
+            if (user == null || !user.Identity!.IsAuthenticated)
+            {
+                return false;
+            }
+
+            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                return false;
+            }
+
+            return userId == resourceUserId;
         }
     }
 }

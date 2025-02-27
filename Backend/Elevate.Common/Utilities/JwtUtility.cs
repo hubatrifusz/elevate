@@ -40,10 +40,26 @@ namespace Elevate.Common.Utilities
             var securityKey = new RsaSecurityKey(rsa);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
 
-            var token = new JwtSecurityToken(issuer, audience, claims as IEnumerable<Claim>, null, DateTime.Now.AddDays(1), credentials);
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
 
-            return tokenString;
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims as IEnumerable<Claim>),
+                Expires = DateTime.Now.AddDays(1),
+                Issuer = issuer,
+                Audience = audienceList[0],
+                SigningCredentials = credentials
+            };
+
+            if (audienceList.Length > 1)
+            {
+                var additionalAudiences = audienceList.Skip(1).Select(aud => new Claim("aud", aud)).ToArray();
+                tokenDescriptor.Subject.AddClaims(additionalAudiences);
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public static bool ValidateJwtRsa(string token, string publicKey, string issuer, string audience)
@@ -51,6 +67,9 @@ namespace Elevate.Common.Utilities
             using (var rsa = RSA.Create())
             {
                 rsa.ImportRSAPublicKeyPem(publicKey);
+
+                var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
                 var validationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -58,9 +77,9 @@ namespace Elevate.Common.Utilities
                     ValidateIssuer = true,
                     ValidIssuer = issuer,
                     ValidateAudience = true,
-                    ValidAudience = audience,
+                    ValidAudiences = audienceList,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
 
                 try
