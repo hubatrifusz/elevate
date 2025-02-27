@@ -3,9 +3,10 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { CreateAccountComponent } from './pages/auth/create-account/create-account.component';
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, //TODO: Simple redirect to Login Page, later use Auth Guard
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 
   // Authentication
   { path: 'login', component: LoginComponent }, // Login Page
@@ -13,5 +14,5 @@ export const routes: Routes = [
   { path: 'password-recovery', component: PasswordRecoveryComponent }, // Password Recovery Page
 
   // Daashboard
-  { path: 'dashboard', component: DashboardComponent }, // Dashboard Page
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] }, // Dashboard Page
 ];
