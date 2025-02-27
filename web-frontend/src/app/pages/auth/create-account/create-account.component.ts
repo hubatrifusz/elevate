@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
 import { LoadingScreenComponent } from "../../../components/loading-screen/loading-screen.component";
+import { PasswordToggleService } from '../../../services/password-toggle.service';
 
 @Component({
   selector: 'app-create-account',
@@ -14,7 +15,7 @@ import { LoadingScreenComponent } from "../../../components/loading-screen/loadi
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private togglePassword: PasswordToggleService) {}
 
   loginForm = new FormGroup({
     firstname: new FormControl('', Validators.required),
@@ -77,15 +78,8 @@ export class CreateAccountComponent {
     return hasErrors;
   }
 
-  togglePasswordView(event: MouseEvent): void {
-    const icon = event.target as HTMLImageElement;
-    const input = icon.parentElement?.children[0] as HTMLInputElement;
-
-    const isPassword = input.type === 'password';
-
-    input.type = isPassword ? 'text' : 'password';
-    icon.src = isPassword ? 'icons/eye-crossed.png' : 'icons/eye.png';
-    icon.title = isPassword ? 'Hide Password' : 'Show Password';
+  onTogglePassword() {
+    this.togglePassword.togglePasswordView();
   }
 
   private apiUrl = 'http://localhost:8080/api';

@@ -13,6 +13,6 @@ export const routes: Routes = [
   { path: 'create-account', component: CreateAccountComponent }, // Create Account Page
   { path: 'password-recovery', component: PasswordRecoveryComponent }, // Password Recovery Page
 
-  // Daashboard
+  // Dashboard
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] }, // Dashboard Page
 ];

@@ -3,9 +3,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { inputValidator } from '../../../shared/input-validator';
 import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
+import { PasswordToggleService } from '../../../services/password-toggle.service';
 
 @Component({
   selector: 'app-login',
@@ -15,22 +14,7 @@ import { AuthService } from '../../../services/auth.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
-  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
-
-  togglePasswordView(): void {
-    const icon = document.querySelector('#toggle_password_icon') as HTMLImageElement;
-    const input = document.querySelector('#password_text_input') as HTMLInputElement;
-
-    if (input.type == 'password') {
-      input.type = 'text';
-      icon.src = 'icons/eye-crossed.png';
-      icon.title = 'Hide Password';
-    } else if (input.type == 'text') {
-      input.type = 'password';
-      icon.src = 'icons/eye.png';
-      icon.title = 'Show Password';
-    }
-  }
+  constructor(private router: Router, private authService: AuthService, private togglePassword: PasswordToggleService) {}
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -40,11 +24,15 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    this.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).subscribe({
       next: (userToken) => this.authService.saveToken(userToken),
       error: (e) => this.checkLoginErrors(e),
       complete: () => this.router.navigate(['/dashboard']),
     });
+  }
+
+  onTogglePassword() {
+    this.togglePassword.togglePasswordView();
   }
 
   checkValidationErrors(): boolean {
@@ -94,11 +82,5 @@ export class LoginComponent {
     } else {
       passwordInput.style.setProperty('--after-content', '""');
     }
-  }
-
-  private apiUrl = 'http://localhost:8080/api';
-
-  login(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, formResult);
   }
 }
