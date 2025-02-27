@@ -44,9 +44,14 @@
     <ion-item slot="header" color="light" class="habit-item">
       <div class="color" [style.backgroundColor]="habit.color"></div>
       <ion-label>{{habit.title}}</ion-label>
-      
+      <div class="time">
+        <ion-icon name="time"></ion-icon>
+        <ion-label>{{habit.frequency}}</ion-label>
+      </div>
+      <ion-checkbox>
+      </ion-checkbox>
     </ion-item>
-    <div class="ion-padding" slot="content">First Content</div>
+    <div class="ion-padding content" slot="content">First Content</div>
   </ion-accordion>
 
   }
