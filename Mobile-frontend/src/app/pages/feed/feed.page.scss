@@ -1,5 +1,5 @@
 @use "../../../theme/variables" as *;
-
+@use "../../../theme/fab.scss" as *;
 
 ion-content {
   .menu-content {
@@ -14,6 +14,7 @@ ion-content {
     --ion-background-color: hsl(248, 10%, 20%);
   }
 }
+
 
 ion-header {
   height: fit-content;

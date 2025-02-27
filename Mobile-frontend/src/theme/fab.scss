@@ -1,0 +1,12 @@
+// @use "variables.scss";
+@use "variables.scss" as *;
+
+
+
+ion-fab-button {
+    --background: hsl(248, 10%, 95%);
+    --color: hsl(249, 40%, 50%);
+
+    @media(prefers-color-scheme: dark) {
+    }
+}
