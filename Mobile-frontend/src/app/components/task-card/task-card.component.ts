@@ -3,6 +3,7 @@ import { IonIcon, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { time } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
@@ -10,6 +11,8 @@ import { Habit, Frequency } from '../../.models/Habit.model';
   imports: [IonIcon, IonCheckbox, IonLabel]
 })
 export class TaskCardComponent implements OnInit {
+
+
   habits: Habit[] = [];
   ngOnInit() {
     this.habits.push({
@@ -134,9 +137,12 @@ export class TaskCardComponent implements OnInit {
     });
   }
 
-  constructor() {
+  constructor(private router: Router) {
     addIcons({ time });
   }
 
+  openHabitDetails(habit: Habit) {
+    this.router.navigate(['/habit-details', habit.id]);
+  }
 
 }

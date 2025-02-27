@@ -1,16 +1,22 @@
 @use "../../../theme/variables.scss" as *;
 
 .container {
-    background-color: $main-color-100;
+    background-color: $main-color-200;
     width: 90%;
     height: 70px;
     margin: 25px auto ;
     border-radius: 15px;
     display: flex;
     align-items: center; // Vertically center the children
+    border: solid 1px $main-color-300;
 
     @media(prefers-color-scheme: dark) {
         background-color: $main-color-600;
+        border: solid 1px $main-color-700;
+    }
+    ion-checkbox {
+        margin-left: 10px;
+        --ion-background-color: $main-color-400;
     }
 
     .color {

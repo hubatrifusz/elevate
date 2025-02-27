@@ -25,6 +25,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -48,7 +49,7 @@
 }
 
 ion-content {
-  --ion-background-color: linear-gradient(35deg, #9a8af675, #ffffff, #ffffff75, #9a8af675);
+  --ion-background-color: linear-gradient(35deg, #9a8af675, #eeeeee, #ffffff75, #9a8af675);
 
   .menu-content {
     --ion-background-color: black;

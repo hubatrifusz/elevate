@@ -1,5 +1,5 @@
 @for (habit of habits ; track $index) {
-<div class="container">
+<div class="container" (click)="openHabitDetails(habit)">
   @if(habit.is_positive){
   <div class="color"></div>
   }
