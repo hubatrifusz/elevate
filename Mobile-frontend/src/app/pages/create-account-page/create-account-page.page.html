@@ -1,31 +1,140 @@
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" fullscreen="true">
   <div class="container">
     <h1 class="text-center welcomeh1">Welcome to Elevate!</h1>
     <p class="text-center subtitle">Small steps lead to big changes.<br>Let's go!</p>
 
-    <fieldset class="input-container">
-      <legend>Enter your first name</legend>
-      <input type="text" class="input" name="firstName" placeholder="Jakab">
-    </fieldset>
+    <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- === {{form.controls.confirmPassword.errors | json}} === -->
 
-    <fieldset class="input-container">
-      <legend>Enter your last name</legend>
-      <input type="text" class="input" name="lastname" placeholder="Gipsz">
-    </fieldset>
+      <!-- <fieldset class="input-container">
+        <legend>Enter your first name</legend>
+        <input type="text" class="input" formControlName="firstName" name="firstName" placeholder="Jakab">
+        @if(form.controls.firstName.invalid && (form.controls.firstName.touched || form.controls.firstName.dirty)){
+        @if(form.controls.firstName.errors?.["required"]){
+        <small>First name is required</small>
+        }
+        }
+      </fieldset> -->
 
-    <fieldset class="input-container">
-      <legend>Enter your email</legend>
-      <input type="email" class="input" name="email" placeholder="gipzsjakab@kukac.com">
-    </fieldset>
+      <div class="input_container">
+        <input id="firstName" type="text" name="firstName" placeholder=" " formControlName="firstName" required />
+        <label for="firstName" class="input_title">Enter your first name</label>
+        @if(form.controls.firstName.invalid && (form.controls.firstName.touched || form.controls.firstName.dirty)){
+        @if(form.controls.firstName.errors?.["required"]){
+        <small>First name is required</small>
+        }
+        }
+      </div>
 
-    <fieldset class="input-container">
-      <legend>Enter your password</legend>
-      <input type="password" class="input">
-    </fieldset>
+      <!-- <fieldset class="input-container">
+        <legend>Enter your last name</legend>
+        <input type="text" class="input" formControlName="lastName" name="lastname" placeholder="Gipsz">
+        @if(form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)){
+        @if(form.controls.lastName.errors?.["required"]){
+        <small>Last name is required</small>
+        }
+        }
+      </fieldset> -->
+      <div class="input_container">
+        <input id="lastname" type="text" placeholder=" " formControlName="lastName" required />
+        <label for="lastname" class="input_title">Enter your last name</label>
+        @if(form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)){
+        @if(form.controls.lastName.errors?.["required"]){
+        <small>Last name is required</small>
+        }
+        }
+      </div>
 
-    <button class="button" href="/tasks">Create account</button>
+      <!-- <fieldset class="input-container">
+        <legend>Enter your email</legend>
+        <input type="email" class="input" name="email" formControlName="email" placeholder="gipzsjakab@kukac.com">
+        @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
+        @if(form.controls.email.errors?.["required"]){
+        <small>Email is required</small>
+        }
+        @else if(form.controls.email.errors?.["email"]){
+        <small>Invalid email format</small>
+        }
+        }
+      </fieldset> -->
 
-    
+      <div class="input_container" id="email_email_input_container">
+        <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email"
+          required />
+        <label for="email_text_input" class="input_title">Enter your email</label>
+        @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
+        @if(form.controls.email.errors?.["required"]){
+        <small>Email is required</small>
+        }
+        @else if(form.controls.email.errors?.["email"]){
+        <small>Invalid email format</small>
+        }
+        }
+      </div>
+
+
+      <div class="input_container" id="password_text_input_container">
+        <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'"
+          id="password_text_input" placeholder=" " formControlName="password" required />
+        <label for="password_text_input" class="input_title">Enter your password</label>
+        <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+          (click)="togglePasswordVisibility('password')">
+        </ion-icon>
+        @if(form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)){
+        @if(form.controls.password.errors?.["minlength"]){
+        <small>Password must be at least 8 characters long </small>
+        }
+        @else if(form.controls.password.errors?.["required"]){
+        <small>Password is required</small>
+        }
+        @else if(form.controls.password.errors?.["pattern"]){
+        <small>Password must contain at least one uppercase letter, one lowercase letter and one special
+          character
+        </small>
+        }
+        }
+      </div>
+
+      <!-- <fieldset class="input-container">
+        <legend>Confirm your password</legend>
+        <div class="password-input-wrapper">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" class="input">
+          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+            (click)="togglePasswordVisibility('confirm')">
+          </ion-icon>
+        </div>
+        @if(form.controls.confirmPassword.invalid && (form.controls.confirmPassword.touched ||
+        form.controls.confirmPassword.dirty)){
+        @if(form.controls.confirmPassword.errors?.["passwordMatch"]){
+        <small>Password don't match </small>
+        }
+        @else if (form.controls.confirmPassword.errors?.["required"]) {
+        <small>Confirm password is required</small>
+        }
+        }
+      </fieldset> -->
+
+      <div class="input_container" id="password_text_input_container">
+        <input type="password" name="password_text_input" [type]="showConfirmPassword ? 'text' : 'password'"
+          id="password_text_input" placeholder=" " formControlName="confirmPassword" required />
+        <label for="password_text_input" class="input_title">Confirm your password</label>
+        <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
+          (click)="togglePasswordVisibility('confirm')">
+        </ion-icon>
+        @if(form.controls.confirmPassword.invalid && (form.controls.confirmPassword.touched ||
+        form.controls.confirmPassword.dirty)){
+        @if(form.controls.confirmPassword.errors?.["passwordMatch"]){
+        <small>Password don't match </small>
+        }
+        @else if (form.controls.confirmPassword.errors?.["required"]) {
+        <small>Confirm password is required</small>
+        }
+        }
+      </div>
+
+      <button class="button" [disabled]="form.invalid" type="submit">Create account</button>
+    </form>
+
 
   </div>
 </ion-content>

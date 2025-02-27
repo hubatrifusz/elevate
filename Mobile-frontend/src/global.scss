@@ -25,6 +25,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -34,7 +35,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-// @import '@ionic/angular/css/palettes/dark.system.css';
+@import '@ionic/angular/css/palettes/dark.system.css';
 
 
 
@@ -48,8 +49,13 @@
 }
 
 ion-content {
-  --ion-background-color: linear-gradient(35deg, #9a8af675, #ffffff, #ffffff75, #9a8af675);
+  --ion-background-color: linear-gradient(35deg, #9a8af675, #eeeeee, #ffffff75, #9a8af675);
+
   .menu-content {
-    --ion-background-color: black ;
+    --ion-background-color: black;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --ion-background-color: linear-gradient(35deg, #9a8af675, #000000, #00000075, #9a8af675);
   }
 }
