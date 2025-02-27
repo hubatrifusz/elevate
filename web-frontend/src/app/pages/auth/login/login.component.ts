@@ -90,7 +90,7 @@ export class LoginComponent {
     const passwordInput = document.querySelector('#password_text_input_container') as HTMLInputElement;
 
     if (error.status === 401) {
-      passwordInput.style.setProperty('--after-content', '"Hibás email vagy jelszó."');
+      passwordInput.style.setProperty('--after-content', '"Incorrect email or password."');
     } else {
       passwordInput.style.setProperty('--after-content', '""');
     }
