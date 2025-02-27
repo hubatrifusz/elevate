@@ -79,7 +79,7 @@ namespace Elevate.Common.Utilities
                     ValidateAudience = true,
                     ValidAudiences = audienceList,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(5)
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 try

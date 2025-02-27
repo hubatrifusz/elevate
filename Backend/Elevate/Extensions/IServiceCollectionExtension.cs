@@ -73,7 +73,7 @@ namespace Elevate.Extensions
             {
                 options.AddPolicy("DevelopmentPolicy", builder =>
                 {
-                    builder.WithOrigins(["http://localhost", "http://localhost:81", "http://localhost:4200"])
+                    builder.WithOrigins(["http://localhost:8080", "http://localhost:81", "http://localhost:4200"])
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
@@ -112,7 +112,7 @@ namespace Elevate.Extensions
                     ValidateAudience = true,
                     ValidAudiences = audienceList,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(5)
+                    ClockSkew = TimeSpan.Zero
                 };
             });
             services.AddAuthorization();
