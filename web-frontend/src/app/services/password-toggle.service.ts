@@ -6,18 +6,14 @@ import { Injectable } from '@angular/core';
 export class PasswordToggleService {
   constructor() {}
 
-  togglePasswordView(): void {
-    const icon = document.querySelector('#toggle_password_icon') as HTMLImageElement;
-    const input = document.querySelector('#password_text_input') as HTMLInputElement;
+  togglePasswordView(event: MouseEvent): void {
+    const icon = event.target as HTMLImageElement;
+    const input = icon.parentElement?.children[0] as HTMLInputElement;
 
-    if (input.type == 'password') {
-      input.type = 'text';
-      icon.src = 'icons/eye-crossed.png';
-      icon.title = 'Hide Password';
-    } else if (input.type == 'text') {
-      input.type = 'password';
-      icon.src = 'icons/eye.png';
-      icon.title = 'Show Password';
-    }
+    const isPassword = input.type === 'password';
+
+    input.type = isPassword ? 'text' : 'password';
+    icon.src = isPassword ? 'icons/eye-crossed.png' : 'icons/eye.png';
+    icon.title = isPassword ? 'Hide Password' : 'Show Password';
   }
 }

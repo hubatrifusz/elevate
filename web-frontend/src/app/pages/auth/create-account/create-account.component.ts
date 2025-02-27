@@ -4,9 +4,10 @@ import { inputValidator } from '../../../shared/input-validator';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
-import { LoadingScreenComponent } from "../../../components/loading-screen/loading-screen.component";
+import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
+import { LoadingScreenComponent } from '../../../components/loading-screen/loading-screen.component';
 import { PasswordToggleService } from '../../../services/password-toggle.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-create-account',
@@ -15,7 +16,7 @@ import { PasswordToggleService } from '../../../services/password-toggle.service
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent {
-  constructor(private http: HttpClient, private router: Router, private togglePassword: PasswordToggleService) {}
+  constructor(private router: Router, private togglePassword: PasswordToggleService, private authService: AuthService) {}
 
   loginForm = new FormGroup({
     firstname: new FormControl('', Validators.required),
@@ -27,9 +28,9 @@ export class CreateAccountComponent {
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    this.postNewUser(this.loginForm.value).subscribe({
+    this.authService.crateAccount(this.loginForm.value).subscribe({
       next: (v) => this.router.navigate(['/login']),
-      error: (e) => console.error(e)
+      error: (e) => console.error(e),
     });
   }
 
@@ -78,13 +79,7 @@ export class CreateAccountComponent {
     return hasErrors;
   }
 
-  onTogglePassword() {
-    this.togglePassword.togglePasswordView();
-  }
-
-  private apiUrl = 'http://localhost:8080/api';
-
-  postNewUser(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  onTogglePassword(event: MouseEvent) {
+    this.togglePassword.togglePasswordView(event);
   }
 }

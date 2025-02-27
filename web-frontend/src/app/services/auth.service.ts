@@ -29,4 +29,8 @@ export class AuthService {
   login(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, formResult);
   }
+
+  crateAccount(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  }
 }

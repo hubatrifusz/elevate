@@ -19,7 +19,7 @@
         <div class="input_container" id="password_text_input_container" data-cy="password_text_input_container">
           <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required data-cy="password_text_input"/>
           <label for="password_text_input" class="input_title">Enter your password</label>
-          <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="onTogglePassword()" />
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="onTogglePassword($event)" />
         </div>
 
         <div class="line_container">

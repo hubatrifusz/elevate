@@ -14,7 +14,7 @@ import { PasswordToggleService } from '../../../services/password-toggle.service
   encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
-  constructor(private router: Router, private authService: AuthService, private togglePassword: PasswordToggleService) {}
+  constructor(private router: Router, private authService: AuthService, private togglePasswordService: PasswordToggleService) {}
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,8 +31,8 @@ export class LoginComponent {
     });
   }
 
-  onTogglePassword() {
-    this.togglePassword.togglePasswordView();
+  onTogglePassword(event: MouseEvent) {
+    this.togglePasswordService.togglePasswordView(event);
   }
 
   checkValidationErrors(): boolean {
