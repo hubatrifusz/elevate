@@ -1,10 +1,100 @@
 @use "../../../theme/variables.scss" as *;
+ion-accordion{
+    box-shadow: none;
 
-.container {
+}
+// .habit-item {
+//     display: flex;
+//     align-items: center;
+// }
+
+// .color {
+//     width: 10px;
+//     height: 100%;
+//     margin-right: 10px;
+// }
+// ion-item {
+//     padding: 0 0;
+//     background-color: $main-color-200;
+//     width: 100%;
+//     height: 100%;
+//     margin: 25px auto ;
+//     border-radius: 15px;
+//     display: flex;
+//     align-items: center; // Vertically center the children
+//     border: solid 1px $main-color-300;
+
+//     @media(prefers-color-scheme: dark) {
+//         background-color: $main-color-600;
+//         border: solid 1px $main-color-700;
+//     }
+//     ion-checkbox {
+//         margin-left: 10px;
+//         --ion-background-color: $main-color-400;
+//     }
+
+//     // .color {
+//     //     width: 5%;
+//     //     height: 70px;
+//     //     border-radius: 15px 0 0 15px;
+//     //     margin-right: 10px;
+//     // }
+
+//     ion-checkbox {
+//         width: 50px;
+//         height: 50px;
+//     }
+//     ion-icon{
+//         --color: red;
+//         color: red;
+//         height: 30px;
+//         width: 30px;
+//     }
+//     ion-button{
+//         width: 30px;
+//         height: 30px;
+//         --background:white
+//     }
+
+//     ion-label {
+//         font-size: $font-size-sm;
+//         color: $text-color-900;
+//         @media(prefers-color-scheme: dark) {
+//             color: $text-color-200;
+//         }
+
+//     }
+
+//     .time {
+//         background-color: $main-color-700;
+//         border-radius: 10px;
+//         margin-left: auto; // Pushes the .time div to the right
+//         margin-right: 10px;
+//         padding: 5px;
+//         display: flex; // Add Flexbox
+//         align-items: center; // Center vertically
+//         justify-content: center;
+
+//         @media(prefers-color-scheme: dark) {
+//             background-color: $main-color-800;
+//         }
+
+//         ion-label {
+//             font-size: $font-size-xs;
+//             color: $text-color-200;
+
+//             @media(prefers-color-scheme: dark) {
+//                 color: $text-color-200;
+//             }
+//         }
+//     }
+// }
+.habit-item {
+    padding: 0 0;
     background-color: $main-color-200;
-    width: 90%;
-    height: 70px;
-    margin: 25px auto ;
+    width: 100%;
+    height: 100%;
+    margin: 25px auto;
     border-radius: 15px;
     display: flex;
     align-items: center; // Vertically center the children
@@ -14,57 +104,10 @@
         background-color: $main-color-600;
         border: solid 1px $main-color-700;
     }
-    ion-checkbox {
-        margin-left: 10px;
-        --ion-background-color: $main-color-400;
-    }
-
     .color {
-        background-color: $accent-color-400;
-        width: 5%;
+        width: 100px;
         height: 70px;
-        border-radius: 15px 0 0 15px;
-        margin-right: 10px;
-    }
-    .red{
-        background-color: $alert-color-400;
-    }
-
-    ion-checkbox {
-        width: 50px;
-        height: 50px;
-    }
-
-    ion-label {
-        font-size: $font-size-sm;
-        color: $text-color-900;
-        @media(prefers-color-scheme: dark) {
-            color: $text-color-200;
-        }
-
-    }
-
-    .time {
-        background-color: $main-color-700;
-        border-radius: 10px;
-        margin-left: auto; // Pushes the .time div to the right
-        margin-right: 10px;
-        padding: 5px;
-        display: flex; // Add Flexbox
-        align-items: center; // Center vertically
-        justify-content: center;
-
-        @media(prefers-color-scheme: dark) {
-            background-color: $main-color-800;
-        }
-
-        ion-label {
-            font-size: $font-size-xs;
-            color: $text-color-200;
-
-            @media(prefers-color-scheme: dark) {
-                color: $text-color-200;
-            }
-        }
+        position: absolute;
+        left: -20px;
     }
 }

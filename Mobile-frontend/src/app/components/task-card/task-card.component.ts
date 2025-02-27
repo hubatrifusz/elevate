@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { time } from 'ionicons/icons';
+import { chevronDownOutline, time } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
 import { Router } from '@angular/router';
+import {  } from '@ionic/angular';
+
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonIcon, IonCheckbox, IonLabel]
+  imports: [IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton]
 })
 export class TaskCardComponent implements OnInit {
 
-
   habits: Habit[] = [];
+
   ngOnInit() {
     this.habits.push({
       id: '1',
@@ -22,7 +24,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Do a workout',
       frequency: Frequency.Daily,
       custom_frequency: 1,
-      color: 'success',
+      color: '#28a745', // success (green)
       is_positive: true,
       streak: 0,
       streak_start: new Date()
@@ -34,7 +36,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Read a book',
       frequency: Frequency.Daily,
       custom_frequency: 1,
-      color: 'warning',
+      color: '#ffc107', // warning (yellow)
       is_positive: false,
       streak: 0,
       streak_start: new Date()
@@ -46,7 +48,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Meditate for 10 minutes',
       frequency: Frequency.Daily,
       custom_frequency: 1,
-      color: 'danger',
+      color: '#dc3545', // danger (red)
       is_positive: true,
       streak: 2,
       streak_start: new Date()
@@ -58,7 +60,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Drink 8 glasses of water',
       frequency: Frequency.Daily,
       custom_frequency: 1,
-      color: 'primary',
+      color: '#007bff', // primary (blue)
       is_positive: false,
       streak: 0,
       streak_start: new Date()
@@ -70,7 +72,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Write in your journal',
       frequency: Frequency.Weekly,
       custom_frequency: 1,
-      color: 'tertiary',
+      color: '#6f42c1', // tertiary (purple)
       is_positive: true,
       streak: 0,
       streak_start: new Date()
@@ -82,7 +84,7 @@ export class TaskCardComponent implements OnInit {
       description: 'Practice yoga',
       frequency: Frequency.Weekly,
       custom_frequency: 1,
-      color: 'secondary',
+      color: '#6c757d', // secondary (gray)
       is_positive: true,
       streak: 0,
       streak_start: new Date()
@@ -94,51 +96,15 @@ export class TaskCardComponent implements OnInit {
       description: 'Go to bed by 10 PM',
       frequency: Frequency.Daily,
       custom_frequency: 1,
-      color: 'dark',
+      color: '#343a40', // dark (dark gray)
       is_positive: false,
-      streak: 0,
-      streak_start: new Date()
-    });
-    this.habits.push({
-      id: '7',
-      created_at: new Date(),
-      title: 'Sleep Early',
-      description: 'Go to bed by 10 PM',
-      frequency: Frequency.Daily,
-      custom_frequency: 1,
-      color: 'dark',
-      is_positive: true,
-      streak: 0,
-      streak_start: new Date()
-    });
-    this.habits.push({
-      id: '7',
-      created_at: new Date(),
-      title: 'Sleep Early',
-      description: 'Go to bed by 10 PM',
-      frequency: Frequency.Daily,
-      custom_frequency: 1,
-      color: 'dark',
-      is_positive: true,
-      streak: 0,
-      streak_start: new Date()
-    });
-    this.habits.push({
-      id: '7',
-      created_at: new Date(),
-      title: 'Sleep Early',
-      description: 'Go to bed by 10 PM',
-      frequency: Frequency.Daily,
-      custom_frequency: 1,
-      color: 'dark',
-      is_positive: true,
       streak: 0,
       streak_start: new Date()
     });
   }
 
   constructor(private router: Router) {
-    addIcons({ time });
+    addIcons({ time, chevronDownOutline });
   }
 
   openHabitDetails(habit: Habit) {

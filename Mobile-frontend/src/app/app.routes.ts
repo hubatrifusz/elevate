@@ -18,10 +18,6 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('../app/components/footertabs/tabs.routes').then((m) => m.routes),
-  },
-  {
-    path: 'habit-details/:id',
-    loadComponent: () => import('./pages/habit-details/habit-details.page').then( m => m.HabitDetailsPage)
   }
 
 

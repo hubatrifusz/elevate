@@ -1,4 +1,4 @@
-@for (habit of habits ; track $index) {
+<!-- @for (habit of habits ; track $index) {
 <div class="container" (click)="openHabitDetails(habit)">
   @if(habit.is_positive){
   <div class="color"></div>
@@ -13,4 +13,41 @@
     <ion-label>{{habit.frequency}}</ion-label>
   </div>
 </div>
-}
+} -->
+
+<!-- <ion-accordion-group>
+  @for (habit of habits ; track $index) {
+  <ion-accordion >
+    <div slot="header" class="container" >
+      <div class="color" [style.backgroundColor]="habit.color"></div>
+      <ion-label>{{ habit.title }}</ion-label>
+      <div class="time">
+        <ion-icon name="time"></ion-icon>
+        <ion-label>{{ habit.frequency }}</ion-label>
+      </div>
+
+      <ion-button>
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </ion-button>
+      <ion-checkbox></ion-checkbox>
+    </div>
+    <div class="ion-padding" slot="content">
+      <p>Details about {{ habit.title }}...</p>
+    </div>
+  </ion-accordion>
+  }
+</ion-accordion-group> -->
+
+<ion-accordion-group expand="inset">
+  @for(habit of habits ; track $index) {
+  <ion-accordion>
+    <ion-item slot="header" color="light" class="habit-item">
+      <div class="color" [style.backgroundColor]="habit.color"></div>
+      <ion-label>{{habit.title}}</ion-label>
+      
+    </ion-item>
+    <div class="ion-padding" slot="content">First Content</div>
+  </ion-accordion>
+
+  }
+</ion-accordion-group>
