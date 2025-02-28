@@ -45,14 +45,32 @@
       <div class="color" [style.backgroundColor]="habit.color"></div>
       <ion-label>{{habit.title}}</ion-label>
       <div class="time">
-        <ion-icon name="time"></ion-icon>
-        <ion-label>{{habit.frequency}}</ion-label>
+        <ion-label>{{habit.streak}}</ion-label>
+        <ion-icon name="flame-outline"></ion-icon>
       </div>
-      <ion-checkbox>
-      </ion-checkbox>
+      <ion-checkbox slot="end" (click)="stopPropagation($event)"></ion-checkbox>
     </ion-item>
-    <div class="ion-padding content" slot="content">First Content</div>
-  </ion-accordion>
+    <div class="ion-padding content" slot="content">
+      <ion-grid>
+        <ion-row class="day-selector">
+          @for(day of weekDays ; track $index) {
+          <ion-col>
+            <ion-button [ngClass]="{'selected': isSelectedDay(habit.custom_frequency, $index)}"
+              (click)="toggleDay(habit, $index)" fill="clear">
+              {{ day.label }}
+            </ion-button>
+          </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+      <ion-textarea label="Description:" [autoGrow]="true" [value]="habit.description"  maxlength="100"></ion-textarea>
+      <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
+        Delete
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
 
+
+    </div>
+  </ion-accordion>
   }
 </ion-accordion-group>

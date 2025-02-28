@@ -4,7 +4,7 @@ export interface Habit {
     title: string;
     description?: string;
     frequency: Frequency;
-    custom_frequency: number;
+    custom_frequency: string;
     color: string;
     is_positive: boolean;
     streak: number;

@@ -41,14 +41,14 @@
         </ion-icon>
         @if(form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)){
         @if(form.controls.password.errors?.["minlength"]){
-        <small>Password must be at least 8 characters long </small>
+        <small>Password must be at least 12 characters long </small>
         }
         @else if(form.controls.password.errors?.["required"]){
         <small>Password is required</small>
         }
         @else if(form.controls.password.errors?.["pattern"]){
         <small>Password must contain at least one uppercase letter, one lowercase letter and one special
-          character
+          character and one number
         </small>
         }
         }
@@ -87,7 +87,7 @@
       </button>
 
 
-      <button class="button" type="submit">Login</button>
+      <button class="button" type="submit" id="open-toast">Login</button>
 
     </form>
 
@@ -121,4 +121,7 @@
 
     <p class="signup-text text-center">Don't have an account? <a (click)="CreateAccount()" >Create one here!</a></p>
   </div>
+
+  <ion-toast id="login-toast" [message]="toastMessage" [duration]="5000" [isOpen]="isToastOpen"
+    (didDismiss)="isToastOpen = false"></ion-toast>
 </ion-content>

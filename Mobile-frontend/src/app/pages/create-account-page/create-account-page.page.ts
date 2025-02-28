@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonNote, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonNote, IonIcon, IonToast } from '@ionic/angular/standalone';
 import { combineLatest, Observable } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
@@ -22,12 +22,14 @@ export const passwordMatchValidator = (control: AbstractControl): ValidationErro
   templateUrl: './create-account-page.page.html',
   styleUrls: ['./create-account-page.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonToast, IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
 })
 
 export class CreateAccountPagePage implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
+  toastMessage = '';
+  isToastOpen = false;
   private auth = inject(AuthService);
   private http = inject(HttpClient);
 
@@ -41,7 +43,7 @@ export class CreateAccountPagePage implements OnInit {
       validators: [Validators.required,
       Validators.minLength(12),
         passwordMatchValidator,
-      Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/)]
+      Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d)/)]
     }),
     confirmPassword: this.fb.control('', { validators: [passwordMatchValidator, Validators.required] })
   });
@@ -63,19 +65,11 @@ export class CreateAccountPagePage implements OnInit {
     if (this.form.valid) {
       // Call the register method from the AuthService
       this.postNewUser(this.form.value).subscribe({
-        next: (v) => this.router.navigate(['/login-page']),
+        next: (v) => this.router.navigate(['/login-page', { queryParams: { message: 'Account created successfully' } }]),
         error: (e) => console.error(e)
       });
     }
   }
-  // Define the form group properly
-  // loginForm = new FormGroup({
-  //   email: new FormControl('',Validators.email),
-  //   password: new FormControl(''),
-  //   confirmPassword: new FormControl(''),
-  //   firstName: new FormControl(''),
-  //   lastName: new FormControl('')  // Complete the lastName control
-  // });
 
   constructor(private router: Router) {
     addIcons({ eyeOffOutline, eyeOutline })
@@ -88,5 +82,10 @@ export class CreateAccountPagePage implements OnInit {
 
   postNewUser(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  }
+
+  async presentToast(message: string) {
+    this.toastMessage = message;
+    this.isToastOpen = true;
   }
 }

@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonCheckbox, IonRouterOutlet } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonIcon, IonCheckbox, IonRouterOutlet, IonToast, ToastController } from '@ionic/angular/standalone';
+import { ActivatedRoute, Router } from '@angular/router';
 import { add, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { Observable } from 'rxjs';
@@ -14,12 +14,17 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login-page.page.html',
   styleUrls: ['./login-page.page.scss'],
   standalone: true,
-  imports: [IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
+  imports: [IonToast, IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
 })
 export class LoginPagePage implements OnInit {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   showPassword = false;
+  toastMessage = '';
+  isToastOpen = false;
+  messageShown = false;
+
+
 
   fb = inject(NonNullableFormBuilder)
   form = this.fb.group({
@@ -27,7 +32,7 @@ export class LoginPagePage implements OnInit {
     password: this.fb.control('', {
       validators: [Validators.required,
       Validators.minLength(12),
-      Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/)]
+      Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d)/)]
     })
   });
 
@@ -40,7 +45,8 @@ export class LoginPagePage implements OnInit {
     }
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute,
+    private toastController: ToastController) {
     addIcons({ eyeOffOutline, eyeOutline })
   }
 
@@ -53,8 +59,10 @@ export class LoginPagePage implements OnInit {
 
       this.login(this.form.value).subscribe({
         next: (userToken) => this.authService.saveToken(userToken),
-        error: (e) => console.log(e),
-        complete: () => this.router.navigate(['/footertabs/feed']),
+        error: (e) => {
+          console.log(e); this.presentToast('Invalid email or password')
+        },
+        complete: () => { this.router.navigate(['/footertabs/feed']) },
       });
     }
 
@@ -64,10 +72,23 @@ export class LoginPagePage implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      console.log(params);
+      if (params['message']) {
+        this.presentToast(params['message']);
+        this.messageShown = true;
+      }
+    });
   }
+
   private apiUrl = 'http://localhost:8080/api';
 
   login(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, formResult);
+  }
+
+  async presentToast(message: string) {
+    this.toastMessage = message;
+    this.isToastOpen = true;
   }
 }
