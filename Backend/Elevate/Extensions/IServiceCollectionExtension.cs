@@ -86,7 +86,7 @@ namespace Elevate.Extensions
             var publicKeyPem = configuration["Jwt:PublicKey"]
                 ?? throw new InvalidOperationException("Public key not configured.");
 
-            using var rsa = RSA.Create();
+            var rsa = RSA.Create();
             rsa.ImportRSAPublicKeyPem(publicKeyPem);
 
             var rsaSecurityKey = new RsaSecurityKey(rsa);
@@ -112,7 +112,7 @@ namespace Elevate.Extensions
                     ValidateAudience = true,
                     ValidAudiences = audienceList,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
             });
             services.AddAuthorization();

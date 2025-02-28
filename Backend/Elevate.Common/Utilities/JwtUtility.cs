@@ -64,34 +64,36 @@ namespace Elevate.Common.Utilities
 
         public static bool ValidateJwtRsa(string token, string publicKey, string issuer, string audience)
         {
-            using (var rsa = RSA.Create())
+            var rsa = RSA.Create();
+            rsa.ImportFromPem(publicKey);
+
+            var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            
+
+            var validationParameters = new TokenValidationParameters
             {
-                rsa.ImportRSAPublicKeyPem(publicKey);
-
-                var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
-
-                var validationParameters = new TokenValidationParameters
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new RsaSecurityKey(rsa)
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new RsaSecurityKey(rsa),
-                    ValidateIssuer = true,
-                    ValidIssuer = issuer,
-                    ValidateAudience = true,
-                    ValidAudiences = audienceList,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                    CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false }
+                },
+                ValidateIssuer = true,
+                ValidIssuer = issuer,
+                ValidateAudience = true,
+                ValidAudiences = audienceList,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(5)
+            };
 
-                try
-                {
-                    new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"JWT validation failed: {ex.Message}");
-                    return false;
-                }
+            try
+            {
+                new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"JWT validation failed: {ex.Message}");
+                return false;
             }
         }
     }
