@@ -37,17 +37,5 @@ namespace Elevate.Data.Repository
             await _context.SaveChangesAsync();
             return user;
         }
-
-        public ApplicationUser? DeleteUser(Guid userId)
-        {
-            ApplicationUser? user = _context.Set<ApplicationUser>().SingleOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new Exception("No such user");
-            }
-            _context.Set<ApplicationUser>().Remove(user);
-            _context.SaveChanges();
-            return user;
-        }
     }
 }

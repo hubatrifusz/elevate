@@ -48,10 +48,5 @@ namespace Elevate.Services
 
             return await _userRepository.UpdateUserAsync(id, ApplicationUser);
         }
-
-        public ApplicationUser? DeleteUser(Guid userId)
-        {
-            return _userRepository.DeleteUser(userId);
-        }
     }
 }

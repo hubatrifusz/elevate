@@ -61,9 +61,7 @@ namespace Elevate
 
             //Configure Swagger
             builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            builder.Services.AddSwaggerGen(c =>
-                c.EnableAnnotations()
-            );
+            builder.Services.AddSwagger();
 
             builder.Services.AddCorsPolicies();
 
