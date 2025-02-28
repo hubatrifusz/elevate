@@ -10,6 +10,5 @@ namespace Elevate.Services
         Task<List<ApplicationUser>?> GetUsersByEmailAsync(string email, int pageNumber, int pageSize);
         Task<IdentityResultWithUser> AddUserAsync(UserCreateDto user);
         Task<ApplicationUser?> UpdateUserAsync(Guid id, UserUpdateDto user);
-        ApplicationUser? DeleteUser(Guid userId);
     }
 }
