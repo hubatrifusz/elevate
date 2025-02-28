@@ -16,7 +16,11 @@ namespace Elevate.Profiles
             CreateMap<UserCreateDto, ApplicationUser>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
-            CreateMap<UserUpdateDto, ApplicationUser>();
+            CreateMap<UserUpdateDto, ApplicationUser>()
+                .ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src =>
+                    !string.IsNullOrEmpty(src.ProfilePictureBase64) ? 
+                    Convert.FromBase64String(src.ProfilePictureBase64) : null
+                ));
 
             CreateMap<Friendship, FriendshipDto>();
             CreateMap<FriendshipCreateDto, Friendship>();
