@@ -4,6 +4,7 @@ import { CreateAccountComponent } from './pages/auth/create-account/create-accou
 import { PasswordRecoveryComponent } from './pages/auth/password-recovery/password-recovery.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
+import { UserComponent } from './pages/user/user.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -15,4 +16,7 @@ export const routes: Routes = [
 
   // Dashboard
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] }, // Dashboard Page
+
+  // User
+  { path: 'user/:id', component: UserComponent, canActivate: [authGuard] }, // User controls
 ];

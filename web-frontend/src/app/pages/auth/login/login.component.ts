@@ -25,7 +25,10 @@ export class LoginComponent {
   onSubmit() {
     if (this.checkValidationErrors()) return;
     this.authService.login(this.loginForm.value).subscribe({
-      next: (userToken) => this.authService.saveToken(userToken),
+      next: (response) => {
+        this.authService.saveToken(response.token);
+        this.authService.saveUserID(response.userId)
+      },
       error: (e) => this.checkLoginErrors(e),
       complete: () => this.router.navigate(['/dashboard']),
     });

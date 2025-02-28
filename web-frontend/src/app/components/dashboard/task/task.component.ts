@@ -11,6 +11,11 @@ export class TaskComponent {
   constructor(private authService: AuthService) {}
 
   getData() {
-    console.log(this.authService.getUserData());
+    this.authService.getUserData(localStorage.getItem('id')).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (e) => console.log(e),
+    });
   }
 }

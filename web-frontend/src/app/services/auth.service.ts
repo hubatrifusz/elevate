@@ -14,8 +14,12 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
+  saveUserID(id: string) {
+    localStorage.setItem('id', id);
+  }
+
   logout() {
-    localStorage.removeItem('token');
+    localStorage.clear();
   }
 
   login(formResult: any): Observable<any> {
@@ -26,12 +30,12 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
   }
 
-  getUserData(): Observable<any> {
+  getUserData(id: string | null): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(`${this.apiUrl}/api/user`, {
+    return this.http.get(`${this.apiUrl}/user/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }
