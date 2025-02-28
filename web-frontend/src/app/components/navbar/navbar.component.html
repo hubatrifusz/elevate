@@ -1,7 +1,8 @@
 <nav>
   <div id="section_top" class="section"></div>
   <div id="section_center" class="section">
-    <a></a>
+    <a [routerLink]="'/dashboard'"><img src="icons/calendar.png" alt="" /></a>
+    <a [routerLink]="'/friends'"><img src="icons/friends.png" alt="" /></a>
   </div>
   <div id="section_bottom" class="section">
     <button (click)="logout()">Log out</button>

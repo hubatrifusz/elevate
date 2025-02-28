@@ -14,14 +14,6 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  isLoggedIn(): boolean {
-    return this.getToken() !== null;
-  }
-
   logout() {
     localStorage.removeItem('token');
   }
@@ -32,5 +24,14 @@ export class AuthService {
 
   crateAccount(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  }
+
+  getUserData(): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.get(`${this.apiUrl}/api/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
   }
 }

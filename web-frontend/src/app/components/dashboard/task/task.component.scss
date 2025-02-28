@@ -1,8 +1,68 @@
-@import '../../../../assets/styles/variables';
+@import "../../../../assets/styles/variables";
 
 #task_container {
-  height: 3rem;
-  width: clamp(2rem, 10rem, 10rem);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
-  background-color: $accent-color-400;
+  height: 5rem;
+  width: 45rem;
+
+  padding: 1.3rem;
+
+  border-radius: 1rem;
+  border-left: 1rem solid $accent-color-800;
+
+  background-color: $main-color-100;
+
+  #left {
+    label {
+      font-size: $font-size-lg;
+      color: $text-color-900;
+    }
+  }
+
+  #right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.3rem;
+
+    height: 100%;
+
+    #time_container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      height: 100%;
+
+      padding: 0.6rem;
+
+      border-radius: 0.7rem;
+      background-color: $main-color-200;
+
+      img {
+        height: 100%;
+      }
+
+      span {
+        color: $main-color-600;
+        font-size: $font-size-base;
+      }
+    }
+
+    #options_container {
+      display: flex;
+      align-items: center;
+
+      height: 100%;
+
+      img {
+        height: 55%;
+        cursor: pointer;
+      }
+    }
+  }
 }
