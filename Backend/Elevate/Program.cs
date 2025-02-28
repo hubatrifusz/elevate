@@ -29,7 +29,6 @@ namespace Elevate
 
             builder.Services.AddIdentity();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             // Add configuration
             builder.Services.AddSingleton(builder.Configuration);
@@ -62,6 +61,9 @@ namespace Elevate
             //Configure Swagger
             builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             builder.Services.AddSwagger();
+            builder.Services.AddSwaggerGen(c =>
+                c.EnableAnnotations()
+            );
 
             builder.Services.AddCorsPolicies();
 

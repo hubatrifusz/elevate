@@ -12,7 +12,11 @@ namespace Elevate.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<ApplicationUser, UserDto>();
+            CreateMap<ApplicationUser, UserDto>()
+                .ForMember(dest => dest.ProfilePictureBase64, opt => opt.MapFrom(src =>
+                src.ProfilePicture != null && src.ProfilePicture.Length > 0 ?
+                Convert.ToBase64String(src.ProfilePicture) : null
+                ));
             CreateMap<UserCreateDto, ApplicationUser>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
