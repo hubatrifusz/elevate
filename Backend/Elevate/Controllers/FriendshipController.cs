@@ -1,5 +1,4 @@
-﻿using Elevate.Models.User;
-using Elevate.Models.Friendship;
+﻿using Elevate.Models.Friendship;
 using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
