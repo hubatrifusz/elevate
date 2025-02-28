@@ -8,7 +8,7 @@ using Elevate.Models.Friendship;
 
 namespace Elevate.Profiles
 {
-    public class AutoMapperProfile : AutoMapper.Profile
+    public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
