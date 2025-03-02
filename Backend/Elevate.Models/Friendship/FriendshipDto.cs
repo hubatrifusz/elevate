@@ -13,7 +13,7 @@ namespace Elevate.Models.Friendship
         [Required]
         public required FriendshipStatus Status { get; set; }
         [Required]
-        public DateTime CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

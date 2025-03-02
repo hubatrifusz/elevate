@@ -7,6 +7,6 @@ namespace Elevate.Models.Friendship
         [Required]
         public FriendshipStatus Status { get; set; }
 
-        public DateTime? UpdatedOn { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
