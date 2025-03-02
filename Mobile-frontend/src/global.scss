@@ -59,3 +59,14 @@ ion-content {
     --ion-background-color: linear-gradient(35deg, #9a8af675, #000000, #00000075, #9a8af675);
   }
 }
+
+ion-toast {
+  // @media(prefers-color-scheme: dark) {
+  //   --background: hsl(248, 10%, 30%);
+  //   --color: #ffffff;
+  // }
+
+  text-align: center;
+  --border-radius: 15px;
+  --box-shadow: 0px 3px 10px 1px rgba(0, 0, 0, 0.774);
+}

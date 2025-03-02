@@ -11,9 +11,9 @@ export interface Habit {
     streak_start?: Date;
 }
 export enum Frequency {
-    Daily,
-    Weekly,
-    Monthly,
-    Yearly,
-    Custom
+    Daily = 'daily',
+    Weekly = 'weekly',
+    Monthly = 'monthly',
+    Yearly = 'yearly',
+    Custom = 'custom'
 }

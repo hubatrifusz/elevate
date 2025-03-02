@@ -8,5 +8,7 @@ ion-fab-button {
     --color: hsl(249, 40%, 50%);
 
     @media(prefers-color-scheme: dark) {
+        --background: #1f1f1f;
+        --color: hsl(249, 100%, 71%);
     }
 }

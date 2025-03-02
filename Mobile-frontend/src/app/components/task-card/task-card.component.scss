@@ -114,6 +114,8 @@ ion-item {
     border: solid 1px $main-color-300;
     border-top: none;
     padding: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
     // border-bottom: solid 1px $main-color-300;
     // border-right: solid 1px $main-color-300;
     // border-left: solid 1px $main-color-300;
@@ -128,6 +130,16 @@ ion-item {
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 15px;
+        padding: 0px 5px;
+        background-color: $main-color-100;
+        border: 1px solid $main-color-300;
+
+        @media(prefers-color-scheme: dark) {
+
+            background-color: #1f1f1f;
+            border: 1px solid $main-color-600;
+        }
     }
 
     ion-grid {
@@ -150,10 +162,65 @@ ion-item {
     }
 
     ion-textarea {
-        padding: 0px 10px;
+        padding: 5px 10px;
+        // --background: white;
+        background-color: $main-color-100;
+        /* Very light background */
+        border: 1px solid $main-color-300;
+        /* Subtle border */
+        border-radius: 15px;
+        font-size: $font-size-md;
+        color: $text-color-900;
+        --padding-top: 5px;
+        --padding-bottom: 5px;
+        width: calc(100% - 10px);
+        margin: auto;
     }
-    .delete{
-        margin: 5px 10px;
+
+    ion-textarea::placeholder {
+        color: $text-color-300;
+        /* Style the placeholder text */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        ion-textarea {
+            background-color: $main-color-990;
+            border: 1px solid $main-color-700;
+            color: $text-color-200;
+        }
+
+        ion-textarea::placeholder {
+            color: $text-color-400;
+        }
+    }
+
+    .delete {
+        margin: 15px 0px 5px 10px;
         width: fit-content;
+    }
+
+    ion-list {
+        margin: 0px 5px;
+        background-color: transparent;
+        --ion-background-color: transparent;
+        font-size: $font-size-sm;
+
+
+
+        ion-select {
+            --padding-start: 10px;
+
+        }
+
+        ion-item {
+            border-radius: 15px;
+            align-items: center;
+            background-color: $main-color-100;
+
+
+            .item-inner {
+                margin: 10px;
+            }
+        }
     }
 }

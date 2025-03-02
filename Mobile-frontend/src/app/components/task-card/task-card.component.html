@@ -51,6 +51,20 @@
       <ion-checkbox slot="end" (click)="stopPropagation($event)"></ion-checkbox>
     </ion-item>
     <div class="ion-padding content" slot="content">
+      <ion-textarea label="Description:" inputmode="text" [autoGrow]="true" [value]="habit.description" maxlength="100"></ion-textarea>
+      <ion-list>
+        <ion-item>
+          <ion-select aria-label="Frequency" interface="popover" label="Frequency:" placeholder="Select frequency"
+            [(ngModel)]="habit.frequency">
+            <ion-select-option value="daily">Daily</ion-select-option>
+            <ion-select-option value="weekly">Weekly</ion-select-option>
+            <ion-select-option value="montly">Montly</ion-select-option>
+            <ion-select-option value="yearly">Yearly</ion-select-option>
+            <ion-select-option value="custom">Custom</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <!-- @if() { -->
       <ion-grid>
         <ion-row class="day-selector">
           @for(day of weekDays ; track $index) {
@@ -63,7 +77,7 @@
           }
         </ion-row>
       </ion-grid>
-      <ion-textarea label="Description:" [autoGrow]="true" [value]="habit.description"  maxlength="100"></ion-textarea>
+      <!-- } -->
       <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
         Delete
         <ion-icon name="trash-outline"></ion-icon>

@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, CommonModule, IonTextarea]
+  imports: [IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList, IonSelect, IonSelectOption, FormsModule]
 })
 export class TaskCardComponent implements OnInit {
 
@@ -139,5 +140,6 @@ export class TaskCardComponent implements OnInit {
   deleteHabit(habit: Habit) {
     this.habits = this.habits.filter((h) => h.id !== habit.id);
   }
+  
 
 }

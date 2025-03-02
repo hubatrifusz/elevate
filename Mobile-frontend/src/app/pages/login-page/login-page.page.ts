@@ -74,9 +74,10 @@ export class LoginPagePage implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       console.log(params);
-      if (params['message']) {
+
+      if (params['message'] && !this.messageShown) {
         this.presentToast(params['message']);
-        this.messageShown = true;
+        this.messageShown = true; // Set messageShown to true
       }
     });
   }
