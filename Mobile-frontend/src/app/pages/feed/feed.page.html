@@ -1,7 +1,8 @@
 <div class="ion-page" id="main-content">
   <ion-header class="ion-no-border">
     <ion-toolbar>
-      <ion-title>Hello <br> Somloi David!</ion-title>
+      <ion-title slot="start">Hello <br> Somloi David!</ion-title>
+      <!-- <ion-icon  name="search-outline"></ion-icon> -->
       <ion-searchbar slot="start" show-clear-button="focus"></ion-searchbar>
       <ion-buttons slot="end">
         <ion-menu-toggle>
@@ -14,6 +15,12 @@
   </ion-header>
   <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
     (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" >
+      <ion-fab-button >
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
     <h1 class="text-center" style="margin-bottom: 30px;">Tasks</h1>
     <app-task-card></app-task-card>
     <app-task-card></app-task-card>

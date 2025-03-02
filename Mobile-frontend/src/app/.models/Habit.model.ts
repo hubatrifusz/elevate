@@ -4,16 +4,16 @@ export interface Habit {
     title: string;
     description?: string;
     frequency: Frequency;
-    custom_frequency: number;
+    custom_frequency: string;
     color: string;
     is_positive: boolean;
     streak: number;
     streak_start?: Date;
 }
 export enum Frequency {
-    Daily,
-    Weekly,
-    Monthly,
-    Yearly,
-    Custom
+    Daily = 'daily',
+    Weekly = 'weekly',
+    Monthly = 'monthly',
+    Yearly = 'yearly',
+    Custom = 'custom'
 }

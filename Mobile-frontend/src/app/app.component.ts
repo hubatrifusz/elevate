@@ -9,6 +9,7 @@ import { add, logOutOutline, menu, menuOutline, people, person, personCircle, pe
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
   imports: [IonApp, IonRouterOutlet, IonMenu, IonIcon, IonButton, IonContent,],
 })
 export class AppComponent {

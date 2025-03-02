@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar } from '@ionic/angular/standalone';
+import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { list, calendar, people, menu, settings, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, logOutOutline, add, cogSharp, menuOutline } from 'ionicons/icons';
+import { list, calendar, people, menu, settings, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, logOutOutline, add, cogSharp, menuOutline, searchOutline, search } from 'ionicons/icons';
 import { FootertabsComponent } from "../../components/footertabs/footertabs.component";
 import { Router, RouterLink } from '@angular/router';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
+  imports: [IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
 })
 export class FeedPage {
   private auth = inject(AuthService);
@@ -29,7 +29,7 @@ export class FeedPage {
   title = document.getElementsByTagName('ion-title');
 
   constructor(private menuCtrl: MenuController, private router: Router) {
-    addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu });
+    addIcons({ search, personCircleOutline, add, searchOutline, ribbonOutline, settings, logOutOutline, menuOutline, ribbon, personOutline, personCircle, person, people, menu });
 
   }
 

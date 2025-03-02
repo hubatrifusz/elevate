@@ -1,43 +1,79 @@
 @use "../../../theme/variables.scss" as *;
 
-.container {
+ion-accordion {
+    box-shadow: none;
+    --ion-safe-area-left: 0;
+
+}
+
+.accordion-collapsed,
+.accordion-collapsing {
+    ion-item {
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+}
+
+.accordion-expanded,
+.accordion-expanding {
+    ion-item {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+.habit-item {
+    // display: flex;
+    align-items: center;
+}
+
+
+
+ion-item {
+    padding: 0 0;
     background-color: $main-color-200;
-    width: 90%;
-    height: 70px;
-    margin: 25px auto ;
-    border-radius: 15px;
+    width: 100%;
+    margin-top: 10px;
+    // margin: 25px auto ;
+    // border-radius: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     display: flex;
     align-items: center; // Vertically center the children
     border: solid 1px $main-color-300;
+
 
     @media(prefers-color-scheme: dark) {
         background-color: $main-color-600;
         border: solid 1px $main-color-700;
     }
+
     ion-checkbox {
         margin-left: 10px;
         --ion-background-color: $main-color-400;
     }
 
     .color {
-        background-color: $accent-color-400;
-        width: 5%;
-        height: 70px;
-        border-radius: 15px 0 0 15px;
+        width: 13px;
+        height: 100%;
         margin-right: 10px;
     }
-    .red{
-        background-color: $alert-color-400;
-    }
 
-    ion-checkbox {
-        width: 50px;
-        height: 50px;
+    // ion-checkbox {
+    //     width: 50px;
+    //     height: 50px;
+    // }
+
+    ion-button {
+        width: 30px;
+        height: 30px;
+        --background: white
     }
 
     ion-label {
         font-size: $font-size-sm;
         color: $text-color-900;
+
         @media(prefers-color-scheme: dark) {
             color: $text-color-200;
         }
@@ -45,14 +81,15 @@
     }
 
     .time {
-        background-color: $main-color-700;
+        background-color: $main-color-800;
         border-radius: 10px;
         margin-left: auto; // Pushes the .time div to the right
         margin-right: 10px;
-        padding: 5px;
+        padding: 5px 10px;
         display: flex; // Add Flexbox
         align-items: center; // Center vertically
         justify-content: center;
+        color: $text-color-100;
 
         @media(prefers-color-scheme: dark) {
             background-color: $main-color-800;
@@ -60,10 +97,129 @@
 
         ion-label {
             font-size: $font-size-xs;
-            color: $text-color-200;
+            margin-right: 3px;
+            color: $text-color-100;
 
             @media(prefers-color-scheme: dark) {
                 color: $text-color-200;
+            }
+        }
+    }
+}
+
+.content {
+    background-color: $main-color-200;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border: solid 1px $main-color-300;
+    border-top: none;
+    padding: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    // border-bottom: solid 1px $main-color-300;
+    // border-right: solid 1px $main-color-300;
+    // border-left: solid 1px $main-color-300;
+
+    @media(prefers-color-scheme: dark) {
+        background-color: $main-color-900;
+        border: solid 1px $main-color-700;
+        border-top: none;
+    }
+
+    .day-selector {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        padding: 0px 5px;
+        background-color: $main-color-100;
+        border: 1px solid $main-color-300;
+
+        @media(prefers-color-scheme: dark) {
+
+            background-color: #1f1f1f;
+            border: 1px solid $main-color-600;
+        }
+    }
+
+    ion-grid {
+
+        ion-button {
+            width: 20px;
+            height: 20px;
+            font-size: $font-size-md;
+            text-transform: none;
+            --background: transparent;
+            --color: #ccc;
+            --border-radius: 15px;
+        }
+
+        ion-button.selected {
+            // --background: $accent-color-400;
+            --background: hsl(249, 40%, 50%);
+            --color: white;
+        }
+    }
+
+    ion-textarea {
+        padding: 5px 10px;
+        // --background: white;
+        background-color: $main-color-100;
+        /* Very light background */
+        border: 1px solid $main-color-300;
+        /* Subtle border */
+        border-radius: 15px;
+        font-size: $font-size-md;
+        color: $text-color-900;
+        --padding-top: 5px;
+        --padding-bottom: 5px;
+        width: calc(100% - 10px);
+        margin: auto;
+    }
+
+    ion-textarea::placeholder {
+        color: $text-color-300;
+        /* Style the placeholder text */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        ion-textarea {
+            background-color: $main-color-990;
+            border: 1px solid $main-color-700;
+            color: $text-color-200;
+        }
+
+        ion-textarea::placeholder {
+            color: $text-color-400;
+        }
+    }
+
+    .delete {
+        margin: 15px 0px 5px 10px;
+        width: fit-content;
+    }
+
+    ion-list {
+        margin: 0px 5px;
+        background-color: transparent;
+        --ion-background-color: transparent;
+        font-size: $font-size-sm;
+
+
+
+        ion-select {
+            --padding-start: 10px;
+
+        }
+
+        ion-item {
+            border-radius: 15px;
+            align-items: center;
+            background-color: $main-color-100;
+
+
+            .item-inner {
+                margin: 10px;
             }
         }
     }
