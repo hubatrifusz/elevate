@@ -1,4 +1,4 @@
-﻿namespace Elevate.Models
+﻿namespace Elevate.Models.Habit
 {
     public enum FrequencyEnum
     {

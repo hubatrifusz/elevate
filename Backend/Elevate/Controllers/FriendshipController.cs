@@ -39,7 +39,8 @@ namespace Elevate.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteFriendship(Guid userId, Guid friendId)
         {
-            if (UserPermissionUtility.IsCurrentUser(userId, User))
+            if (UserPermissionUtility.IsCurrentUser(userId, User) 
+                || UserPermissionUtility.IsCurrentUser(friendId, User))
             {
                 var result = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
                 if (result == null)
