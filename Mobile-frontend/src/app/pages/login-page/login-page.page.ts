@@ -58,7 +58,11 @@ export class LoginPagePage implements OnInit {
       // Call the login method from the AuthService
 
       this.login(this.form.value).subscribe({
-        next: (userToken) => this.authService.saveToken(userToken),
+        next: (response) => {
+          this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
+          localStorage.setItem('userId', response.userId);
+           // Store userId in localStorage
+        },
         error: (e) => {
           console.log(e); this.presentToast('Invalid email or password')
         },

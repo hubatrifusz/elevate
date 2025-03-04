@@ -16,13 +16,12 @@
   <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
     (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
     <ion-fab horizontal="end" vertical="bottom" slot="fixed" >
-      <ion-fab-button >
+      <ion-fab-button (click)="newHabit()">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
 
     <h1 class="text-center" style="margin-bottom: 30px;">Tasks</h1>
-    <app-task-card></app-task-card>
     <app-task-card></app-task-card>
 
 

@@ -83,5 +83,7 @@ export class FeedPage {
   handleScrollEnd() {
     // console.log('scroll end');
   }
-
+  newHabit() {
+    this.router.navigate(['/create-habit']);
+  }
 }

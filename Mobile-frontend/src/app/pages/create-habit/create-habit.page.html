@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/footertabs/feed"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Habit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>New Habit</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Title</ion-label>
+        <ion-input type="text" [(ngModel)]="habit.title"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Description</ion-label>
+        <ion-textarea [(ngModel)]="habit.description"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Frequency</ion-label>
+        <ion-select [(ngModel)]="habit.frequency">
+          <ion-select-option value="Daily">Daily</ion-select-option>
+          <ion-select-option value="Weekly">Weekly</ion-select-option>
+          <ion-select-option value="Monthly">Monthly</ion-select-option>
+          <ion-select-option value="Custom">Custom</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-item >
+        <ion-label>Custom Frequency</ion-label>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="auto" *ngFor="let day of weekDays; let i = index">
+              <ion-button (click)="toggleDay(i)" [color]="isSelectedDay(i) ? 'primary' : 'light'">
+                {{ day.label }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-label>Color</ion-label>
+        <ion-input type="color" [(ngModel)]="habit.color"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Positive Habit?</ion-label>
+        <ion-checkbox slot="end" [(ngModel)]="habit.is_positive"></ion-checkbox>
+      </ion-item>
+
+      <ion-button expand="full" (click)="createHabit()">Create</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
