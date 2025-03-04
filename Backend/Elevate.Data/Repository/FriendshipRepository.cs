@@ -18,14 +18,14 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<Friendship> AddFriendshipAsync(Friendship friendship)
+        public async Task<FriendshipModel> AddFriendshipAsync(FriendshipModel friendship)
         {
             _context.Friendships.Add(friendship);
             await _context.SaveChangesAsync();
             return friendship;
         }
 
-        public async Task<Friendship> DeleteFriendshipAsync(Guid userId, Guid friendId)
+        public async Task<FriendshipModel> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
             var friendship = await _context.Friendships
                 .FirstOrDefaultAsync(f => 
