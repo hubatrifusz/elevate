@@ -20,6 +20,8 @@ namespace Elevate.Extensions
             services.AddScoped<HabitLogRepository>();
             services.AddScoped<FriendshipRepository>();
 
+            services.AddScoped<HabitLogGeneratorRepository>();
+
             services.AddDbContext<ElevateDbContext>();
         }
 
@@ -29,6 +31,10 @@ namespace Elevate.Extensions
             services.AddScoped<IHabitService, HabitService>();
             services.AddScoped<IHabitLogService, HabitLogService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+
+            services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
+
+            services.AddHostedService<HabitLogGenerationBackgroundService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)

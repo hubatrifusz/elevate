@@ -24,6 +24,11 @@ namespace Elevate.Data.Repository
             return _context.Set<HabitModel>().SingleOrDefault(h => h.Id == habitId);
         }
 
+        public List<HabitModel> GetAllHabits()
+        {
+            return _context.Set<HabitModel>().ToList();
+        }
+
         public HabitModel? AddHabit(HabitModel habit)
         {
             HabitModel savedHabit = _context.Set<HabitModel>().Add(habit).Entity;

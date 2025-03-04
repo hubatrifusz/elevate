@@ -4,8 +4,8 @@
     {
         public required Guid Id { get; set; }
 
-        public required string UserId { get; set; }
-        public required string FriendId { get; set; }
+        public required Guid UserId { get; set; }
+        public required Guid FriendId { get; set; }
 
         public FriendshipStatus Status { get; set; } = FriendshipStatus.Pending;
 
