@@ -3,15 +3,17 @@ using Elevate.Models.Habit;
 using Elevate.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Elevate.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class HabitController(IHabitService habitService) : ControllerBase
+    public class HabitController(IHabitService habitService, IHabitLogGeneratorService habitLogGeneratorService) : ControllerBase
     {
         private readonly IHabitService _habitService = habitService;
+        private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
 
         [HttpGet]
         public ActionResult<IEnumerable<HabitModel>> GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)
@@ -44,7 +46,7 @@ namespace Elevate.Controllers
         }
 
         [HttpPost]
-        public ActionResult<HabitModel> AddHabit(HabitCreateDto habitCreateDto)
+        public async Task<ActionResult<HabitModel>> AddHabit(HabitCreateDto habitCreateDto)
         {
             if (UserPermissionUtility.IsCurrentUser(habitCreateDto.UserID, User))
             {
@@ -53,6 +55,8 @@ namespace Elevate.Controllers
                 {
                     return BadRequest("Habit could not be created.");
                 }
+                await _habitLogGeneratorService.GenerateLogsForHabitAsync(createdHabit);
+
                 return CreatedAtAction(nameof(GetHabitById), new { id = createdHabit.Id }, createdHabit);
             }
             return Forbid();
