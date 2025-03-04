@@ -11,12 +11,11 @@ namespace Elevate.Data.Repository
 
         public async Task<List<ApplicationUser>> GetFriendsAsync(Guid userId)
         {
-            var friends = await _context.Friendships
-                .Where(f => f.UserId == userId || f.FriendId == userId)
-                .Select(f => f.UserId == userId ? f.FriendId : f.UserId)
+            return await _context.Users
+                .Where(u => _context.Friendships.Any(f =>
+                    (f.UserId == userId && f.FriendId == u.Id) ||
+                    (f.FriendId == userId && f.UserId == u.Id)))
                 .ToListAsync();
-
-            return await _context.Users.Where(u => friends.Contains(u.Id)).ToListAsync();
         }
 
         public async Task<Friendship> AddFriendshipAsync(Friendship friendship)
@@ -29,7 +28,10 @@ namespace Elevate.Data.Repository
         public async Task<Friendship> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
             var friendship = await _context.Friendships
-                .FirstOrDefaultAsync(f => (f.UserId == userId && f.FriendId == friendId) || (f.UserId == friendId && f.FriendId == userId));
+                .FirstOrDefaultAsync(f => 
+                    (f.UserId == userId && f.FriendId == friendId) ||
+                    (f.UserId == friendId && f.FriendId == userId)
+                );
 
             if (friendship == null)
             {
