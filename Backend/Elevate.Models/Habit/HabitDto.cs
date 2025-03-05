@@ -15,8 +15,8 @@ namespace Elevate.Models.Habit
         [MaxLength(100)]
         public string? Description { get; set; }
         [Required]
-        public required FrequencyEnum FrequencyType { get; set; }
-        public short? CustomFrequency { get; set; }
+        public required string FrequencyType { get; set; }
+        public ushort? CustomFrequency { get; set; }
         [Required, MaxLength(6)]
         public required string Color { get; set; }
         [Required]
