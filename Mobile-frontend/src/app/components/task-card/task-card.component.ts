@@ -63,10 +63,31 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
+  toggleDay(habit: Habit, dayIndex: number) {
+    if (habit.custom_frequency == null) {
+      console.log('custom_frequency is null or undefined');
+      habit.custom_frequency = 0; // Initialize to 0 if null or undefined
+    }
 
-  isSelectedDay(customFrequency: number, dayIndex: number): boolean {
-    if (customFrequency != null) {
-      const binaryString = customFrequency.toString(2).padStart(7, '0');
+    let binaryString = habit.custom_frequency.toString(2).padStart(7, '0');
+    let binaryArray = binaryString.split('');
+    binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
+    habit.custom_frequency = parseInt(binaryArray.join(''), 2);
+
+    // Update the habit in the habits array
+    const index = this.habits.findIndex(h => h.id === habit.id);
+    if (index !== -1) {
+      this.habits[index] = { ...habit }; // Create a new object
+    }
+
+    console.log(habit.custom_frequency);
+    console.log(habit);
+  }
+
+   isSelectedDay(custom_frequency: number, dayIndex: number): boolean {
+    
+    if (custom_frequency != null) {
+      const binaryString = custom_frequency.toString(2).padStart(7, '0');
       return binaryString.charAt(dayIndex) === '1';
     }
     else {
@@ -74,12 +95,8 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-  toggleDay(habit: Habit, dayIndex: number) {
-    let binaryString = habit.custom_frequency.toString(2).padStart(7, '0');
-    let binaryArray = binaryString.split('');
-    binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
-    habit.custom_frequency = parseInt(binaryArray.join(''), 2);
-  }
+
+
   stopPropagation(event: Event) {
     event.stopPropagation();
   }

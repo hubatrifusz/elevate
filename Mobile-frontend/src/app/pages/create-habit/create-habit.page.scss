@@ -1,0 +1,36 @@
+@use "../../../theme/variables.scss" as *;
+
+.day-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    padding: 0px 5px;
+    background-color: $main-color-100;
+    border: 1px solid $main-color-300;
+
+    @media(prefers-color-scheme: dark) {
+
+        background-color: #1f1f1f;
+        border: 1px solid $main-color-600;
+    }
+}
+
+ion-grid {
+
+    ion-button {
+        width: 20px;
+        height: 20px;
+        font-size: $font-size-md;
+        text-transform: none;
+        --background: transparent;
+        --color: #ccc;
+        --border-radius: 15px;
+    }
+
+    ion-button.selected {
+        // --background: $accent-color-400;
+        --background: hsl(249, 40%, 50%);
+        --color: white;
+    }
+}
