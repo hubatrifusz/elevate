@@ -8,7 +8,7 @@
         public required string Title { get; set; }
         public string? Description { get; set; }
         public required FrequencyEnum FrequencyType { get; set; }
-        public int? CustomFrequency { get; set; }
+        public ushort? CustomFrequency { get; set; }
         public required string Color { get; set; }
         public required bool IsPositive { get; set; }
         public int Streak { get; set; } = 0;

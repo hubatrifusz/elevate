@@ -29,7 +29,9 @@ namespace Elevate.Profiles
             CreateMap<FriendshipModel, FriendshipDto>();
             CreateMap<FriendshipCreateDto, FriendshipModel>();
 
-            CreateMap<HabitModel, HabitDto>();
+            CreateMap<HabitModel, HabitDto>()
+                .ForMember(dest => dest.FrequencyType, opt =>
+                opt.MapFrom(src => src.FrequencyType.ToString()));
             CreateMap<HabitCreateDto, HabitModel>();
             CreateMap<HabitUpdateDto, HabitModel>();
 
