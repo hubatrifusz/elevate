@@ -104,26 +104,27 @@ namespace Elevate.Data.Repository
         {
             var newLogs = new List<HabitLogModel>();
 
-            int customFrequency = habit.CustomFrequency ?? 0;
+            sbyte customFrequency = habit.CustomFrequency ?? 0;
             if (customFrequency == 0)
             {
                 return newLogs;
             }
 
-            var currentDate = startDate;
-            while (currentDate <= endDate)
+            var currentDate = startDate.Date;
+            DateTime endDateMidnight = endDate.Date;
+
+            while (currentDate <= endDateMidnight)
             {
-                // First bit (position 0) is always 0
-                // Position 1 = Monday, Position 2 = Tuesday, ..., Position 7 = Sunday
-
+                // Monday = bit 0, Tuesday = bit 1, ... Sunday = bit 6
                 int dayOfWeek = (int)currentDate.DayOfWeek;
-                int bitPosition = dayOfWeek == 0 ? 7 : dayOfWeek;
+                int bitPosition = dayOfWeek == 0 ? 6 : dayOfWeek - 1;
 
-                bool isDaySelected = (customFrequency & (1 << bitPosition)) != 0;
+                bool isDaySelected = ((customFrequency >> bitPosition) & 1) != 0;
 
-                if (isDaySelected && !existingDates.Contains(currentDate.Date))
+                DateTime currentDateMidnight = currentDate.Date;
+                if (isDaySelected && !existingDates.Contains(currentDateMidnight))
                 {
-                    newLogs.Add(CreateLog(habit, currentDate));
+                    newLogs.Add(CreateLog(habit, currentDateMidnight));
                 }
 
                 currentDate = currentDate.AddDays(1);

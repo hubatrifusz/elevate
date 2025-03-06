@@ -13,7 +13,7 @@ namespace Elevate.Models.Habit
 
         public string? FrequencyType { get; set; }
 
-        public ushort? CustomFrequency { get; set; }
+        public sbyte? CustomFrequency { get; set; }
 
         [StringLength(6)]
         public string? Color { get; set; }
