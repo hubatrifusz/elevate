@@ -16,7 +16,7 @@ namespace Elevate.Models.Habit
         public string? Description { get; set; }
         [Required]
         public required string FrequencyType { get; set; }
-        public ushort? CustomFrequency { get; set; }
+        public sbyte? CustomFrequency { get; set; }
         [Required, MaxLength(6)]
         public required string Color { get; set; }
         [Required]
