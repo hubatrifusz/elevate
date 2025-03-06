@@ -27,7 +27,7 @@ namespace Elevate.Data.Database
         public DbSet<AchievementModel> Achievements { get; set; }
         public DbSet<HabitLogModel> HabitLogs { get; set; }
         public DbSet<AchievementProgressModel> AchievementProgresses { get; set; }
-        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<FriendshipModel> Friendships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -62,17 +62,17 @@ namespace Elevate.Data.Database
 
             modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasIndex(f => new { f.UserId, f.FriendId })
                 .IsUnique();
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.FriendId)

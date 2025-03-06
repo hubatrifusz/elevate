@@ -26,10 +26,12 @@ namespace Elevate.Profiles
                     Convert.FromBase64String(src.ProfilePictureBase64) : null
                 ));
 
-            CreateMap<Friendship, FriendshipDto>();
-            CreateMap<FriendshipCreateDto, Friendship>();
+            CreateMap<FriendshipModel, FriendshipDto>();
+            CreateMap<FriendshipCreateDto, FriendshipModel>();
 
-            CreateMap<HabitModel, HabitDto>();
+            CreateMap<HabitModel, HabitDto>()
+                .ForMember(dest => dest.FrequencyType, opt =>
+                opt.MapFrom(src => src.FrequencyType.ToString()));
             CreateMap<HabitCreateDto, HabitModel>();
             CreateMap<HabitUpdateDto, HabitModel>();
 

@@ -1,6 +1,6 @@
 ﻿namespace Elevate.Models.Friendship
 {
-    public class Friendship
+    public class FriendshipModel
     {
         public required Guid Id { get; set; }
 
