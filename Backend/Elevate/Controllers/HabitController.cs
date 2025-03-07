@@ -50,14 +50,17 @@ namespace Elevate.Controllers
         {
             if (UserPermissionUtility.IsCurrentUser(habitCreateDto.UserID, User))
             {
-                var createdHabit = _habitService.AddHabit(habitCreateDto);
-                if (createdHabit == null)
+                try
                 {
-                    return BadRequest("Habit could not be created.");
-                }
-                await _habitLogGeneratorService.GenerateLogsForHabitAsync(createdHabit);
+                    var createdHabit = _habitService.AddHabit(habitCreateDto);
+                    await _habitLogGeneratorService.GenerateLogsForHabitAsync(createdHabit);
 
-                return CreatedAtAction(nameof(GetHabitById), new { id = createdHabit.Id }, createdHabit);
+                    return CreatedAtAction(nameof(GetHabitById), new { id = createdHabit.Id }, createdHabit);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Could not create object" + ex.Message);
+                }
             }
             return Forbid();
         }
@@ -81,7 +84,7 @@ namespace Elevate.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return BadRequest(ex.Message);
+                        return BadRequest("Could not create object" + ex.Message);
                     }
                 }
                 return Forbid();
