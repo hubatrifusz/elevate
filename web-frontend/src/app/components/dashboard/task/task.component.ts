@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Habit } from '../../../models/habit.model';
 
 @Component({
   selector: 'app-task',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
 })
 export class TaskComponent {
-  constructor(private authService: AuthService) {}
+  @Input() habitData!: Habit;
 }
