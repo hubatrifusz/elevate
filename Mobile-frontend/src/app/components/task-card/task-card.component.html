@@ -37,55 +37,53 @@
   </ion-accordion>
   }
 </ion-accordion-group> -->
+  <ion-accordion-group expand="inset">
+    @for(habit of habits ; track habit.id) {
+    <ion-accordion>
+      <ion-item slot="header" color="light" class="habit-item">
+        <div class="color" [style.backgroundColor]="habit.color"></div>
+        <ion-label>{{habit.title}}</ion-label>
+        <div class="time">
+          <ion-label>{{habit.streak}}</ion-label>
+          <ion-icon name="flame-outline"></ion-icon>
+        </div>
+        <ion-checkbox slot="end" (click)="stopPropagation($event)"></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding content" slot="content">
+        <ion-textarea label="Description:" inputmode="text" [autoGrow]="true" [value]="habit.description"
+          maxlength="100"></ion-textarea>
+        <ion-list>
+          <ion-item>
+            <ion-select aria-label="Frequency" interface="popover" label="Frequency:" placeholder="Select frequency"
+              [(ngModel)]="habit.frequencyType" [value]="habit.frequencyType">
+              <ion-select-option value="daily">Daily</ion-select-option>
+              <ion-select-option value="weekly">Weekly</ion-select-option>
+              <ion-select-option value="montly">Montly</ion-select-option>
+              <ion-select-option value="custom">Custom</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <!-- @if() { -->
+        <ion-grid>
+          <ion-row class="day-selector">
+            @for(day of weekDays ; track $index) {
+            <ion-col>
+              <ion-button [ngClass]="{'selected': isSelectedDay(habit.customFrequency, $index)}"
+                (click)="toggleDay(habit, $index)" fill="clear">
+                {{ day.label }}
+              </ion-button>
+            </ion-col>
+            }
+          </ion-row>
+        </ion-grid>
+        <!-- } -->
+        <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
+          Delete
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
 
-<ion-accordion-group expand="inset">
-  @for(habit of habits ; track habit.id) {
-  <ion-accordion>
-    <ion-item slot="header" color="light" class="habit-item">
-      <div class="color" [style.backgroundColor]="habit.color"></div>
-      <ion-label>{{habit.title}}</ion-label>
-      <div class="time">
-        <ion-label>{{habit.streak}}</ion-label>
-        <ion-icon name="flame-outline"></ion-icon>
+
       </div>
-      <ion-checkbox slot="end" (click)="stopPropagation($event)"></ion-checkbox>
-    </ion-item>
-    <div class="ion-padding content" slot="content">
-      <ion-textarea label="Description:" inputmode="text" [autoGrow]="true" [value]="habit.description"
-        maxlength="100"></ion-textarea>
-      <ion-list>
-        <ion-item>
-          <ion-select aria-label="Frequency" interface="popover" label="Frequency:" placeholder="Select frequency"
-            [(ngModel)]="habit.frequency">
-            <ion-select-option value="daily">Daily</ion-select-option>
-            <ion-select-option value="weekly">Weekly</ion-select-option>
-            <ion-select-option value="montly">Montly</ion-select-option>
-            <ion-select-option value="yearly">Yearly</ion-select-option>
-            <ion-select-option value="custom">Custom</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
-      <!-- @if() { -->
-      <ion-grid>
-        <ion-row class="day-selector">
-          @for(day of weekDays ; track $index) {
-          <ion-col>
-            <ion-button [ngClass]="{'selected': isSelectedDay(habit.custom_frequency, $index)}"
-              (click)="toggleDay(habit, $index)" fill="clear">
-              {{ day.label }}
-            </ion-button>
-          </ion-col>
-          }
-        </ion-row>
-      </ion-grid>
-      <!-- } -->
-      <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
-        Delete
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-button>
-
-
-    </div>
-  </ion-accordion>
-  }
-</ion-accordion-group>
+    </ion-accordion>
+    }
+  </ion-accordion-group>

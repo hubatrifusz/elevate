@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
+import { Component, EventEmitter, inject, Input, OnInit } from '@angular/core';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -12,15 +12,17 @@ import { HabitService } from 'src/app/services/habit.service';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList, IonSelect, IonSelectOption, FormsModule]
+  imports: [IonIcon, IonCheckbox,
+    IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
+    IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
+    IonSelect, IonSelectOption, FormsModule]
 })
 export class TaskCardComponent implements OnInit {
-
+  @Input() loadMoreHabits: EventEmitter<void> = new EventEmitter<void>();
   habits: Habit[] = [];
   private habitService = inject(HabitService);
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
-
   weekDays = [
     { label: 'M', value: 'Mon' },
     { label: 'T', value: 'Tue' },
@@ -33,6 +35,10 @@ export class TaskCardComponent implements OnInit {
 
   ngOnInit() {
     this.loadHabits();
+    this.loadMoreHabits.subscribe(() => {
+      console.log("ad");
+      this.loadMore();
+    });
   }
 
   constructor(private router: Router) {
@@ -41,7 +47,6 @@ export class TaskCardComponent implements OnInit {
 
   loadHabits() {
     const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
-
 
     if (userId) {
       this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
@@ -63,16 +68,35 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
+  loadMore() {
+    console.log("sdfs")
+
+    this.pageNumber++;
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
+        (habits) => {
+          this.habits = [...this.habits, ...habits];
+        },
+        (error) => {
+          console.error('Error loading more habits:', error);
+        }
+      );
+    } else {
+      console.warn('User ID not found in localStorage.');
+    }
+  }
+
   toggleDay(habit: Habit, dayIndex: number) {
-    if (habit.custom_frequency == null) {
-      console.log('custom_frequency is null or undefined');
-      habit.custom_frequency = 0; // Initialize to 0 if null or undefined
+    if (habit.customFrequency == null) {
+      console.log('customFrequency is null or undefined');
+      habit.customFrequency = 0; // Initialize to 0 if null or undefined
     }
 
-    let binaryString = habit.custom_frequency.toString(2).padStart(7, '0');
+    let binaryString = habit.customFrequency.toString(2).padStart(7, '0');
     let binaryArray = binaryString.split('');
     binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
-    habit.custom_frequency = parseInt(binaryArray.join(''), 2);
+    habit.customFrequency = parseInt(binaryArray.join(''), 2);
 
     // Update the habit in the habits array
     const index = this.habits.findIndex(h => h.id === habit.id);
@@ -80,14 +104,13 @@ export class TaskCardComponent implements OnInit {
       this.habits[index] = { ...habit }; // Create a new object
     }
 
-    console.log(habit.custom_frequency);
+    console.log(habit.customFrequency);
     console.log(habit);
   }
 
-   isSelectedDay(custom_frequency: number, dayIndex: number): boolean {
-    
-    if (custom_frequency != null) {
-      const binaryString = custom_frequency.toString(2).padStart(7, '0');
+  isSelectedDay(customFrequency: number, dayIndex: number): boolean {
+    if (customFrequency != null) {
+      const binaryString = customFrequency.toString(2).padStart(7, '0');
       return binaryString.charAt(dayIndex) === '1';
     }
     else {

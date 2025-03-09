@@ -20,8 +20,8 @@ export class CreateHabitPage implements OnInit {
     created_at: new Date(),
     title: '',
     description: '',
-    frequency: Frequency.Custom,
-    custom_frequency: 0,
+    frequencyType: Frequency.Daily,
+    customFrequency: 0,
     color: '#000000',
     is_positive: true,
     streak: 0,
@@ -53,36 +53,17 @@ export class CreateHabitPage implements OnInit {
         this.habit.color = this.habit.color.slice(1);
       }
 
-      // Convert frequency to number
-      // let frequencyNumber: number;
-      // switch (this.habit.frequency) {
-      //   case "Daily":
-      //     frequencyNumber = 0;
-      //     break;
-      //   case "Weekly":
-      //     frequencyNumber = 1;
-      //     break;
-      //   case "Monthly":
-      //     frequencyNumber = 2;
-      //     break;
-      //   case "Custom":
-      //     frequencyNumber = 3;
-      //     break;
-      //   default:
-      //     frequencyNumber = 0; // Default to Daily
-      // }
-
       // Prepare the habit data for the backend
       const habitData = {
         title: this.habit.title,
         userID: userId, // Map userId to userID
         description: this.habit.description,
-        frequencyType: 1, // Map frequency to frequencyType
-        customFrequency: this.habit.custom_frequency,
+        frequencyType: this.habit.frequencyType, // Map frequency to frequencyType
+        customFrequency: this.habit.customFrequency,
         color: this.habit.color,
         isPositive: this.habit.is_positive // Map is_positive to isPositive
       };
-
+      console.log('Creating habit:', habitData);
       this.habitService.createHabit(habitData).subscribe(
         (response) => {
           console.log('Habit created successfully:', response);
@@ -98,15 +79,15 @@ export class CreateHabitPage implements OnInit {
     }
   }
   toggleDay(habit: Habit, dayIndex: number) {
-    if (habit.custom_frequency == null) {
-      console.log('custom_frequency is null or undefined');
-      habit.custom_frequency = 0; // Initialize to 0 if null or undefined
+    if (habit.customFrequency == null) {
+      console.log('customFrequency is null or undefined');
+      habit.customFrequency = 0; // Initialize to 0 if null or undefined
     }
 
-    let binaryString = habit.custom_frequency.toString(2).padStart(7, '0');
+    let binaryString = habit.customFrequency.toString(2).padStart(7, '0');
     let binaryArray = binaryString.split('');
     binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
-    habit.custom_frequency = parseInt(binaryArray.join(''), 2);
+    habit.customFrequency = parseInt(binaryArray.join(''), 2);
 
     // Update the habit in the habits array
     // const index = this.habits.findIndex(h => h.id === habit.id);
@@ -114,13 +95,13 @@ export class CreateHabitPage implements OnInit {
     //   this.habits[index] = { ...habit }; // Create a new object
     // }
 
-    console.log(habit.custom_frequency);
+    console.log(habit.customFrequency);
     console.log(habit);
   }
-  isSelectedDay(custom_frequency: number, dayIndex: number): boolean {
+  isSelectedDay(customFrequency: number, dayIndex: number): boolean {
 
-    if (custom_frequency != null) {
-      const binaryString = custom_frequency.toString(2).padStart(7, '0');
+    if (customFrequency != null) {
+      const binaryString = customFrequency.toString(2).padStart(7, '0');
       return binaryString.charAt(dayIndex) === '1';
     }
     else {
@@ -134,6 +115,6 @@ export class CreateHabitPage implements OnInit {
     for (let i = 0; i < this.selectedDays.length; i++) {
       binaryString += this.selectedDays[i] ? '1' : '0';
     }
-    this.habit.custom_frequency = parseInt(binaryString, 2);
+    this.habit.customFrequency = parseInt(binaryString, 2);
   }
 }

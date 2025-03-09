@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { add, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -61,16 +61,39 @@ export class LoginPagePage implements OnInit {
         next: (response) => {
           this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
           localStorage.setItem('userId', response.userId);
-           // Store userId in localStorage
+          // Store userId in localStorage
         },
         error: (e) => {
           console.log(e); this.presentToast('Invalid email or password')
         },
-        complete: () => { this.router.navigate(['/footertabs/feed']) },
+        complete: () => {
+          this.router.navigate(['/footertabs/feed']);
+          this.getUserInfo();
+        },
       });
     }
 
   }
+
+  getUserInfo() {
+    const token = localStorage.getItem('token'); // Or retrieve from @ionic/storage
+
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+
+    this.http.get(`${this.apiUrl}/user/${localStorage.getItem('userId')}`, {headers}).subscribe({
+      next: (response) => {
+        localStorage.setItem('userInfo', JSON.stringify(response));
+        console.log(response);
+      },
+      error: (e) => {
+        console.log(e);
+      }
+    })
+  }
+
+
   CreateAccount() {
     this.router.navigate(['/create-account-page']);
   }
@@ -91,6 +114,7 @@ export class LoginPagePage implements OnInit {
   login(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, formResult);
   }
+
 
   async presentToast(message: string) {
     this.toastMessage = message;

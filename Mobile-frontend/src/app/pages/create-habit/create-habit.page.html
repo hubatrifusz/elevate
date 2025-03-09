@@ -26,20 +26,20 @@
       <ion-list>
         <ion-item>
           <ion-label>Frequency</ion-label>
-          <ion-select placeholder="Select frequency" interface="popover" [(ngModel)]="habit.frequency">
-            <ion-select-option value="Daily">Daily</ion-select-option>
-            <ion-select-option value="Weekly">Weekly</ion-select-option>
-            <ion-select-option value="Monthly">Monthly</ion-select-option>
-            <ion-select-option value="Custom">Custom</ion-select-option>
+          <ion-select placeholder="Select frequency" interface="popover" [(ngModel)]="habit.frequencyType">
+            <ion-select-option value="daily">Daily</ion-select-option>
+            <ion-select-option value="weekly">Weekly</ion-select-option>
+            <ion-select-option value="monthly">Monthly</ion-select-option>
+            <ion-select-option value="custom">Custom</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-list>
-      @if(habit.frequency.toString() == "Custom"){
+      @if(habit.frequencyType.toString() == "custom"){
       <ion-grid>
         <ion-row class="day-selector">
           @for(day of weekDays ; track $index) {
           <ion-col>
-            <ion-button [ngClass]="{'selected': isSelectedDay(habit.custom_frequency, $index)}"
+            <ion-button [ngClass]="{'selected': isSelectedDay(habit.customFrequency, $index)}"
               (click)="toggleDay(habit, $index)" fill="clear">
               {{ day.label }}
             </ion-button>

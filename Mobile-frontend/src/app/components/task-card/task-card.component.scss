@@ -5,6 +5,9 @@ ion-accordion {
     --ion-safe-area-left: 0;
 
 }
+ion-content{
+    --background: none;
+}
 
 .accordion-collapsed,
 .accordion-collapsing {

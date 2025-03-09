@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton } from '@ionic/angular/standalone';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { list, calendar, people, menu, settings, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, logOutOutline, add, cogSharp, menuOutline, searchOutline, search } from 'ionicons/icons';
@@ -15,11 +15,15 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
+  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
 })
 export class FeedPage {
   private auth = inject(AuthService);
   private http = inject(HttpClient);
+  @Output() loadMoreHabits = new EventEmitter<void>();
+
+  userInfo: string | null = localStorage.getItem('userInfo');
+  userName = this.userInfo ? JSON.parse(this.userInfo).firstName + " " + JSON.parse(this.userInfo).firstName : '';
 
 
   tasks: { title: string }[] = [];
@@ -85,5 +89,13 @@ export class FeedPage {
   }
   newHabit() {
     this.router.navigate(['/create-habit']);
+  }
+
+  onIonInfinite(event: InfiniteScrollCustomEvent) {
+    // console.log('Infinite scroll triggered');
+    this.loadMoreHabits.emit();
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
   }
 }

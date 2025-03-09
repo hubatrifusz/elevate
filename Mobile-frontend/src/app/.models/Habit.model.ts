@@ -3,8 +3,8 @@ export interface Habit {
     created_at: Date;
     title: string;
     description?: string;
-    frequency: Frequency;
-    custom_frequency: number;
+    frequencyType: Frequency;
+    customFrequency: number;
     color: string;
     is_positive: boolean;
     streak: number;
