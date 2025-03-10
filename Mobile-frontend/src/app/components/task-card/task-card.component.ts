@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
@@ -18,11 +18,14 @@ import { HabitService } from 'src/app/services/habit.service';
     IonSelect, IonSelectOption, FormsModule]
 })
 export class TaskCardComponent implements OnInit {
-  @Input() loadMoreHabits: EventEmitter<void> = new EventEmitter<void>();
+  @Input() loadMoreHabits!: EventEmitter<void>; // Remove initialization
+  @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
   private habitService = inject(HabitService);
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
+  public hasMoreHabits: boolean = true;
+
   weekDays = [
     { label: 'M', value: 'Mon' },
     { label: 'T', value: 'Tue' },
@@ -36,7 +39,6 @@ export class TaskCardComponent implements OnInit {
   ngOnInit() {
     this.loadHabits();
     this.loadMoreHabits.subscribe(() => {
-      console.log("ad");
       this.loadMore();
     });
   }
@@ -50,8 +52,16 @@ export class TaskCardComponent implements OnInit {
 
     if (userId) {
       this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
-        (habits) => {
-          this.habits = habits;
+        (newHabits) => {
+          if (newHabits.length === 0) {
+            this.hasMoreHabits = false;
+            this.hasMoreHabitsChange.emit(this.hasMoreHabits);
+          }
+          if (this.pageNumber === 1) {
+            this.habits = newHabits; // Initial load
+          } else {
+            this.habits = [...this.habits, ...newHabits]; // Append new habits
+          }
           this.habits.forEach((habit) => {
             if (!habit.color.startsWith('#')) {
               habit.color = '#' + habit.color;
@@ -64,27 +74,12 @@ export class TaskCardComponent implements OnInit {
       );
     } else {
       console.warn('User ID not found in localStorage.');
-      // Handle the case where the user ID is not available (e.g., redirect to login)
     }
   }
 
   loadMore() {
-    console.log("sdfs")
-
     this.pageNumber++;
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
-        (habits) => {
-          this.habits = [...this.habits, ...habits];
-        },
-        (error) => {
-          console.error('Error loading more habits:', error);
-        }
-      );
-    } else {
-      console.warn('User ID not found in localStorage.');
-    }
+    this.loadHabits();
   }
 
   toggleDay(habit: Habit, dayIndex: number) {

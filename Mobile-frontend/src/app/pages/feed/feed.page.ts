@@ -21,10 +21,10 @@ export class FeedPage {
   private auth = inject(AuthService);
   private http = inject(HttpClient);
   @Output() loadMoreHabits = new EventEmitter<void>();
-
+  public hasMoreHabits: boolean = true; 
+  
   userInfo: string | null = localStorage.getItem('userInfo');
   userName = this.userInfo ? JSON.parse(this.userInfo).firstName + " " + JSON.parse(this.userInfo).firstName : '';
-
 
   tasks: { title: string }[] = [];
   private prevScrollPos: number = 0;

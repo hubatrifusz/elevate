@@ -15,19 +15,21 @@
   </ion-header>
   <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
     (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed" >
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
       <ion-fab-button (click)="newHabit()">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
 
     <h1 class="text-center" style="margin-bottom: 30px;">Tasks</h1>
-    <app-task-card (loadMoreHabits)="loadMoreHabits"></app-task-card>
+    <app-task-card [loadMoreHabits]="loadMoreHabits" (hasMoreHabitsChange)="hasMoreHabits = $event"></app-task-card>
 
 
-      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-        <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="!hasMoreHabits">
+      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
+    @if(hasMoreHabits){
+    }
   </ion-content>
 </div>
