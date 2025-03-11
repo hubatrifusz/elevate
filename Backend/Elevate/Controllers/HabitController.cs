@@ -50,9 +50,9 @@ namespace Elevate.Controllers
             {
                 try
                 {
-                    HabitDto createdHabit = _habitService.AddHabitAsync(habitCreateDto).Result;
+                    HabitDto? createdHabit = await _habitService.AddHabitAsync(habitCreateDto);
 
-                    return CreatedAtAction(nameof(GetHabitByIdAsync), new { id = createdHabit.Id }, createdHabit);
+                    return CreatedAtRoute(nameof(GetHabitByIdAsync), new { id = createdHabit?.Id }, createdHabit);
                 }
                 catch (Exception ex)
                 {
