@@ -50,11 +50,11 @@
         </ion-row>
       </ion-grid>
       }
-      
+
 
       <ion-item>
         <ion-label>Color</ion-label>
-        <ion-input type="color" [(ngModel)]="habit.color"></ion-input>
+        <ion-input type="color" class="color" [(ngModel)]="habit.color"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -65,4 +65,6 @@
       <ion-button expand="full" (click)="createHabit()">Create</ion-button>
     </ion-card-content>
   </ion-card>
+
+ 
 </ion-content>

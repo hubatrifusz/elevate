@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ToastService } from 'src/app/services/toast.service';
 
 export const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const password = control?.root?.get('password');
@@ -43,7 +44,7 @@ export class CreateAccountPagePage implements OnInit {
     confirmPassword: this.fb.control('', { validators: [passwordMatchValidator, Validators.required] })
   });
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private toastService: ToastService) {
     addIcons({ eyeOffOutline, eyeOutline });
   }
 
@@ -61,14 +62,17 @@ export class CreateAccountPagePage implements OnInit {
     if (this.form.valid) {
       this.postNewUser(this.form.value).subscribe({
         next: (v) => {
-          this.router.navigate(['/login-page'], { queryParams: { message: 'Account created successfully, please log in' } });
+          this.router.navigate(['/login-page']);
+          this.toastService.presentToast('Account created successfully, please log in');
         },
         error: (e) => {
           console.error('Error creating account:', e);
+          this.toastService.presentToast('Error in creating account');
         }
       });
     } else {
       console.log('Form is invalid.');
+      this.toastService.presentToast('Form is invalid');
     }
   }
 

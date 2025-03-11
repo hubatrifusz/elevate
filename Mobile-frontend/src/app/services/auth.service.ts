@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-
+  private router = inject(Router);
   private http= inject(HttpClient)
   private apiUrl = 'http://localhost:8080/api';  // Replace with your API URL
 
@@ -25,6 +26,11 @@ export class AuthService {
 
   logout() {
     localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login-page']).then(() => {
+      // Reload the app to ensure fresh state
+      window.location.reload();
+    });
   }
   
   login(formResult: any): Observable<any> {

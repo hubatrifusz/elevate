@@ -19,6 +19,7 @@ import { HabitService } from 'src/app/services/habit.service';
 })
 export class TaskCardComponent implements OnInit {
   @Input() loadMoreHabits!: EventEmitter<void>; // Remove initialization
+  // @Input() refreshHabits!: EventEmitter<void>; // Remove initialization
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
   private habitService = inject(HabitService);
@@ -40,7 +41,13 @@ export class TaskCardComponent implements OnInit {
     this.loadHabits();
     this.loadMoreHabits.subscribe(() => {
       this.loadMore();
+      console.log(this.hasMoreHabits)
     });
+    // this.refreshHabits.subscribe(() => {
+    //   this.hasMoreHabits = true;
+    //   this.pageNumber = 1;
+    //   this.loadHabits();
+    // });
   }
 
   constructor(private router: Router) {
@@ -55,10 +62,12 @@ export class TaskCardComponent implements OnInit {
         (newHabits) => {
           if (newHabits.length === 0) {
             this.hasMoreHabits = false;
+            console.log('No more habits to load');
             this.hasMoreHabitsChange.emit(this.hasMoreHabits);
           }
           if (this.pageNumber === 1) {
             this.habits = newHabits; // Initial load
+            console.log('Habits loaded successfully');
           } else {
             this.habits = [...this.habits, ...newHabits]; // Append new habits
           }

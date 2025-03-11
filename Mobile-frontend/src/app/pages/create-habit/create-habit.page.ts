@@ -5,6 +5,7 @@ import { Frequency, Habit } from 'src/app/.models/Habit.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-create-habit',
@@ -40,7 +41,7 @@ export class CreateHabitPage implements OnInit {
 
   selectedDays: boolean[] = [false, false, false, false, false, false, false];
 
-  constructor(private router: Router, private habitService: HabitService) { }
+  constructor(private router: Router, private habitService: HabitService,private toastService: ToastService) { }
 
   ngOnInit() {
   }
@@ -67,10 +68,14 @@ export class CreateHabitPage implements OnInit {
       this.habitService.createHabit(habitData).subscribe(
         (response) => {
           console.log('Habit created successfully:', response);
-          this.router.navigate(['/footertabs/feed']); // Navigate back to the feed
+          this.toastService.presentToast('Habit created successfully');
+          this.router.navigate(['/footertabs/feed']).then(() => {
+            window.location.reload();
+          });
         },
         (error) => {
           console.error('Error creating habit:', error);
+          this.toastService.presentToast('Please enter your habit title');
         }
       );
     } else {

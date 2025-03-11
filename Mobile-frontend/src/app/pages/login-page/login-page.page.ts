@@ -8,21 +8,20 @@ import { addIcons } from 'ionicons';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.page.html',
   styleUrls: ['./login-page.page.scss'],
   standalone: true,
-  imports: [IonToast, IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
+  imports: [ IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
 })
 export class LoginPagePage implements OnInit {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   showPassword = false;
-  toastMessage = '';
-  isToastOpen = false;
-  messageShown = false;
+
 
 
 
@@ -46,7 +45,7 @@ export class LoginPagePage implements OnInit {
   }
 
   constructor(private router: Router, private route: ActivatedRoute,
-    private toastController: ToastController) {
+    private toastController: ToastController, private toastService: ToastService) {
     addIcons({ eyeOffOutline, eyeOutline })
   }
 
@@ -60,10 +59,11 @@ export class LoginPagePage implements OnInit {
         this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
         localStorage.setItem('userId', response.userId);
         await this.authService.getUserInfo();
+        this.toastService.presentToast('Succesfull login');
         this.router.navigate(['/footertabs/feed']);
       } catch (e) {
         console.log(e);
-        this.presentToast('Invalid email or password');
+        this.toastService.presentToast('Invalid email or password');
       }
     }
   }
@@ -78,10 +78,6 @@ export class LoginPagePage implements OnInit {
     this.route.queryParams.subscribe(params => {
       console.log(params);
 
-      if (params['message'] && !this.messageShown) {
-        this.presentToast(params['message']);
-        this.messageShown = true; // Set messageShown to true
-      }
     });
   }
 
@@ -90,8 +86,5 @@ export class LoginPagePage implements OnInit {
 
 
 
-  async presentToast(message: string) {
-    this.toastMessage = message;
-    this.isToastOpen = true;
-  }
+  
 }

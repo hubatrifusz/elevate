@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
+import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { list, calendar, people, menu, settings, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, logOutOutline, add, cogSharp, menuOutline, searchOutline, search } from 'ionicons/icons';
@@ -9,18 +9,21 @@ import { TaskCardComponent } from "../../components/task-card/task-card.componen
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { IonRefresherCustomEvent } from '@ionic/core';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
+  imports: [IonRefresherContent, IonRefresher, IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
 })
 export class FeedPage implements OnInit {
+
   private auth = inject(AuthService);
   private http = inject(HttpClient);
   @Output() loadMoreHabits = new EventEmitter<void>();
+  @Output() refreshHabits = new EventEmitter<void>();
   public hasMoreHabits: boolean = true;
 
   userInfo: string | null = localStorage.getItem('userInfo');
@@ -48,7 +51,7 @@ export class FeedPage implements OnInit {
 
   ngOnInit() {
     if (this.userInfo) {
-      this.userName = this.userInfo ? JSON.parse(this.userInfo).firstName + " " + JSON.parse(this.userInfo).lastName : '';
+      this.userName = localStorage.getItem('userName')!;
     }
   }
 
@@ -101,5 +104,13 @@ export class FeedPage implements OnInit {
     setTimeout(() => {
       event.target.complete();
     }, 500);
+  }
+
+  handleRefresh(event: CustomEvent) {
+    setTimeout(() => {
+      // Any calls to load data go here
+      window.location.reload();
+      (event.target as HTMLIonRefresherElement).complete();
+    }, 200);
   }
 }
