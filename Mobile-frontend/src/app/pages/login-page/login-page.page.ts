@@ -51,47 +51,23 @@ export class LoginPagePage implements OnInit {
   }
 
 
-  onSubmit() {
+  async onSubmit() {
     console.log(this.form.value);
     console.log(this.form.valid);
     if (this.form.valid) {
-      // Call the login method from the AuthService
-
-      this.login(this.form.value).subscribe({
-        next: (response) => {
-          this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
-          localStorage.setItem('userId', response.userId);
-          // Store userId in localStorage
-        },
-        error: (e) => {
-          console.log(e); this.presentToast('Invalid email or password')
-        },
-        complete: () => {
-          this.router.navigate(['/footertabs/feed']);
-          this.getUserInfo();
-        },
-      });
-    }
-
-  }
-
-  getUserInfo() {
-    const token = localStorage.getItem('token'); // Or retrieve from @ionic/storage
-
-    let headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Or however your backend expects the token
-    });
-
-    this.http.get(`${this.apiUrl}/user/${localStorage.getItem('userId')}`, {headers}).subscribe({
-      next: (response) => {
-        localStorage.setItem('userInfo', JSON.stringify(response));
-        console.log(response);
-      },
-      error: (e) => {
+      try {
+        const response = await this.authService.login(this.form.value).toPromise();
+        this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
+        localStorage.setItem('userId', response.userId);
+        await this.authService.getUserInfo();
+        this.router.navigate(['/footertabs/feed']);
+      } catch (e) {
         console.log(e);
+        this.presentToast('Invalid email or password');
       }
-    })
+    }
   }
+
 
 
   CreateAccount() {
@@ -111,9 +87,7 @@ export class LoginPagePage implements OnInit {
 
   private apiUrl = 'http://localhost:8080/api';
 
-  login(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, formResult);
-  }
+
 
 
   async presentToast(message: string) {

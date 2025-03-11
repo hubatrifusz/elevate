@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { IonMenuToggle, IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonIcon, IonButton, IonCard, IonCardHeader, IonCardContent, IonItem, IonCardTitle, IonList, IonLabel, IonCheckbox, ScrollDetail, IonTabButton, IonSearchbar, IonFab, IonFabButton, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -17,14 +17,14 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent]
 })
-export class FeedPage {
+export class FeedPage implements OnInit {
   private auth = inject(AuthService);
   private http = inject(HttpClient);
   @Output() loadMoreHabits = new EventEmitter<void>();
-  public hasMoreHabits: boolean = true; 
-  
+  public hasMoreHabits: boolean = true;
+
   userInfo: string | null = localStorage.getItem('userInfo');
-  userName = this.userInfo ? JSON.parse(this.userInfo).firstName + " " + JSON.parse(this.userInfo).firstName : '';
+  public userName: string = '';
 
   tasks: { title: string }[] = [];
   private prevScrollPos: number = 0;
@@ -34,7 +34,6 @@ export class FeedPage {
 
   constructor(private menuCtrl: MenuController, private router: Router) {
     addIcons({ search, personCircleOutline, add, searchOutline, ribbonOutline, settings, logOutOutline, menuOutline, ribbon, personOutline, personCircle, person, people, menu });
-
   }
 
   setStatusBarStyleDark = async () => {
@@ -47,6 +46,11 @@ export class FeedPage {
 
   }
 
+  ngOnInit() {
+    if (this.userInfo) {
+      this.userName = this.userInfo ? JSON.parse(this.userInfo).firstName + " " + JSON.parse(this.userInfo).lastName : '';
+    }
+  }
 
   handleScrollStart() {
     // console.log('scroll start');

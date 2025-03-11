@@ -1,5 +1,13 @@
 @use "../../../theme/variables.scss" as *;
 
+
+
+ion-input, ion-textarea{
+    color: $text-color-100;
+    font-size: $font-size-sm;
+    margin: 10px 0px;
+}
+
 .day-selector {
     display: flex;
     justify-content: center;
@@ -15,6 +23,8 @@
         border: 1px solid $main-color-600;
     }
 }
+
+
 
 ion-grid {
 

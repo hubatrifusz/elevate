@@ -73,9 +73,10 @@ ion-item {
         --background: white
     }
 
-    ion-label {
+    ion-input {
         font-size: $font-size-sm;
         color: $text-color-900;
+        display: block;
 
         @media(prefers-color-scheme: dark) {
             color: $text-color-200;

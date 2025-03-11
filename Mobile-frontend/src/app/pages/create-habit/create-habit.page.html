@@ -14,15 +14,17 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Title</ion-label>
-        <ion-input type="text" [(ngModel)]="habit.title"></ion-input>
-      </ion-item>
 
-      <ion-item>
+      <ion-input label="Habit title" [(ngModel)]="habit.title" label-placement="floating" fill="outline"
+        placeholder="Enter text"></ion-input>
+
+      <ion-textarea label="Habit description" [(ngModel)]="habit.description" label-placement="floating" fill="outline"
+        placeholder="Enter text" autoGrow="true"></ion-textarea>
+
+      <!-- <ion-item>
         <ion-label position="floating">Description</ion-label>
         <ion-textarea [(ngModel)]="habit.description"></ion-textarea>
-      </ion-item>
+      </ion-item> -->
       <ion-list>
         <ion-item>
           <ion-label>Frequency</ion-label>
@@ -48,22 +50,7 @@
         </ion-row>
       </ion-grid>
       }
-
-
-
-
-      <!-- <ion-item >
-        <ion-label>Custom Frequency</ion-label>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="auto" *ngFor="let day of weekDays; let i = index">
-              <ion-button (click)="toggleDay(i)" [color]="isSelectedDay(i) ? 'primary' : 'light'">
-                {{ day.label }}
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item> -->
+      
 
       <ion-item>
         <ion-label>Color</ion-label>
@@ -71,7 +58,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label>Positive Habit?</ion-label>
+        <ion-label>Is it a Positive Habit?</ion-label>
         <ion-checkbox slot="end" [(ngModel)]="habit.is_positive"></ion-checkbox>
       </ion-item>
 

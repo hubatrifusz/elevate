@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -15,7 +15,7 @@ import { HabitService } from 'src/app/services/habit.service';
   imports: [IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
-    IonSelect, IonSelectOption, FormsModule]
+    IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
   @Input() loadMoreHabits!: EventEmitter<void>; // Remove initialization
@@ -49,7 +49,7 @@ export class TaskCardComponent implements OnInit {
 
   loadHabits() {
     const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
-
+    console.log(userId);
     if (userId) {
       this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
         (newHabits) => {
@@ -63,6 +63,7 @@ export class TaskCardComponent implements OnInit {
             this.habits = [...this.habits, ...newHabits]; // Append new habits
           }
           this.habits.forEach((habit) => {
+            console.log(habit.frequencyType)
             if (!habit.color.startsWith('#')) {
               habit.color = '#' + habit.color;
             }
@@ -122,6 +123,8 @@ export class TaskCardComponent implements OnInit {
   trackById(index: number, habit: Habit): string {
     return habit.id;
   }
+
+
   deleteHabit(habit: Habit) {
     this.habits = this.habits.filter((h) => h.id !== habit.id);
     this.habitService.deleteHabit(habit.id).subscribe(

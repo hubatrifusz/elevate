@@ -42,7 +42,7 @@ export class HabitService {
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
     });
-
+    console.log("dfsefsefed")
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: headers });
   }
 
