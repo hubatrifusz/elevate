@@ -34,7 +34,7 @@ namespace Elevate.Services
         {
             try
             {
-                var habits = _habitRepository.GetAllHabits();
+                var habits = await _habitRepository.GetAllHabitsAsync();
                 int totalLogsGenerated = 0;
 
                 foreach (var habit in habits)

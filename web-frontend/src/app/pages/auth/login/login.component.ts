@@ -1,8 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { inputValidator } from '../../../shared/input-validator';
-import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
+import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
+import { AuthService } from '../../../services/auth.service';
+import { PasswordToggleService } from '../../../services/password-toggle.service';
 
 @Component({
   selector: 'app-login',
@@ -12,30 +14,28 @@ import { LoginFeatureListComponent } from "../../../components/auth/login-featur
   encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
-  togglePasswordView(): void {
-    const icon = document.querySelector('#toggle_password_icon') as HTMLImageElement;
-    const input = document.querySelector('#password_text_input') as HTMLInputElement;
-
-    if (input.type == 'password') {
-      input.type = 'text';
-      icon.src = 'icons/eye-crossed.png';
-      icon.title = 'Hide Password';
-    } else if (input.type == 'text') {
-      input.type = 'password';
-      icon.src = 'icons/eye.png';
-      icon.title = 'Show Password';
-    }
-  }
+  constructor(private router: Router, private authService: AuthService, private togglePasswordService: PasswordToggleService) {}
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/)]),
     rememberMe: new FormControl(false, Validators.required),
   });
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    console.log('Successful login!');
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.authService.saveToken(response.token);
+        this.authService.saveUserID(response.userId)
+      },
+      error: (e) => this.checkLoginErrors(e),
+      complete: () => this.router.navigate(['/dashboard']),
+    });
+  }
+
+  onTogglePassword(event: MouseEvent) {
+    this.togglePasswordService.togglePasswordView(event);
   }
 
   checkValidationErrors(): boolean {
@@ -44,13 +44,14 @@ export class LoginComponent {
         elementId: '#email_email_input_container',
         errors: {
           required: 'Email is required.',
-          forbiddenPattern: 'Invalid email.',
+          email: 'Invalid email.',
         },
       },
       password: {
         elementId: '#password_text_input_container',
         errors: {
           required: 'Password is required.',
+          forbiddenPattern: 'Invalid password.',
         },
       },
     };
@@ -74,5 +75,15 @@ export class LoginComponent {
     });
 
     return hasErrors;
+  }
+
+  checkLoginErrors(error: any) {
+    const passwordInput = document.querySelector('#password_text_input_container') as HTMLInputElement;
+
+    if (error.status === 401) {
+      passwordInput.style.setProperty('--after-content', '"Incorrect email or password."');
+    } else {
+      passwordInput.style.setProperty('--after-content', '""');
+    }
   }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elevate.Data.Migrations
 {
     [DbContext(typeof(ElevateDbContext))]
-    [Migration("20250306171058_UpdatedHabitFieldTypes")]
-    partial class UpdatedHabitFieldTypes
+    [Migration("20250310170828_UpdatedFrequencyType")]
+    partial class UpdatedFrequencyType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

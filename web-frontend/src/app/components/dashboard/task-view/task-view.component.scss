@@ -1,0 +1,105 @@
+@import "../../../../assets/styles/variables";
+
+#task_view_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  #task_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #add_new_task_button {
+    position: fixed;
+    right: 4rem;
+    bottom: 4rem;
+
+    &:hover {
+      .icon_container {
+        transform: scale(1.1);
+      }
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon_container {
+        transition: transform 0.1s ease-out;
+
+        .plus_icon {
+          height: 1rem;
+          width: 1rem;
+        }
+
+        #plus_left {
+          border-bottom: 4px solid $accent-color-800;
+          border-right: 4px solid $accent-color-800;
+
+          transform: translate(calc(-50% + 2px), 2px);
+        }
+
+        #plus_right {
+          border-top: 4px solid $accent-color-400;
+          border-left: 4px solid $accent-color-400;
+
+          transform: translate(calc(50% - 2px), -2px);
+        }
+      }
+    }
+  }
+
+  form {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    background-color: $main-color-100;
+
+    padding: 3rem;
+    border-radius: 2rem;
+
+    .input_container {
+      input[type="radio"] {
+        display: none;
+      }
+
+      .radio_label {
+        width: 2.5rem;
+        height: 2.5rem;
+
+        border-radius: 100rem;
+
+        cursor: pointer;
+
+        &:nth-child(2) {
+          background-color: red;
+        }
+
+        &:nth-child(4) {
+          background-color: blue;
+        }
+
+        &:nth-child(6) {
+          background-color: green;
+        }
+      }
+
+      input:checked + .radio_label {
+        border: 2px solid $main-color-900;
+      }
+    }
+
+    #color_radio_input_container {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  }
+}
