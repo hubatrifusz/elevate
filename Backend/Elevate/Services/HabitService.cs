@@ -52,7 +52,8 @@ namespace Elevate.Services
 
         public async Task<HabitDto?> DeleteHabitAsync(Guid habitId)
         {
-            HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(habitId);
+            HabitModel habitModel = await _habitRepository.DeleteHabitAsync(habitId);
+
             return _mapper.Map<HabitDto>(habitModel);
         }
     }
