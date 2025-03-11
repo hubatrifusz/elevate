@@ -11,14 +11,21 @@ namespace Elevate.Services
         private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<List<HabitModel>?> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
+        public async Task<List<HabitDto>?> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            return await _habitRepository.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
+            List<HabitDto> habitDtos = new List<HabitDto>();
+            List<HabitModel> habitModels = await _habitRepository.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
+            foreach (var habitModel in habitModels)
+            {
+                habitDtos.Add(_mapper.Map<HabitDto>(habitModel));
+            }
+            return habitDtos;
         }
 
-        public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
+        public async Task<HabitDto?> GetHabitByIdAsync(Guid habitId)
         {
-            return await _habitRepository.GetHabitByIdAsync(habitId);
+            HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(habitId);
+            return _mapper.Map<HabitDto>(habitModel);
         }
 
         public async Task<HabitDto?> AddHabitAsync(HabitCreateDto habit)
@@ -31,19 +38,22 @@ namespace Elevate.Services
             return _mapper.Map<HabitDto>(savedHabit);
         }
 
-        public async Task<HabitModel?> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
+        public async Task<HabitDto?> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
         {
             HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(id)
                 ?? throw new Exception("Habit not found");
 
             _mapper.Map(habitUpdateDto, habitModel);
 
-            return _habitRepository.UpdateHabitAsync(id, habitModel).Result;
+            var updatedHabit = _habitRepository.UpdateHabitAsync(id, habitModel).Result;
+
+            return _mapper.Map<HabitDto>(updatedHabit);
         }
 
-        public async Task<HabitModel?> DeleteHabitAsync(Guid habitId)
+        public async Task<HabitDto?> DeleteHabitAsync(Guid habitId)
         {
-            return await _habitRepository.DeleteHabitAsync(habitId);
+            HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(habitId);
+            return _mapper.Map<HabitDto>(habitModel);
         }
     }
 }

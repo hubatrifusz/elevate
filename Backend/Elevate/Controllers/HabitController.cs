@@ -81,7 +81,7 @@ namespace Elevate.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return BadRequest("Could not create object" + ex.Message);
+                        return BadRequest("Could not create object. " + ex.Message);
                     }
                 }
                 return Forbid();
