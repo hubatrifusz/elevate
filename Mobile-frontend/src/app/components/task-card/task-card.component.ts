@@ -124,6 +124,14 @@ export class TaskCardComponent implements OnInit {
   }
   deleteHabit(habit: Habit) {
     this.habits = this.habits.filter((h) => h.id !== habit.id);
+    this.habitService.deleteHabit(habit.id).subscribe(
+      () => {
+        console.log('Habit deleted successfully');
+      },
+      (error) => {
+        console.error('Error deleting habit:', error);
+      }
+    );
   }
 
 

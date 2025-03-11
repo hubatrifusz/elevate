@@ -12,7 +12,7 @@ export class HabitService {
   private apiUrl = 'http://localhost:8080/api/habit';  // Replace with your API URL
 
   getHabits(userId: string, pageNumber: number, pageSize: number): Observable<Habit[]> {
-    const token = localStorage.getItem('token'); // Or retrieve from @ionic/storage
+    const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
@@ -27,7 +27,7 @@ export class HabitService {
   }
 
   createHabit(habitData: any): Observable<Habit> {
-    const token = localStorage.getItem('token'); // Or retrieve from @ionic/storage
+    const token = localStorage.getItem('token'); 
 
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
@@ -35,4 +35,15 @@ export class HabitService {
 
     return this.http.post<Habit>(this.apiUrl, habitData, { headers: headers });
   }
+
+  deleteHabit(id: string){
+    const token = localStorage.getItem('token'); 
+
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: headers });
+  }
+
 }
