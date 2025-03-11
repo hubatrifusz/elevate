@@ -1,7 +1,16 @@
 <div id="user_page_container" class="page_container">
   <app-navbar></app-navbar>
   <div id="user_details_container">
-    <button (click)="logout()">Logout</button>
-    <button (click)="getUserData()">Get user data</button>
+    <div id="profile_picture_container">
+      <div id="banner"></div>
+      <div id="profile_picture">
+        <img src="images/default_profile_picture.jpg" alt="pfp" />
+      </div>
+    </div>
+    <h3>{{ userData.firstName }} {{ userData.lastName }}</h3>
+    <p>{{ userData.email }}</p>
+    <div class="button_container">
+      <button (click)="logout()" class="button_secondary"><span>Logout</span></button>
+    </div>
   </div>
 </div>

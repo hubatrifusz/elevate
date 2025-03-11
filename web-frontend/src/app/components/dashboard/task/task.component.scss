@@ -2,67 +2,102 @@
 
 #task_container {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 
-  height: 5rem;
-  width: 45rem;
-
-  padding: 1.3rem;
+  position: relative;
 
   border-radius: 1rem;
-  border-left: 1rem solid $accent-color-800;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
 
-  background-color: $main-color-100;
+  overflow: hidden;
 
-  #left {
-    label {
-      font-size: $font-size-lg;
-      color: $text-color-900;
-    }
-  }
-
-  #right {
+  #task_header_container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.3rem;
+    justify-content: space-between;
 
-    height: 100%;
+    position: absolute;
 
-    #time_container {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    height: 5rem;
+    width: 45rem;
 
-      height: 100%;
+    padding: 1.3rem;
 
-      padding: 0.6rem;
+    background-color: $main-color-100;
 
-      border-radius: 0.7rem;
-      background-color: $main-color-200;
-
-      img {
-        height: 100%;
-      }
-
-      span {
-        color: $main-color-600;
-        font-size: $font-size-base;
+    #left {
+      label {
+        font-size: $font-size-lg;
+        color: $text-color-900;
       }
     }
 
-    #options_container {
+    #right {
       display: flex;
+      flex-direction: row;
       align-items: center;
+      gap: 1.3rem;
 
       height: 100%;
 
-      img {
-        height: 55%;
-        cursor: pointer;
+      #time_container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        height: 100%;
+
+        padding: 0.6rem;
+
+        border-radius: 0.7rem;
+        background-color: $main-color-200;
+
+        img {
+          height: 100%;
+        }
+
+        span {
+          color: $main-color-600;
+          font-size: $font-size-base;
+        }
+      }
+
+      #options_container {
+        display: flex;
+        align-items: center;
+
+        height: 100%;
+
+        img {
+          height: 55%;
+          cursor: pointer;
+        }
       }
     }
   }
+
+  .expand {
+    height: 15rem !important;
+
+  }
+
+  #task_details_container {
+    width: 45rem;
+    height: 5rem;
+
+    padding: 5rem 1rem 0 1rem;
+
+    background-color: $main-color-100;
+
+    transition: height 0.2s ease-in-out;
+  }
+}
+
+.blue {
+  border-left: 1rem solid $task-color-blue;
+}
+
+.red {
+  border-left: 1rem solid $task-color-red;
 }

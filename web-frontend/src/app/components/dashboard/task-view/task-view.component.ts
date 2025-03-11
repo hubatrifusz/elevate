@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TaskComponent } from '../task/task.component';
 import { AuthService } from '../../../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Habit } from '../../../models/habit.model';
 
 @Component({
   selector: 'app-task-view',
@@ -13,13 +14,13 @@ export class TaskViewComponent {
   constructor(private authService: AuthService) {}
 
   userId = localStorage.getItem('id');
-  habitList = [];
+  habitList: Habit[] = [];
 
   addNewTaskForm = new FormGroup({
     title: new FormControl(''),
     userID: new FormControl(localStorage.getItem('id')),
     description: new FormControl(''),
-    frequencyType: new FormControl(0),
+    frequencyType: new FormControl('Daily'),
     customFrequency: new FormControl(0),
     color: new FormControl('blue'),
     isPositive: new FormControl(true),
@@ -29,14 +30,13 @@ export class TaskViewComponent {
     this.authService.getUserHabits().subscribe({
       next: (response) => (this.habitList = response),
       error: (error) => console.log(error),
-      complete: () => console.log(typeof this.habitList[0]),
     });
   }
 
   addNewTask() {
     this.authService.addNewTask(this.addNewTaskForm.value).subscribe({
-      next: (response) => console.log(response),
-      error: (error) => console.log(error),
+      next: (response) => this.habitList.push(response as Habit),
+      error: (error) => alert(error),
     });
 
     this.toggleFormVisibility();
