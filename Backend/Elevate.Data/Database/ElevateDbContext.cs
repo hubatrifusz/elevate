@@ -7,6 +7,7 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Elevate.Data.Database
 {
@@ -77,6 +78,34 @@ namespace Elevate.Data.Database
                 .WithMany()
                 .HasForeignKey(f => f.FriendId)
                 .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        public void Initialize(IServiceProvider serviceProvider)
+        {
+            using (var context = new ElevateDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<ElevateDbContext>>(),
+                serviceProvider.GetRequiredService<DbConnectionManager>()))
+            {
+                if (!context.ApplicationUsers.Any(u => u.Email == "test@example.com"))
+                {
+                    context.ApplicationUsers.Add(
+                        new ApplicationUser
+                        {
+                            Id = Guid.NewGuid(),
+                            CreatedAt = new DateTime(2021, 1, 1),
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Email = "test@example.com",
+                            UserName = "test@example.com",
+                            NormalizedEmail = "TEST@EXAMPLE.COM",
+                            NormalizedUserName = "TEST@EXAMPLE.COM",
+                            EmailConfirmed = true,
+                            PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "Test@1234")
+                        }
+                    );
+                    context.SaveChanges();
+                }
+            }
         }
     }
 }

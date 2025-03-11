@@ -103,6 +103,7 @@ namespace Elevate
                         Thread.Sleep(2000);
                     }
                 }
+                dbContext.Initialize(scope.ServiceProvider);
             }
 
             app.Run();

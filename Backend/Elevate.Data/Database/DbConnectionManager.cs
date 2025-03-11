@@ -34,6 +34,15 @@ namespace Elevate.Data.Database
             return connection;
         }
 
+        public bool IsAppInDevelopment()
+        {
+            if (_configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                return true;
+            }
+            return false;
+        }
+
         private static bool IsRunningOnGoogleCloud()
         {
             return Environment.GetEnvironmentVariable("GCE_METADATA_HOST") != null;

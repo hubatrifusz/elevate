@@ -12,20 +12,6 @@ services:
       timeout: 5s
       retries: 5
 
-  test_db:
-    image: mysql:9.2.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: elevate_test
-    volumes:
-      - test_db_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d/
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   backend:
     build:
       context: ./backend
@@ -62,18 +48,5 @@ services:
     depends_on:
       - db
 
-  phpmyadmin_test:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: test_db
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "8001:80"
-    depends_on:
-      - test_db
-
 volumes:
   db_data:
-  test_db_data:
