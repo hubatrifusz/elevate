@@ -9,11 +9,9 @@ import { Component, HostListener } from '@angular/core';
 export class LoginFeatureListComponent {
   gridItems = Array.from({ length: 16 });
 
-  @HostListener('window:load')
-  onLoad() {
+  ngAfterViewInit(): void {
     let grid = Array.from((document.querySelector('.grid') as HTMLElement)?.children);
 
     grid[9].children[0].classList.add('item-card');
-
   }
 }

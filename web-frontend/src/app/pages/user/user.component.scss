@@ -1,0 +1,37 @@
+@import "../../../assets/styles/variables";
+
+#user_page_container {
+  #user_details_container {
+    height: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: $main-color-200;
+
+    #profile_picture_container {
+      margin-bottom: 4rem;
+      #banner {
+        height: 6rem;
+
+        background-color: $accent-color-100;
+
+        border-radius: 0 0 1rem 1rem;
+      }
+
+      #profile_picture {
+        position: absolute;
+        top: 3.5rem;
+        left: 7rem;
+
+        img {
+          height: 5rem;
+
+          border-radius: 100rem;
+          border: 5px solid $main-color-200;
+        }
+      }
+    }
+  }
+}

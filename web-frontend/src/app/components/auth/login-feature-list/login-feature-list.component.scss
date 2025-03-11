@@ -62,9 +62,27 @@
           height: 100%;
 
           background-color: blue;
-
           border-radius: 2rem;
 
+          animation: item-card-animation 10s ease-in-out infinite;
+        }
+
+        @keyframes item-card-animation {
+          0% {
+            transform: translateY(100%);
+          }
+
+          10% {
+            transform: translateY(0%);
+          }
+
+          90% {
+            transform: translateY(0%);
+          }
+
+          100% {
+            transform: translateY(-100%);
+          }
         }
       }
     }
