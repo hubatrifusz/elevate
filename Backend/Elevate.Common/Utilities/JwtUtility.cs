@@ -35,45 +35,65 @@ namespace Elevate.Common.Utilities
                 throw new InvalidOperationException("Missing JWT configuration (private key, issuer, or audience).");
             }
 
-            using (var rsa = RSA.Create())
+            var rsa = RSA.Create();
+            rsa.ImportRSAPrivateKeyPem(privateKey);
+            var securityKey = new RsaSecurityKey(rsa);
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
+
+            var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                rsa.ImportRSAPrivateKeyPem(privateKey);
-                var securityKey = new RsaSecurityKey(rsa);
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
+                Subject = new ClaimsIdentity(claims as IEnumerable<Claim>),
+                Expires = DateTime.Now.AddDays(1),
+                Issuer = issuer,
+                Audience = audienceList[0],
+                SigningCredentials = credentials
+            };
 
-                var token = new JwtSecurityToken(issuer, audience, claims as IEnumerable<Claim>, null, DateTime.Now.AddDays(1), credentials);
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
+            if (audienceList.Length > 1)
+            {
+                var additionalAudiences = audienceList.Skip(1).Select(aud => new Claim("aud", aud)).ToArray();
+                tokenDescriptor.Subject.AddClaims(additionalAudiences);
             }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public static bool ValidateJwtRsa(string token, string publicKey, string issuer, string audience)
         {
-            using (var rsa = RSA.Create())
-            {
-                rsa.ImportRSAPublicKeyPem(publicKey);
-                var validationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new RsaSecurityKey(rsa),
-                    ValidateIssuer = true,
-                    ValidIssuer = issuer,
-                    ValidateAudience = true,
-                    ValidAudience = audience,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+            var rsa = RSA.Create();
+            rsa.ImportFromPem(publicKey);
 
-                try
+            var audienceList = audience.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new RsaSecurityKey(rsa)
                 {
-                    new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"JWT validation failed: {ex.Message}");
-                    return false;
-                }
+                    CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false }
+                },
+                ValidateIssuer = true,
+                ValidIssuer = issuer,
+                ValidateAudience = true,
+                ValidAudiences = audienceList,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(5)
+            };
+
+            try
+            {
+                new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"JWT validation failed: {ex.Message}");
+                return false;
             }
         }
     }

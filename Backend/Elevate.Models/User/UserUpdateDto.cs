@@ -12,7 +12,7 @@ namespace Elevate.Models.User
         [MaxLength(20)]
         public required string LastName { get; set; }
 
-        //limit file size
-        public byte[]? ProfilePicture { get; set; }
+        [MaxLength(5242880)]
+        public string? ProfilePictureBase64 { get; set; }
     }
 }

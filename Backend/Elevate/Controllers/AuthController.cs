@@ -73,7 +73,8 @@ namespace Elevate.Controllers
                         };
 
                         var token = _jwtUtility.GenerateJwtRsa(claims);
-                        return Ok(new { token });
+                        var userId = user.Id;
+                        return Ok(new { token, userId });
                     }
                 }
 

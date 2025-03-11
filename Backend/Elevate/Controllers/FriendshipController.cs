@@ -1,8 +1,8 @@
-﻿using Elevate.Models.User;
-using Elevate.Models.Friendship;
+﻿using Elevate.Models.Friendship;
 using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Elevate.Common.Utilities;
 
 namespace Elevate.Controllers
 {
@@ -23,23 +23,33 @@ namespace Elevate.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFriendship(FriendshipCreateDto friendshipCreateDto)
         {
-            var friendship = await _friendshipService.AddFriendshipAsync(friendshipCreateDto);
-            if (friendship == null)
+            var userId = friendshipCreateDto.UserId;
+            if (UserPermissionUtility.IsCurrentUser(userId, User))
             {
-                return BadRequest("Friendship could not be established.");
+                var friendship = await _friendshipService.AddFriendshipAsync(friendshipCreateDto);
+                if (friendship == null)
+                {
+                    return BadRequest("Friendship could not be established.");
+                }
+                return CreatedAtAction(nameof(GetFriends), new { userId = friendship.UserId }, friendship); 
             }
-            return CreatedAtAction(nameof(GetFriends), new { userId = friendship.UserId }, friendship);
+            return Forbid();
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteFriendship(Guid userId, Guid friendId)
         {
-            var result = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
-            if (result == null)
+            if (UserPermissionUtility.IsCurrentUser(userId, User) 
+                || UserPermissionUtility.IsCurrentUser(friendId, User))
             {
-                return NotFound();
+                var result = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return NoContent();
+            return Forbid();
         }
     }
 }

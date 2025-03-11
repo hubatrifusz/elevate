@@ -6,6 +6,7 @@ using Elevate.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Security.Cryptography;
 
 namespace Elevate.Extensions
@@ -19,6 +20,8 @@ namespace Elevate.Extensions
             services.AddScoped<HabitLogRepository>();
             services.AddScoped<FriendshipRepository>();
 
+            services.AddScoped<HabitLogGeneratorRepository>();
+
             services.AddDbContext<ElevateDbContext>();
         }
 
@@ -28,6 +31,10 @@ namespace Elevate.Extensions
             services.AddScoped<IHabitService, HabitService>();
             services.AddScoped<IHabitLogService, HabitLogService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+
+            services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
+
+            services.AddHostedService<HabitLogGenerationBackgroundService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)
@@ -72,7 +79,10 @@ namespace Elevate.Extensions
             {
                 options.AddPolicy("DevelopmentPolicy", builder =>
                 {
-                    builder.WithOrigins(["http://localhost", "http://localhost:81", "http://localhost:4200"])
+
+                    builder.WithOrigins(["http://localhost:8080", "http://localhost:81", "http://localhost:4200", "http//:localhost:8100"])
+
+
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
@@ -85,10 +95,13 @@ namespace Elevate.Extensions
             var publicKeyPem = configuration["Jwt:PublicKey"]
                 ?? throw new InvalidOperationException("Public key not configured.");
 
-            using var rsa = RSA.Create();
+            var rsa = RSA.Create();
             rsa.ImportRSAPublicKeyPem(publicKeyPem);
 
             var rsaSecurityKey = new RsaSecurityKey(rsa);
+
+            var audienceList = configuration["Jwt:Audience"]?.Split(',', StringSplitOptions.RemoveEmptyEntries) 
+                ?? throw new InvalidOperationException("Audiences not configured.");
 
             services.AddAuthentication(options =>
             {
@@ -106,13 +119,41 @@ namespace Elevate.Extensions
                     ValidateIssuer = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidateAudience = true,
-                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidAudiences = audienceList,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
             });
-
             services.AddAuthorization();
+        }
+
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
         }
     }
 }

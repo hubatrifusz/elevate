@@ -15,13 +15,13 @@ namespace Elevate.Services
             return await _friendshipRepository.GetFriendsAsync(userId);
         }
 
-        public async Task<Friendship> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
+        public async Task<FriendshipModel> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
         {
-            var friendship = _mapper.Map<Friendship>(friendshipCreateDto);
+            var friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
             return await _friendshipRepository.AddFriendshipAsync(friendship);
         }
 
-        public async Task<Friendship> DeleteFriendshipAsync(Guid userId, Guid friendId)
+        public async Task<FriendshipModel> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
             return await _friendshipRepository.DeleteFriendshipAsync(userId, friendId);
         }

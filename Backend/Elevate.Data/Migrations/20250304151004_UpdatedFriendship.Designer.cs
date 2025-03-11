@@ -4,6 +4,7 @@ using Elevate.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elevate.Data.Migrations
 {
     [DbContext(typeof(ElevateDbContext))]
-    partial class ElevateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304151004_UpdatedFriendship")]
+    partial class UpdatedFriendship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +75,7 @@ namespace Elevate.Data.Migrations
                     b.ToTable("AchievementProgresses");
                 });
 
-            modelBuilder.Entity("Elevate.Models.Friendship.FriendshipModel", b =>
+            modelBuilder.Entity("Elevate.Models.Friendship.Friendship", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,8 +119,8 @@ namespace Elevate.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<sbyte?>("CustomFrequency")
-                        .HasColumnType("tinyint");
+                    b.Property<int?>("CustomFrequency")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
@@ -400,7 +403,7 @@ namespace Elevate.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Elevate.Models.Friendship.FriendshipModel", b =>
+            modelBuilder.Entity("Elevate.Models.Friendship.Friendship", b =>
                 {
                     b.HasOne("Elevate.Models.User.ApplicationUser", null)
                         .WithMany()

@@ -1,10 +1,12 @@
 ﻿using Elevate.Common.Utilities;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace Elevate.Models.User
 {
     public class UserCreateDto
     {
+        [SwaggerSchema(ReadOnly = true)]
         public DateTime? CreatedAt { get; set; } = DateTimeConverter.GetCetTime();
 
         [Required, EmailAddress, MaxLength(30)]
@@ -21,8 +23,5 @@ namespace Elevate.Models.User
 
         [Required, MaxLength(20)]
         public required string LastName { get; set; }
-
-        //limit file size
-        public byte[]? ProfilePicture { get; set; }
     }
 }

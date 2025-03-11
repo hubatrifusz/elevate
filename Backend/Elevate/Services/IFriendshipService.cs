@@ -6,7 +6,7 @@ namespace Elevate.Services
     public interface IFriendshipService
     {
         Task<List<ApplicationUser>> GetFriendsAsync(Guid userId);
-        Task<Friendship> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto);
-        Task<Friendship> DeleteFriendshipAsync(Guid userId, Guid friendId);
+        Task<FriendshipModel> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto);
+        Task<FriendshipModel> DeleteFriendshipAsync(Guid userId, Guid friendId);
     }
 }
