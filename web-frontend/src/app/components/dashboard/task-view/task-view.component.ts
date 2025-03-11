@@ -20,7 +20,7 @@ export class TaskViewComponent {
     title: new FormControl(''),
     userID: new FormControl(localStorage.getItem('id')),
     description: new FormControl(''),
-    frequencyType: new FormControl('Daily'),
+    frequencyType: new FormControl('Monthly'),
     customFrequency: new FormControl(0),
     color: new FormControl('blue'),
     isPositive: new FormControl(true),

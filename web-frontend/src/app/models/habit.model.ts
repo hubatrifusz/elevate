@@ -4,7 +4,7 @@ export interface Habit {
   createdAt: Date;
   title: string;
   description?: string;
-  frequency: FrequencyEnum;
+  frequencyType: FrequencyEnum;
   customFrequency?: number;
   color: string;
   isPositive: boolean;

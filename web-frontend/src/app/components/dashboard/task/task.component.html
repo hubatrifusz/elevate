@@ -12,14 +12,12 @@
     <div id="right">
       <div id="time_container">
         <img src="icons/clock.png" alt="clock" />
-        <span>{{ habitData.frequency }}</span>
+        <span>{{ habitData.frequencyType }}</span>
       </div>
       <div id="options_container">
         <img src="icons/menu-dots-vertical.png" alt="menu-dots-vertical" (click)="expandTask($event)" />
       </div>
     </div>
   </div>
-  <div id="task_details_container">
-    {{ habitData.description }}
-  </div>
+  <div id="task_details_container">{{ habitData.description }}, {{ habitData.deleted }}, {{ habitData.streakStart }}</div>
 </div>
