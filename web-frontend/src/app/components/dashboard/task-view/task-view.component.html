@@ -1,10 +1,11 @@
 <div id="task_view_container">
+  <!-- Tasks -->
   <div id="task_container">
     @if (habitList.length == 0) {
     <h3>No tasks yet.</h3>
     <p>Make one by clicking the 'Add' button.</p>
     } @else { @for (habit of habitList; track $index) {
-    <app-task [habitData]="habit"></app-task>} }
+    <app-task [habitData]="habit" (dataEmitter)="deleteHabit($event)"></app-task>} }
   </div>
 
   <!-- Add new task button -->

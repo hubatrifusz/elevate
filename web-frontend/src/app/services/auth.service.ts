@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
+  token = localStorage.getItem('token');
+
   constructor(private http: HttpClient, private router: Router) {}
 
   private apiUrl = 'http://localhost:8080/api';
@@ -33,23 +35,21 @@ export class AuthService {
   }
 
   getUserData(id: string | null): Observable<any> {
-    const token = localStorage.getItem('token');
     return this.http.get(`${this.apiUrl}/user/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
   }
 
   getUserHabits(): Observable<any> {
-    const token = localStorage.getItem('token');
     const userId = localStorage.getItem('id') ?? '';
     const params = new HttpParams().set('userId', userId).set('pageNumber', 1).set('pageSize', 20);
 
     return this.http.get(`${this.apiUrl}/habit`, {
       params,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
   }
@@ -57,14 +57,18 @@ export class AuthService {
   addNewTask(formResult: any): Observable<any> {
     const token = localStorage.getItem('token');
 
-    return this.http.post(
-      `${this.apiUrl}/habit`,
-      formResult,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return this.http.post(`${this.apiUrl}/habit`, formResult, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  deleteHabit(habitId: string) {
+    return this.http.delete(`${this.apiUrl}/habit/${habitId}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
   }
 }

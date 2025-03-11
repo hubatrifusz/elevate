@@ -3,6 +3,7 @@ import { TaskComponent } from '../task/task.component';
 import { AuthService } from '../../../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Habit } from '../../../models/habit.model';
+import { AlertService } from '../../../services/alert.service';
 
 @Component({
   selector: 'app-task-view',
@@ -11,7 +12,7 @@ import { Habit } from '../../../models/habit.model';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private alertService: AlertService) {}
 
   userId = localStorage.getItem('id');
   habitList: Habit[] = [];
@@ -20,7 +21,7 @@ export class TaskViewComponent {
     title: new FormControl(''),
     userID: new FormControl(localStorage.getItem('id')),
     description: new FormControl(''),
-    frequencyType: new FormControl('Monthly'),
+    frequencyType: new FormControl('Daily'),
     customFrequency: new FormControl(0),
     color: new FormControl('blue'),
     isPositive: new FormControl(true),
@@ -28,7 +29,7 @@ export class TaskViewComponent {
 
   ngOnInit() {
     this.authService.getUserHabits().subscribe({
-      next: (response) => (this.habitList = response),
+      next: (response) => (this.habitList = response as Habit[]),
       error: (error) => console.log(error),
     });
   }
@@ -40,6 +41,19 @@ export class TaskViewComponent {
     });
 
     this.toggleFormVisibility();
+  }
+
+  deleteHabit(event: Habit) {
+    let habitId = event.id;
+    this.authService.deleteHabit(habitId).subscribe({
+      next: () => this.alertService.showAlert('Task deleted successfully!'),
+      error: (error) => this.alertService.showAlert(error),
+      complete: () =>
+        this.habitList.splice(
+          this.habitList.findIndex((habit) => habit.id === habitId),
+          1
+        ),
+    });
   }
 
   isVisible: boolean = false;

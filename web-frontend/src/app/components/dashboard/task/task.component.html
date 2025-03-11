@@ -1,3 +1,7 @@
+@if (showConfirmDialog){
+  <app-confirm-dialog (dataEmitter)="deleteHabit($event)"></app-confirm-dialog>
+}
+
 <div id="task_container" class="{{ habitData.color }}">
   <div id="task_header_container">
     <div id="left">
@@ -19,5 +23,11 @@
       </div>
     </div>
   </div>
-  <div id="task_details_container">{{ habitData.description }}, {{ habitData.deleted }}, {{ habitData.streakStart }}</div>
+  <div id="task_details_container">
+    <div id="task_actions">
+      <div class="button_container" (click)="openConfirmationDialog()">
+        <button class="button_delete"><span>Delete</span></button>
+      </div>
+    </div>
+  </div>
 </div>
