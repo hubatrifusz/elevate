@@ -9,9 +9,10 @@ namespace Elevate.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class FriendshipController(IFriendshipService friendshipService) : ControllerBase
+    public class FriendshipController(IFriendshipService friendshipService, IUserService userService) : ControllerBase
     {
         private readonly IFriendshipService _friendshipService = friendshipService;
+        private readonly IUserService _userService = userService;
 
         [HttpGet("{userId}/friends")]
         public async Task<IActionResult> GetFriends(Guid userId)
@@ -26,6 +27,15 @@ namespace Elevate.Controllers
             var userId = friendshipCreateDto.UserId;
             if (UserPermissionUtility.IsCurrentUser(userId, User))
             {
+                if (await _userService.GetUserByIdAsync(friendshipCreateDto.FriendId) == null)
+                {
+                    return NotFound("No user found with given Id.");
+                }
+                var friends = await _friendshipService.GetFriendsAsync(userId);
+                if (friends.Any(f => f.Id == friendshipCreateDto.FriendId))
+                {
+                    return BadRequest("Already friends.");
+                }
                 var friendship = await _friendshipService.AddFriendshipAsync(friendshipCreateDto);
                 if (friendship == null)
                 {
@@ -42,6 +52,10 @@ namespace Elevate.Controllers
             if (UserPermissionUtility.IsCurrentUser(userId, User) 
                 || UserPermissionUtility.IsCurrentUser(friendId, User))
             {
+                if (!_friendshipService.GetFriendsAsync(userId).Result.Contains(_userService.GetUserByIdAsync(friendId).Result))
+                {
+                    return NotFound("Users are not friends.");
+                }
                 var result = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
                 if (result == null)
                 {
