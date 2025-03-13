@@ -1,6 +1,7 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Models.HabitLog;
+using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
 {
@@ -20,6 +21,13 @@ namespace Elevate.Data.Repository
         public HabitLogModel? GetHabitLogById(Guid habitLogId)
         {
             return _context.Set<HabitLogModel>().SingleOrDefault(hl => hl.Id == habitLogId);
+        }
+
+        public async Task<List<HabitLogModel>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
+        {
+            return await _context.Set<HabitLogModel>()
+                .Where(hl => hl.UserId == userId && hl.DueDate.Date == dueDate.Date)
+                .ToListAsync();
         }
 
         public HabitLogModel? AddHabitLog(HabitLogModel habitLog)

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
+using Microsoft.VisualBasic;
+using System.ComponentModel;
 
 namespace Elevate.Services
 {
@@ -19,7 +21,18 @@ namespace Elevate.Services
             return _habitLogRepository.GetHabitLogById(habitLogId);
         }
 
-        public HabitLogModel? AddHabitLog(HabitLogCreateDto habitLog)
+        public async Task<List<HabitLogDto>?> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
+        {
+            List<HabitLogModel> habitLogModels = await _habitLogRepository.GetHabitLogsByDueDateAsync(userId, dueDate);
+            List<HabitLogDto> habitLogDtos = new();
+            foreach (HabitLogModel habitLogModel in habitLogModels)
+            {
+                habitLogDtos.Add(_mapper.Map<HabitLogDto>(habitLogModel));
+            }
+            return habitLogDtos;
+        }
+
+        public HabitLogModel? AddHabitLog(HabitLogCreateDto habitLog)   //??
         {
             var habitLogModel = _mapper.Map<HabitLogModel>(habitLog);
             return _habitLogRepository.AddHabitLog(habitLogModel);
