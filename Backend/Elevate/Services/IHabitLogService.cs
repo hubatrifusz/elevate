@@ -4,11 +4,11 @@ namespace Elevate.Services
 {
     public interface IHabitLogService
     {
-        List<HabitLogModel>? GetHabitLogsByHabitId(Guid habitId, int pageNumber, int pageSize);
-        HabitLogModel? GetHabitLogById(Guid habitLogId);
-        Task<List<HabitLogDto>?> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate);
-        HabitLogModel? AddHabitLog(HabitLogCreateDto habitLog);
-        HabitLogModel? UpdateHabitLog(Guid id, HabitLogUpdateDto habitLog);
-        HabitLogModel? DeleteHabitLog(Guid habitLogId);
+        Task<List<HabitLogDto>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize);
+        Task<HabitLogDto> GetHabitLogByIdAsync(Guid habitLogId);
+        Task<List<HabitLogDto>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate);
+        Task<HabitLogDto> AddHabitLogAsync(HabitLogCreateDto habitLog);
+        Task<HabitLogDto> UpdateHabitLogAsync(Guid id, HabitLogUpdateDto habitLog);
+        Task<HabitLogDto> DeleteHabitLogAsync(Guid habitLogId);
     }
 }

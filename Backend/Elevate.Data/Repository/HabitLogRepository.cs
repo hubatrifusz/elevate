@@ -9,13 +9,13 @@ namespace Elevate.Data.Repository
     {
         readonly ElevateDbContext _context = context;
 
-        public List<HabitLogModel> GetHabitLogsByHabitId(Guid habitId, int pageNumber, int pageSize)
+        public async Task<List<HabitLogModel>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
-            return _context.Set<HabitLogModel>()
+            return await _context.Set<HabitLogModel>()
                 .Where(hl => hl.HabitId == habitId)
                 .OrderBy(hl => hl.DueDate)
                 .ApplyPagination(pageNumber, pageSize)
-                .ToList();
+                .ToListAsync();
         }
 
         public HabitLogModel? GetHabitLogById(Guid habitLogId)

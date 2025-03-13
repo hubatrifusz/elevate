@@ -14,18 +14,17 @@ namespace Elevate.Controllers
         private readonly IHabitLogService _habitLogService = habitLogService;
 
         [HttpGet]
-        public ActionResult<IEnumerable<HabitLogModel>> GetHabitLogsByHabitId(Guid id, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
-            var habitLogs = _habitLogService.GetHabitLogsByHabitId(id, pageNumber, pageSize);
-            if (habitLogs != null)
+            try
             {
-                if (UserPermissionUtility.IsCurrentUser(habitLogs.First().UserId, User))
-                {
-                    return Ok(habitLogs);
-                }
-                return Forbid();
+                List<HabitLogDto> result = await _habitLogService.GetHabitLogsByHabitIdAsync(habitId, pageNumber, pageSize);
+                return Ok(result);
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
