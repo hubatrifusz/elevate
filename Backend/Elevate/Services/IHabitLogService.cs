@@ -6,6 +6,7 @@ namespace Elevate.Services
     {
         List<HabitLogModel>? GetHabitLogsByHabitId(Guid habitId, int pageNumber, int pageSize);
         HabitLogModel? GetHabitLogById(Guid habitLogId);
+        Task<List<HabitLogDto>?> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate);
         HabitLogModel? AddHabitLog(HabitLogCreateDto habitLog);
         HabitLogModel? UpdateHabitLog(Guid id, HabitLogUpdateDto habitLog);
         HabitLogModel? DeleteHabitLog(Guid habitLogId);

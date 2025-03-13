@@ -43,6 +43,17 @@ namespace Elevate.Controllers
             return NotFound();
         }
 
+        [HttpGet("duedate/{dueDate}")]
+        public async Task<ActionResult<List<HabitLogDto>>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
+        {
+            if (UserPermissionUtility.IsCurrentUser(userId, User))
+            {
+                List<HabitLogDto> habitLogs = await _habitLogService.GetHabitLogsByDueDateAsync(userId, dueDate);
+                return Ok(habitLogs);
+            }
+            return Forbid();
+        }
+
         [HttpPatch("{id}")]
         public ActionResult<HabitLogModel> UpdateHabitLog(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {
