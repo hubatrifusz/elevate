@@ -12,6 +12,9 @@
 
     #profile_picture_container {
       margin-bottom: 4rem;
+
+      position: relative;
+
       #banner {
         height: 6rem;
 
@@ -22,14 +25,43 @@
 
       #profile_picture {
         position: absolute;
-        top: 3.5rem;
-        left: 7rem;
+        bottom: 0;
+        left: 3rem;
+
+        transform: translateY(50%);
 
         img {
           height: 5rem;
 
           border-radius: 100rem;
           border: 5px solid $main-color-200;
+        }
+      }
+    }
+
+    #user_details {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      padding: 0 3rem 0 3rem;
+
+      hr {
+        border: 0;
+        border-top: 1px solid $main-color-300;
+      }
+
+      .settings_block {
+        display: flex;
+        flex-direction: row;
+
+        .color_theme_picker {
+          height: 10rem;
+          aspect-ratio: 3/2;
+
+          background-color: red;
+
+          border-radius: 2rem;
         }
       }
     }

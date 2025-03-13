@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -10,7 +11,7 @@ import { User } from '../../models/user.model';
   styleUrl: './user.component.scss',
 })
 export class UserComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private userService: UserService) {}
 
   userData!: User;
 
@@ -20,7 +21,7 @@ export class UserComponent {
 
   getUserData() {
     let userId = localStorage.getItem('id');
-    this.authService.getUserData(userId).subscribe({
+    this.userService.getUserData(userId).subscribe({
       next: (response) => this.userData = response as User,
       error: (e) => {
         console.log(e);

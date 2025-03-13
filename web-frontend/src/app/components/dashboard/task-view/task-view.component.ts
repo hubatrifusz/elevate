@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Habit } from '../../../models/habit.model';
 import { AlertService } from '../../../services/alert.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-task-view',
@@ -12,7 +13,7 @@ import { AlertService } from '../../../services/alert.service';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private authService: AuthService, private alertService: AlertService) {}
+  constructor(private authService: AuthService, private alertService: AlertService, private userService: UserService) {}
 
   userId = localStorage.getItem('id');
   habitList: Habit[] = [];
@@ -28,14 +29,11 @@ export class TaskViewComponent {
   });
 
   ngOnInit() {
-    this.authService.getUserHabits().subscribe({
-      next: (response) => (this.habitList = response as Habit[]),
-      error: (error) => console.log(error),
-    });
+    this.getAllHabits();
   }
 
-  addNewTask() {
-    this.authService.addNewTask(this.addNewTaskForm.value).subscribe({
+  addNewHabit() {
+    this.userService.addNewHabit(this.addNewTaskForm.value).subscribe({
       next: (response) => this.habitList.push(response as Habit),
       error: (error) => alert(error),
     });
@@ -45,7 +43,7 @@ export class TaskViewComponent {
 
   deleteHabit(event: Habit) {
     let habitId = event.id;
-    this.authService.deleteHabit(habitId).subscribe({
+    this.userService.deleteHabit(habitId).subscribe({
       next: () => this.alertService.showAlert('Task deleted successfully!'),
       error: (error) => this.alertService.showAlert(error),
       complete: () =>
@@ -53,6 +51,21 @@ export class TaskViewComponent {
           this.habitList.findIndex((habit) => habit.id === habitId),
           1
         ),
+    });
+  }
+
+  getTodaysHabits() {
+    this.userService.getTodaysHabits().subscribe({
+      next: (response) => console.log(response),
+      error: (error) => console.log(error),
+    });
+  }
+
+  getAllHabits() {
+    this.userService.getHabits().subscribe({
+      // next: (response) => (this.habitList = response as Habit[]),
+      next: (response) => console.log(response),
+      error: (error) => console.log(error),
     });
   }
 

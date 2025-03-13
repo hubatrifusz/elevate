@@ -33,42 +33,4 @@ export class AuthService {
   crateAccount(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
   }
-
-  getUserData(id: string | null): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/${id}`, {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    });
-  }
-
-  getUserHabits(): Observable<any> {
-    const userId = localStorage.getItem('id') ?? '';
-    const params = new HttpParams().set('userId', userId).set('pageNumber', 1).set('pageSize', 20);
-
-    return this.http.get(`${this.apiUrl}/habit`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    });
-  }
-
-  addNewTask(formResult: any): Observable<any> {
-    const token = localStorage.getItem('token');
-
-    return this.http.post(`${this.apiUrl}/habit`, formResult, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-
-  deleteHabit(habitId: string) {
-    return this.http.delete(`${this.apiUrl}/habit/${habitId}`, {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    });
-  }
 }
