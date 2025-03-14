@@ -11,7 +11,7 @@ namespace Elevate.Data.Repository
 
         public async Task<List<HabitLogModel>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
-            return await _context.Set<HabitLogModel>()
+            return await _context.HabitLogs
                 .Where(hl => hl.HabitId == habitId)
                 .OrderBy(hl => hl.DueDate)
                 .ApplyPagination(pageNumber, pageSize)
@@ -20,26 +20,26 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitLogModel?> GetHabitLogByIdAsync(Guid habitLogId)
         {
-            return await _context.Set<HabitLogModel>().SingleAsync(hl => hl.Id == habitLogId);
+            return await _context.HabitLogs.SingleAsync(hl => hl.Id == habitLogId);
         }
 
         public async Task<List<HabitLogModel>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
         {
-            return await _context.Set<HabitLogModel>()
+            return await _context.HabitLogs
                 .Where(hl => hl.UserId == userId && hl.DueDate.Date == dueDate.Date)
                 .ToListAsync();
         }
 
         public async Task<HabitLogModel?> UpdateHabitLogAsync(HabitLogModel habitLog)
         {
-            _context.Set<HabitLogModel>().Update(habitLog);
+            _context.HabitLogs.Update(habitLog);
             await _context.SaveChangesAsync();
-            return await _context.Set<HabitLogModel>().SingleAsync(hl => hl.Id == habitLog.Id);
+            return await GetHabitLogByIdAsync(habitLog.Id);
         }
 
         public async Task<HabitLogModel?> DeleteHabitLogAsync(HabitLogModel habitLogToDelete)
         {
-            _context.Set<HabitLogModel>().Remove(habitLogToDelete);
+            _context.HabitLogs.Remove(habitLogToDelete);
             await _context.SaveChangesAsync();
             return habitLogToDelete;
         }

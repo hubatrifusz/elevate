@@ -36,10 +36,11 @@ namespace Elevate.Services
 
         public async Task<HabitLogDto> UpdateHabitLogAsync(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {
-            HabitLogModel habitLogModel = await _habitLogRepository.GetHabitLogByIdAsync(id)
-                ?? throw new ResourceNotFoundException("Habit log was not found.");
+            HabitLogModel habitLogModel = _mapper.Map<HabitLogModel>(habitLogUpdateDto);
+                          habitLogModel.Id = id;
 
-            HabitLogModel updatedHabitLog = await _habitLogRepository.UpdateHabitLogAsync(habitLogModel)
+            HabitLogModel updatedHabitLog = await _habitLogRepository.
+                UpdateHabitLogAsync(habitLogModel)
                 ?? throw new BadRequestException("Failed to update habit log.");
 
             return _mapper.Map<HabitLogDto>(updatedHabitLog);
