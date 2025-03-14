@@ -32,6 +32,14 @@ export class UserService {
     });
   }
 
+  getHabitByID(habitId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/habit/${habitId}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+  }
+
   addNewHabit(formResult: any): Observable<any> {
     const token = localStorage.getItem('token');
 
@@ -50,11 +58,11 @@ export class UserService {
     });
   }
 
-  getTodaysHabits(): Observable<any> {
+  getTodaysHabitlogs(date: string): Observable<any> {
     const userId = localStorage.getItem('id') ?? '';
-    const params = new HttpParams().set('id', userId).set('pageNumber', 1).set('pageSize', 20);
+    const params = new HttpParams().set('userId', userId);
 
-    return this.http.get(`${this.apiUrl}/habitlog`, {
+    return this.http.get(`${this.apiUrl}/habitlog/duedate/${date}`, {
       params,
       headers: {
         Authorization: `Bearer ${this.token}`,
