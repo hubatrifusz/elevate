@@ -8,6 +8,7 @@ namespace Elevate.Middleware
     {
         private readonly RequestDelegate _next = next;
         private readonly ILogger<GlobalExceptionHandler> _logger = logger;
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
@@ -27,28 +28,32 @@ namespace Elevate.Middleware
             httpContext.Response.ContentType = "application/json";
             var response = new
             {
-                StatusCode = GetStatusCode(exception),
-                Message = exception.Message
+                message = exception.Message,
+                statusCode = 500
             };
 
-            httpContext.Response.StatusCode = response.StatusCode;
-
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
-        }
-
-        private static int GetStatusCode(Exception exception)
-        {
-            return exception switch
+            switch (exception)
             {
-                KeyNotFoundException => (int)HttpStatusCode.NotFound,
-                ResourceNotFoundException => (int)HttpStatusCode.NotFound,
-                UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
-                AuthorizationException => (int)HttpStatusCode.Unauthorized,
-                ArgumentException => (int)HttpStatusCode.BadRequest,
-                InvalidOperationException => (int)HttpStatusCode.BadRequest,
-                BadRequestException => (int)HttpStatusCode.BadRequest,
-                _ => (int)HttpStatusCode.InternalServerError
-            };
+                case ResourceNotFoundException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    response = new { message = exception.Message, statusCode = 404 };
+                    break;
+                case BadRequestException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    response = new { message = exception.Message, statusCode = 400 };
+                    break;
+                case AuthorizationException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    response = new { message = exception.Message, statusCode = 403 };
+                    break;
+                default:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    response = new { message = "An unexpected error occurred", statusCode = 500 };
+                    break;
+            }
+
+            var json = JsonSerializer.Serialize(response, _jsonSerializerOptions);
+            await httpContext.Response.WriteAsync(json);
         }
     }
 }

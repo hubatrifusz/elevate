@@ -14,46 +14,26 @@ namespace Elevate.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet]
-        public ActionResult<IEnumerable<ApplicationUser>> GetUsersByEmail(string email, int pageNumber, int pageSize)
+        public async Task<ActionResult<List<UserDto>>> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
         {
-            var users = _userService.GetUsersByEmailAsync(email, pageNumber, pageSize);
+            List<UserDto> users = await _userService.GetUsersByEmailAsync(email, pageNumber, pageSize);
             return Ok(users);
         }
 
         [HttpGet("{id}", Name = "GetUserByIdAsyncRoute")]
-        public async Task<ActionResult<ApplicationUser>> GetUserByIdAsync(Guid id)
+        public async Task<ActionResult<UserDto>> GetUserByIdAsync(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            UserDto user = await _userService.GetUserByIdAsync(id);
             return Ok(user);
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<ApplicationUser>> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
+        public async Task<ActionResult<UserDto>> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
         {
-            if (UserPermissionUtility.IsCurrentUser(id, User))
-            {
-                try
-                {
-                    var updatedUser = await _userService.UpdateUserAsync(id, userUpdateDto);
-                    if (updatedUser == null)
-                    {
-                        return NotFound();
-                    }
-                    return NoContent();
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            else
-            {
-                return Forbid();
-            }
+            UserDto user = await _userService.GetUserByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(user.Id, User);
+            UserDto updatedUser = await _userService.UpdateUserAsync(id, userUpdateDto);
+            return Ok(updatedUser);
         }
     }
 }

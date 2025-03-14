@@ -23,6 +23,11 @@ namespace Elevate.Data.Repository
             return await _context.Habits.SingleAsync(h => h.Id == habitId);
         }
 
+        public async Task<List<HabitModel>> GetAllHabitsAsync()
+        {
+            return await _context.Habits.ToListAsync();
+        }
+
         public async Task<HabitModel?> AddHabitAsync(HabitModel habit)
         {
             await _context.Habits.AddAsync(habit);

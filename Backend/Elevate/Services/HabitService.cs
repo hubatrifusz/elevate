@@ -14,6 +14,7 @@ namespace Elevate.Services
         public async Task<List<HabitDto>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
             List<HabitModel> habitModels = await _habitRepository.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
+
             return habitModels.Count == 0
                 ? throw new ResourceNotFoundException("User has no recorded habits.")
                 : _mapper.Map<List<HabitDto>>(habitModels);
@@ -23,6 +24,7 @@ namespace Elevate.Services
         {
             HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(habitId)
                 ?? throw new ResourceNotFoundException("Habit was not found.");
+
             return _mapper.Map<HabitDto>(habitModel);
         }
 

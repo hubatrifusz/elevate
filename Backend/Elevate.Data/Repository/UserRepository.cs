@@ -2,19 +2,27 @@
 using Elevate.Extensions;
 using Elevate.Data.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Elevate.Data.Repository
 {
-    public class UserRepository(ElevateDbContext context)
+    public class UserRepository
+    (
+        ElevateDbContext context,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager
+    )
     {
         readonly ElevateDbContext _context = context;
+        readonly UserManager<ApplicationUser> _userManager = userManager;
+        readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 
         public async Task<ApplicationUser?> GetUserByIdAsync(Guid userId)
         {
-            return await _context.Set<ApplicationUser>().SingleOrDefaultAsync(u => u.Id == userId);
+            return await _context.ApplicationUsers.SingleAsync(u => u.Id == userId);
         }
 
-        public async Task<List<ApplicationUser>?> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
+        public async Task<List<ApplicationUser>> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
         {
             return await _context.Set<ApplicationUser>()
                 .Where(u => u.Email != null && u.Email.Contains(email))
@@ -22,20 +30,21 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<ApplicationUser?> UpdateUserAsync(Guid id, ApplicationUser user)
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
-            if (id != user.Id)
-            {
-                throw new Exception("User ID does not match");
-            }
-            var updatedUser = await _context.Set<ApplicationUser>().AnyAsync(u => u.Id == id);
-            if (!updatedUser)
-            {
-                throw new Exception("No such user");
-            }
-            _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            return await _userManager.CreateAsync(user, password);
+        }
+
+        public async Task<ApplicationUser?> UpdateUserAsync(ApplicationUser user)
+        {
+            _context.ApplicationUsers.Update(user);
             await _context.SaveChangesAsync();
-            return user;
+            return await GetUserByIdAsync(user.Id);
+        }
+
+        public async Task<SignInResult> CheckPasswordSignInAsync(ApplicationUser user, string password, bool lockoutOnFailure)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure);
         }
     }
 }

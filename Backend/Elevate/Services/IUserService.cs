@@ -1,14 +1,14 @@
 ﻿using Elevate.Models.User;
-using Elevate.Models;
 
 namespace Elevate.Services
 {
     public interface IUserService
     {
-        Task<ApplicationUser?> GetUserByIdAsync(Guid userId);
-        Task<ApplicationUser?> GetUserByEmailAsync(string email);
-        Task<List<ApplicationUser>?> GetUsersByEmailAsync(string email, int pageNumber, int pageSize);
+        Task<UserDto> GetUserByIdAsync(Guid userId);
+        Task<UserDto> GetUserByEmailAsync(string email);
+        Task<List<UserDto>> GetUsersByEmailAsync(string email, int pageNumber, int pageSize);
         Task<IdentityResultWithUser> AddUserAsync(UserCreateDto user);
-        Task<ApplicationUser?> UpdateUserAsync(Guid id, UserUpdateDto user);
+        Task<UserDto> UpdateUserAsync(Guid id, UserUpdateDto user);
+        Task<UserIdWithJWT> SignInAsync(UserDto user, string password, bool lockoutOnFailure);
     }
 }
