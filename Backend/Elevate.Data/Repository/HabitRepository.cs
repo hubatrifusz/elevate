@@ -44,7 +44,7 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitModel?> DeleteHabitAsync(HabitModel habit) 
         {
-            _context.Set<HabitModel>().Remove(habit);
+            _context.Habits.Remove(habit);
             await _context.SaveChangesAsync();
             return habit;
         }
