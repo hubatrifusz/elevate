@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Elevate.Common.Utilities;
+using Elevate.Middleware;
+using Microsoft.AspNetCore.Builder;
 
 namespace Elevate
 {
@@ -71,6 +73,8 @@ namespace Elevate
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
             var app = builder.Build();
+
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

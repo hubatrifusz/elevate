@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Elevate.Common.Exceptions;
 using System.Security.Claims;
 
 namespace Elevate.Common.Utilities
@@ -9,13 +9,13 @@ namespace Elevate.Common.Utilities
         {
             if (user == null || !user.Identity!.IsAuthenticated)
             {
-                return false;
+                throw new AuthorizationException();
             }
 
             var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
             {
-                return false;
+                throw new AuthorizationException();
             }
 
             return userId == resourceUserId;

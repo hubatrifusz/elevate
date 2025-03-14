@@ -73,6 +73,11 @@ namespace Elevate.Extensions
             // Add email sending service (example using built-in but consider a library)
         }
 
+        public static void AddMiddleWare(this IServiceCollection services)
+        {
+
+        }
+
         public static void AddCorsPolicies(this IServiceCollection services) 
         {
             services.AddCors(options =>
