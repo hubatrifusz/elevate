@@ -25,6 +25,7 @@ namespace Elevate.Profiles
                     !string.IsNullOrEmpty(src.ProfilePictureBase64) ? 
                     Convert.FromBase64String(src.ProfilePictureBase64) : null
                 ));
+            CreateMap<UserDto, ApplicationUser>();
 
             CreateMap<FriendshipModel, FriendshipDto>();
             CreateMap<FriendshipCreateDto, FriendshipModel>();
