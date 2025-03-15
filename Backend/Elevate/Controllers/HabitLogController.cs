@@ -21,7 +21,7 @@ namespace Elevate.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<List<HabitLogDto>>> GetHabitLogByIdAsync(Guid id)
         {
             var habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
@@ -29,7 +29,7 @@ namespace Elevate.Controllers
             return Ok(habitLog);
         }
 
-        [HttpGet("duedate/{dueDate}")]
+        [HttpGet("{dueDate:datetime}")]
         public async Task<ActionResult<List<HabitLogDto>>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
         {
             UserPermissionUtility.IsCurrentUser(userId, User);
@@ -37,7 +37,7 @@ namespace Elevate.Controllers
             return Ok(habitLogs);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{id:guid}")]
         public async Task<ActionResult<HabitLogDto>> UpdateHabitLogAsync(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {
             HabitLogDto habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
@@ -46,7 +46,7 @@ namespace Elevate.Controllers
             return Ok(updatedHabitLog);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<HabitLogDto>> DeleteHabitLogAsync(Guid id)
         {
             HabitLogDto habitLog = await _habitLogService.GetHabitLogByIdAsync(id);

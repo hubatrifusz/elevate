@@ -46,6 +46,10 @@ namespace Elevate.Middleware
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     response = new { message = exception.Message, statusCode = 403 };
                     break;
+                case InvalidPasswordException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    response = new { message = exception.Message, statusCode = 403 };
+                    break;
                 default:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     response = new { message = "An unexpected error occurred", statusCode = 500 };

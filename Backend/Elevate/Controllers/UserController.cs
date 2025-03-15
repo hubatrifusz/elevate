@@ -20,14 +20,14 @@ namespace Elevate.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{id}", Name = "GetUserByIdAsyncRoute")]
+        [HttpGet("{id:guid}", Name = "GetUserByIdAsyncRoute")]
         public async Task<ActionResult<UserDto>> GetUserByIdAsync(Guid id)
         {
             UserDto user = await _userService.GetUserByIdAsync(id);
             return Ok(user);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{id:guid}")]
         public async Task<ActionResult<UserDto>> UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
         {
             UserDto user = await _userService.GetUserByIdAsync(id);

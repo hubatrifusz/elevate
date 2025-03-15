@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Elevate.Common.Utilities;
 using Elevate.Models.User;
-using Elevate.Common.Exceptions;
 
 namespace Elevate.Controllers
 {
@@ -15,7 +14,7 @@ namespace Elevate.Controllers
     {
         private readonly IFriendshipService _friendshipService = friendshipService;
 
-        [HttpGet("{userId}/friends")]
+        [HttpGet("{userId:guid}/friends")]
         public async Task<ActionResult<List<UserDto>>> GetFriends(Guid userId)
         {
             List<UserDto> friends = await _friendshipService.GetFriendsAsync(userId);

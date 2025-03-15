@@ -63,9 +63,15 @@ namespace Elevate.Services
 
         public async Task<UserIdWithJWT> SignInAsync(UserDto user, string password, bool lockoutOnFailure)
         {
-            ApplicationUser applicationUser = _mapper.Map<ApplicationUser>(user);
-            _ = await _userRepository.CheckPasswordSignInAsync(applicationUser, password, lockoutOnFailure)
-                ?? throw new Exception("Invalid Password.");
+            ApplicationUser applicationUser = await _userRepository.GetUserByIdAsync(user.Id)
+                ?? throw new ResourceNotFoundException("User was not found.");
+
+            SignInResult signInResult = await _userRepository.CheckPasswordSignInAsync(applicationUser, password, lockoutOnFailure);
+
+            if (!signInResult.Succeeded)
+            {
+                throw new InvalidPasswordException();
+            }
 
             var claims = new List<Claim>
             {

@@ -21,7 +21,7 @@ namespace Elevate.Controllers
             return Ok(habits);
         }
 
-        [HttpGet("{id}", Name = "GetHabitByIdAsync")]
+        [HttpGet("{id:guid}", Name = "GetHabitByIdAsync")]
         public async Task<ActionResult<HabitDto>> GetHabitByIdAsync(Guid id)
         {
             HabitDto habit = await _habitService.GetHabitByIdAsync(id);
@@ -37,7 +37,7 @@ namespace Elevate.Controllers
             return CreatedAtRoute(nameof(GetHabitByIdAsync), new { id = createdHabit.Id }, createdHabit);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{id:guid}")]
         public async Task<ActionResult<HabitDto>> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
         {
             HabitDto habit = await _habitService.GetHabitByIdAsync(id);
@@ -46,7 +46,7 @@ namespace Elevate.Controllers
             return Ok(updatedHabit);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<HabitDto>> DeleteHabitAsync(Guid id)
         {
             HabitDto habit = await _habitService.GetHabitByIdAsync(id);
