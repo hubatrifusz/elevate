@@ -1,16 +1,23 @@
-\documentclass{report}
+\documentclass[12pt]{report}
 \usepackage{minted}
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
 \usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
 \tcbuselibrary{minted}
 
 \renewcommand{\theFancyVerbLine}{\textcolor{gray!50}{\scriptsize\arabic{FancyVerbLine}}}
 \renewcommand{\contentsname}{Tartalomjegyzék}
 
-\titleformat{\subsubsection}
-{\large\bfseries}{}{0em}{}
+\titleformat{\chapter}
+  {\normalfont\Huge\bfseries}
+  {\thechapter.}
+  {0.5em}                      
+  {} 
 
 \newtcolorbox{codeblock}[2][]{
   colback=black!85!gray,
@@ -27,7 +34,7 @@
   right=5pt,
   top=2pt,
   bottom=2pt,
-  %sharp corners=south,
+  % sharp corners=south,
   #1
 }
 
@@ -66,21 +73,22 @@
 
 \maketitle
 
+\setcounter{tocdepth}{3}
 \tableofcontents
 
-\section{A projektről}
+\chapter{A projektről}
 A téma kiválasztásánál arra törekedtünk, hogy egy, a hétköznapi élet során alkalmazható szoftvert készítsünk. Több opció is felmerült, azonban végül egy szokásformáló felület mellett döntöttünk, amit Elevate-nek neveztünk el, az egészséges, felemelő életmód jegyében. Az Elevate ösztönzi a felhasználókat, hogy új, pozitív szokásokat vezessenek be, miközben hatékonyan követhetik saját fejlődésüket, emellett hozzájárul életminőségük javításához és a fenntart-ható fejlődéshez.
-\subsection{Az Elevate célja}
+\section{Az Elevate célja}
 A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását és különféle jutalmakat kap, ha tartja a felállított célját. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Egy szokás tartásához elengedhetetlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben jeleníti meg a teendőket és emlékeztet azok elvégzésére. 
-\section{Weboldal}
-\section{Mobil Applikáció}
-\section{Adatbázis}
-\section{Backend}
+\chapter{Weboldal}
+\chapter{Mobil Applikáció}
+\chapter{Adatbázis}
+\chapter{Backend}
 
-\subsection{Végpontok}
+\section{Végpontok}
 
 \vspace{0.5cm}
-\subsubsection{Autentikáció}
+\subsection{Autentikáció}
 \begin{description}
 
   \item [\textbf{POST /api/auth/register}] - Regisztráció
@@ -159,12 +167,14 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 "Invalid login details"
           \end{minted}
         \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
     \end{itemize}
 
 \end{description}
 
 \vspace{0.5cm}
-\subsubsection{Felhasználó}
+\subsection{Felhasználó}
 \begin{description}
   \item[\textbf{GET /api/user}] - Felhasználók lekérdezése email alapján
   
@@ -299,8 +309,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
 \end{description}
 
-\vspace{0.5cm}
-\subsubsection{Barátok}
+\subsection{Barátok}
 \begin{description}
   \item[\textbf{GET /api/friendship/\{userId\}/friends}] - Barátok lekérdezése
 
@@ -359,7 +368,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
     \vspace{0.5cm}
     \textbf{Válaszok:}
     \begin{itemize}
-      \item \textbf{200 OK} - Sikeres hozzáadás
+      \item \textbf{201 Created} - Sikeres hozzáadás
 
         \textbf{Response body:}
         \begin{codeblock}{JSON}
@@ -428,6 +437,267 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
     \end{itemize}
 \end{description}
 
-\section{Tesztelés}
+\subsection{Szokások}
+\begin{description}
+  \item[\textbf{GET /api/habit}] - Szokások lekérdezése
+
+    \vspace{0.5cm}
+    A felhasználó szokásainak lekérdezése a felhasználó azonosítója alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt szokások száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User has no recorded habits."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\textbf{GET /api/habit/\{id\}}] - Szokás lekérdezése
+  
+  \vspace{0.5cm}
+  Szokás lekérdezése azonosító alapján.
+
+  \vspace{0.5cm}
+  \textbf{Paraméterek:}
+  \begin{itemize}
+    \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+  \end{itemize}
+
+  \vspace{0.5cm}
+  \textbf{Válaszok:}
+  \begin{itemize}
+    \item \textbf{200 OK} - Sikeres lekérdezés
+
+      \textbf{Response body:}
+      \begin{codeblock}{JSON}
+        \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+        \end{minted}
+      \end{codeblock}
+
+    \item \textbf{404 Not Found} - Nincs találat
+
+      \textbf{Response body:}
+      \begin{codeblock}{JSON}
+        \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit was not found."
+        \end{minted}
+      \end{codeblock}
+  \end{itemize}
+
+  \item[\textbf{POST /api/habit}] - Szokás hozzáadása
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "title": "string",
+  "userId": "string($uuid)",
+  "description": "string",
+  "frequencyType": "string",
+    // DAILY, WEEKLY, MONTHLY, CUSTOM
+  "customFrequency": Number,
+    // Ha a frequencyType CUSTOM
+  "color": "string",
+    // HEX kód
+  "isPositive": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{201 Created} - Sikeres hozzáadás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      \item \textbf{403 Forbidden} - A megadott azonosító nem egyezik a bejelentkezett felhasználóéval
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"You are not authorized to perform this action."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\textbf{PATCH /api/habit/\{id\}}] - Szokás módosítása
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+    // DAILY, WEEKLY, MONTHLY, CUSTOM
+  "customFrequency": Number,
+  "color": "string",
+  "isPublic": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+    
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\textbf{DELETE /api/habit/\{id\}}] - Szokás törlése
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres törlés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+\end{description}
+
+\subsection{Szokás napló}
+\begin{description}
+  \item[] 
+\end{description}
+
+\chapter{Tesztelés}
 
 \end{document}
