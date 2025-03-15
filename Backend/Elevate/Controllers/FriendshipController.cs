@@ -10,9 +10,10 @@ namespace Elevate.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class FriendshipController(IFriendshipService friendshipService) : ControllerBase
+    public class FriendshipController(IFriendshipService friendshipService, IUserService userService) : ControllerBase
     {
         private readonly IFriendshipService _friendshipService = friendshipService;
+        private readonly IUserService _userService = userService;
 
         [HttpGet("{userId:guid}/friends")]
         public async Task<ActionResult<List<UserDto>>> GetFriends(Guid userId)
@@ -41,10 +42,9 @@ namespace Elevate.Controllers
             {
                 UserPermissionUtility.IsCurrentUser(friendId, User);
             }
-            {
-                FriendshipDto deletedFriendship = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
-                return Ok(deletedFriendship);
-            }
+            
+            FriendshipDto deletedFriendship = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
+            return Ok(deletedFriendship);
         }
     }
 }

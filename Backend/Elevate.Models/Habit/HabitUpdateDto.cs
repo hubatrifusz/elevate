@@ -11,6 +11,7 @@ namespace Elevate.Models.Habit
         [MaxLength(100)]
         public string? Description { get; set; }
 
+        [ValidFrequencyType(isRequired: false)]
         public string? FrequencyType { get; set; }
 
         public sbyte? CustomFrequency { get; set; }

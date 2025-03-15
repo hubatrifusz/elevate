@@ -13,6 +13,7 @@ namespace Elevate.Models.User
         public required string LastName { get; set; }
 
         [MaxLength(5242880)]
+        [Base64String(ErrorMessage = "The provided profile picture is not a valid BASE64 string.")]
         public string? ProfilePictureBase64 { get; set; }
     }
 }
