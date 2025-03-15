@@ -20,7 +20,7 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
         {
-            return await _context.Habits.SingleAsync(h => h.Id == habitId);
+            return await _context.Habits.FindAsync(habitId);
         }
 
         public async Task<List<HabitModel>> GetAllHabitsAsync()

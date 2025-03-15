@@ -14,7 +14,7 @@ namespace Elevate.Services
         {
             List<HabitLogModel> habitLogModels = await _habitLogRepository.GetHabitLogsByHabitIdAsync(habitId, pageNumber, pageSize);
             return habitLogModels.Count == 0
-                ? throw new ResourceNotFoundException("No habit log was found with the provided Id.")
+                ? throw new ResourceNotFoundException("No log was found for the provided habit.")
                 : _mapper.Map<List<HabitLogDto>>(habitLogModels);
         }
 

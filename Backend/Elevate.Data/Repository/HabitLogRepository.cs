@@ -20,7 +20,7 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitLogModel?> GetHabitLogByIdAsync(Guid habitLogId)
         {
-            return await _context.HabitLogs.SingleAsync(hl => hl.Id == habitLogId);
+            return await _context.HabitLogs.FindAsync(habitLogId);
         }
 
         public async Task<List<HabitLogModel>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)

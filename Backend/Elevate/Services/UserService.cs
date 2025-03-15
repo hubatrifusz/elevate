@@ -45,7 +45,7 @@ namespace Elevate.Services
             ApplicationUser user = _mapper.Map<ApplicationUser>(userCreateDto);
             user.UserName = user.Email;
             IdentityResult result = await _userRepository.CreateUserAsync(user, userCreateDto.Password)
-                ?? throw new Exception("Failed to create user");
+                ?? throw new BadRequestException("Failed to create user");
 
             return new IdentityResultWithUser { Result = result, User = _mapper.Map<UserDto>(user) };
         }

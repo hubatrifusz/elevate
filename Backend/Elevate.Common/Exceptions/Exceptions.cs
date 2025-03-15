@@ -8,6 +8,10 @@
 
     public class AuthorizationException(string message = "You are not authorized to perform this action.") 
         : Exception(message) { }
+
     public class InvalidPasswordException(string message = "Invalid password.")
+        : Exception(message) { }
+
+    public class ConnectionStringException(string message = "Connection string is invalid.")
         : Exception(message) { }
 }
