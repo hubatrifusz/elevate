@@ -7,6 +7,7 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
+using Elevate.Common.Exceptions;
 
 namespace Elevate.Data.Database
 {
@@ -42,7 +43,7 @@ namespace Elevate.Data.Database
             }
             else
             {
-                throw new Exception("Failed to retrieve connection string");
+                throw new ConnectionStringException("Failed to retrieve connection string");
             }
         }
 

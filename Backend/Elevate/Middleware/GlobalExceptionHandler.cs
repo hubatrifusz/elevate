@@ -26,33 +26,33 @@ namespace Elevate.Middleware
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
             httpContext.Response.ContentType = "application/json";
-            var response = new
-            {
-                message = exception.Message,
-                statusCode = 500
-            };
+            var response = exception.Message;
 
             switch (exception)
             {
                 case ResourceNotFoundException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    response = new { message = exception.Message, statusCode = 404 };
+                    response = exception.Message;
                     break;
                 case BadRequestException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    response = new { message = exception.Message, statusCode = 400 };
+                    response = exception.Message;
                     break;
                 case AuthorizationException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    response = new { message = exception.Message, statusCode = 403 };
+                    response = exception.Message;
                     break;
                 case InvalidPasswordException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    response = new { message = exception.Message, statusCode = 403 };
+                    response = exception.Message;
+                    break;
+                case ConnectionStringException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.FailedDependency;
+                    response = exception.Message;
                     break;
                 default:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    response = new { message = "An unexpected error occurred", statusCode = 500 };
+                    response = "An unexpected error occurred";
                     break;
             }
 

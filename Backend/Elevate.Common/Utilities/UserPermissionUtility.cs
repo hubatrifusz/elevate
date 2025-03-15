@@ -5,7 +5,7 @@ namespace Elevate.Common.Utilities
 {
     public static class UserPermissionUtility
     {
-        public static bool IsCurrentUser(Guid resourceUserId, ClaimsPrincipal user)
+        public static void IsCurrentUser(Guid resourceUserId, ClaimsPrincipal user)
         {
             if (user == null || !user.Identity!.IsAuthenticated)
             {
@@ -18,7 +18,10 @@ namespace Elevate.Common.Utilities
                 throw new AuthorizationException();
             }
 
-            return userId == resourceUserId;
+            if(userId != resourceUserId)
+            {
+                throw new AuthorizationException();
+            }
         }
     }
 }
