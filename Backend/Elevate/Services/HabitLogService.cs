@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
+using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
-using Microsoft.VisualBasic;
-using System.ComponentModel;
 
 namespace Elevate.Services
 {
@@ -11,46 +10,49 @@ namespace Elevate.Services
         private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
         private readonly IMapper _mapper = mapper;
 
-        public List<HabitLogModel>? GetHabitLogsByHabitId(Guid habitId, int pageNumber, int pageSize)
+        public async Task<List<HabitLogDto>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
-            return _habitLogRepository.GetHabitLogsByHabitId(habitId, pageNumber, pageSize);
+            List<HabitLogModel> habitLogModels = await _habitLogRepository.GetHabitLogsByHabitIdAsync(habitId, pageNumber, pageSize);
+            return habitLogModels.Count == 0
+                ? throw new ResourceNotFoundException("No habit log was found with the provided Id.")
+                : _mapper.Map<List<HabitLogDto>>(habitLogModels);
         }
 
-        public HabitLogModel? GetHabitLogById(Guid habitLogId)
+        public async Task<HabitLogDto> GetHabitLogByIdAsync(Guid habitLogId)
         {
-            return _habitLogRepository.GetHabitLogById(habitLogId);
+            HabitLogModel habitLogModel = await _habitLogRepository.GetHabitLogByIdAsync(habitLogId)
+                ?? throw new ResourceNotFoundException("Habit log was not found.");
+
+            return _mapper.Map<HabitLogDto>(habitLogModel);
         }
 
-        public async Task<List<HabitLogDto>?> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
+        public async Task<List<HabitLogDto>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
         {
             List<HabitLogModel> habitLogModels = await _habitLogRepository.GetHabitLogsByDueDateAsync(userId, dueDate);
-            List<HabitLogDto> habitLogDtos = new();
-            foreach (HabitLogModel habitLogModel in habitLogModels)
-            {
-                habitLogDtos.Add(_mapper.Map<HabitLogDto>(habitLogModel));
-            }
-            return habitLogDtos;
+            return habitLogModels.Count == 0
+                ? throw new ResourceNotFoundException("No habit log was found with the provided due date.")
+                : _mapper.Map<List<HabitLogDto>>(habitLogModels);
         }
 
-        public HabitLogModel? AddHabitLog(HabitLogCreateDto habitLog)   //??
+        public async Task<HabitLogDto> UpdateHabitLogAsync(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {
-            var habitLogModel = _mapper.Map<HabitLogModel>(habitLog);
-            return _habitLogRepository.AddHabitLog(habitLogModel);
+            HabitLogModel habitLogModel = _mapper.Map<HabitLogModel>(habitLogUpdateDto);
+                          habitLogModel.Id = id;
+
+            HabitLogModel updatedHabitLog = await _habitLogRepository.
+                UpdateHabitLogAsync(habitLogModel)
+                ?? throw new BadRequestException("Failed to update habit log.");
+
+            return _mapper.Map<HabitLogDto>(updatedHabitLog);
         }
 
-        public HabitLogModel? UpdateHabitLog(Guid id, HabitLogUpdateDto habitLogUpdateDto)
+        public async Task<HabitLogDto> DeleteHabitLogAsync(HabitLogDto habitLog)
         {
-            var habitLogModel = _habitLogRepository.GetHabitLogById(id)
-                ?? throw new Exception("Habit log not found");
+            HabitLogModel habitLogToDelete = _mapper.Map<HabitLogModel>(habitLog);
+            HabitLogModel habitLogModel = await _habitLogRepository.DeleteHabitLogAsync(habitLogToDelete)
+                ?? throw new BadRequestException("Failed to delete habit log.");
 
-            _mapper.Map(habitLogUpdateDto, habitLogModel);
-
-            return _habitLogRepository.UpdateHabitLog(id, habitLogModel);
-        }
-
-        public HabitLogModel? DeleteHabitLog(Guid habitLogId)
-        {
-            return _habitLogRepository.DeleteHabitLog(habitLogId);
+            return _mapper.Map<HabitLogDto>(habitLogModel);
         }
     }
 }
