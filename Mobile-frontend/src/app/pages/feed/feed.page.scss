@@ -145,3 +145,13 @@ h2 {
   width: 45px;
   --ion-margin: auto
 }
+.styled-heading {
+  font-size: $font-size-xl;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 30px;
+  padding: 0px 20px;
+  border-radius: 10px;
+  font-variant: small-caps;
+  text-transform: uppercase;
+}

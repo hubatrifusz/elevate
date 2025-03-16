@@ -18,7 +18,12 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('../app/components/footertabs/tabs.routes').then((m) => m.routes),
+  },
+  {
+    path: 'create-habit',
+    loadComponent: () => import('./pages/create-habit/create-habit.page').then(m => m.CreateHabitPage)
   }
+
 
 
 

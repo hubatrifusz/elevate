@@ -1,0 +1,112 @@
+@use "../../../theme/variables.scss" as *;
+
+
+
+ion-header {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-light);
+}
+
+ion-card {
+    margin: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+ion-card-header {
+    background-color: $accent-color-400;
+    color: var(--ion-color-light);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin-bottom: 25px;
+
+}
+
+ion-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+ion-item {
+    --background: var(--ion-color-light);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ion-label {
+    color: var(--ion-color-dark);
+}
+
+ion-input,
+ion-textarea {
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-dark);
+    margin: 10px 0;
+    --border-radius: 15px;
+}
+ion-input:focus, ion-textarea:focus{
+    --border-color: $accent-color-400;
+}
+.input-fill-outline.sc-ion-input-md-h, .textarea-fill-outline.sc-ion-textarea-md-h{
+    --border-radius: 15px;
+   
+}
+
+.day-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    padding: 0px 5px;
+    // background-color: $main-color-100;
+    --background: var(--ion-color-light);
+    border: 1px solid $main-color-300;
+
+    @media(prefers-color-scheme: dark) {
+        --background: var(--ion-color-light);
+        // background-color: #1f1f1f;
+        border: 1px solid $main-color-600;
+    }
+}
+
+
+
+ion-grid {
+
+    ion-button {
+        width: 20px;
+        height: 20px;
+        font-size: $font-size-md;
+        text-transform: none;
+        --background: transparent;
+        --color: #ccc;
+        --border-radius: 15px;
+    }
+
+    ion-button.selected {
+        // --background: $accent-color-400;
+        --background: hsl(249, 40%, 50%);
+        --color: white;
+    }
+}
+
+ion-button {
+    // --background: hsl(249, 86%, 67%);
+    background-color: $accent-color-400;
+    color: var(--ion-color-light);
+    margin: 10px 0;
+}
+
+ion-button.selected {
+    --background: var(--ion-color-secondary);
+    --color: var(--ion-color-light);
+}
+
+ion-checkbox {
+    --background: var(--ion-color-light);
+    --border-radius: 5px;
+}
+.color{
+    width: 50%;
+}
