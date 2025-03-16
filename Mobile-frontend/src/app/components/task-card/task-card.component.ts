@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitService } from 'src/app/services/habit.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HabitLog } from 'src/app/.models/HabitLog.model';
 
 @Component({
   selector: 'app-task-card',
@@ -19,8 +20,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
-
-  @Input() loadMoreHabits!: EventEmitter<void>; 
+  @Input() habitLogs: HabitLog[] = [];
+  @Input() loadMoreHabits!: EventEmitter<void>;
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
 
@@ -70,6 +71,13 @@ export class TaskCardComponent implements OnInit {
           } else {
             this.habits = [...this.habits, ...newHabits];
           }
+          if (this.habitLogs.length > 0) {
+
+            const habitLogIds = this.habitLogs.map(log => log.habitId);
+            this.habits = this.habits.filter(habit => habitLogIds.includes(habit.id));
+          }
+
+
           this.habits.forEach((habit) => {
             console.log(habit);
             if (!habit.color.startsWith('#')) {

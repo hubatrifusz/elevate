@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Habit } from '../.models/Habit.model';
+import { IonDatetime } from '@ionic/angular/standalone';
+import { HabitLog } from '../.models/HabitLog.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +26,19 @@ export class HabitService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<Habit[]>(this.apiUrl, { headers: headers, params: params });
+  }
+  getHabitLogs(userId: string, dueDate:IonDatetime): Observable<HabitLog[]> {
+    const token = localStorage.getItem('token');
+
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+
+    let params = new HttpParams()
+      .set('userId', userId.toString())
+      .set('dueDate', dueDate.toString());
+
+    return this.http.get<HabitLog[]>(`${this.apiUrl}log/${dueDate}`, { headers: headers, params: params });
   }
 
   createHabit(habitData: any): Observable<Habit> {

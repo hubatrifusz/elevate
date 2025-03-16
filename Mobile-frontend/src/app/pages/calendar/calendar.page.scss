@@ -1,0 +1,11 @@
+@use "../../../theme/variables" as *;
+@use "../../../theme/fab.scss" as *;
+
+ion-datetime {
+    margin: 20px auto;
+    border-radius: $border-radius;
+}
+
+.modal-content {
+    --ion-background-color: transparent;
+}
