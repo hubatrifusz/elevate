@@ -85,7 +85,7 @@ namespace Elevate.Services
 
             if (!signInResult.Succeeded)
             {
-                throw new InvalidPasswordException();
+                throw new WrongPasswordException();
             }
 
             var claims = new List<Claim>
