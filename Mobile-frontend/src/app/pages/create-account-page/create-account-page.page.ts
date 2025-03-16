@@ -31,6 +31,7 @@ export class CreateAccountPagePage implements OnInit {
   private auth = inject(AuthService);
   private http = inject(HttpClient);
   fb = inject(NonNullableFormBuilder)
+  
   form = this.fb.group({
     firstName: this.fb.control('', { validators: [Validators.required] }),
     lastName: this.fb.control('', { validators: [Validators.required] }),

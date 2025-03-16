@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitService } from 'src/app/services/habit.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-task-card',
@@ -18,11 +19,14 @@ import { HabitService } from 'src/app/services/habit.service';
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
-  @Input() loadMoreHabits!: EventEmitter<void>; // Remove initialization
-  // @Input() refreshHabits!: EventEmitter<void>; // Remove initialization
+
+  @Input() loadMoreHabits!: EventEmitter<void>; 
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
+
   private habitService = inject(HabitService);
+  private router = inject(Router);
+
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
@@ -43,19 +47,14 @@ export class TaskCardComponent implements OnInit {
       this.loadMore();
       console.log(this.hasMoreHabits)
     });
-    // this.refreshHabits.subscribe(() => {
-    //   this.hasMoreHabits = true;
-    //   this.pageNumber = 1;
-    //   this.loadHabits();
-    // });
   }
 
-  constructor(private router: Router) {
+  constructor() {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
   }
 
   loadHabits() {
-    const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+    const userId = localStorage.getItem('userId');
     console.log(userId);
     if (userId) {
       this.habitService.getHabits(userId, this.pageNumber, this.pageSize).subscribe(
@@ -66,20 +65,26 @@ export class TaskCardComponent implements OnInit {
             this.hasMoreHabitsChange.emit(this.hasMoreHabits);
           }
           if (this.pageNumber === 1) {
-            this.habits = newHabits; // Initial load
+            this.habits = newHabits;
             console.log('Habits loaded successfully');
           } else {
-            this.habits = [...this.habits, ...newHabits]; // Append new habits
+            this.habits = [...this.habits, ...newHabits];
           }
           this.habits.forEach((habit) => {
-            console.log(habit.frequencyType)
+            console.log(habit);
             if (!habit.color.startsWith('#')) {
               habit.color = '#' + habit.color;
             }
           });
         },
-        (error) => {
-          console.error('Error loading habits:', error);
+        (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.hasMoreHabits = false;
+            this.hasMoreHabitsChange.emit(this.hasMoreHabits);
+            console.log('No more habits to load');
+          } else {
+            console.error('Error loading habits:', error);
+          }
         }
       );
     } else {
@@ -108,6 +113,9 @@ export class TaskCardComponent implements OnInit {
     if (index !== -1) {
       this.habits[index] = { ...habit }; // Create a new object
     }
+
+    // Save the updated habit to the backend
+    this.editHabit(habit);
 
     console.log(habit.customFrequency);
     console.log(habit);
@@ -146,5 +154,38 @@ export class TaskCardComponent implements OnInit {
     );
   }
 
+  onDescriptionBlur(habit: Habit) {
+    console.log('Description:', habit.description);
+    this.editHabit(habit);
+  }
 
+  onFrequencyChange(habit: Habit, event: any) {
+    console.log('Frequency:', event.detail.value);
+    this.editHabit(habit);
+  }
+
+  onColorChange(habit: Habit, event: any) {
+    console.log('Color:', event.detail.value);
+    if (!event.detail.value.startsWith('#')) {
+      habit.color = '#' + event.detail.value;
+    }
+    this.editHabit(habit);
+  }
+
+  onPositiveChange(habit: Habit, event: any) {
+    console.log('Is Positive:', event.detail.checked);
+    this.editHabit(habit);
+  }
+  editHabit(habit: Habit) {
+    this.habitService.editHabit(habit).subscribe(
+      (response) => {
+        console.log('Habit edited successfully');
+        habit.color = "#" + habit.color;
+        console.log(response);
+      },
+      (error) => {
+        console.error('Error editing habit:', error);
+      }
+    );
+  }
 }

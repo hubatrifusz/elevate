@@ -27,17 +27,32 @@ export class HabitService {
   }
 
   createHabit(habitData: any): Observable<Habit> {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
     });
+    if (habitData.color.startsWith('#')) {
+      habitData.color = habitData.color.slice(1);
+    }
 
     return this.http.post<Habit>(this.apiUrl, habitData, { headers: headers });
   }
 
-  deleteHabit(id: string){
-    const token = localStorage.getItem('token'); 
+  editHabit(Editedhabit: Habit) {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+    if (Editedhabit.color.startsWith('#')) {
+      Editedhabit.color = Editedhabit.color.slice(1);
+    }
+    return this.http.patch(`${this.apiUrl}/${Editedhabit.id}`, Editedhabit, { headers: headers });
+
+  }
+
+  deleteHabit(id: string) {
+    const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token

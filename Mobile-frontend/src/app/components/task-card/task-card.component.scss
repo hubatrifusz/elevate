@@ -5,7 +5,8 @@ ion-accordion {
     --ion-safe-area-left: 0;
 
 }
-ion-content{
+
+ion-content {
     --background: none;
 }
 
@@ -204,7 +205,6 @@ ion-item {
     }
 
     ion-list {
-        margin: 0px 5px;
         background-color: transparent;
         --ion-background-color: transparent;
         font-size: $font-size-sm;
@@ -216,15 +216,23 @@ ion-item {
 
         }
 
-        ion-item {
-            border-radius: 15px;
-            align-items: center;
-            background-color: $main-color-100;
+    }
 
-
-            .item-inner {
-                margin: 10px;
-            }
+    ion-item {
+        border-radius: 15px;
+        align-items: center;
+        background-color: $main-color-100;
+        width: calc(100% - 10px);
+        margin: 10px auto;
+        .item-inner {
+            margin: 10px;
+        }
+        ion-label{
+            margin: 0 15px;
+        }
+        ion-input[type="color"]{
+            width: 50%;
         }
     }
+
 }
