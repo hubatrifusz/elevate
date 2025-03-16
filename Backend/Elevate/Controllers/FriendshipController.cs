@@ -42,7 +42,6 @@ namespace Elevate.Controllers
             {
                 UserPermissionUtility.IsCurrentUser(friendId, User);
             }
-            
             FriendshipDto deletedFriendship = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
             return Ok(deletedFriendship);
         }
