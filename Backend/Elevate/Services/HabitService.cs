@@ -22,10 +22,11 @@ namespace Elevate.Services
 
         public async Task<HabitDto> GetHabitByIdAsync(Guid habitId)
         {
-            HabitModel habitModel = await _habitRepository.GetHabitByIdAsync(habitId)
-                ?? throw new ResourceNotFoundException("Habit was not found.");
+            HabitModel? habitModel = await _habitRepository.GetHabitByIdAsync(habitId);
 
-            return _mapper.Map<HabitDto>(habitModel);
+            return habitModel == null
+                ? throw new ResourceNotFoundException("Habit was not found.")
+                : _mapper.Map<HabitDto>(habitModel);
         }
 
         public async Task<HabitDto> AddHabitAsync(HabitCreateDto habit)
@@ -55,10 +56,13 @@ namespace Elevate.Services
         {
             HabitModel habitToDelete = _mapper.Map<HabitModel>(habit);
 
-            HabitModel habitModel = await _habitRepository.DeleteHabitAsync(habitToDelete)
-                ?? throw new BadRequestException("Failed to delete habit.");
+            habitToDelete.Deleted = true;
 
-            return _mapper.Map<HabitDto>(habitModel);
+            HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(habitToDelete);
+
+            return habitModel == null
+                ? throw new BadRequestException("Failed to delete habit.")
+                : _mapper.Map<HabitDto>(habitModel);
         }
     }
 }

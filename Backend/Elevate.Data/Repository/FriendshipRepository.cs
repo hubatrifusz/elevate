@@ -18,6 +18,15 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
+        public async Task<bool> AreFriends(Guid userId, Guid friendId)
+        {
+            return await _context.Friendships
+                .AnyAsync(f =>
+                    (f.UserId == userId && f.FriendId == friendId) ||
+                    (f.UserId == friendId && f.FriendId == userId)
+                );
+        }
+
         public async Task<FriendshipModel?> AddFriendshipAsync(FriendshipModel friendship)
         {
             await _context.Friendships.AddAsync(friendship);

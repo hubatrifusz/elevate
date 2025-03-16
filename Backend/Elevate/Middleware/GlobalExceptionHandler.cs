@@ -39,15 +39,27 @@ namespace Elevate.Middleware
                     response = exception.Message;
                     break;
                 case AuthorizationException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    response = exception.Message;
+                    break;
+                case WrongPasswordException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     response = exception.Message;
                     break;
                 case InvalidPasswordException:
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     response = exception.Message;
                     break;
                 case ConnectionStringException:
                     httpContext.Response.StatusCode = (int)HttpStatusCode.FailedDependency;
+                    response = exception.Message;
+                    break;
+                case DuplicateUserException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                    response = exception.Message;
+                    break;
+                case NotFriendsException:
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     response = exception.Message;
                     break;
                 default:

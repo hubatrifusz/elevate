@@ -9,18 +9,20 @@ using System.Security.Claims;
 namespace Elevate.Services
 {
     public class UserService(UserRepository userRepository, IMapper mapper,
-        IConfiguration configuration) : IUserService
+        IConfiguration configuration, UserManager<ApplicationUser> userManager) : IUserService
     {
         private readonly UserRepository _userRepository = userRepository;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IMapper _mapper = mapper;
         private readonly JwtUtility _jwtUtility = new(configuration);
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
         {
-            ApplicationUser user = (await _userRepository.GetUsersByEmailAsync(email, 1, 1)).First()
-                ?? throw new ResourceNotFoundException("User was not found.");
+            ApplicationUser? user = (await _userRepository.GetUsersByEmailAsync(email, 1, 1)).FirstOrDefault();
 
-            return _mapper.Map<UserDto>(user);
+            return user == null 
+                ? throw new ResourceNotFoundException("User was not found.") 
+                : _mapper.Map<UserDto>(user);
         }
 
         public async Task<List<UserDto>> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)
@@ -34,15 +36,27 @@ namespace Elevate.Services
 
         public async Task<UserDto> GetUserByIdAsync(Guid userId)
         {
-            ApplicationUser user = await _userRepository.GetUserByIdAsync(userId)
-                ?? throw new ResourceNotFoundException("User was not found.");
+            ApplicationUser? user = await _userRepository.GetUserByIdAsync(userId);
 
-            return _mapper.Map<UserDto>(user);
+            return user == null
+                ? throw new ResourceNotFoundException("User was not found.")
+                : _mapper.Map<UserDto>(user);
         }
 
         public async Task<IdentityResultWithUser> AddUserAsync(UserCreateDto userCreateDto)
         {
             ApplicationUser user = _mapper.Map<ApplicationUser>(userCreateDto);
+            if ((await _userRepository.GetUsersByEmailAsync(user.Email!, 1, 1)).Count != 0)
+            {
+                throw new DuplicateUserException("Email is already taken.");
+            }
+
+            IdentityResult passwordValidationResult = await _userManager.PasswordValidators[0].ValidateAsync(_userManager, user, userCreateDto.Password);
+            if (!passwordValidationResult.Succeeded)
+            {
+                throw new InvalidPasswordException();
+            }
+
             user.UserName = user.Email;
             IdentityResult result = await _userRepository.CreateUserAsync(user, userCreateDto.Password)
                 ?? throw new BadRequestException("Failed to create user");
@@ -55,10 +69,11 @@ namespace Elevate.Services
             ApplicationUser user = _mapper.Map<ApplicationUser>(userUpdateDto);
                             user.Id = id;
 
-            ApplicationUser updatedUser = await _userRepository.UpdateUserAsync(user)
-                ?? throw new BadRequestException("Failed to update user.");
+            ApplicationUser? updatedUser = await _userRepository.UpdateUserAsync(user);
 
-            return _mapper.Map<UserDto>(updatedUser);
+            return updatedUser == null
+                ? throw new BadRequestException("Failed to update user.") 
+                : _mapper.Map<UserDto>(updatedUser);
         }
 
         public async Task<UserIdWithJWT> SignInAsync(UserDto user, string password, bool lockoutOnFailure)

@@ -33,6 +33,7 @@ namespace Elevate.Profiles
             CreateMap<HabitModel, HabitDto>();
             CreateMap<HabitCreateDto, HabitModel>();
             CreateMap<HabitUpdateDto, HabitModel>();
+            CreateMap<HabitDto, HabitModel>();
 
             CreateMap<HabitLogModel, HabitLogDto>();
             CreateMap<HabitLogCreateDto, HabitLogModel>();

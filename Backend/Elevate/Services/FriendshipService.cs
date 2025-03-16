@@ -20,6 +20,11 @@ namespace Elevate.Services
                 : _mapper.Map<List<UserDto>>(users);
         }
 
+        public async Task<bool> AreFriends(Guid userId, Guid friendId)
+        {
+            return await _friendshipRepository.AreFriends(userId, friendId);
+        }
+
         public async Task<FriendshipDto> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
         {
             FriendshipModel friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
@@ -31,6 +36,11 @@ namespace Elevate.Services
 
         public async Task<FriendshipDto> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
+            if(!await AreFriends(userId, friendId))
+            {
+                throw new NotFriendsException();
+            }
+
             FriendshipModel friendship = await _friendshipRepository.DeleteFriendshipAsync(userId, friendId)
                 ?? throw new ResourceNotFoundException("Failed to remove friend.");
 
