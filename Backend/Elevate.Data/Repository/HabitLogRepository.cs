@@ -32,9 +32,17 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitLogModel?> UpdateHabitLogAsync(HabitLogModel habitLog)
         {
-            _context.HabitLogs.Update(habitLog);
-            await _context.SaveChangesAsync();
-            return await GetHabitLogByIdAsync(habitLog.Id);
+            var existingHabitLog = await GetHabitLogByIdAsync(habitLog.Id);
+
+            if (existingHabitLog != null)
+            {
+                _context.Entry(existingHabitLog).CurrentValues.SetValues(habitLog);
+
+                await _context.SaveChangesAsync();
+                return existingHabitLog;
+            }
+
+            return null;
         }
 
         public async Task<HabitLogModel?> DeleteHabitLogAsync(HabitLogModel habitLogToDelete)
