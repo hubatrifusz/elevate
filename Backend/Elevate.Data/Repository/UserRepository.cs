@@ -19,7 +19,7 @@ namespace Elevate.Data.Repository
 
         public async Task<ApplicationUser?> GetUserByIdAsync(Guid userId)
         {
-            return await _context.ApplicationUsers.SingleAsync(u => u.Id == userId);
+            return await _context.ApplicationUsers.SingleOrDefaultAsync(u => u.Id == userId);
         }
 
         public async Task<List<ApplicationUser>> GetUsersByEmailAsync(string email, int pageNumber, int pageSize)

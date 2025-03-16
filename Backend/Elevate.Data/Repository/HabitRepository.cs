@@ -12,7 +12,7 @@ namespace Elevate.Data.Repository
         public async Task<List<HabitModel>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
             return await _context.Habits
-                .Where(h => h.UserId == userId)
+                .Where(h => h.UserId == userId && !h.Deleted)
                 .OrderBy(h => h.CreatedAt)
                 .ApplyPagination(pageNumber, pageSize)
                 .ToListAsync();
@@ -20,12 +20,13 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
         {
-            return await _context.Habits.FindAsync(habitId);
+            var habit = await _context.Habits.FindAsync(habitId);
+            return habit?.Deleted == true ? null : habit;
         }
 
         public async Task<List<HabitModel>> GetAllHabitsAsync()
         {
-            return await _context.Habits.ToListAsync();
+            return await _context.Habits.Where(h => !h.Deleted).ToListAsync();
         }
 
         public async Task<HabitModel?> AddHabitAsync(HabitModel habit)
@@ -37,16 +38,17 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitModel?> UpdateHabitAsync(HabitModel habit)
         {
-            _context.Habits.Update(habit);
-            await _context.SaveChangesAsync();
-            return await GetHabitByIdAsync(habit.Id);
-        }
+            var existingHabit = await GetHabitByIdAsync(habit.Id);
 
-        public async Task<HabitModel?> DeleteHabitAsync(HabitModel habit) 
-        {
-            _context.Habits.Remove(habit);
-            await _context.SaveChangesAsync();
-            return habit;
+            if (existingHabit != null)
+            {
+                _context.Entry(existingHabit).CurrentValues.SetValues(habit);
+
+                await _context.SaveChangesAsync();
+                return existingHabit;
+            }
+
+            return null;
         }
     }
 }

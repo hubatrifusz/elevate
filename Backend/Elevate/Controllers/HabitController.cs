@@ -16,8 +16,8 @@ namespace Elevate.Controllers
         [HttpGet]
         public async Task<ActionResult<List<HabitDto>>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            List<HabitDto> habits = await _habitService.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
             UserPermissionUtility.IsCurrentUser(userId, User);
+            List<HabitDto> habits = await _habitService.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
             return Ok(habits);
         }
 
