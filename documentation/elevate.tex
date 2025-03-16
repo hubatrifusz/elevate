@@ -13,6 +13,18 @@
 \renewcommand{\theFancyVerbLine}{\textcolor{gray!50}{\scriptsize\arabic{FancyVerbLine}}}
 \renewcommand{\contentsname}{Tartalomjegyzék}
 
+\definecolor{getColor}{HTML}{4CAF50}
+\definecolor{postColor}{HTML}{2196F3}
+\definecolor{patchColor}{HTML}{FF9800}
+\definecolor{deleteColor}{HTML}{F44336}
+\definecolor{putColor}{HTML}{9C27B0}
+
+\newcommand{\httpGet}[1]{\colorbox{getColor}{\textbf{\textcolor{white}{GET}}}~#1}
+\newcommand{\httpPost}[1]{\colorbox{postColor}{\textbf{\textcolor{white}{POST}}}~#1}
+\newcommand{\httpPatch}[1]{\colorbox{patchColor}{\textbf{\textcolor{white}{PATCH}}}~#1}
+\newcommand{\httpDelete}[1]{\colorbox{deleteColor}{\textbf{\textcolor{white}{DELETE}}}~#1}
+\newcommand{\httpPut}[1]{\colorbox{putColor}{\textbf{\textcolor{white}{PUT}}}~#1}
+
 \titleformat{\chapter}
   {\normalfont\Huge\bfseries}
   {\thechapter.}
@@ -77,9 +89,13 @@
 \tableofcontents
 
 \chapter{A projektről}
-A téma kiválasztásánál arra törekedtünk, hogy egy, a hétköznapi élet során alkalmazható szoftvert készítsünk. Több opció is felmerült, azonban végül egy szokásformáló felület mellett döntöttünk, amit Elevate-nek neveztünk el, az egészséges, felemelő életmód jegyében. Az Elevate ösztönzi a felhasználókat, hogy új, pozitív szokásokat vezessenek be, miközben hatékonyan követhetik saját fejlődésüket, emellett hozzájárul életminőségük javításához és a fenntart-ható fejlődéshez.
+\begin{sloppypar}
+A téma kiválasztásánál arra törekedtünk, hogy egy, a hétköznapi élet során alkalmazható szoftvert készítsünk. Több opció is felmerült, azonban végül egy szokásformáló felület mellett döntöttünk, amit Elevate-nek neveztünk el, az egészséges, felemelő életmód jegyében. Az Elevate ösztönzi a felhasználó-kat, hogy új, pozitív szokásokat vezessenek be, miközben hatékonyan követhetik saját fejlődésüket, emellett hozzájárul életminőségük javításához és a fenntart-ható fejlődéshez.
+\end{sloppypar}
 \section{Az Elevate célja}
-A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását és különféle jutalmakat kap, ha tartja a felállított célját. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Egy szokás tartásához elengedhetetlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben jeleníti meg a teendőket és emlékeztet azok elvégzésére. 
+\begin{sloppypar}
+A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását és különféle jutal-makat kap, ha tartja a felállított célját. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Egy szokás tartásához elengedhet-etlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben jeleníti meg a teendőket és emlékeztet azok elvégzésére. 
+\end{sloppypar}
 \chapter{Weboldal}
 \chapter{Mobil Applikáció}
 \chapter{Adatbázis}
@@ -91,7 +107,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 \subsection{Autentikáció}
 \begin{description}
 
-  \item [\textbf{POST /api/auth/register}] - Regisztráció
+  \item [\httpPost{/api/auth/register}] - Regisztráció
   
     \vspace{0.5cm}
     \textbf{Request body:}
@@ -129,10 +145,25 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
 
       \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
-      %\item \textbf{409 Conflict} - A megadott e-mail cím vagy felhasználónév már foglalt
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Password must contain at least 12 characters, an uppercase letter, a number and a symbol."
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{409 Conflict} - A megadott e-mail cím vagy felhasználónév már foglalt
+        
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Email is already taken."
+          \end{minted}
+        \end{codeblock}
     \end{itemize}
 
-  \item [\textbf{POST /api/auth/login}] - Bejelentkezés
+  \item [\httpPost{/api/auth/login}] - Bejelentkezés
   
     \vspace{0.5cm}
     \textbf{Request body:}
@@ -176,7 +207,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 \vspace{0.5cm}
 \subsection{Felhasználó}
 \begin{description}
-  \item[\textbf{GET /api/user}] - Felhasználók lekérdezése email alapján
+  \item[\httpGet{/api/user}] - Felhasználók lekérdezése email alapján
   
     \vspace{0.5cm}
     Keresés email cím részlet alapján. A lekérdezés oldalanként maximum 20 felhasználót ad vissza.
@@ -220,7 +251,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
       \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{GET /api/user/\{id\}}] - Felhasználó lekérdezése azonosító alapján
+  \item[\httpGet{/api/user/\{id\}}] - Felhasználó lekérdezése azonosító alapján
 
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -257,7 +288,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-    \item[\textbf{PATCH /api/user/\{id\}}] - Felhasználó módosítása azonosító alapján
+    \item[\httpPatch{/api/user/\{id\}}] - Felhasználó módosítása azonosító alapján
 
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -297,6 +328,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
 
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -311,7 +344,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
 \subsection{Barátok}
 \begin{description}
-  \item[\textbf{GET /api/friendship/\{userId\}/friends}] - Barátok lekérdezése
+  \item[\httpGet{/api/friendship/\{userId\}/friends}] - Barátok lekérdezése
 
     \vspace{0.5cm}
     A felhasználó barátainak lekérdezése a felhasználó azonosítója alapján.
@@ -352,7 +385,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{POST /api/friendship}] - Barát hozzáadása
+  \item[\httpPost{/api/friendship}] - Barát hozzáadása
   
     \vspace{0.5cm}
     \textbf{Request body:}
@@ -386,6 +419,9 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
 
       \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -396,7 +432,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{DELETE /api/friendship}] - Barát törlése
+  \item[\httpDelete{/api/friendship}] - Barát törlése
   
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -425,7 +461,10 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
 
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -439,7 +478,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
 \subsection{Szokások}
 \begin{description}
-  \item[\textbf{GET /api/habit}] - Szokások lekérdezése
+  \item[\httpGet{/api/habit}] - Szokások lekérdezése
 
     \vspace{0.5cm}
     A felhasználó szokásainak lekérdezése a felhasználó azonosítója alapján.
@@ -477,6 +516,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
 
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{404 Not Found} - Nincs találat
       
         \textbf{Response body:}
@@ -487,7 +528,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{GET /api/habit/\{id\}}] - Szokás lekérdezése
+  \item[\httpGet{/api/habit/\{id\}}] - Szokás lekérdezése
   
   \vspace{0.5cm}
   Szokás lekérdezése azonosító alapján.
@@ -523,6 +564,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{minted}
       \end{codeblock}
 
+    \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
     \item \textbf{404 Not Found} - Nincs találat
 
       \textbf{Response body:}
@@ -533,7 +576,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
       \end{codeblock}
   \end{itemize}
 
-  \item[\textbf{POST /api/habit}] - Szokás hozzáadása
+  \item[\httpPost{/api/habit}] - Szokás hozzáadása
   
     \vspace{0.5cm}
     \textbf{Request body:}
@@ -580,7 +623,11 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
 
       \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
-      \item \textbf{403 Forbidden} - A megadott azonosító nem egyezik a bejelentkezett felhasználóéval
+      
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{403 Forbidden} - A megadott azonosító nem egyezik a 
+      \hfill \\ bejelentkezett felhasználóéval
       
         \textbf{Response body:}
         \begin{codeblock}{JSON}
@@ -590,7 +637,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{PATCH /api/habit/\{id\}}] - Szokás módosítása
+  \item[\httpPatch{/api/habit/\{id\}}] - Szokás módosítása
   
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -639,6 +686,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
     
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -649,7 +698,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[\textbf{DELETE /api/habit/\{id\}}] - Szokás törlése
+  \item[\httpDelete{/api/habit/\{id\}}] - Szokás törlése
   
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -682,6 +731,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
 
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -695,7 +746,192 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
 \subsection{Szokás napló}
 \begin{description}
-  \item[] 
+  \item[\httpGet{/api/habitLog}] - Szokás naplók lekérdezése
+  
+    \vspace{0.5cm}
+    A szokás naplók lekérdezése a szokás azonosítója alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A szokás azonosítója
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt naplók száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"No log was found for the provided habit."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/habitLog/\{id\}}] - Szokás napló lekérdezése
+  
+    \vspace{0.5cm}
+    Szokás napló lekérdezése azonosító alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás napló azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit log was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/habitlog/\{dueDate\}}] 
+  \hfill \\ - Szokás napló lekérdezése határidő alapján
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+      \item \textbf{dueDate: string(\$date)} - A szokás napló dátuma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"No habit log was found with the provided due date."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[httpPatch{/api/habitLog/\{id\}}] - Szokás napló módosítása
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás napló azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "completed": bool,
+  "completedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedDate": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json} 
+"Habit log was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
 \end{description}
 
 \chapter{Tesztelés}

@@ -2,7 +2,6 @@
 
 *.aux
 *.log
-*.pdf
 *.fls
 *.toc
 *.synctex.gz
