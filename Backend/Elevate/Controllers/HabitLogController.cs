@@ -42,7 +42,7 @@ namespace Elevate.Controllers
         {
             HabitLogDto habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
             UserPermissionUtility.IsCurrentUser(habitLog.UserId, User);
-            HabitLogDto updatedHabitLog = await _habitLogService.UpdateHabitLogAsync(id, habitLogUpdateDto);
+            HabitLogDto updatedHabitLog = await _habitLogService.UpdateHabitLogAsync(habitLog, habitLogUpdateDto);
             return Ok(updatedHabitLog);
         }
 

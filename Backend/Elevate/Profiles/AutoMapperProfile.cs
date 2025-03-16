@@ -33,11 +33,17 @@ namespace Elevate.Profiles
             CreateMap<HabitModel, HabitDto>();
             CreateMap<HabitCreateDto, HabitModel>();
             CreateMap<HabitUpdateDto, HabitModel>();
+            CreateMap<HabitUpdateDto, HabitModel>()
+                .ForAllMembers(opts => opts
+                .Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<HabitDto, HabitModel>();
 
             CreateMap<HabitLogModel, HabitLogDto>();
             CreateMap<HabitLogCreateDto, HabitLogModel>();
-            CreateMap<HabitLogUpdateDto, HabitLogModel>();
+            CreateMap<HabitLogUpdateDto, HabitLogModel>()
+                .ForAllMembers(opts => opts
+                .Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<HabitLogDto, HabitLogModel>();
 
             CreateMap<AchievementModel, AchievementDto>();
             CreateMap<AchievementProgressModel, AchievementProgressDto>();

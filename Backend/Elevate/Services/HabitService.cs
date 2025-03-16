@@ -2,6 +2,7 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Habit;
+using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
 {
@@ -42,11 +43,14 @@ namespace Elevate.Services
 
         public async Task<HabitDto> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
         {
-            HabitModel habitModel = _mapper.Map<HabitModel>(habitUpdateDto);
-                       habitModel.Id = id;
+            HabitModel existingHabit = await _habitRepository.GetHabitByIdAsync(id)
+                ?? throw new ResourceNotFoundException("Habit was not found.");
 
-            HabitModel updatedHabit = await _habitRepository.
-                UpdateHabitAsync(habitModel)
+            HabitModel habitModel = _mapper.Map<HabitModel>(existingHabit);
+
+            _mapper.Map(habitUpdateDto, habitModel);
+
+            HabitModel updatedHabit = await _habitRepository.UpdateHabitAsync(habitModel)
                 ?? throw new BadRequestException("Failed to update habit.");
 
             return _mapper.Map<HabitDto>(updatedHabit);
