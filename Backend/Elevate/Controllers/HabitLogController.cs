@@ -45,14 +45,5 @@ namespace Elevate.Controllers
             HabitLogDto updatedHabitLog = await _habitLogService.UpdateHabitLogAsync(habitLog, habitLogUpdateDto);
             return Ok(updatedHabitLog);
         }
-
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult<HabitLogDto>> DeleteHabitLogAsync(Guid id)
-        {
-            HabitLogDto habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
-            UserPermissionUtility.IsCurrentUser(habitLog.UserId, User);
-            HabitLogDto deletedHabitLog = await _habitLogService.DeleteHabitLogAsync(habitLog);
-            return Ok(deletedHabitLog);
-        }
     }
 }
