@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
+using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
@@ -57,10 +58,13 @@ namespace Elevate.Services
         public async Task<HabitLogDto> DeleteHabitLogAsync(HabitLogDto habitLog)
         {
             HabitLogModel habitLogToDelete = _mapper.Map<HabitLogModel>(habitLog);
-            HabitLogModel habitLogModel = await _habitLogRepository.DeleteHabitLogAsync(habitLogToDelete)
-                ?? throw new BadRequestException("Failed to delete habit log.");
+            habitLogToDelete.Deleted = true;
 
-            return _mapper.Map<HabitLogDto>(habitLogModel);
+            HabitLogModel? habitLogModel = await _habitLogRepository.UpdateHabitLogAsync(habitLogToDelete);
+
+            return habitLogModel == null
+                ? throw new BadRequestException("Failed to delete habit log.")
+                : _mapper.Map<HabitLogDto>(habitLogModel);
         }
     }
 }
