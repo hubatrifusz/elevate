@@ -12,7 +12,7 @@ namespace Elevate.Data.Repository
         public async Task<List<HabitLogModel>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
             return await _context.HabitLogs
-                .Where(hl => hl.HabitId == habitId)
+                .Where(hl => hl.HabitId == habitId && !hl.Deleted)
                 .OrderBy(hl => hl.DueDate)
                 .ApplyPagination(pageNumber, pageSize)
                 .ToListAsync();
@@ -20,13 +20,14 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitLogModel?> GetHabitLogByIdAsync(Guid habitLogId)
         {
-            return await _context.HabitLogs.FindAsync(habitLogId);
+            HabitLogModel? habitLog = await _context.HabitLogs.FindAsync(habitLogId);
+            return habitLog?.Deleted == true ? null : habitLog;
         }
 
         public async Task<List<HabitLogModel>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
         {
             return await _context.HabitLogs
-                .Where(hl => hl.UserId == userId && hl.DueDate.Date == dueDate.Date)
+                .Where(hl => hl.UserId == userId && !hl.Deleted && hl.DueDate.Date == dueDate.Date)
                 .ToListAsync();
         }
 
@@ -43,13 +44,6 @@ namespace Elevate.Data.Repository
             }
 
             return null;
-        }
-
-        public async Task<HabitLogModel?> DeleteHabitLogAsync(HabitLogModel habitLogToDelete)
-        {
-            _context.HabitLogs.Remove(habitLogToDelete);
-            await _context.SaveChangesAsync();
-            return habitLogToDelete;
         }
     }
 }

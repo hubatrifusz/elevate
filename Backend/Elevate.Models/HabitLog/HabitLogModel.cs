@@ -10,5 +10,6 @@
         public DateTime? CompletedAt { get; set; }
         public string? Notes { get; set; }
         public required bool IsPublic { get; set; } = false;
+        public bool Deleted { get; set; } = false;
     }
 }

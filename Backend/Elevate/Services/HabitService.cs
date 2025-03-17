@@ -6,9 +6,15 @@ using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
 {
-    public class HabitService(HabitRepository habitRepository, IHabitLogGeneratorService habitLogGeneratorService, IMapper mapper) : IHabitService
+    public class HabitService(
+        HabitRepository habitRepository, 
+        HabitLogRepository habitLogRepository, 
+        IHabitLogGeneratorService habitLogGeneratorService, 
+        IMapper mapper)
+        : IHabitService
     {
         private readonly HabitRepository _habitRepository = habitRepository;
+        private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
         private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
         private readonly IMapper _mapper = mapper;
 
@@ -62,11 +68,34 @@ namespace Elevate.Services
 
             habitToDelete.Deleted = true;
 
+            await DeleteAllHabitLogsForHabitAsync(habitToDelete.Id);
+
             HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(habitToDelete);
 
             return habitModel == null
                 ? throw new BadRequestException("Failed to delete habit.")
                 : _mapper.Map<HabitDto>(habitModel);
+        }
+
+        private async Task DeleteAllHabitLogsForHabitAsync(Guid habitId)
+        {
+            int pageNumber = 1;
+            const int batchSize = 20;
+            List<HabitLogModel> habitLogs;
+
+            do
+            {
+                habitLogs = await _habitLogRepository.GetHabitLogsByHabitIdAsync(habitId, pageNumber, batchSize);
+
+                foreach (var log in habitLogs)
+                {
+                    log.Deleted = true;
+                    await _habitLogRepository.UpdateHabitLogAsync(log);
+                }
+
+                pageNumber++;
+            }
+            while (habitLogs.Count == batchSize);
         }
     }
 }

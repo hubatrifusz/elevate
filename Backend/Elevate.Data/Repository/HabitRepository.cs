@@ -20,7 +20,7 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
         {
-            var habit = await _context.Habits.FindAsync(habitId);
+            HabitModel? habit = await _context.Habits.FindAsync(habitId);
             return habit?.Deleted == true ? null : habit;
         }
 
