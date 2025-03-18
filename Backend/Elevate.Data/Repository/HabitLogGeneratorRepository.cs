@@ -66,7 +66,7 @@ namespace Elevate.Data.Repository
                         break;
 
                     case FrequencyEnum.Weekly:
-                        includeDate = currentDate.DayOfWeek == DayOfWeek.Monday;
+                        includeDate = currentDate.DayOfWeek == startDate.DayOfWeek;
                         break;
 
                     case FrequencyEnum.Monthly:
@@ -135,12 +135,14 @@ namespace Elevate.Data.Repository
 
         private HabitLogModel CreateLog(HabitModel habit, DateTime date)
         {
+            var dueDateTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
             return new HabitLogModel
             {
                 Id = Guid.NewGuid(),
                 UserId = habit.UserId,
                 HabitId = habit.Id,
-                DueDate = date,
+                DueDate = dueDateTime,
                 Completed = false,
                 CompletedAt = null,
                 Notes = null,
