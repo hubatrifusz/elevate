@@ -28,7 +28,7 @@
 
     <h1 class="styled-heading">Control all your tasks in one place</h1>
 
-    <app-task-card  [loadMoreHabits]="loadMoreHabits" (hasMoreHabitsChange)="hasMoreHabits = $event"></app-task-card>
+    <app-task-card [habitlogsDate]="null"  [loadMoreHabits]="loadMoreHabits" (hasMoreHabitsChange)="hasMoreHabits = $event"></app-task-card>
 
 
     <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="!hasMoreHabits">

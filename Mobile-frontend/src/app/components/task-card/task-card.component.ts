@@ -20,10 +20,11 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
-  @Input() habitLogs: HabitLog[] = [];
   @Input() loadMoreHabits!: EventEmitter<void>;
+  @Input() habitlogsDate: string | null = null;
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
+  habitLogs: HabitLog[] = [];
 
   private habitService = inject(HabitService);
   private router = inject(Router);
@@ -43,11 +44,17 @@ export class TaskCardComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.loadHabits();
-    this.loadMoreHabits.subscribe(() => {
-      this.loadMore();
-      console.log(this.hasMoreHabits)
-    });
+    if (this.habitlogsDate) {
+      console.log(`Loading tasks for date: ${this.habitlogsDate}`);
+      this.loadHabitLogs();
+    } else {
+      this.loadHabits();
+      this.loadMoreHabits.subscribe(() => {
+        this.loadMore();
+        console.log(this.hasMoreHabits)
+      });
+
+    }
   }
 
   constructor() {
@@ -55,6 +62,7 @@ export class TaskCardComponent implements OnInit {
   }
 
   loadHabits() {
+
     const userId = localStorage.getItem('userId');
     console.log(userId);
     if (userId) {
@@ -71,12 +79,6 @@ export class TaskCardComponent implements OnInit {
           } else {
             this.habits = [...this.habits, ...newHabits];
           }
-          if (this.habitLogs.length > 0) {
-
-            const habitLogIds = this.habitLogs.map(log => log.habitId);
-            this.habits = this.habits.filter(habit => habitLogIds.includes(habit.id));
-          }
-
 
           this.habits.forEach((habit) => {
             console.log(habit);
@@ -102,9 +104,78 @@ export class TaskCardComponent implements OnInit {
 
   loadMore() {
     this.pageNumber++;
-    this.loadHabits();
+    if (this.habitlogsDate != null) {
+      this.loadHabitLogs();
+    }
+    else {
+
+      this.loadHabits();
+    }
   }
 
+  // loadHabitLogs() {
+  //   const userId = localStorage.getItem('userId');
+  //   if (userId && this.habitlogsDate) {
+  //     this.habitService.getTodaysHabitlogs(this.habitlogsDate).subscribe(
+  //       (newHabits) => {
+  //         if (newHabits.length === 0) {
+  //           this.hasMoreHabits = false;
+  //           console.log('No more habits to load');
+  //           this.hasMoreHabitsChange.emit(this.hasMoreHabits);
+  //         }
+  //         if (this.pageNumber === 1) {
+  //           this.habits = newHabits;
+  //           console.log('Habits loaded successfully');
+  //         } else {
+  //           this.habits = [...this.habits, ...newHabits];
+  //         }
+
+  //         this.habits.forEach((habit) => {
+  //           console.log(habit);
+  //           if (!habit.color.startsWith('#')) {
+  //             habit.color = '#' + habit.color;
+  //           }
+  //         });
+  //       },
+  //       (error: HttpErrorResponse) => {
+  //         if (error.status === 404) {
+  //           this.hasMoreHabits = false;
+  //           this.hasMoreHabitsChange.emit(this.hasMoreHabits);
+  //           console.log('No more habits to load');
+  //         } else {
+  //           console.error('Error loading habits:', error);
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
+  loadHabitLogs() {
+    const userId = localStorage.getItem('userId');
+    if (userId && this.habitlogsDate) {
+      this.habitService.getTodaysHabitlogs(this.habitlogsDate).subscribe({
+        next: (responce) => (this.habitLogs = responce as HabitLog[]),
+        error: (error) => (console.log(error)),
+        complete: () => {
+          this.habitLogs.forEach((habitlog) => {
+            this.getHabitByID(habitlog.habitId);
+          });
+        },
+      })
+    }
+  }
+
+  getHabitByID(habitId: string) {
+    this.habitService.getHabitByID(habitId).subscribe({
+      next: (responce) => {
+        this.habits.push(responce as Habit);
+        this.habits.forEach((habit) => {
+          if (!habit.color.startsWith('#')) {
+            habit.color = '#' + habit.color;
+        }});
+      },
+      error: (error) => (console.log(error)),
+    })
+  }
   toggleDay(habit: Habit, dayIndex: number) {
     if (habit.customFrequency == null) {
       console.log('customFrequency is null or undefined');

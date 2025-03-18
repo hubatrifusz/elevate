@@ -1,18 +1,20 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
 import { HabitService } from 'src/app/services/habit.service';
 import { HabitLog } from 'src/app/.models/HabitLog.model';
+import { addIcons } from 'ionicons';
+import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
   standalone: true,
-  imports: [IonAvatar,
+  imports: [IonInfiniteScroll, IonInfiniteScrollContent, IonText, IonAvatar,
     IonButton,
     IonContent,
     IonHeader,
@@ -26,27 +28,59 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
     IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent]
 })
 export class CalendarPage implements OnInit {
+
+
   selectedDate: IonDatetime | null = null;
   private habitService = inject(HabitService);
   private modalController = inject(ModalController);
-   habitLogs: HabitLog[] = [];
-  
-  constructor(private menuCtrl: MenuController) { }
+  habitLogs: HabitLog[] = [];
+
+  @Output() loadMoreHabits = new EventEmitter<void>();
+  @Output() refreshHabits = new EventEmitter<void>();
+  public hasMoreHabits: boolean = true;
+
+  date = new Date();
+  datestring = this.date.toISOString()
+  weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
+  dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+  constructor(private menuCtrl: MenuController) {
+    addIcons({ chevronBackOutline, chevronForwardOutline });
+  }
 
   ngOnInit() {
+    console.log(this.date.toString());
   }
 
-  onDateChange(event: any) {
-
-    this.selectedDate = event.detail.value;
-    console.log('Selected Date:', this.selectedDate);
-    const userId = localStorage.getItem('userId');
-    if (this.selectedDate && userId) {
-
-      this.habitService.getHabitLogs(userId, this.selectedDate).subscribe((habits) => {
-        console.log(habits);
-      });
-    }
-
+  previousDay() {
+    this.date.setDate(this.date.getDate() - 1);
+    this.updateDateDisplay();
   }
+
+  nextDay() {
+    this.date.setDate(this.date.getDate() + 1);
+    this.updateDateDisplay();
+  }
+  updateDateDisplay() {
+    this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
+    this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+
+    // this.getTodaysHabitlogs(this.date.toISOString());
+    // this.habitService.getTodaysHabitlogs(this.date.toISOString());
+  }
+  onIonInfinite(event: InfiniteScrollCustomEvent) {
+    // console.log('Infinite scroll triggered');
+    this.loadMoreHabits.emit();
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
+  }
+
+  handleRefresh(event: CustomEvent) {
+    setTimeout(() => {
+      // Any calls to load data go here
+      window.location.reload();
+      (event.target as HTMLIonRefresherElement).complete();
+    }, 200);
+  }
+
 }

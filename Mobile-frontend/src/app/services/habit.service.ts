@@ -27,18 +27,24 @@ export class HabitService {
 
     return this.http.get<Habit[]>(this.apiUrl, { headers: headers, params: params });
   }
-  getHabitLogs(userId: string, dueDate:IonDatetime): Observable<HabitLog[]> {
+  getHabitByID(habitId: string): Observable<any> {
     const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
     });
 
-    let params = new HttpParams()
-      .set('userId', userId.toString())
-      .set('dueDate', dueDate.toString());
+    return this.http.get(`${this.apiUrl}/${habitId}`, { headers: headers });
+  }
+  getTodaysHabitlogs(date: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+    const userId = localStorage.getItem('userId') ?? '';
+    const params = new HttpParams().set('userId', userId);
 
-    return this.http.get<HabitLog[]>(`${this.apiUrl}log/${dueDate}`, { headers: headers, params: params });
+    return this.http.get(`http://localhost:8080/api/habitlog/${date}`, { headers: headers, params: params });
   }
 
   createHabit(habitData: any): Observable<Habit> {

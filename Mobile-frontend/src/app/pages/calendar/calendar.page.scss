@@ -1,11 +1,30 @@
 @use "../../../theme/variables" as *;
 @use "../../../theme/fab.scss" as *;
 
-ion-datetime {
-    margin: 20px auto;
-    border-radius: $border-radius;
+
+.date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // gap: 10px;
+    margin: 10px 0px;
+    background: var(--ion-color-light);
+    padding: 10px;
+    border-radius: 8px;
 }
 
-.modal-content {
-    --ion-background-color: transparent;
+.date-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 16px;
+}
+
+ion-button {
+    --color: gray;
+    --padding-start: 8px;
+    --padding-end: 8px;
+}
+ion-header{
+    height: fit-content;
 }
