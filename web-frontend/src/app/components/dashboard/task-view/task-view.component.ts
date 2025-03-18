@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TaskComponent } from '../task/task.component';
 import { AuthService } from '../../../services/auth.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Habit } from '../../../models/habit.model';
 import { AlertService } from '../../../services/alert.service';
 import { UserService } from '../../../services/user.service';
@@ -19,20 +19,30 @@ export class TaskViewComponent {
   userId = localStorage.getItem('id');
   habitlogList: HabitLog[] = [];
   habitList: Habit[] = [];
+  date = new Date();
+  weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
+  dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
 
   addNewTaskForm = new FormGroup({
-    title: new FormControl(''),
+    title: new FormControl('', [Validators.required]),
     userID: new FormControl(localStorage.getItem('id')),
-    description: new FormControl(''),
-    frequencyType: new FormControl('Daily'),
-    customFrequency: new FormControl(0),
-    color: new FormControl('blue'),
+    description: new FormControl('', [Validators.required]),
+    frequencyType: new FormControl('', [Validators.required]),
+    customFrequency: new FormControl(0), //TODO
+    color: new FormControl('blue', [Validators.required]),
     isPositive: new FormControl(true),
   });
 
   ngOnInit() {
-    const today = new Date().toISOString();
-    this.getTodaysHabitlogs(today);
+    this.getTodaysHabitlogs(this.date.toISOString());
+  }
+
+  onSubmit() {
+    if (!this.addNewTaskForm.valid) {
+      console.log('form is not valid');
+      return;
+    }
+    this.addNewHabit();
   }
 
   getHabitByID(habitId: string) {
@@ -45,7 +55,7 @@ export class TaskViewComponent {
   addNewHabit() {
     this.userService.addNewHabit(this.addNewTaskForm.value).subscribe({
       next: (response) => this.habitList.push(response as Habit),
-      error: (error) => alert(error),
+      error: (error) => console.log(error),
     });
 
     this.toggleFormVisibility();
@@ -65,6 +75,9 @@ export class TaskViewComponent {
   }
 
   getTodaysHabitlogs(today: string) {
+    this.habitlogList = [];
+    this.habitList = [];
+
     this.userService.getTodaysHabitlogs(today).subscribe({
       next: (response) => (this.habitlogList = response as HabitLog[]),
       error: (error) => console.log(error),
@@ -87,5 +100,22 @@ export class TaskViewComponent {
   isVisible: boolean = false;
   toggleFormVisibility() {
     this.isVisible = !this.isVisible;
+  }
+
+  previousDay() {
+    this.date.setDate(this.date.getDate() - 1);
+    this.updateDateDisplay();
+  }
+
+  nextDay() {
+    this.date.setDate(this.date.getDate() + 1);
+    this.updateDateDisplay();
+  }
+
+  updateDateDisplay() {
+    this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
+    this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+
+    this.getTodaysHabitlogs(this.date.toISOString());
   }
 }

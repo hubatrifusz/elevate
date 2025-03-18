@@ -62,7 +62,7 @@ export class UserService {
     const userId = localStorage.getItem('id') ?? '';
     const params = new HttpParams().set('userId', userId);
 
-    return this.http.get(`${this.apiUrl}/habitlog/duedate/${date}`, {
+    return this.http.get(`${this.apiUrl}/habitlog/${date}`, {
       params,
       headers: {
         Authorization: `Bearer ${this.token}`,
