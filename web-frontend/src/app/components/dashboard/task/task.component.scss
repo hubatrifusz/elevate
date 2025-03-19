@@ -17,6 +17,8 @@
     align-items: center;
     justify-content: space-between;
 
+    z-index: 2;
+
     position: absolute;
 
     height: 5rem;
@@ -82,14 +84,25 @@
   }
 
   #task_details_container {
+    position: relative;
     width: 45rem;
     height: 5rem;
+
+    z-index: 1;
 
     padding: 5rem 1rem 0 1rem;
 
     background-color: $main-color-100;
 
     transition: height 0.2s ease-in-out;
+
+    #task_actions {
+      .button_container {
+        position: absolute;
+        right: 2rem;
+        bottom: 2rem;
+      }
+    }
   }
 }
 

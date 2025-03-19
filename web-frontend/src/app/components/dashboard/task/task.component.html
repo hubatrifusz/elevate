@@ -1,5 +1,5 @@
 @if (showConfirmDialog){
-  <app-confirm-dialog (dataEmitter)="deleteHabit($event)"></app-confirm-dialog>
+<app-confirm-dialog (dataEmitter)="deleteHabit($event)"></app-confirm-dialog>
 }
 
 <div id="task_container" class="{{ habitData.color }}">
@@ -24,6 +24,7 @@
     </div>
   </div>
   <div id="task_details_container">
+    <p>{{ habitData.description }}</p>
     <div id="task_actions">
       <div class="button_container" (click)="openConfirmationDialog()">
         <button class="button_delete"><span>Delete</span></button>
