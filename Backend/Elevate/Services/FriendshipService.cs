@@ -27,6 +27,10 @@ namespace Elevate.Services
 
         public async Task<FriendshipDto> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
         {
+            if (friendshipCreateDto.UserId == friendshipCreateDto.FriendId)
+            {
+                throw new BadRequestException("User cannot be friends with themselves.");
+            }
             FriendshipModel friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
             FriendshipModel savedFriendship = await _friendshipRepository.AddFriendshipAsync(friendship)
                 ?? throw new BadRequestException("Failed to add friend.");
