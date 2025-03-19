@@ -48,7 +48,7 @@ export class CalendarPage implements OnInit {
     addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log(this.date.toString());
   }
 
@@ -70,9 +70,9 @@ export class CalendarPage implements OnInit {
     // this.getTodaysHabitlogs(this.date.toISOString());
     // this.habitService.getTodaysHabitlogs(this.date.toISOString());
   }
-  onIonInfinite(event: InfiniteScrollCustomEvent) {
+  async onIonInfinite(event: InfiniteScrollCustomEvent) {
     // console.log('Infinite scroll triggered');
-    this.loadMoreHabits.emit();
+    await this.loadMoreHabits.emit();
     setTimeout(() => {
       event.target.complete();
     }, 500);

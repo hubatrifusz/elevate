@@ -31,6 +31,7 @@ export class TaskCardComponent implements OnInit {
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
   habitLogs: HabitLog[] = [];
+  
 
   private habitService = inject(HabitService);
   private router = inject(Router);
@@ -38,6 +39,7 @@ export class TaskCardComponent implements OnInit {
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
+  public checked = false;
 
   weekDays = [
     { label: 'M', value: 'Mon' },
@@ -52,15 +54,14 @@ export class TaskCardComponent implements OnInit {
   async ngOnInit() {
     const loading = await this.presentLoading();
     if (!this.habitlogsDate) {
-      this.loadHabits();
+      await this.loadHabits(); // Await for better flow control
       loading.dismiss();
 
-      this.loadMoreHabits.subscribe(() => {
-        this.loadMore();
-        console.log(this.hasMoreHabits)
+      this.loadMoreHabits.subscribe(async () => {
+        await this.loadMore(); // Await loadMore
+        console.log(this.hasMoreHabits);
       });
-    }
-    else {
+    } else {
       loading.dismiss();
     }
   }
@@ -78,14 +79,13 @@ export class TaskCardComponent implements OnInit {
       console.log(`Date changed to: ${this.habitlogsDate}`);
       this.pageNumber = 1; // Reset pagination
       this.habits = []; // Clear current habits
-      this.loadHabitLogs(); // Load habits for the new date
+      await this.loadHabitLogs(); // Await loadHabitLogs
       loading.dismiss();
-
     } else {
       console.log('Date cleared, loading all habits');
       this.pageNumber = 1; // Reset pagination
       this.habits = []; // Clear current habits
-      this.loadHabits(); // Load all habits
+      await this.loadHabits(); // Await loadHabits
     }
   }
 
@@ -94,7 +94,7 @@ export class TaskCardComponent implements OnInit {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
   }
 
-  loadHabits() {
+  async loadHabits() {
 
     const userId = localStorage.getItem('userId');
     console.log(userId);
@@ -134,82 +134,44 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-  loadMore() {
+  async loadMore() {
     this.pageNumber++;
     if (this.habitlogsDate != null) {
-      this.loadHabitLogs();
+      await this.loadHabitLogs(); // Await loadHabitLogs
     }
     else {
 
-      this.loadHabits();
+      await this.loadHabits(); // Await loadHabits
     }
   }
 
-  // loadHabitLogs() {
-  //   const userId = localStorage.getItem('userId');
-  //   if (userId && this.habitlogsDate) {
-  //     this.habitService.getTodaysHabitlogs(this.habitlogsDate).subscribe(
-  //       (newHabits) => {
-  //         if (newHabits.length === 0) {
-  //           this.hasMoreHabits = false;
-  //           console.log('No more habits to load');
-  //           this.hasMoreHabitsChange.emit(this.hasMoreHabits);
-  //         }
-  //         if (this.pageNumber === 1) {
-  //           this.habits = newHabits;
-  //           console.log('Habits loaded successfully');
-  //         } else {
-  //           this.habits = [...this.habits, ...newHabits];
-  //         }
-
-  //         this.habits.forEach((habit) => {
-  //           console.log(habit);
-  //           if (!habit.color.startsWith('#')) {
-  //             habit.color = '#' + habit.color;
-  //           }
-  //         });
-  //       },
-  //       (error: HttpErrorResponse) => {
-  //         if (error.status === 404) {
-  //           this.hasMoreHabits = false;
-  //           this.hasMoreHabitsChange.emit(this.hasMoreHabits);
-  //           console.log('No more habits to load');
-  //         } else {
-  //           console.error('Error loading habits:', error);
-  //         }
-  //       }
-  //     );
-  //   }
-  // }
-  loadHabitLogs() {
+  async loadHabitLogs() {
     const userId = localStorage.getItem('userId');
     if (userId && this.habitlogsDate) {
-      this.habitService.getTodaysHabitlogs(this.habitlogsDate).subscribe({
-        next: (responce) => (this.habitLogs = responce as HabitLog[]),
-        error: (error) => (console.log(error)),
-        complete: () => {
-          console.log(this.habitLogs.length)
-          this.habitLogs.forEach((habitlog) => {
-            this.getHabitByID(habitlog.habitId);
-            console.log(habitlog);
-          });
-        },
-      })
+      try {
+        const response = await this.habitService.getTodaysHabitlogs(this.habitlogsDate).toPromise();
+        this.habitLogs = response as HabitLog[];
+        for (const habitLog of this.habitLogs) {
+          await this.getHabitByID(habitLog.habitId); // Await getHabitByID
+        }
+      } catch (error) {
+        console.error('Error loading habit logs:', error);
+      }
     }
   }
 
-  getHabitByID(habitId: string) {
-    this.habitService.getHabitByID(habitId).subscribe({
-      next: (responce) => {
-        this.habits.push(responce as Habit);
-        this.habits.forEach((habit) => {
-          if (!habit.color.startsWith('#')) {
-            habit.color = '#' + habit.color;
-          }
-        });
-      },
-      // error: (error) => (console.log(error)),
-    })
+  async getHabitByID(habitId: string) {
+    try {
+      const response = await this.habitService.getHabitByID(habitId).toPromise();
+      const habit = response as Habit;
+      console.log(habitId)
+      if (!habit.color.startsWith('#')) {
+        habit.color = '#' + habit.color;
+      }
+      this.habits.push(habit);
+    } catch (error) {
+      console.error('Error fetching habit by ID:', error);
+    }
   }
 
   toggleDay(habit: Habit, dayIndex: number) {
@@ -258,16 +220,14 @@ export class TaskCardComponent implements OnInit {
   }
 
 
-  deleteHabit(habit: Habit) {
+  async deleteHabit(habit: Habit) {
     this.habits = this.habits.filter((h) => h.id !== habit.id);
-    this.habitService.deleteHabit(habit.id).subscribe(
-      () => {
-        console.log('Habit deleted successfully');
-      },
-      (error) => {
-        console.error('Error deleting habit:', error);
-      }
-    );
+    try {
+      await this.habitService.deleteHabit(habit.id).toPromise();
+      console.log('Habit deleted successfully');
+    } catch (error) {
+      console.error('Error deleting habit:', error);
+    }
   }
 
   onDescriptionBlur(habit: Habit) {
@@ -292,16 +252,14 @@ export class TaskCardComponent implements OnInit {
     console.log('Is Positive:', event.detail.checked);
     this.editHabit(habit);
   }
-  editHabit(habit: Habit) {
-    this.habitService.editHabit(habit).subscribe(
-      (response) => {
-        console.log('Habit edited successfully');
-        habit.color = "#" + habit.color;
-        console.log(response);
-      },
-      (error) => {
-        console.error('Error editing habit:', error);
-      }
-    );
+  async editHabit(habit: Habit) {
+    try {
+      const response = await this.habitService.editHabit(habit).toPromise();
+      console.log('Habit edited successfully');
+      habit.color = '#' + habit.color;
+      console.log(response);
+    } catch (error) {
+      console.error('Error editing habit:', error);
+    }
   }
 }
