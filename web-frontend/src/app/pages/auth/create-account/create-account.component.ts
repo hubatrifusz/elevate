@@ -22,8 +22,8 @@ export class CreateAccountComponent {
     firstname: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
-    confirmPassword: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)]),
+    confirmPassword: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)]),
   });
 
   onSubmit() {
