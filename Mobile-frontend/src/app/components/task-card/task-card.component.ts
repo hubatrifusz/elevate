@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -14,21 +14,27 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonIcon, IonCheckbox,
+  imports: [IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
   @Input() loadMoreHabits!: EventEmitter<void>;
-  @Input() habitlogsDate: string | null = null;
+  @Input() set habitlogsDate(value: string | null) {
+    this._habitlogsDate = value;
+    this.onDateChange(); // Trigger logic when the date changes
+  }
+  get habitlogsDate(): string | null {
+    return this._habitlogsDate;
+  }
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
   habitLogs: HabitLog[] = [];
 
   private habitService = inject(HabitService);
   private router = inject(Router);
-
+  private _habitlogsDate: string | null = null;
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
@@ -43,21 +49,48 @@ export class TaskCardComponent implements OnInit {
     { label: 'S', value: 'Sun' }
   ];
 
-  ngOnInit() {
-    if (this.habitlogsDate) {
-      console.log(`Loading tasks for date: ${this.habitlogsDate}`);
-      this.loadHabitLogs();
-    } else {
+  async ngOnInit() {
+    const loading = await this.presentLoading();
+    if (!this.habitlogsDate) {
       this.loadHabits();
+      loading.dismiss();
+
       this.loadMoreHabits.subscribe(() => {
         this.loadMore();
         console.log(this.hasMoreHabits)
       });
+    }
+    else {
+      loading.dismiss();
+    }
+  }
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Loading...',
+    });
+    await loading.present();
+    return loading;
+  }
 
+  async onDateChange() {
+    if (this.habitlogsDate) {
+      const loading = await this.presentLoading();
+      console.log(`Date changed to: ${this.habitlogsDate}`);
+      this.pageNumber = 1; // Reset pagination
+      this.habits = []; // Clear current habits
+      this.loadHabitLogs(); // Load habits for the new date
+      loading.dismiss();
+
+    } else {
+      console.log('Date cleared, loading all habits');
+      this.pageNumber = 1; // Reset pagination
+      this.habits = []; // Clear current habits
+      this.loadHabits(); // Load all habits
     }
   }
 
-  constructor() {
+
+  constructor(private loadingController: LoadingController) {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
   }
 
@@ -79,7 +112,6 @@ export class TaskCardComponent implements OnInit {
           } else {
             this.habits = [...this.habits, ...newHabits];
           }
-
           this.habits.forEach((habit) => {
             console.log(habit);
             if (!habit.color.startsWith('#')) {
@@ -156,8 +188,10 @@ export class TaskCardComponent implements OnInit {
         next: (responce) => (this.habitLogs = responce as HabitLog[]),
         error: (error) => (console.log(error)),
         complete: () => {
+          console.log(this.habitLogs.length)
           this.habitLogs.forEach((habitlog) => {
             this.getHabitByID(habitlog.habitId);
+            console.log(habitlog);
           });
         },
       })
@@ -171,12 +205,15 @@ export class TaskCardComponent implements OnInit {
         this.habits.forEach((habit) => {
           if (!habit.color.startsWith('#')) {
             habit.color = '#' + habit.color;
-        }});
+          }
+        });
       },
-      error: (error) => (console.log(error)),
+      // error: (error) => (console.log(error)),
     })
   }
+
   toggleDay(habit: Habit, dayIndex: number) {
+
     if (habit.customFrequency == null) {
       console.log('customFrequency is null or undefined');
       habit.customFrequency = 0; // Initialize to 0 if null or undefined

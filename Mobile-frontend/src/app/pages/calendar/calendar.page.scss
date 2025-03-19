@@ -1,5 +1,6 @@
 @use "../../../theme/variables" as *;
 @use "../../../theme/fab.scss" as *;
+@use "../feed/feed.page.scss" as *;
 
 
 .date-picker {
@@ -7,10 +8,16 @@
     align-items: center;
     justify-content: center;
     // gap: 10px;
-    margin: 10px 0px;
+    margin: 10px auto;
+    width: 60%;
     background: var(--ion-color-light);
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 0px $shadow;
+
+    @media(prefers-color-scheme: dark) {
+        box-shadow: 0px 0px 10px 0px black;
+    }
 }
 
 .date-text {
@@ -25,6 +32,10 @@ ion-button {
     --padding-start: 8px;
     --padding-end: 8px;
 }
-ion-header{
-    height: fit-content;
+
+
+
+.icon {
+    font-size: 50px;
+    margin: 10px 0; // Adjust the size of the icon as needed
 }

@@ -1,20 +1,21 @@
 import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
 import { HabitService } from 'src/app/services/habit.service';
 import { HabitLog } from 'src/app/.models/HabitLog.model';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
+import { chevronBackOutline, chevronForwardOutline, personCircleOutline, add } from 'ionicons/icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScroll, IonInfiniteScrollContent, IonText, IonAvatar,
+  imports: [IonFabButton, IonFab, IonInfiniteScroll, IonInfiniteScrollContent, IonText, IonAvatar,
     IonButton,
     IonContent,
     IonHeader,
@@ -29,10 +30,10 @@ import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 })
 export class CalendarPage implements OnInit {
 
-
   selectedDate: IonDatetime | null = null;
   private habitService = inject(HabitService);
   private modalController = inject(ModalController);
+  private router = inject(Router);
   habitLogs: HabitLog[] = [];
 
   @Output() loadMoreHabits = new EventEmitter<void>();
@@ -44,7 +45,7 @@ export class CalendarPage implements OnInit {
   weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
   constructor(private menuCtrl: MenuController) {
-    addIcons({ chevronBackOutline, chevronForwardOutline });
+    addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
   }
 
   ngOnInit() {
@@ -63,6 +64,8 @@ export class CalendarPage implements OnInit {
   updateDateDisplay() {
     this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
     this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+    this.datestring = this.date.toISOString();
+
 
     // this.getTodaysHabitlogs(this.date.toISOString());
     // this.habitService.getTodaysHabitlogs(this.date.toISOString());
@@ -82,5 +85,7 @@ export class CalendarPage implements OnInit {
       (event.target as HTMLIonRefresherElement).complete();
     }, 200);
   }
-
+  newHabit() {
+    this.router.navigate(['/create-habit']);
+  }
 }
