@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Elevate.Models.Habit
 {
@@ -15,6 +14,7 @@ namespace Elevate.Models.Habit
         public string? Description { get; set; }
 
         [Required]
+        [ValidFrequencyType(isRequired: true)]
         public required string FrequencyType { get; set; }
 
         public sbyte? CustomFrequency { get; set; }

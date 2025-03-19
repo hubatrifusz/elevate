@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   db:
     image: mysql:9.2.0
@@ -15,10 +13,12 @@ services:
       retries: 5
 
   backend:
-    image: ghcr.io/${GITHUB_REPOSITORY}/backend:latest
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__LocalConnection: ${CONNECTION_STRING}
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__LocalConnection: ${CONNECTION_STRING_LOCAL}
       Jwt__PrivateKey: ${JWT_PRIVATE_KEY}
       Jwt__PublicKey: ${JWT_PUBLIC_KEY}
       Jwt__Issuer: ${JWT_ISSUER}
@@ -28,13 +28,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  frontend:
-    image: ghcr.io/${GITHUB_REPOSITORY}/frontend:latest
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

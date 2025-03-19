@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Elevate.Common.Exceptions;
 using System.Security.Claims;
 
 namespace Elevate.Common.Utilities
 {
     public static class UserPermissionUtility
     {
-        public static bool IsCurrentUser(Guid resourceUserId, ClaimsPrincipal user)
+        public static void IsCurrentUser(Guid resourceUserId, ClaimsPrincipal user)
         {
             if (user == null || !user.Identity!.IsAuthenticated)
             {
-                return false;
+                throw new AuthorizationException();
             }
 
             var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
             {
-                return false;
+                throw new AuthorizationException();
             }
 
-            return userId == resourceUserId;
+            if(userId != resourceUserId)
+            {
+                throw new AuthorizationException();
+            }
         }
     }
 }

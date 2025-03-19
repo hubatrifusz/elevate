@@ -11,20 +11,22 @@ namespace Elevate.Data.Repository
 
         public async Task<List<HabitModel>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            pageSize = Math.Min(pageSize, 20);
-            pageSize = Math.Max(pageSize, 1);
-
-            return await _context.Habits.Where(h => h.UserId == userId).OrderBy(h => h.CreatedAt).ApplyPagination(pageNumber, pageSize).ToListAsync();
+            return await _context.Habits
+                .Where(h => h.UserId == userId && !h.Deleted)
+                .OrderBy(h => h.CreatedAt)
+                .ApplyPagination(pageNumber, pageSize)
+                .ToListAsync();
         }
 
         public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
         {
-            return await _context.Habits.SingleAsync(h => h.Id == habitId);
+            HabitModel? habit = await _context.Habits.FindAsync(habitId);
+            return habit?.Deleted == true ? null : habit;
         }
 
         public async Task<List<HabitModel>> GetAllHabitsAsync()
         {
-            return await _context.Habits.ToListAsync();
+            return await _context.Habits.Where(h => !h.Deleted).ToListAsync();
         }
 
         public async Task<HabitModel?> AddHabitAsync(HabitModel habit)
@@ -34,31 +36,19 @@ namespace Elevate.Data.Repository
             return habit;
         }
 
-        public async Task<HabitModel?> UpdateHabitAsync(Guid id, HabitModel habit)
+        public async Task<HabitModel?> UpdateHabitAsync(HabitModel habit)
         {
-            if (id != habit.Id)
-            {
-                throw new Exception("Habit ID does not match");
-            }
-            if (!await _context.Set<HabitModel>().AnyAsync(h => h.Id == id))
-            {
-                throw new Exception("No such habit");
-            }
-            HabitModel updatedHabit = _context.Set<HabitModel>().Update(habit).Entity;
-            await _context.SaveChangesAsync();
-            return updatedHabit;
-        }
+            var existingHabit = await GetHabitByIdAsync(habit.Id);
 
-        public async Task<HabitModel?> DeleteHabitAsync(Guid habitId) 
-        {
-            HabitModel? habit = await _context.Set<HabitModel>().SingleOrDefaultAsync(h => h.Id == habitId);
-            if (habit == null)
+            if (existingHabit != null)
             {
-                throw new Exception("No such habit");
+                _context.Entry(existingHabit).CurrentValues.SetValues(habit);
+
+                await _context.SaveChangesAsync();
+                return existingHabit;
             }
-            _context.Set<HabitModel>().Remove(habit);
-            await _context.SaveChangesAsync();
-            return habit;
+
+            return null;
         }
     }
 }

@@ -1,0 +1,939 @@
+\documentclass[12pt]{report}
+\usepackage{minted}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+\tcbuselibrary{minted}
+
+\renewcommand{\theFancyVerbLine}{\textcolor{gray!50}{\scriptsize\arabic{FancyVerbLine}}}
+\renewcommand{\contentsname}{Tartalomjegyzék}
+
+\definecolor{getColor}{HTML}{4CAF50}
+\definecolor{postColor}{HTML}{2196F3}
+\definecolor{patchColor}{HTML}{FF9800}
+\definecolor{deleteColor}{HTML}{F44336}
+\definecolor{putColor}{HTML}{9C27B0}
+
+\newcommand{\httpGet}[1]{\colorbox{getColor}{\textbf{\textcolor{white}{GET}}}~#1}
+\newcommand{\httpPost}[1]{\colorbox{postColor}{\textbf{\textcolor{white}{POST}}}~#1}
+\newcommand{\httpPatch}[1]{\colorbox{patchColor}{\textbf{\textcolor{white}{PATCH}}}~#1}
+\newcommand{\httpDelete}[1]{\colorbox{deleteColor}{\textbf{\textcolor{white}{DELETE}}}~#1}
+\newcommand{\httpPut}[1]{\colorbox{putColor}{\textbf{\textcolor{white}{PUT}}}~#1}
+
+\titleformat{\chapter}
+  {\normalfont\Huge\bfseries}
+  {\thechapter.}
+  {0.5em}                      
+  {} 
+
+\newtcolorbox{codeblock}[2][]{
+  colback=black!85!gray,
+  colframe=black!50!gray, % Gradient effect
+  colbacktitle=black!50!gray,
+  coltitle=white,
+  title={\ttfamily#2},
+  fonttitle=\footnotesize\bfseries,
+  arc=5pt,
+  boxrule=1pt,
+  toptitle=4pt,
+  bottomtitle=2pt,
+  left=25pt,
+  right=5pt,
+  top=2pt,
+  bottom=2pt,
+  % sharp corners=south,
+  #1
+}
+
+% \begin{codeblock}{MyClass.cs}
+%   \begin{minted}[
+%     style=one-dark,
+%     breaklines,
+%     linenos,
+%     firstline=1,
+%     gobble=0
+%     ]{csharp}
+%   public class MyClass
+%   {
+%       public void MyMethod()
+%       {
+%         List<App> apps = new();
+
+%         for (int i = 0; i < 10; i++)
+%         {
+%             apps.Add(new App());
+%         }
+%       }
+%   }
+%   \end{minted}
+% \end{codeblock}
+
+\begin{document}
+
+\title{Elevate Dokumentáció}
+\author{Somlói Dávid
+        \and
+        Trifusz Huba
+        \and
+        Verba Viktor}
+\date{\today}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\chapter{A projektről}
+\begin{sloppypar}
+A téma kiválasztásánál arra törekedtünk, hogy egy, a hétköznapi élet során alkalmazható szoftvert készítsünk. Több opció is felmerült, azonban végül egy szokásformáló felület mellett döntöttünk, amit Elevate-nek neveztünk el, az egészséges, felemelő életmód jegyében. Az Elevate ösztönzi a felhasználó-kat, hogy új, pozitív szokásokat vezessenek be, miközben hatékonyan követhetik saját fejlődésüket, emellett hozzájárul életminőségük javításához és a fenntart-ható fejlődéshez.
+\end{sloppypar}
+\section{Az Elevate célja}
+\begin{sloppypar}
+A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását és különféle jutal-makat kap, ha tartja a felállított célját. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Egy szokás tartásához elengedhet-etlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben jeleníti meg a teendőket és emlékeztet azok elvégzésére. 
+\end{sloppypar}
+\chapter{Weboldal}
+\chapter{Mobil Applikáció}
+\chapter{Adatbázis}
+\chapter{Backend}
+
+\section{Végpontok}
+
+\vspace{0.5cm}
+\subsection{Autentikáció}
+\begin{description}
+
+  \item [\httpPost{/api/auth/register}] - Regisztráció
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "email": "string($email)",
+  "password": "string",
+  // Min. 12 karakter, legalább egy kisbetű, nagybetű, szám és speciális karakter
+  "confirmPassword": "string",
+  "firstName": "string",
+  "lastName": "string"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres regisztráció
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Password must contain at least 12 characters, an uppercase letter, a number and a symbol."
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{409 Conflict} - A megadott e-mail cím vagy felhasználónév már foglalt
+        
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Email is already taken."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item [\httpPost{/api/auth/login}] - Bejelentkezés
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "email": "string($email)",
+  "password": "string"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres bejelentkezés
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "userId": "string($uuid)",
+  "token": "string"
+}
+          \end{minted}
+        \end{codeblock}
+      \item \textbf{403 Forbidden} - Helytelen e-mail cím vagy jelszó
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Invalid login details"
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+    \end{itemize}
+
+\end{description}
+
+\vspace{0.5cm}
+\subsection{Felhasználó}
+\begin{description}
+  \item[\httpGet{/api/user}] - Felhasználók lekérdezése email alapján
+  
+    \vspace{0.5cm}
+    Keresés email cím részlet alapján. A lekérdezés oldalanként maximum 20 felhasználót ad vissza.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{email: string} - A felhasználó e-mail címe
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt felhasználók száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      \item \textbf{404 Not Found} - Nincs találat
+
+      \textbf{Response body:}
+      \begin{codeblock}{JSON}
+        \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"No users found."
+        \end{minted}
+      \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/user/\{id\}}] - Felhasználó lekérdezése azonosító alapján
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+    \item[\httpPatch{/api/user/\{id\}}] - Felhasználó módosítása azonosító alapján
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+\end{description}
+
+\subsection{Barátok}
+\begin{description}
+  \item[\httpGet{/api/friendship/\{userId\}/friends}] - Barátok lekérdezése
+
+    \vspace{0.5cm}
+    A felhasználó barátainak lekérdezése a felhasználó azonosítója alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User has no friends."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpPost{/api/friendship}] - Barát hozzáadása
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{201 Created} - Sikeres hozzáadás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpDelete{/api/friendship}] - Barát törlése
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+      \item \textbf{friendId: string(\$uuid)} - A barát azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres törlés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "email": "string($email)",
+  "firstName": "string",
+  "lastName": "string",
+  "profilePictureBase64": "string",
+  "longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+\end{description}
+
+\subsection{Szokások}
+\begin{description}
+  \item[\httpGet{/api/habit}] - Szokások lekérdezése
+
+    \vspace{0.5cm}
+    A felhasználó szokásainak lekérdezése a felhasználó azonosítója alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt szokások száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User has no recorded habits."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/habit/\{id\}}] - Szokás lekérdezése
+  
+  \vspace{0.5cm}
+  Szokás lekérdezése azonosító alapján.
+
+  \vspace{0.5cm}
+  \textbf{Paraméterek:}
+  \begin{itemize}
+    \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+  \end{itemize}
+
+  \vspace{0.5cm}
+  \textbf{Válaszok:}
+  \begin{itemize}
+    \item \textbf{200 OK} - Sikeres lekérdezés
+
+      \textbf{Response body:}
+      \begin{codeblock}{JSON}
+        \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+        \end{minted}
+      \end{codeblock}
+
+    \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+    \item \textbf{404 Not Found} - Nincs találat
+
+      \textbf{Response body:}
+      \begin{codeblock}{JSON}
+        \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit was not found."
+        \end{minted}
+      \end{codeblock}
+  \end{itemize}
+
+  \item[\httpPost{/api/habit}] - Szokás hozzáadása
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "title": "string",
+  "userId": "string($uuid)",
+  "description": "string",
+  "frequencyType": "string",
+    // DAILY, WEEKLY, MONTHLY, CUSTOM
+  "customFrequency": Number,
+    // Ha a frequencyType CUSTOM
+  "color": "string",
+    // HEX kód
+  "isPositive": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{201 Created} - Sikeres hozzáadás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+      
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{403 Forbidden} - A megadott azonosító nem egyezik a 
+      \hfill \\ bejelentkezett felhasználóéval
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"You are not authorized to perform this action."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpPatch{/api/habit/\{id\}}] - Szokás módosítása
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+    // DAILY, WEEKLY, MONTHLY, CUSTOM
+  "customFrequency": Number,
+  "color": "string",
+  "isPublic": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+    
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpDelete{/api/habit/\{id\}}] - Szokás törlése
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres törlés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "createdAt": "string($date-time)",
+  "title": "string",
+  "description": "string",
+  "frequencyType": "string",
+  "customFrequency": Number,
+  "color": "string",
+  "isPositive": bool,
+  "streak": Number,
+  "streakStart": "string($date-time)",
+  "deleted": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+\end{description}
+
+\subsection{Szokás napló}
+\begin{description}
+  \item[\httpGet{/api/habitLog}] - Szokás naplók lekérdezése
+  
+    \vspace{0.5cm}
+    A szokás naplók lekérdezése a szokás azonosítója alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A szokás azonosítója
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt naplók száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"No log was found for the provided habit."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/habitLog/\{id\}}] - Szokás napló lekérdezése
+  
+    \vspace{0.5cm}
+    Szokás napló lekérdezése azonosító alapján.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás napló azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit log was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/habitlog/\{dueDate\}}] 
+  \hfill \\ - Szokás napló lekérdezése határidő alapján
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+      \item \textbf{dueDate: string(\$date)} - A szokás napló dátuma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"No habit log was found with the provided due date."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[httpPatch{/api/habitLog/\{id\}}] - Szokás napló módosítása
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{id: string(\$uuid)} - A szokás napló azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "completed": bool,
+  "completedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool
+  "comletedDate": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json} 
+"Habit log was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+\end{description}
+
+\chapter{Tesztelés}
+
+\end{document}

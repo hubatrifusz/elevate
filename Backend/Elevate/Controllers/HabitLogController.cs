@@ -14,72 +14,36 @@ namespace Elevate.Controllers
         private readonly IHabitLogService _habitLogService = habitLogService;
 
         [HttpGet]
-        public ActionResult<IEnumerable<HabitLogModel>> GetHabitLogsByHabitId(Guid id, int pageNumber, int pageSize)
+        public async Task<ActionResult<HabitLogDto>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
         {
-            var habitLogs = _habitLogService.GetHabitLogsByHabitId(id, pageNumber, pageSize);
-            if (habitLogs != null)
-            {
-                if (UserPermissionUtility.IsCurrentUser(habitLogs.First().UserId, User))
-                {
-                    return Ok(habitLogs);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            List<HabitLogDto> result = await _habitLogService.GetHabitLogsByHabitIdAsync(habitId, pageNumber, pageSize);
+            UserPermissionUtility.IsCurrentUser(result[0].UserId, User);
+            return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<HabitLogModel> GetHabitLogById(Guid id)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<List<HabitLogDto>>> GetHabitLogByIdAsync(Guid id)
         {
-            var habitLog = _habitLogService.GetHabitLogById(id);
-            if (habitLog != null)
-            {
-                if(UserPermissionUtility.IsCurrentUser(habitLog.UserId, User))
-                {
-                    return Ok(habitLog);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            var habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habitLog.UserId, User);
+            return Ok(habitLog);
         }
 
-        [HttpPatch("{id}")]
-        public ActionResult<HabitLogModel> UpdateHabitLog(Guid id, HabitLogUpdateDto habitLogUpdateDto)
+        [HttpGet("{dueDate:datetime}")]
+        public async Task<ActionResult<List<HabitLogDto>>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
         {
-            var habitLog = _habitLogService.GetHabitLogById(id);
-            if (habitLog != null)
-            {
-                if(UserPermissionUtility.IsCurrentUser(habitLog.UserId, User))
-                {
-                    try
-                    {
-                        var updatedHabitLog = _habitLogService.UpdateHabitLog(id, habitLogUpdateDto);
-                        return Ok(updatedHabitLog);
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
-                }
-                return Forbid();
-            }
-            return NotFound();
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<HabitLogDto> habitLogs = await _habitLogService.GetHabitLogsByDueDateAsync(userId, dueDate);
+            return Ok(habitLogs);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<HabitLogModel> DeleteHabitLog(Guid id)
+        [HttpPatch("{id:guid}")]
+        public async Task<ActionResult<HabitLogDto>> UpdateHabitLogAsync(Guid id, HabitLogUpdateDto habitLogUpdateDto)
         {
-            var habitLog = _habitLogService.GetHabitLogById(id);
-            if (habitLog != null)
-            {
-                if(UserPermissionUtility.IsCurrentUser(habitLog.UserId, User))
-                {
-                    var deletedHabitLog = _habitLogService.DeleteHabitLog(id);
-                    return Ok(deletedHabitLog);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            HabitLogDto habitLog = await _habitLogService.GetHabitLogByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habitLog.UserId, User);
+            HabitLogDto updatedHabitLog = await _habitLogService.UpdateHabitLogAsync(habitLog, habitLogUpdateDto);
+            return Ok(updatedHabitLog);
         }
     }
 }

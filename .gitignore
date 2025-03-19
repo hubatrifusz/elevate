@@ -1,1 +1,12 @@
 .vs
+
+*.aux
+*.log
+*.fls
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+
+documentation/_minted-elevate/*
+!documentation/_minted-elevate/one-dark
+!documentation/_minted-elevate/one-dark.pygstyle
