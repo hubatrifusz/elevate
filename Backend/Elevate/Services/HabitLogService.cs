@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
-using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
@@ -16,7 +15,7 @@ namespace Elevate.Services
             List<HabitLogModel> habitLogModels = await _habitLogRepository.GetHabitLogsByHabitIdAsync(habitId, pageNumber, pageSize);
             return habitLogModels.Count == 0
                 ? throw new ResourceNotFoundException("No log was found for the provided habit.")
-                : _mapper.Map<List<HabitLogDto>>(habitLogModels);
+                : _mapper.Map<List<HabitLogDto>>(habitLogModels);   
         }
 
         public async Task<HabitLogDto> GetHabitLogByIdAsync(Guid habitLogId)
