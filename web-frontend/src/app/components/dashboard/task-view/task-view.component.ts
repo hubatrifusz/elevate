@@ -14,9 +14,9 @@ import { HabitLog } from '../../../models/habitlog.model';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private alertService: AlertService, private userService: UserService) {}
+  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) {}
 
-  userId = localStorage.getItem('id');
+  userId!: string | null;
   habitlogList: HabitLog[] = [];
   habitList: Habit[] = [];
   date = new Date();
@@ -25,7 +25,7 @@ export class TaskViewComponent {
 
   addNewTaskForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
-    userID: new FormControl(localStorage.getItem('id')),
+    userID: new FormControl(),
     description: new FormControl('', [Validators.required]),
     frequencyType: new FormControl('', [Validators.required]),
     customFrequency: new FormControl(0), //TODO
@@ -34,6 +34,8 @@ export class TaskViewComponent {
   });
 
   ngOnInit() {
+    this.userId = this.authService.getToken();
+    this.addNewTaskForm.value.userID = this.authService.getToken();
     this.getTodaysHabitlogs(this.date.toISOString());
   }
 
