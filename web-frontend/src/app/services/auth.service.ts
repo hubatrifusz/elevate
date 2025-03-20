@@ -13,16 +13,25 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:8080/api';
 
-  saveToken(token: string) {
-    localStorage.setItem('token', token);
+  saveToken(token: string, rememberMe: boolean) {
+    if (rememberMe) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
   }
 
-  saveUserID(id: string) {
-    localStorage.setItem('id', id);
+  saveUserID(id: string, rememberMe: boolean) {
+    if (rememberMe) {
+      localStorage.setItem('id', id);
+    } else {
+      sessionStorage.setItem('id', id);
+    }
   }
 
   logout() {
     localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/login']);
   }
 
@@ -32,5 +41,13 @@ export class AuthService {
 
   crateAccount(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
