@@ -81,12 +81,16 @@ export class HabitService {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: headers });
   }
 
-  completeHabit(habitId: string): Observable<any> {
-    
-      const token = localStorage.getItem('token');
-      let headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}` // Or however your backend expects the token
-      });
-    return this.http.patch(`http://localhost:8080/api/habitlog/${habitId}`, {}, { headers: headers });
+  completeHabit(habitLogId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Include the token in the headers
+    });
+
+    const body = {
+      completed: true // Send the completed status in the body
+    };
+
+    return this.http.patch(`http://localhost:8080/api/habitlog/${habitLogId}`, body, { headers: headers });
   }
 }

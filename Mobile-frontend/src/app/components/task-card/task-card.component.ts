@@ -31,7 +31,7 @@ export class TaskCardComponent implements OnInit {
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
   habitLogs: HabitLog[] = [];
-  
+
 
   private habitService = inject(HabitService);
   private router = inject(Router);
@@ -40,6 +40,7 @@ export class TaskCardComponent implements OnInit {
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
   public checked = false;
+
 
   weekDays = [
     { label: 'M', value: 'Mon' },
@@ -50,6 +51,13 @@ export class TaskCardComponent implements OnInit {
     { label: 'S', value: 'Sat' },
     { label: 'S', value: 'Sun' }
   ];
+
+
+
+  constructor(private loadingController: LoadingController) {
+    addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
+  }
+
 
   async ngOnInit() {
     const loading = await this.presentLoading();
@@ -90,9 +98,7 @@ export class TaskCardComponent implements OnInit {
   }
 
 
-  constructor(private loadingController: LoadingController) {
-    addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
-  }
+
 
   async loadHabits() {
 
@@ -164,7 +170,6 @@ export class TaskCardComponent implements OnInit {
     try {
       const response = await this.habitService.getHabitByID(habitId).toPromise();
       const habit = response as Habit;
-      console.log(habitId)
       if (!habit.color.startsWith('#')) {
         habit.color = '#' + habit.color;
       }
@@ -209,7 +214,10 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-
+  isHabitCompleted(habitId: string): boolean {
+    const habitLog = this.habitLogs.find((log) => log.habitId === habitId);
+    return habitLog ? habitLog.completed : false;
+  }
 
   stopPropagation(event: Event) {
     event.stopPropagation();
@@ -260,6 +268,28 @@ export class TaskCardComponent implements OnInit {
       console.log(response);
     } catch (error) {
       console.error('Error editing habit:', error);
+    }
+  }
+
+  completed(habitId: string) {
+    const habitLog = this.habitLogs.find(habitLog => habitLog.habitId === habitId);
+    if (habitLog) {
+      const habitLogId = habitLog.id;
+
+      this.habitService.completeHabit(habitLogId).subscribe(
+        (response) => {
+          console.log('Habit completed successfully:', response);
+
+          // Update the habitLog locally instead of reloading all habit logs
+          habitLog.completed = true;
+
+          // Optionally, update the UI if needed
+          console.log('Updated habitLog:', habitLog);
+        },
+        (error) => {
+          console.error('Error completing habit:', error);
+        }
+      );
     }
   }
 }

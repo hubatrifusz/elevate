@@ -1,7 +1,7 @@
-import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton, GestureController, Gesture } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
 import { HabitService } from 'src/app/services/habit.service';
@@ -29,7 +29,6 @@ import { Router } from '@angular/router';
     IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent]
 })
 export class CalendarPage implements OnInit {
-
   selectedDate: IonDatetime | null = null;
   private habitService = inject(HabitService);
   private modalController = inject(ModalController);
@@ -44,13 +43,14 @@ export class CalendarPage implements OnInit {
   datestring = this.date.toISOString()
   weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-  constructor(private menuCtrl: MenuController) {
+  constructor(private menuCtrl: MenuController, private gestureCtrl: GestureController) {
     addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
   }
 
-  async ngOnInit() {
-    console.log(this.date.toString());
+  ngOnInit() {
   }
+
+
 
   previousDay() {
     this.date.setDate(this.date.getDate() - 1);
@@ -70,13 +70,7 @@ export class CalendarPage implements OnInit {
     // this.getTodaysHabitlogs(this.date.toISOString());
     // this.habitService.getTodaysHabitlogs(this.date.toISOString());
   }
-  async onIonInfinite(event: InfiniteScrollCustomEvent) {
-    // console.log('Infinite scroll triggered');
-    await this.loadMoreHabits.emit();
-    setTimeout(() => {
-      event.target.complete();
-    }, 500);
-  }
+
 
   handleRefresh(event: CustomEvent) {
     setTimeout(() => {

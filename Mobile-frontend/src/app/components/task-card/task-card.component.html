@@ -2,7 +2,7 @@
 
 <ion-accordion-group expand="inset">
   @for(habit of habits ; track $index) {
-  <ion-accordion>
+  <ion-accordion [disabled]="isHabitCompleted(habit.id) ">
     <ion-item slot="header" color="light" class="habit-item">
       <div class="color" [style.backgroundColor]="habit.color"></div>
       <ion-input [readonly]="true" type="text" [value]="habit.title"></ion-input>
@@ -10,14 +10,14 @@
         <ion-label>{{habit.streak}}</ion-label>
         <ion-icon name="flame-outline"></ion-icon>
       </div>
-      <ion-checkbox slot="end" (click)="stopPropagation($event)"></ion-checkbox>
+      <ion-checkbox [disabled]="!this.habitlogsDate"  [checked]="isHabitCompleted(habit.id)" slot="end" (click)="stopPropagation($event); completed(habit.id)"></ion-checkbox>
     </ion-item>
     <div class="ion-padding content" slot="content">
-      <ion-textarea label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
+      <ion-textarea [readonly]="this.habitlogsDate" label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
         (ionBlur)="onDescriptionBlur(habit)" maxlength="100"></ion-textarea>
       <ion-list>
         <ion-item>
-          <ion-select aria-label="Frequency" interface="popover" label="Frequency:" placeholder="Select frequency"
+          <ion-select [disabled]="!!this.habitlogsDate" aria-label="Frequency" interface="popover" label="Frequency:" placeholder="Select frequency"
             [(ngModel)]="habit.frequencyType" [value]="habit.frequencyType"
             (ionChange)="onFrequencyChange(habit, $event)">
             <ion-select-option value="Daily">Daily</ion-select-option>
@@ -28,11 +28,11 @@
         </ion-item>
       </ion-list>
       @if(habit.frequencyType.toString() == "Custom"){
-      <ion-grid>
-        <ion-row class="day-selector">
+      <ion-grid >
+        <ion-row  class="day-selector">
           @for(day of weekDays ; track $index) {
           <ion-col>
-            <ion-button [ngClass]="{'selected': isSelectedDay(habit.customFrequency, $index)}"
+            <ion-button [disabled]="!!this.habitlogsDate" [ngClass]="{'selected': isSelectedDay(habit.customFrequency, $index)}"
               (click)="toggleDay(habit, $index)" fill="clear">
               {{ day.label }}
             </ion-button>
@@ -43,11 +43,11 @@
       }
       <ion-item>
         <ion-label>Color:</ion-label>
-        <ion-input type="color" [(ngModel)]="habit.color" (ionChange)="onColorChange(habit, $event)"></ion-input>
+        <ion-input [disabled]="!!this.habitlogsDate" type="color" [(ngModel)]="habit.color" (ionChange)="onColorChange(habit, $event)"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Is it a Positive Habit?</ion-label>
-        <ion-checkbox slot="end" [(ngModel)]="habit.is_positive"
+        <ion-checkbox slot="end" [disabled]="!!this.habitlogsDate" [(ngModel)]="habit.is_positive"
           (ionChange)="onPositiveChange(habit, $event)"></ion-checkbox>
       </ion-item>
 

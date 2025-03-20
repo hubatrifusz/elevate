@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" id="swipeArea"> 
   <div class="date-picker">
     <ion-button fill="clear" (click)="previousDay()">
       <ion-icon name="chevron-back-outline"></ion-icon>
@@ -22,7 +22,7 @@
       <ion-text color="dark"><strong>{{dayAndMonth}}</strong></ion-text>
     </div>
 
-    <ion-button fill="clear" (click)="nextDay()">
+    <ion-button fill="clear"  (click)="nextDay()">
       <ion-icon name="chevron-forward-outline"></ion-icon>
     </ion-button>
   </div>
@@ -35,10 +35,10 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
+<!-- 
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="!hasMoreHabits">
     <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll> -->
 
   <!-- <app-task-card></app-task-card> -->
 
