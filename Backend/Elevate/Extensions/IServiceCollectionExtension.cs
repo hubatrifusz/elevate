@@ -19,6 +19,7 @@ namespace Elevate.Extensions
             services.AddScoped<HabitRepository>();
             services.AddScoped<HabitLogRepository>();
             services.AddScoped<FriendshipRepository>();
+            services.AddScoped<FeedRepository>();
 
             services.AddScoped<HabitLogGeneratorRepository>();
 
@@ -31,6 +32,7 @@ namespace Elevate.Extensions
             services.AddScoped<IHabitService, HabitService>();
             services.AddScoped<IHabitLogService, HabitLogService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+            services.AddScoped<IFeedService, FeedService>();
 
             services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
 
