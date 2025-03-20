@@ -5,7 +5,7 @@ import { inputValidator } from '../../../shared/input-validator';
 import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
 import { AuthService } from '../../../services/auth.service';
 import { PasswordToggleService } from '../../../services/password-toggle.service';
-import { ValidationMessageComponent } from "../../../components/auth/validation-message/validation-message.component";
+import { ValidationMessageComponent } from '../../../components/auth/validation-message/validation-message.component';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent {
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)], ValidationService.passwordMinLengthValidator(12)),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/), ValidationService.passwordMinLengthValidator(12)]),
     rememberMe: new FormControl(false, Validators.required),
   });
 
@@ -92,7 +92,5 @@ export class LoginComponent {
   //   }
   // }
 
-  handleLoginErrors() {
-
-  }
+  handleLoginErrors() {}
 }

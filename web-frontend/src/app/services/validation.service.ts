@@ -5,7 +5,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
   providedIn: 'root',
 })
 export class ValidationService {
-  static passwordMinLengthValidator(min: number): ValidationErrors {
+  static passwordMinLengthValidator(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value && control.value.length >= min) {
         return null;
