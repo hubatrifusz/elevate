@@ -5,6 +5,7 @@ import { PasswordRecoveryComponent } from './pages/auth/password-recovery/passwo
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 import { UserComponent } from './pages/user/user.component';
+import { FeedComponent } from './pages/feed/feed.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -19,4 +20,7 @@ export const routes: Routes = [
 
   // User
   { path: 'user/:id', component: UserComponent, canActivate: [authGuard] }, // User controls
+
+  // Feed
+  { path: 'feed', component: FeedComponent } // Feed Page
 ];

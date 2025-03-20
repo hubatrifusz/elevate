@@ -1,0 +1,119 @@
+@import "../../../../assets/styles/variables";
+
+#task_container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  border-radius: 1rem;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
+
+  #task_header_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    z-index: 2;
+
+    position: absolute;
+
+    height: 5rem;
+    width: 45rem;
+
+    padding: 1.3rem;
+
+    background-color: $main-color-100;
+
+    #left {
+      label {
+        font-size: $font-size-lg;
+        color: $text-color-900;
+      }
+    }
+
+    #right {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1.3rem;
+
+      height: 100%;
+
+      #time_container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        height: 100%;
+
+        padding: 0.6rem;
+
+        border-radius: 0.7rem;
+        background-color: $main-color-200;
+
+        img {
+          height: 100%;
+        }
+
+        span {
+          color: $main-color-600;
+          font-size: $font-size-base;
+        }
+      }
+
+      #options_container {
+        display: flex;
+        align-items: center;
+
+        height: 100%;
+
+        img {
+          height: 55%;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .expand {
+    height: 15rem !important;
+  }
+
+  #task_details_container {
+    position: relative;
+    width: 45rem;
+    height: 5rem;
+
+    z-index: 1;
+
+    padding: 5rem 1rem 0 1rem;
+
+    background-color: $main-color-100;
+
+    transition: height 0.2s ease-in-out;
+
+    #task_actions {
+      .button_container {
+        position: absolute;
+        right: 2rem;
+        bottom: 2rem;
+      }
+    }
+  }
+}
+
+.blue {
+  border-left: 1rem solid $task-color-blue;
+}
+
+.red {
+  border-left: 1rem solid $task-color-red;
+}
+
+.green {
+  border-left: 1rem solid $task-color-green;
+}
