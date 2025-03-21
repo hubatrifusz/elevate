@@ -4,6 +4,6 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  profilePicture?: Uint8Array;
+  profilePictureBase64?: string;
   longestStreak: number;
 }

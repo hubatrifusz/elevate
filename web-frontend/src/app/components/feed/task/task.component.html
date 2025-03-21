@@ -1,7 +1,9 @@
-<div id="task_container" class="{{ post.habitLog.id }}">
+<div id="task_container" class="{{ post.habit.color }}">
   <div id="task_header">
     <div id="task_user">
-      <img src="" alt="">
+      <img
+        [src]="post.user.profilePictureBase64 ? 'data:image/jpeg;base64,' + post.user.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+        alt="Profile picture">
       <h3>{{ post.user.firstName }} {{ post.user.lastName }}</h3>
     </div>
     <div id="task_title">
@@ -10,6 +12,6 @@
   </div>
   <div id="task_body">
     <p>{{ post.habitLog.notes}}</p>
-    <p>{{ post.habitLog.completedDate }}</p>
+    <p>{{ post.habitLog.completedAt | date:'MMM d, y • h:mm a' }}</p>
   </div>
 </div>
