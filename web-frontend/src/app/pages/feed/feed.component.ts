@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { ToolbarComponent } from "../../components/dashboard/toolbar/toolbar.component";
 import { TaskFeedComponent } from "../../components/feed/task/task.component";
-import { HabitLog } from '../../models/habitlog.model';
 import { FeedService } from '../../services/feed.service';
-import { FrequencyEnum } from '../../models/habit.model';
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'app-feed',
@@ -13,7 +12,7 @@ import { FrequencyEnum } from '../../models/habit.model';
   styleUrl: './feed.component.scss'
 })
 export class FeedComponent {
-  posts: HabitLog[] | undefined;
+  posts: Post[] | undefined;
 
   constructor(private feedService: FeedService) {
     this.feedService.getFeed(1, 20).subscribe({

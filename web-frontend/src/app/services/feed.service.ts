@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HabitLog } from '../models/habitlog.model';
+import { Post } from '../models/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,8 @@ export class FeedService {
 
   constructor(private http: HttpClient) { }
 
-  getFeed(pageNumber: Number, pageSize: Number): Observable<HabitLog[]> {
-    return this.http.get<HabitLog[]>(`${this.apiUrl}/feed`, {
+  getFeed(pageNumber: Number, pageSize: Number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.apiUrl}/feed`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },

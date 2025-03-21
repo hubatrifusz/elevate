@@ -4,7 +4,7 @@
     <app-toolbar></app-toolbar>
     <div id="feed">
       @for (post of posts; track $index) {
-        <app-task-feed [habitLogData]="post"></app-task-feed>
+      <app-task-feed [post]="post"></app-task-feed>
       }
     </div>
   </div>

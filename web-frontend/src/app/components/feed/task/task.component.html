@@ -1,17 +1,15 @@
-<div id="task_container" class="{{ habitLogData.habitLog.id }}">
-  <div id="task_header_container">
-    <div id="task_header">
-      <div id="task_user">
-        <img src="" alt="">
-        <p></p>
-      </div>
-      <div id="task_title">
-        <h3>{{ habitLogData.habitLog.userId }}</h3>
-      </div>
+<div id="task_container" class="{{ post.habitLog.id }}">
+  <div id="task_header">
+    <div id="task_user">
+      <img src="" alt="">
+      <h3>{{ post.user.firstName }} {{ post.user.lastName }}</h3>
+    </div>
+    <div id="task_title">
+      <h3>{{ post.habit.title }}</h3>
     </div>
   </div>
   <div id="task_body">
-    <p>{{ habitLogData.habitLog.notes}}</p>
-    <p>{{ habitLogData.habitLog.completedDate }}</p>
+    <p>{{ post.habitLog.notes}}</p>
+    <p>{{ post.habitLog.completedDate }}</p>
   </div>
 </div>
