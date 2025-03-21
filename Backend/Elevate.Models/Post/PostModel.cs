@@ -8,7 +8,7 @@ namespace Elevate.Models.Post
     public class PostModel
     {
         public ApplicationUser? User { get; set; }
-        public HabitModel? HabitModel { get; set; }
-        public HabitLogModel? HabitLogModel { get; set; }
+        public HabitModel? Habit { get; set; }
+        public HabitLogModel? HabitLog { get; set; }
     }
 }

@@ -10,8 +10,8 @@ namespace Elevate.Models.Post
         [Required]
         public required UserDto User { get; set; }
         [Required]
-        public required HabitDto HabitDto { get; set; }
+        public required HabitDto Habit { get; set; }
         [Required]
-        public required HabitLogDto HabitLogDto { get; set; }
+        public required HabitLogDto HabitLog { get; set; }
     }
 }

@@ -1,14 +1,21 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Extensions;
+using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.Post;
+using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
 {
-    public class FeedRepository(ElevateDbContext context)
+    public class FeedRepository(
+        ElevateDbContext context, 
+        UserRepository userRepository, 
+        HabitRepository habitRepository)
     {
         private readonly ElevateDbContext _context = context;
+        private readonly UserRepository _userRepository = userRepository;
+        private readonly HabitRepository _habitRepository = habitRepository;
 
         public async Task<List<PostModel>> GetFeedAsync(int pageNumber, int pageSize)
         {
@@ -18,25 +25,21 @@ namespace Elevate.Data.Repository
                 .ApplyPagination(pageNumber, pageSize)
                 .ToListAsync();
 
-            List<Guid> habitIds = habitLogs.Select(hl => hl.HabitId).Distinct().ToList();
-            List<Guid> userIds = habitLogs.Select(hl => hl.UserId).Distinct().ToList();
+            List<PostModel> posts = new();
 
-            var habits = await _context.Habits
-                .Where(h => habitIds.Contains(h.Id))
-                .ToDictionaryAsync(h => h.Id);
-
-            var users = await _context.ApplicationUsers
-                .Where(u => userIds.Contains(u.Id))
-                .ToDictionaryAsync(u => u.Id);
-
-            var result = habitLogs.Select(hl => new PostModel
+            foreach (HabitLogModel habitLog in habitLogs)
             {
-                HabitLogModel = hl,
-                HabitModel = habits.GetValueOrDefault(hl.HabitId),
-                User = users.GetValueOrDefault(hl.UserId)
-            }).ToList();
+                ApplicationUser? user = await _userRepository.GetUserByIdAsync(habitLog.UserId);
+                HabitModel? habit = await _habitRepository.GetHabitByIdAsync(habitLog.HabitId);
 
-            return result;
+                posts.Add(new PostModel
+                {
+                    User = user,
+                    Habit = habit,
+                    HabitLog = habitLog
+                });
+            }
+            return posts;
         }
     }
 }
