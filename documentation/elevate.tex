@@ -879,7 +879,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
-  \item[httpPatch{/api/habitLog/\{id\}}] - Szokás napló módosítása
+  \item[\httpPatch{/api/habitLog/\{id\}}] - Szokás napló módosítása
   
     \vspace{0.5cm}
     \textbf{Paraméterek:}
@@ -929,6 +929,52 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \begin{codeblock}{JSON}
           \begin{minted}[breaklines, linenos, style=one-dark]{json} 
 "Habit log was not found."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+\end{description}
+
+\subsection{Feed}
+\begin{description}
+  \item[\httpGet{/api/feed}] - Feed lekérdezése
+  
+    \vspace{0.5cm}
+    Más felhasználók által publikusként megjelölt szokás naplók lekérdezése.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{pageNumber: int} - A lekérdezni kívánt oldal száma
+      \item \textbf{pageSize: int} - A lekérdezni kívánt bejegyzések száma
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "habitId": "string($uuid)",
+  "dueDate": "string($date-time)",
+  "completed": bool,
+  "completedAt": "string($date-time)",
+  "notes": "string",
+  "isPublic": bool
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+      
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Could not update feed."
           \end{minted}
         \end{codeblock}
     \end{itemize}
