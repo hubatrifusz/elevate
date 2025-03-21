@@ -1,4 +1,5 @@
 ﻿using Elevate.Models.HabitLog;
+using Elevate.Models.Post;
 using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace Elevate.Controllers
         private readonly IFeedService _feedService = feedService;
 
         [HttpGet]
-        public async Task<ActionResult<List<HabitLogDto>>> GetFeedAsync(int pageNumber, int pageSize)
+        public async Task<ActionResult<List<PostDto>>> GetFeedAsync(int pageNumber, int pageSize)
         {
             return Ok(await _feedService.GetFeedAsync(pageNumber, pageSize));
         }
