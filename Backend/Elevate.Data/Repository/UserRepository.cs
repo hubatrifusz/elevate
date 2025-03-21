@@ -37,9 +37,26 @@ namespace Elevate.Data.Repository
 
         public async Task<ApplicationUser?> UpdateUserAsync(ApplicationUser user)
         {
-            _context.ApplicationUsers.Update(user);
-            await _context.SaveChangesAsync();
-            return await GetUserByIdAsync(user.Id);
+            var existingUser = await GetUserByIdAsync(user.Id);
+
+            if (existingUser != null)
+            {
+                var properties = typeof(ApplicationUser).GetProperties();
+                foreach (var property in properties)
+                {
+                    var newValue = property.GetValue(user);
+                    if (newValue != null)
+                    {
+                        property.SetValue(existingUser, newValue);
+                    }
+                }
+
+                _context.Entry(existingUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return existingUser;
+            }
+
+            return null;
         }
 
         public async Task<SignInResult> CheckPasswordSignInAsync(ApplicationUser user, string password, bool lockoutOnFailure)
