@@ -4,6 +4,7 @@ import { ToolbarComponent } from "../../components/dashboard/toolbar/toolbar.com
 import { TaskFeedComponent } from "../../components/feed/task/task.component";
 import { HabitLog } from '../../models/habitlog.model';
 import { FeedService } from '../../services/feed.service';
+import { FrequencyEnum } from '../../models/habit.model';
 
 @Component({
   selector: 'app-feed',
