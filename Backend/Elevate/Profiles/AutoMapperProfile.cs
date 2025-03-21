@@ -5,6 +5,7 @@ using Elevate.Models.User;
 using Elevate.Models.AchievementProgress;
 using AutoMapper;
 using Elevate.Models.Friendship;
+using Elevate.Models.Post;
 
 namespace Elevate.Profiles
 {
@@ -44,6 +45,8 @@ namespace Elevate.Profiles
                 .ForAllMembers(opts => opts
                 .Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<HabitLogDto, HabitLogModel>();
+
+            CreateMap<PostModel, PostDto>();
 
             CreateMap<AchievementModel, AchievementDto>();
             CreateMap<AchievementProgressModel, AchievementProgressDto>();

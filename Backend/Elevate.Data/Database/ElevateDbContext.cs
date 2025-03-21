@@ -39,7 +39,10 @@ namespace Elevate.Data.Database
                 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
                 optionsBuilder.UseMySql(connectionString, serverVersion, mySqlOptions =>
-                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
+                        {
+                            mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory");
+                            mySqlOptions.EnablePrimitiveCollectionsSupport();
+                        });
             }
             else
             {

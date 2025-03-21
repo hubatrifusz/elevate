@@ -4,7 +4,7 @@ export interface HabitLog {
   habitId: string;
   dueDate: string;
   completed: boolean;
-  completedDate?: string;
+  completedAt?: string;
   notes?: string;
   isPublic: boolean;
 }
