@@ -36,8 +36,10 @@ namespace Elevate.Extensions
             services.AddScoped<IFeedService, FeedService>();
 
             services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
+            services.AddScoped<IStreakService, StreakService>();
 
             services.AddHostedService<HabitLogGenerationBackgroundService>();
+            services.AddHostedService<StreakBackgroundService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)
