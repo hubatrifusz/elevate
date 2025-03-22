@@ -31,6 +31,14 @@ namespace Elevate.Controllers
             return CreatedAtAction(nameof(GetFriends), new { userId = friendship.UserId }, friendship);
         }
 
+        [HttpPatch]
+        public async Task<ActionResult<FriendshipDto>> UpdateFriendship(FriendshipUpdateDto friendshipUpdateDto)
+        {
+            UserPermissionUtility.IsCurrentUser(friendshipUpdateDto.UserId, User);
+            FriendshipDto friendship = await _friendshipService.UpdateFriendshipAsync(friendshipUpdateDto);
+            return CreatedAtAction(nameof(GetFriends), new { userId = friendship.UserId }, friendship);
+        }
+
         [HttpDelete]
         public async Task<ActionResult<FriendshipDto>> DeleteFriendship(Guid userId, Guid friendId)
         {
