@@ -20,8 +20,11 @@ namespace Elevate.Data.Repository
 
         public async Task<HabitLogModel?> GetHabitLogByIdAsync(Guid habitLogId)
         {
-            HabitLogModel? habitLog = await _context.HabitLogs.FindAsync(habitLogId);
-            return habitLog?.Deleted == true ? null : habitLog;
+            HabitLogModel? habitLog = await _context.HabitLogs
+                .Where(hl => hl.Id == habitLogId && !hl.Deleted)
+                .FirstOrDefaultAsync();
+
+            return habitLog;
         }
 
         public async Task<List<HabitLogModel>> GetHabitLogsByDueDateAsync(Guid userId, DateTime dueDate)
@@ -44,6 +47,17 @@ namespace Elevate.Data.Repository
             }
 
             return null;
+        }
+
+        public async Task<HabitLogModel?> GetOldestMissedHabitLogAsync(Guid habitId, DateTime currentTime)
+        {
+            return await _context.HabitLogs
+                .Where(hl => hl.HabitId == habitId &&
+                             !hl.Completed &&
+                             !hl.Deleted &&
+                             hl.DueDate < currentTime)
+                .OrderBy(hl => hl.DueDate)
+                .FirstOrDefaultAsync();
         }
     }
 }

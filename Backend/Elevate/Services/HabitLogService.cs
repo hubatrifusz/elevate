@@ -5,9 +5,10 @@ using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
 {
-    public class HabitLogService(HabitLogRepository habitLogRepository, IMapper mapper) : IHabitLogService
+    public class HabitLogService(HabitLogRepository habitLogRepository, IStreakService streakService, IMapper mapper) : IHabitLogService
     {
         private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
+        private readonly IStreakService _streakService = streakService;
         private readonly IMapper _mapper = mapper;
 
         public async Task<List<HabitLogDto>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
@@ -41,11 +42,11 @@ namespace Elevate.Services
 
             HabitLogModel habitLogModel = _mapper.Map<HabitLogModel>(existingHabitLog);
 
-            _mapper.Map(habitLogUpdateDto, habitLogModel);
-
             if (habitLogUpdateDto.Completed.HasValue && habitLogUpdateDto.Completed.Value && !existingHabitLog.Completed)
             {
-                habitLogModel.CompletedAt = DateTime.UtcNow;
+                _mapper.Map(habitLogUpdateDto, habitLogModel);
+                await _streakService.UpdateStreakForHabitLog(habitLogModel);
+                habitLogModel.CompletedAt = DateTime.Now;
             }
 
             HabitLogModel updatedHabitLog = await _habitLogRepository.UpdateHabitLogAsync(habitLogModel)
