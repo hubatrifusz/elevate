@@ -1,10 +1,22 @@
 <div id="task_view_container">
+  <!-- Todays date -->
+  <div id="date_container">
+    <img src="icons/left-arrow.png" alt="" (click)="previousDay()" />
+    <div>
+      <h4 class="header_light">{{ weekday }},</h4>
+      <h4 class="header_bold">{{ dayAndMonth }}</h4>
+    </div>
+    <img src="icons/right-arrow.png" alt="" (click)="nextDay()" />
+  </div>
+
+  <!-- Tasks -->
   <div id="task_container">
     @if (habitList.length == 0) {
-    <h3>No tasks yet.</h3>
-    <p>Make one by clicking the 'Add' button.</p>
+    <h3>All done! 🎉</h3>
+    <p>Click 'Add' to create a new habit.</p>
     } @else { @for (habit of habitList; track $index) {
-    <app-task [habitData]="habit"></app-task>} }
+    <app-task [habitData]="habit" (dataEmitter)="deleteHabit($event)"></app-task>
+    } }
   </div>
 
   <!-- Add new task button -->
@@ -19,7 +31,8 @@
 
   <!-- Add new task form -->
   @if (isVisible) {
-  <form [formGroup]="addNewTaskForm">
+  <form [formGroup]="addNewTaskForm" (ngSubmit)="onSubmit()" (keydown.escape)="toggleFormVisibility()">
+    <img src="icons/cross.png" alt="cross" (click)="toggleFormVisibility()" />
     <div class="input_container" id="title_text_input_container" data-cy="title_text_input_container">
       <input type="text" name="title_text_input" id="title_text_input" placeholder=" " [formControlName]="'title'" />
       <label for="title" class="input_title">Add a title</label>
@@ -41,7 +54,17 @@
       <label for="green_color_radio_input" class="radio_label"></label>
     </div>
 
-    <div class="button_container" (click)="addNewTask()">
+    <div class="input_container">
+      <select name="frequency_selector" id="frequency_selector" [formControlName]="'frequencyType'">
+        <option value="" disabled selected>Select Frequency</option>
+        <option value="Daily">Daily</option>
+        <option value="Weekly">Weekly</option>
+        <option value="Monthly">Monthly</option>
+        <option value="Custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="button_container">
       <button class="button_secondary"><span>Add new task!</span></button>
     </div>
   </form>

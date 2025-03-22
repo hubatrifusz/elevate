@@ -18,16 +18,19 @@ export class LoginComponent {
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/)]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)]),
     rememberMe: new FormControl(false, Validators.required),
   });
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
+
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        this.authService.saveToken(response.token);
-        this.authService.saveUserID(response.userId)
+        console.log(response);
+
+        this.authService.saveToken(response.token, this.loginForm.value.rememberMe as boolean);
+        this.authService.saveUserID(response.userId, this.loginForm.value.rememberMe as boolean);
       },
       error: (e) => this.checkLoginErrors(e),
       complete: () => this.router.navigate(['/dashboard']),

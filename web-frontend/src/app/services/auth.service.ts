@@ -7,20 +7,31 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
+  token = localStorage.getItem('token');
+
   constructor(private http: HttpClient, private router: Router) {}
 
   private apiUrl = 'http://localhost:8080/api';
 
-  saveToken(token: string) {
-    localStorage.setItem('token', token);
+  saveToken(token: string, rememberMe: boolean) {
+    if (rememberMe) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
   }
 
-  saveUserID(id: string) {
-    localStorage.setItem('id', id);
+  saveUserID(id: string, rememberMe: boolean) {
+    if (rememberMe) {
+      localStorage.setItem('id', id);
+    } else {
+      sessionStorage.setItem('id', id);
+    }
   }
 
   logout() {
     localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/login']);
   }
 
@@ -32,39 +43,11 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);
   }
 
-  getUserData(id: string | null): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.get(`${this.apiUrl}/user/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  getToken(): string | null {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
   }
 
-  getUserHabits(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('id') ?? '';
-    const params = new HttpParams().set('userId', userId).set('pageNumber', 1).set('pageSize', 20);
-
-    return this.http.get(`${this.apiUrl}/habit`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-
-  addNewTask(formResult: any): Observable<any> {
-    const token = localStorage.getItem('token');
-
-    return this.http.post(
-      `${this.apiUrl}/habit`,
-      formResult,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
