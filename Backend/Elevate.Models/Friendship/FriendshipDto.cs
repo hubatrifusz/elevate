@@ -11,7 +11,7 @@ namespace Elevate.Models.Friendship
         [Required]
         public required Guid FriendId { get; set; }
         [Required]
-        public required FriendshipStatus Status { get; set; }
+        public required string Status { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
