@@ -2,9 +2,14 @@
 
 namespace Elevate.Models.Friendship
 {
-    class FriendshipUpdateDto
+    public class FriendshipUpdateDto
     {
         [Required]
-        public FriendshipStatus Status { get; set; }
+        public required Guid UserId { get; set; }
+        [Required]
+        public required Guid FriendId { get; set; }
+        [Required]
+        [ValidFriendShipStatus(isRequired: true)]
+        public required string Status { get; set; }
     }
 }

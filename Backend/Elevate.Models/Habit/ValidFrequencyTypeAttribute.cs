@@ -1,14 +1,9 @@
 ﻿using Elevate.Models.Habit;
 using System.ComponentModel.DataAnnotations;
 
-public class ValidFrequencyTypeAttribute : ValidationAttribute
+public class ValidFrequencyTypeAttribute(bool isRequired = false) : ValidationAttribute
 {
-    private readonly bool _isRequired;
-
-    public ValidFrequencyTypeAttribute(bool isRequired = false)
-    {
-        _isRequired = isRequired;
-    }
+    private readonly bool _isRequired = isRequired;
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {

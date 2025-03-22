@@ -30,6 +30,9 @@ namespace Elevate.Profiles
 
             CreateMap<FriendshipModel, FriendshipDto>();
             CreateMap<FriendshipCreateDto, FriendshipModel>();
+            CreateMap<FriendshipUpdateDto, FriendshipModel>()
+                .ForAllMembers(opts => opts
+                .Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<HabitModel, HabitDto>();
             CreateMap<HabitCreateDto, HabitModel>();
