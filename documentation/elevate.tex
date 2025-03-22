@@ -205,6 +205,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 \end{description}
 
 \vspace{0.5cm}
+
 \subsection{Felhasználó}
 \begin{description}
   \item[\httpGet{/api/user}] - Felhasználók lekérdezése email alapján
@@ -381,6 +382,50 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \begin{codeblock}{JSON}
           \begin{minted}[breaklines, linenos, style=one-dark]{json}
 "User has no friends."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpGet{/api/friendship/\{userId\}/friend-requests}]- Barátkérések ~\\
+  \indent lekérdezése
+
+    \vspace{0.5cm}
+    \begin{sloppypar}
+      A felhasználó barátkéréseinek lekérdezése a felhasználó azonosítója alapján.
+    \end{sloppypar}
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+"id": "string($uuid)",
+"createdAt": "string($date-time)",
+"email": "string($email)",
+"firstName": "string",
+"lastName": "string",
+"profilePictureBase64": "string",
+"longestStreak": Number
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User has no friend requests."
           \end{minted}
         \end{codeblock}
     \end{itemize}
