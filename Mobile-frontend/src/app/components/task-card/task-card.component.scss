@@ -224,15 +224,20 @@ ion-item {
         background-color: $main-color-100;
         width: calc(100% - 10px);
         margin: 10px auto;
+
         .item-inner {
             margin: 10px;
         }
-        ion-label{
+
+        ion-label {
             margin: 0 15px;
         }
-        ion-input[type="color"]{
+
+        ion-input[type="color"] {
             width: 50%;
         }
     }
 
 }
+
+

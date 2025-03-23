@@ -41,7 +41,7 @@ export class CreateHabitPage implements OnInit {
 
   selectedDays: boolean[] = [false, false, false, false, false, false, false];
 
-  constructor(private router: Router, private habitService: HabitService,private toastService: ToastService) { }
+  constructor(private router: Router, private habitService: HabitService, private toastService: ToastService) { }
 
   ngOnInit() {
   }

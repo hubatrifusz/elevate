@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -8,28 +8,40 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitService } from 'src/app/services/habit.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HabitLog } from 'src/app/.models/HabitLog.model';
 
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonIcon, IonCheckbox,
+  imports: [IonTabButton, IonAlert, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
 
-  @Input() loadMoreHabits!: EventEmitter<void>; 
+  @Input() loadMoreHabits!: EventEmitter<void>;
+  @Input() set habitlogsDate(value: string | null) {
+    this._habitlogsDate = value;
+    this.onDateChange(); // Trigger logic when the date changes
+  }
+  get habitlogsDate(): string | null {
+    return this._habitlogsDate;
+  }
   @Output() hasMoreHabitsChange = new EventEmitter<boolean>();
   habits: Habit[] = [];
+  habitLogs: HabitLog[] = [];
+
 
   private habitService = inject(HabitService);
   private router = inject(Router);
-
+  private _habitlogsDate: string | null = null;
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
+  public checked = false;
+
 
   weekDays = [
     { label: 'M', value: 'Mon' },
@@ -41,19 +53,55 @@ export class TaskCardComponent implements OnInit {
     { label: 'S', value: 'Sun' }
   ];
 
-  ngOnInit() {
-    this.loadHabits();
-    this.loadMoreHabits.subscribe(() => {
-      this.loadMore();
-      console.log(this.hasMoreHabits)
-    });
-  }
 
-  constructor() {
+  constructor(private loadingController: LoadingController, private alertController: AlertController) {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
   }
 
-  loadHabits() {
+
+  async ngOnInit() {
+    const loading = await this.presentLoading();
+    if (!this.habitlogsDate) {
+      await this.loadHabits(); // Await for better flow control
+      loading.dismiss();
+
+      this.loadMoreHabits.subscribe(async () => {
+        await this.loadMore(); // Await loadMore
+        console.log(this.hasMoreHabits);
+      });
+    } else {
+      loading.dismiss();
+    }
+  }
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Loading...',
+    });
+    await loading.present();
+    return loading;
+  }
+
+  async onDateChange() {
+    if (this.habitlogsDate) {
+      const loading = await this.presentLoading();
+      console.log(`Date changed to: ${this.habitlogsDate}`);
+      this.pageNumber = 1; // Reset pagination
+      this.habits = []; // Clear current habits
+      await this.loadHabitLogs(); // Await loadHabitLogs
+      loading.dismiss();
+    } else {
+      console.log('Date cleared, loading all habits');
+      this.pageNumber = 1; // Reset pagination
+      this.habits = []; // Clear current habits
+      await this.loadHabits(); // Await loadHabits
+    }
+  }
+
+
+
+
+  async loadHabits() {
+
     const userId = localStorage.getItem('userId');
     console.log(userId);
     if (userId) {
@@ -92,12 +140,47 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-  loadMore() {
+  async loadMore() {
     this.pageNumber++;
-    this.loadHabits();
+    if (this.habitlogsDate != null) {
+      await this.loadHabitLogs(); // Await loadHabitLogs
+    }
+    else {
+
+      await this.loadHabits(); // Await loadHabits
+    }
+  }
+
+  async loadHabitLogs() {
+    const userId = localStorage.getItem('userId');
+    if (userId && this.habitlogsDate) {
+      try {
+        const response = await this.habitService.getTodaysHabitlogs(this.habitlogsDate).toPromise();
+        this.habitLogs = response as HabitLog[];
+        for (const habitLog of this.habitLogs) {
+          await this.getHabitByID(habitLog.habitId); // Await getHabitByID
+        }
+      } catch (error) {
+        console.error('Error loading habit logs:', error);
+      }
+    }
+  }
+
+  async getHabitByID(habitId: string) {
+    try {
+      const response = await this.habitService.getHabitByID(habitId).toPromise();
+      const habit = response as Habit;
+      if (!habit.color.startsWith('#')) {
+        habit.color = '#' + habit.color;
+      }
+      this.habits.push(habit);
+    } catch (error) {
+      console.error('Error fetching habit by ID:', error);
+    }
   }
 
   toggleDay(habit: Habit, dayIndex: number) {
+
     if (habit.customFrequency == null) {
       console.log('customFrequency is null or undefined');
       habit.customFrequency = 0; // Initialize to 0 if null or undefined
@@ -131,7 +214,10 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-
+  isHabitCompleted(habitId: string): boolean {
+    const habitLog = this.habitLogs.find((log) => log.habitId === habitId);
+    return habitLog ? habitLog.completed : false;
+  }
 
   stopPropagation(event: Event) {
     event.stopPropagation();
@@ -142,16 +228,14 @@ export class TaskCardComponent implements OnInit {
   }
 
 
-  deleteHabit(habit: Habit) {
+  async deleteHabit(habit: Habit) {
     this.habits = this.habits.filter((h) => h.id !== habit.id);
-    this.habitService.deleteHabit(habit.id).subscribe(
-      () => {
-        console.log('Habit deleted successfully');
-      },
-      (error) => {
-        console.error('Error deleting habit:', error);
-      }
-    );
+    try {
+      await this.habitService.deleteHabit(habit.id).toPromise();
+      console.log('Habit deleted successfully');
+    } catch (error) {
+      console.error('Error deleting habit:', error);
+    }
   }
 
   onDescriptionBlur(habit: Habit) {
@@ -176,16 +260,65 @@ export class TaskCardComponent implements OnInit {
     console.log('Is Positive:', event.detail.checked);
     this.editHabit(habit);
   }
-  editHabit(habit: Habit) {
-    this.habitService.editHabit(habit).subscribe(
-      (response) => {
-        console.log('Habit edited successfully');
-        habit.color = "#" + habit.color;
-        console.log(response);
-      },
-      (error) => {
-        console.error('Error editing habit:', error);
-      }
-    );
+  async editHabit(habit: Habit) {
+    try {
+      const response = await this.habitService.editHabit(habit).toPromise();
+      console.log('Habit edited successfully');
+      habit.color = '#' + habit.color;
+      console.log(response);
+    } catch (error) {
+      console.error('Error editing habit:', error);
+    }
   }
+
+  completed(habitId: string, Ispublic: boolean) {
+    const habitLog = this.habitLogs.find(habitLog => habitLog.habitId === habitId);
+    if (habitLog) {
+      const habitLogId = habitLog.id;
+
+      this.habitService.completeHabit(habitLogId, Ispublic).subscribe(
+        (response) => {
+          console.log('Habit completed successfully:', response);
+
+          // Update the habitLog locally instead of reloading all habit logs
+          habitLog.completed = true;
+
+          // Optionally, update the UI if needed
+          console.log('Updated habitLog:', habitLog);
+        },
+        (error) => {
+          console.error('Error completing habit:', error);
+        }
+      );
+    }
+  }
+
+  async presentAlert(habitID: string) {
+    const alert = await this.alertController.create({
+      header: 'You made it!',
+      subHeader: 'You are one step closer to your goal! 🎉',
+      message: 'Do you want to share your progress?',
+      buttons: [
+        {
+          text: 'No, thanks',
+          role: 'cancel',
+          handler: () => {
+            console.log('Alert canceled');
+            this.completed(habitID, false);
+          },
+        },
+        {
+          text: 'Yes, share',
+          role: 'confirm',
+          handler: () => {
+            console.log('Alert confirmed');
+            this.completed(habitID, true);
+          },
+        },],
+    });
+
+    await alert.present();
+  }
+
+
 }

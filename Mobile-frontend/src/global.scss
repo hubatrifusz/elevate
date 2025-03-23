@@ -59,7 +59,10 @@ ion-content {
     --ion-background-color: linear-gradient(35deg, #9a8af675, #000000, #00000075, #9a8af675);
   }
 }
-
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/theme/fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+}
 ion-toast {
   // @media(prefers-color-scheme: dark) {
   //   --background: hsl(248, 10%, 30%);

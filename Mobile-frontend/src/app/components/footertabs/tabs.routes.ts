@@ -15,6 +15,10 @@ export const routes: Routes = [
             {
                 path: 'create-account-page',
                 loadComponent: () => import('../../pages/create-account-page/create-account-page.page').then(m => m.CreateAccountPagePage)
+            },
+            {
+                path: 'calendar',
+                loadComponent: () => import('../../pages/calendar/calendar.page').then(m => m.CalendarPage)
             }
         ]
     },

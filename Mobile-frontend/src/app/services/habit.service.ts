@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Habit } from '../.models/Habit.model';
+import { IonDatetime } from '@ionic/angular/standalone';
+import { HabitLog } from '../.models/HabitLog.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +26,25 @@ export class HabitService {
       .set('pageSize', pageSize.toString());
 
     return this.http.get<Habit[]>(this.apiUrl, { headers: headers, params: params });
+  }
+  getHabitByID(habitId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+
+    return this.http.get(`${this.apiUrl}/${habitId}`, { headers: headers });
+  }
+  getTodaysHabitlogs(date: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+    const userId = localStorage.getItem('userId') ?? '';
+    const params = new HttpParams().set('userId', userId);
+
+    return this.http.get(`http://localhost:8080/api/habitlog/${date}`, { headers: headers, params: params });
   }
 
   createHabit(habitData: any): Observable<Habit> {
@@ -57,8 +78,20 @@ export class HabitService {
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
     });
-    console.log("dfsefsefed")
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: headers });
   }
 
+  completeHabit(habitLogId: string, Ispublic : boolean): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Include the token in the headers
+    });
+
+    const body = {
+      completed: true,
+      isPublic: Ispublic
+    };
+
+    return this.http.patch(`http://localhost:8080/api/habitlog/${habitLogId}`, body, { headers: headers });
+  }
 }
