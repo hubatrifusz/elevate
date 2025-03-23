@@ -43,6 +43,7 @@ namespace Elevate.Controllers
         {
             UserPermissionUtility.IsCurrentUser(friendshipUpdateDto.UserId, User);
             FriendshipDto friendship = await _friendshipService.UpdateFriendshipAsync(friendshipUpdateDto);
+
             return CreatedAtAction(nameof(GetFriendsAsync), new { userId = friendship.UserId }, friendship);
         }
 

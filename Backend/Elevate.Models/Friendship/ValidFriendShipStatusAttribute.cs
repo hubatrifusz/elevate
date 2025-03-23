@@ -1,5 +1,4 @@
-﻿using Elevate.Models.Habit;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Elevate.Models.Friendship
 {

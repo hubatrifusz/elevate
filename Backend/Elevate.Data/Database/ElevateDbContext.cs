@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
 using Elevate.Common.Exceptions;
+using Elevate.Models.Challenge;
 
 namespace Elevate.Data.Database
 {
@@ -80,6 +81,28 @@ namespace Elevate.Data.Database
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasIndex(c => new { c.UserId, c.FriendId })
+                .IsUnique();
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(c => c.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasOne<HabitModel>()
+                .WithMany()
+                .HasForeignKey(c => c.Habit.Id)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
