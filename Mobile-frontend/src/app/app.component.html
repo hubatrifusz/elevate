@@ -1,7 +1,7 @@
 <ion-app>
   <ion-menu side="end" contentId="main-content" fullscreen="true">
-    <ion-content (click)="goToUserPage(user?.id)" class="ion-padding" color="light" [fullscreen]="true">
-      <div class="profile-pic">
+    <ion-content  class="ion-padding" color="light" [fullscreen]="true">
+      <div (click)="goToUserPage(user?.id)" class="profile-pic">
         <ion-avatar>
           <img
             [src]="user?.profilePictureBase64 ? 'data:image/jpeg;base64,' + user?.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
