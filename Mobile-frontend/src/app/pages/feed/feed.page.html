@@ -1,18 +1,6 @@
 <div class="ion-page" id="main-content">
-  <ion-header class="ion-no-border">
-    <ion-toolbar>
-      <ion-title slot="start">Hello <br> {{userName}}!</ion-title>
-      <!-- <ion-icon  name="search-outline"></ion-icon> -->
-      <ion-searchbar slot="start" show-clear-button="focus"></ion-searchbar>
-      <ion-buttons slot="end">
-        <ion-menu-toggle>
-          <ion-button>
-            <ion-icon class="icon" name="person-circle-outline"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+ <app-header [showGreeting]="true" ></app-header>
+  
   <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
     (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">

@@ -22,7 +22,12 @@ export const routes: Routes = [
   {
     path: 'create-habit',
     loadComponent: () => import('./pages/create-habit/create-habit.page').then(m => m.CreateHabitPage)
+  },
+  {
+    path: 'profile/:id',
+    loadComponent: () => import('./pages/profile/profile.page').then( m => m.ProfilePage)
   }
+
 
 
 

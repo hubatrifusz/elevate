@@ -13,13 +13,13 @@ export const routes: Routes = [
                 loadComponent: () => import('../../pages/feed/feed.page').then(m => m.FeedPage)
             },
             {
-                path: 'create-account-page',
-                loadComponent: () => import('../../pages/create-account-page/create-account-page.page').then(m => m.CreateAccountPagePage)
-            },
-            {
                 path: 'calendar',
                 loadComponent: () => import('../../pages/calendar/calendar.page').then(m => m.CalendarPage)
-            }
+            },
+            {
+                path: 'friendFeed',
+                loadComponent: () => import('../../pages/friends-feed/friends-feed.page').then(m => m.FriendsFeedPage)
+            },
         ]
     },
     {
