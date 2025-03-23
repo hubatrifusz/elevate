@@ -81,14 +81,15 @@ export class HabitService {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: headers });
   }
 
-  completeHabit(habitLogId: string): Observable<any> {
+  completeHabit(habitLogId: string, Ispublic : boolean): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Include the token in the headers
     });
 
     const body = {
-      completed: true // Send the completed status in the body
+      completed: true,
+      isPublic: Ispublic
     };
 
     return this.http.patch(`http://localhost:8080/api/habitlog/${habitLogId}`, body, { headers: headers });

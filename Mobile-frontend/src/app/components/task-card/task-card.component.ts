@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -14,12 +14,13 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
+  imports: [IonTabButton, IonAlert, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
 export class TaskCardComponent implements OnInit {
+
   @Input() loadMoreHabits!: EventEmitter<void>;
   @Input() set habitlogsDate(value: string | null) {
     this._habitlogsDate = value;
@@ -53,8 +54,7 @@ export class TaskCardComponent implements OnInit {
   ];
 
 
-
-  constructor(private loadingController: LoadingController) {
+  constructor(private loadingController: LoadingController, private alertController: AlertController) {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
   }
 
@@ -271,12 +271,12 @@ export class TaskCardComponent implements OnInit {
     }
   }
 
-  completed(habitId: string) {
+  completed(habitId: string, Ispublic: boolean) {
     const habitLog = this.habitLogs.find(habitLog => habitLog.habitId === habitId);
     if (habitLog) {
       const habitLogId = habitLog.id;
 
-      this.habitService.completeHabit(habitLogId).subscribe(
+      this.habitService.completeHabit(habitLogId, Ispublic).subscribe(
         (response) => {
           console.log('Habit completed successfully:', response);
 
@@ -292,4 +292,33 @@ export class TaskCardComponent implements OnInit {
       );
     }
   }
+
+  async presentAlert(habitID: string) {
+    const alert = await this.alertController.create({
+      header: 'You made it!',
+      subHeader: 'You are one step closer to your goal! 🎉',
+      message: 'Do you want to share your progress?',
+      buttons: [
+        {
+          text: 'No, thanks',
+          role: 'cancel',
+          handler: () => {
+            console.log('Alert canceled');
+            this.completed(habitID, false);
+          },
+        },
+        {
+          text: 'Yes, share',
+          role: 'confirm',
+          handler: () => {
+            console.log('Alert confirmed');
+            this.completed(habitID, true);
+          },
+        },],
+    });
+
+    await alert.present();
+  }
+
+
 }

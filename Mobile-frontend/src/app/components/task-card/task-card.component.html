@@ -10,7 +10,8 @@
         <ion-label>{{habit.streak}}</ion-label>
         <ion-icon name="flame-outline"></ion-icon>
       </div>
-      <ion-checkbox [disabled]="!this.habitlogsDate"  [checked]="isHabitCompleted(habit.id)" slot="end" (click)="stopPropagation($event); completed(habit.id)"></ion-checkbox>
+      <ion-checkbox  [disabled]="!this.habitlogsDate"  [checked]="isHabitCompleted(habit.id)" slot="end" (click)="stopPropagation($event); presentAlert(habit.id)"></ion-checkbox>
+   
     </ion-item>
     <div class="ion-padding content" slot="content">
       <ion-textarea [readonly]="this.habitlogsDate" label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
