@@ -16,41 +16,6 @@ ion-content {
 }
 
 
-ion-header {
-  height: fit-content;
-  box-shadow: none;
-
-  // border-radius: 80px;
-  ion-title {
-    color: $text-color-900;
-    font-size: 25px;
-    padding: 15px;
-    letter-spacing: 0.6px;
-
-    @media(prefers-color-scheme: dark) {
-      color: $text-color-200;
-    }
-  }
-
-  ion-searchbar {
-    --border-radius: 10px;
-    display: none;
-    width: 80%;
-  }
-
-
-  // --ion-toolbar-background: transparent;
-  @media(prefers-color-scheme: dark) {}
-
-}
-
-ion-toolbar {
-  // border-radius: 10px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  --border: 2px solid $text-color-900;
-  @media(prefers-color-scheme: dark) {}
-}
 
 .profile-pic {
   display: flex;
@@ -60,9 +25,6 @@ ion-toolbar {
   padding-top: 10px;
 }
 
-.icon {
-  font-size: 50px; // Adjust the size of the icon as needed
-}
 
 h2 {
   color: $text-color-900;

@@ -9,6 +9,7 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chevronForwardOutline, personCircleOutline, add } from 'ionicons/icons';
 import { Router } from '@angular/router';
+import { HeaderComponent } from "../../components/header/header.component";
 
 @Component({
   selector: 'app-calendar',
@@ -26,7 +27,7 @@ import { Router } from '@angular/router';
     IonModal,
     IonTitle,
     IonToolbar,
-    IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent]
+    IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent, HeaderComponent]
 })
 export class CalendarPage implements OnInit {
   selectedDate: IonDatetime | null = null;

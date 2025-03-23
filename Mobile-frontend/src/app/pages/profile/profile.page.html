@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{user?.firstName}} {{user?.lastName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if(!user){
+
+  <ion-spinner></ion-spinner>
+  }
+  @else if(user){
+
+  <ion-card>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img
+          [src]="user.profilePictureBase64 ? 'data:image/png;base64,' + user.profilePictureBase64 : 'https://www.gravatar.com/avatar?d=mp'"
+          alt="Profile Picture" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p>Email: {{ user.email }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-card-content>
+      <p><strong>Joined:</strong> {{ user.createdAt ? (user.createdAt | date:'longDate') : 'Unknown' }}</p>
+      <p><strong>Longest Streak:</strong> {{ user.longestStreak }} days</p>
+    </ion-card-content>
+  </ion-card>
+  }
+
+
+  @if(user == null){
+  <p style="text-align: center; color: red;">User not found</p>
+
+  }
+</ion-content>

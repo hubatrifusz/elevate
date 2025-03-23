@@ -1,0 +1,45 @@
+@use "../../../theme/variables.scss" as *;
+
+ion-header {
+    box-shadow: none;
+
+    // border-radius: 80px;
+    ion-title {
+        color: $text-color-900;
+        font-size: 25px;
+        padding: 15px;
+        padding-bottom: 0px;
+        letter-spacing: 0.6px;
+
+        @media(prefers-color-scheme: dark) {
+            color: $text-color-200;
+        }
+    }
+
+    ion-searchbar {
+        --border-radius: 10px;
+        display: none;
+        width: 80%;
+    }
+
+    ion-avatar {
+        height: 45px;
+        width: 45px;
+        margin: auto;
+    }
+
+    // --ion-toolbar-background: transparent;
+    @media(prefers-color-scheme: dark) {}
+
+}
+
+ion-toolbar {
+    // border-radius: 10px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    --border: 2px solid $text-color-900;
+    padding-bottom: 10px;
+
+    @media(prefers-color-scheme: dark) {}
+}
+

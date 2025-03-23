@@ -1,0 +1,29 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title slot="start">
+      @if(showGreeting){
+        Hello <br> {{ user?.firstName }} {{ user?.lastName }}!
+      }
+      @else{
+        {{ title }}
+      }
+    </ion-title>
+    @if(showGreeting){
+
+    <ion-searchbar slot="start" show-clear-button="focus"></ion-searchbar>
+    }
+
+
+    <ion-buttons slot="end">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-avatar class="icon">
+            <img
+              [src]="user?.profilePictureBase64 ? 'data:image/jpeg;base64,' + user?.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+              alt="Profile Picture"  />
+          </ion-avatar>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
