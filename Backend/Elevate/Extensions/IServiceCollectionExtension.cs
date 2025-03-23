@@ -18,6 +18,7 @@ namespace Elevate.Extensions
         {
             services.AddScoped<UserRepository>();
             services.AddScoped<HabitRepository>();
+            services.AddScoped<ChallengeRepository>();
             services.AddScoped<HabitLogRepository>();
             services.AddScoped<FriendshipRepository>();
             services.AddScoped<FeedRepository>();
@@ -31,6 +32,7 @@ namespace Elevate.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IHabitService, HabitService>();
+            services.AddScoped<IChallengeService, ChallengeService>();
             services.AddScoped<IHabitLogService, HabitLogService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
             services.AddScoped<IFeedService, FeedService>();

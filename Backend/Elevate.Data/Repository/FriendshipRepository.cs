@@ -7,7 +7,7 @@ namespace Elevate.Data.Repository
 {
     public class FriendshipRepository(ElevateDbContext context)
     {
-        readonly ElevateDbContext _context = context;
+        private readonly ElevateDbContext _context = context;
 
         public async Task<List<ApplicationUser>> GetFriendsAsync(Guid userId)
         {

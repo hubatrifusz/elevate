@@ -3,7 +3,6 @@ using Elevate.Models.User;
 using Elevate.Models.Friendship;
 using Elevate.Common.Exceptions;
 using AutoMapper;
-using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
 {
@@ -39,7 +38,7 @@ namespace Elevate.Services
         {
             if (friendshipCreateDto.UserId == friendshipCreateDto.FriendId)
             {
-                throw new BadRequestException("User cannot be friends with themselves.");
+                throw new BadRequestException("User cannot be friends with themself.");
             }
             FriendshipModel friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
             FriendshipModel savedFriendship = await _friendshipRepository.AddFriendshipAsync(friendship)

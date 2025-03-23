@@ -12,20 +12,15 @@ using Elevate.Models.Challenge;
 
 namespace Elevate.Data.Database
 {
-    public class ElevateDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class ElevateDbContext(
+        DbContextOptions<ElevateDbContext> options,
+        DbConnectionManager connectionManager) : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
     {
-        private readonly DbConnectionManager _connectionManager;
-
-        public ElevateDbContext(
-            DbContextOptions<ElevateDbContext> options,
-            DbConnectionManager connectionManager)
-            : base(options)
-        {
-            _connectionManager = connectionManager;
-        }
+        private readonly DbConnectionManager _connectionManager = connectionManager;
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<HabitModel> Habits { get; set; }
+        public DbSet<ChallengeModel> Challenges { get; set; }
         public DbSet<AchievementModel> Achievements { get; set; }
         public DbSet<HabitLogModel> HabitLogs { get; set; }
         public DbSet<AchievementProgressModel> AchievementProgresses { get; set; }
@@ -97,12 +92,6 @@ namespace Elevate.Data.Database
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(c => c.FriendId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ChallengeModel>()
-                .HasOne<HabitModel>()
-                .WithMany()
-                .HasForeignKey(c => c.Habit.Id)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
