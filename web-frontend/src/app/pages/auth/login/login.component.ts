@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { inputValidator } from '../../../shared/input-validator';
 import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
 import { AuthService } from '../../../services/auth.service';
 import { PasswordToggleService } from '../../../services/password-toggle.service';
@@ -21,12 +20,8 @@ export class LoginComponent {
   formErrorMessage: string = '';
 
   loginForm = new FormGroup({
-    email: new FormControl('', [ValidationService.requiredValidator(), Validators.email]),
-    password: new FormControl('', [
-      ValidationService.requiredValidator(),
-      inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/),
-      ValidationService.passwordMinLengthValidator(12),
-    ]),
+    email: new FormControl('', [ValidationService.requiredValidator(), ValidationService.emailValidator()]),
+    password: new FormControl('', [ValidationService.requiredValidator(), ValidationService.passwordValidator()]),
     rememberMe: new FormControl(false),
   });
 
@@ -36,12 +31,16 @@ export class LoginComponent {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log(response);
-
         this.authService.saveToken(response.token, this.loginForm.value.rememberMe as boolean);
         this.authService.saveUserID(response.userId, this.loginForm.value.rememberMe as boolean);
       },
-      error: (e) => console.log(e),
+      error: (error) => {
+        if (error.status === 403) {
+          this.formErrorMessage = 'Incorrect email or password.';
+        } else {
+          this.formErrorMessage = 'An error occurred. Please try again later.';
+        }
+      },
       complete: () => this.router.navigate(['/dashboard']),
     });
   }
@@ -65,9 +64,8 @@ export class LoginComponent {
       }
     });
 
-    errors.sort()
+    errors.sort();
     this.formErrorMessage = errors[0];
-    console.log(errors);
     errors = [];
   }
 }
