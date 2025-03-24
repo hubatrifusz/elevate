@@ -24,9 +24,34 @@ namespace Elevate.Data.Repository
             var lastDayOfNextMonth = new DateTime(nextMonthYear, nextMonth, DateTime.DaysInMonth(nextMonthYear, nextMonth));
 
             var targetEndDate = endDate ?? lastDayOfNextMonth;
+            var allNewLogs = new List<HabitLogModel>();
 
+            var ownerLogs = await GenerateLogsForUserAsync(habit, habit.UserId, startDate, targetEndDate);
+            allNewLogs.AddRange(ownerLogs);
+
+            foreach (var friendId in habit.ChallengedFriends)
+            {
+                if (friendId == habit.UserId)
+                    continue;
+
+                var friendLogs = await GenerateLogsForUserAsync(habit, friendId, startDate, targetEndDate);
+                allNewLogs.AddRange(friendLogs);
+            }
+
+            if (allNewLogs.Count > 0)
+            {
+                await _context.Set<HabitLogModel>().AddRangeAsync(allNewLogs);
+                await _context.SaveChangesAsync();
+            }
+
+            return allNewLogs;
+        }
+
+        private async Task<List<HabitLogModel>> GenerateLogsForUserAsync(HabitModel habit, Guid userId, DateTime startDate, DateTime endDate)
+        {
+            // Get existing dates for this specific user and habit
             var existingDates = await _context.Set<HabitLogModel>()
-                .Where(l => l.HabitId == habit.Id)
+                .Where(l => l.HabitId == habit.Id && l.UserId == userId)
                 .Select(l => l.DueDate.Date)
                 .ToListAsync();
 
@@ -34,23 +59,17 @@ namespace Elevate.Data.Repository
 
             if (habit.FrequencyType == FrequencyEnum.Custom && habit.CustomFrequency.HasValue)
             {
-                newLogs.AddRange(GenerateCustomFrequencyLogs(habit, startDate, targetEndDate, existingDates));
+                newLogs.AddRange(GenerateCustomFrequencyLogs(habit, userId, startDate, endDate, existingDates));
             }
             else
             {
-                newLogs.AddRange(GenerateStandardFrequencyLogs(habit, startDate, targetEndDate, existingDates));
-            }
-
-            if (newLogs.Count != 0)
-            {
-                await _context.Set<HabitLogModel>().AddRangeAsync(newLogs);
-                await _context.SaveChangesAsync();
+                newLogs.AddRange(GenerateStandardFrequencyLogs(habit, userId, startDate, endDate, existingDates));
             }
 
             return newLogs;
         }
 
-        private List<HabitLogModel> GenerateStandardFrequencyLogs(HabitModel habit, DateTime startDate, DateTime endDate, List<DateTime> existingDates)
+        private List<HabitLogModel> GenerateStandardFrequencyLogs(HabitModel habit, Guid userId, DateTime startDate, DateTime endDate, List<DateTime> existingDates)
         {
             var newLogs = new List<HabitLogModel>();
             var currentDate = startDate;
@@ -76,7 +95,7 @@ namespace Elevate.Data.Repository
 
                 if (includeDate && !existingDates.Contains(currentDate.Date))
                 {
-                    newLogs.Add(CreateLog(habit, currentDate));
+                    newLogs.Add(CreateLog(habit, userId, currentDate));
                 }
 
                 currentDate = currentDate.AddDays(1);
@@ -93,14 +112,14 @@ namespace Elevate.Data.Repository
 
                     if (!existingDates.Contains(lastDayOfMonth.Date))
                     {
-                        newLogs.Add(CreateLog(habit, lastDayOfMonth));
+                        newLogs.Add(CreateLog(habit, userId, lastDayOfMonth));
                     }
                 }
             }
             return newLogs;
         }
 
-        private List<HabitLogModel> GenerateCustomFrequencyLogs(HabitModel habit, DateTime startDate, DateTime endDate, List<DateTime> existingDates)
+        private List<HabitLogModel> GenerateCustomFrequencyLogs(HabitModel habit, Guid userId, DateTime startDate, DateTime endDate, List<DateTime> existingDates)
         {
             var newLogs = new List<HabitLogModel>();
             sbyte customFrequency = habit.CustomFrequency ?? 0;
@@ -120,7 +139,7 @@ namespace Elevate.Data.Repository
 
                 if (isDaySelected && !existingDates.Contains(currentDate))
                 {
-                    newLogs.Add(CreateLog(habit, currentDate));
+                    newLogs.Add(CreateLog(habit, userId, currentDate));
                 }
                 currentDate = currentDate.AddDays(1);
             }
@@ -128,15 +147,14 @@ namespace Elevate.Data.Repository
             return newLogs;
         }
 
-
-        private HabitLogModel CreateLog(HabitModel habit, DateTime date)
+        private HabitLogModel CreateLog(HabitModel habit, Guid userId, DateTime date)
         {
             var dueDateTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
             return new HabitLogModel
             {
                 Id = Guid.NewGuid(),
-                UserId = habit.UserId,
+                UserId = userId,
                 HabitId = habit.Id,
                 DueDate = dueDateTime,
                 Completed = false,
@@ -145,5 +163,6 @@ namespace Elevate.Data.Repository
                 IsPublic = false
             };
         }
+
     }
 }

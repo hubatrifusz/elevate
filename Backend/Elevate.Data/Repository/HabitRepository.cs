@@ -12,7 +12,7 @@ namespace Elevate.Data.Repository
         public async Task<List<HabitModel>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
             return await _context.Habits
-                .Where(h => h.UserId == userId && !h.Deleted)
+                .Where(h => (h.UserId == userId || h.ChallengedFriends.Contains(userId)) && !h.Deleted)
                 .OrderBy(h => h.CreatedAt)
                 .ApplyPagination(pageNumber, pageSize)
                 .ToListAsync();
