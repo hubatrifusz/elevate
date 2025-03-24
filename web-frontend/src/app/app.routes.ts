@@ -6,6 +6,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 import { UserComponent } from './pages/user/user.component';
 import { FeedComponent } from './pages/feed/feed.component';
+import { FriendsComponent } from './pages/friends/friends.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -23,4 +24,7 @@ export const routes: Routes = [
 
   // Feed
   { path: 'feed', component: FeedComponent, canActivate: [authGuard] }, // Feed Page
+
+  // Friends
+  { path: 'friends', component: FriendsComponent, canActivate: [authGuard] }, // Friends Page
 ];

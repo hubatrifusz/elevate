@@ -1,0 +1,21 @@
+@import "../../../assets/styles/variables";
+
+#friends_page_container {
+  #friends_container {
+    height: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: $main-color-200;
+
+    #friends {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+
+      padding: 2rem;
+    }
+  }
+}

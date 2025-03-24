@@ -47,6 +47,10 @@ export class AuthService {
     return localStorage.getItem('token') || sessionStorage.getItem('token');
   }
 
+  getUserId(): string | null{
+    return localStorage.getItem('id') || sessionStorage.getItem('id');
+  }
+
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
