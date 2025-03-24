@@ -1,6 +1,5 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Models.Challenge;
-using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
@@ -9,11 +8,12 @@ namespace Elevate.Data.Repository
     {
         private readonly ElevateDbContext _context = context;
 
-        public async Task<List<ApplicationUser>> GetChallengeInvitesAsync(Guid userId)
+        public async Task<List<ChallengeModel>> GetChallengeInvitesAsync(Guid userId)
         {
-            return await _context.Users
-                .Where(u => _context.Challenges.Any(c => c.FriendId == userId && c.UserId == u.Id &&
-                  c.Status == ChallengeInviteStatus.Pending))
+            return await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.FriendId == userId &&
+                  c.Status == ChallengeInviteStatus.Pending)
                 .ToListAsync();
         }
 

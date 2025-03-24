@@ -1,7 +1,6 @@
 ﻿using Elevate.Common.Utilities;
 using Elevate.Models.Challenge;
 using Elevate.Models.Habit;
-using Elevate.Models.User;
 using Elevate.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +16,10 @@ namespace Elevate.Controllers
         private readonly IHabitService _habitService = habitService;
 
         [HttpGet("{userId:guid}/challenge-invites")]
-        public async Task<ActionResult<List<UserDto>>> GetChallengeInvitesAsync(Guid userId)
+        public async Task<ActionResult<List<ChallengeDto>>> GetChallengeInvitesAsync(Guid userId)
         {
             UserPermissionUtility.IsCurrentUser(userId, User);
-            List<UserDto> challengeInvites = await _challengeService.GetChallengeInvitesAsync(userId);
+            List<ChallengeDto> challengeInvites = await _challengeService.GetChallengeInvitesAsync(userId);
             return Ok(challengeInvites);
         }
 
@@ -36,7 +35,7 @@ namespace Elevate.Controllers
         [HttpPatch]
         public async Task<ActionResult<ChallengeDto>> UpdateChallengeAsync(ChallengeUpdateDto challengeUpdateDto)
         {
-            UserPermissionUtility.IsCurrentUser(challengeUpdateDto.UserId, User);
+            UserPermissionUtility.IsCurrentUser(challengeUpdateDto.FriendId, User);
             ChallengeDto challenge = await _challengeService.UpdateChallengeAsync(challengeUpdateDto);
 
             return challenge;

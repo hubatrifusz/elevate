@@ -2,25 +2,24 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Challenge;
-using Elevate.Models.Friendship;
 using Elevate.Models.Habit;
-using Elevate.Models.User;
 
 namespace Elevate.Services
 {
-    public class ChallengeService(ChallengeRepository challengeRepository, HabitRepository habitRepository, IMapper mapper) : IChallengeService
+    public class ChallengeService(ChallengeRepository challengeRepository, HabitRepository habitRepository, IHabitLogGeneratorService habitLogGeneratorService, IMapper mapper) : IChallengeService
     {
         private readonly ChallengeRepository _challengeRepository = challengeRepository;
         private readonly HabitRepository _habitRepository = habitRepository;
+        private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<List<UserDto>> GetChallengeInvitesAsync(Guid userId)
+        public async Task<List<ChallengeDto>> GetChallengeInvitesAsync(Guid userId)
         {
-            List<ApplicationUser> users = await _challengeRepository.GetChallengeInvitesAsync(userId);
+            List<ChallengeModel> challenges = await _challengeRepository.GetChallengeInvitesAsync(userId);
 
-            return users.Count == 0
+            return challenges.Count == 0
                 ? throw new ResourceNotFoundException("User has no challenge invites.")
-                : _mapper.Map<List<UserDto>>(users);
+                : _mapper.Map<List<ChallengeDto>>(challenges);
         }
 
         public async Task<ChallengeDto> AddChallengeAsync(ChallengeCreateDto challengeCreateDto)
@@ -48,13 +47,23 @@ namespace Elevate.Services
         public async Task<ChallengeDto> UpdateChallengeAsync(ChallengeUpdateDto challengeUpdateDto)
         {
             ChallengeModel challengeModel = _mapper.Map<ChallengeModel>(challengeUpdateDto);
+            bool isAccepted = challengeUpdateDto.Status.Equals("Accepted", StringComparison.OrdinalIgnoreCase);
 
-            challengeUpdateDto.Habit.ChallengedFriends.Add(challengeUpdateDto.FriendId);
+            if (isAccepted && !challengeUpdateDto.Habit.ChallengedFriends.Contains(challengeUpdateDto.FriendId))
+            {
+                challengeUpdateDto.Habit.ChallengedFriends.Add(challengeUpdateDto.FriendId);
+            }
 
-            HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(_mapper.Map<HabitModel>(challengeUpdateDto.Habit));
+            HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(_mapper.Map<HabitModel>(challengeUpdateDto.Habit))
+                ?? throw new BadRequestException("Failed to update habit for challenge.");
 
             ChallengeModel updatedChallenge = await _challengeRepository.UpdateChallengeAsync(challengeModel)
                 ?? throw new BadRequestException("Failed to update challenge.");
+
+            if (isAccepted)
+            {
+                await _habitLogGeneratorService.GenerateLogsForHabitAsync(habitModel);
+            }
 
             return _mapper.Map<ChallengeDto>(updatedChallenge);
         }
