@@ -30,7 +30,7 @@ namespace Elevate.Controllers
             UserPermissionUtility.IsCurrentUser(challengeCreateDto.UserId, User);
             ChallengeDto challenge = await _challengeService.AddChallengeAsync(challengeCreateDto);
 
-            return CreatedAtAction(nameof(GetChallengeInvitesAsync), new { userId = challenge.UserId }, challenge);
+            return challenge;
         }
 
         [HttpPatch]
@@ -39,7 +39,7 @@ namespace Elevate.Controllers
             UserPermissionUtility.IsCurrentUser(challengeUpdateDto.UserId, User);
             ChallengeDto challenge = await _challengeService.UpdateChallengeAsync(challengeUpdateDto);
 
-            return CreatedAtAction(nameof(GetChallengeInvitesAsync), new { userId = challenge.UserId }, challenge);
+            return challenge;
         }
 
         [HttpDelete]
