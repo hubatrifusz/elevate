@@ -5,6 +5,20 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
   providedIn: 'root',
 })
 export class ValidationService {
+  static requiredValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value && control.value.length > 0) {
+        return null;
+      } else {
+        return {
+          required: {
+            message: 'All fields are requried.',
+          },
+        };
+      }
+    };
+  }
+
   static passwordMinLengthValidator(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value && control.value.length >= min) {
