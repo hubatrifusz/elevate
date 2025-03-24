@@ -8,3 +8,8 @@ p {
   color: $text-color-900;
   font-weight: bold;
 }
+
+.p_error {
+  color: $alert-color-500;
+  font-size: $font-size-sm;
+}
