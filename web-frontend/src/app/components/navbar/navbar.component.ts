@@ -11,7 +11,11 @@ import { Router, RouterModule } from '@angular/router';
 export class NavbarComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
-  id = localStorage.getItem('id');
+  id: string | null = null;
+
+  ngOnInit() {
+    this.id = this.authService.getUserId();
+  }
 
   logout() {
     this.authService.logout();

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-friends',
@@ -8,5 +9,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   styleUrl: './friends.component.scss',
 })
 export class FriendsComponent {
+  search: FormControl = new FormControl();
 
+  searchFriend() {}
 }

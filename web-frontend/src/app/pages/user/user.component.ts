@@ -20,7 +20,7 @@ export class UserComponent {
   }
 
   getUserData() {
-    let userId = localStorage.getItem('id');
+    let userId = this.authService.getUserId();
     this.userService.getUserData(userId).subscribe({
       next: (response) => this.userData = response as User,
       error: (e) => {
