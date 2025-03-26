@@ -2,10 +2,21 @@
   <app-navbar></app-navbar>
   <div id="friends_container">
     <div id="friends"></div>
+    <div id="friend_requests">
+      <p>Pendig friend requests:</p>
+    </div>
     <div id="add_friend">
       <p>Search:</p>
-      <input type="search" />
-      <button type="submit" (click)="searchFriend()"></button>
+      <input type="search" [formControl]="search" />
+      <button type="submit" (click)="searchFriends()">Search</button>
+      @if (searchResult.length == 0) {
+      <p>No users found. :(</p>
+      } @else { @for (user of searchResult; track $index) {
+      <div style="display: flex; flex-direction: row;">
+        <p>{{ user.email }}</p>
+        <button (click)="sendFriendsRequest(user.id)">Send friend request</button>
+      </div>
+      } }
     </div>
   </div>
 </div>

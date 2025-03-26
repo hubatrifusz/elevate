@@ -6,15 +6,12 @@
     flex-grow: 1;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 10rem;
+
+    padding: 2rem;
 
     background-color: $main-color-200;
 
-    #friends {
-      display: flex;
-      justify-content: center;
-
-      padding: 2rem;
-    }
   }
 }

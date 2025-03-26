@@ -40,8 +40,6 @@ export class UserService {
   }
 
   addNewHabit(formResult: any): Observable<any> {
-    const token = this.authService.getToken();
-
     return this.http.post(`${this.apiUrl}/habit`, formResult, {
       headers: this.getAuthHeaders(),
     });
