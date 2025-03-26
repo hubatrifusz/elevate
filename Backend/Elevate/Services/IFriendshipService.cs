@@ -5,8 +5,11 @@ namespace Elevate.Services
 {
     public interface IFriendshipService
     {
-        Task<List<ApplicationUser>> GetFriendsAsync(Guid userId);
-        Task<Friendship> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto);
-        Task<Friendship> DeleteFriendshipAsync(Guid userId, Guid friendId);
+        Task<List<UserDto>> GetFriendsAsync(Guid userId);
+        Task<List<UserDto>> GetFriendRequestsAsync(Guid userId);
+        Task<bool> AreFriends(Guid userId, Guid friendId);
+        Task<FriendshipDto> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto);
+        Task<FriendshipDto> UpdateFriendshipAsync(FriendshipUpdateDto friendshipUpdateDto);
+        Task<FriendshipDto> DeleteFriendshipAsync(Guid userId, Guid friendId);
     }
 }

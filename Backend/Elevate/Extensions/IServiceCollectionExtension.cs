@@ -5,6 +5,7 @@ using Elevate.Models.User;
 using Elevate.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography;
@@ -17,8 +18,12 @@ namespace Elevate.Extensions
         {
             services.AddScoped<UserRepository>();
             services.AddScoped<HabitRepository>();
+            services.AddScoped<ChallengeRepository>();
             services.AddScoped<HabitLogRepository>();
             services.AddScoped<FriendshipRepository>();
+            services.AddScoped<FeedRepository>();
+
+            services.AddScoped<HabitLogGeneratorRepository>();
 
             services.AddDbContext<ElevateDbContext>();
         }
@@ -27,8 +32,16 @@ namespace Elevate.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IHabitService, HabitService>();
+            services.AddScoped<IChallengeService, ChallengeService>();
             services.AddScoped<IHabitLogService, HabitLogService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+            services.AddScoped<IFeedService, FeedService>();
+
+            services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
+            services.AddScoped<IStreakService, StreakService>();
+
+            services.AddHostedService<HabitLogGenerationBackgroundService>();
+            services.AddHostedService<StreakBackgroundService>();
         }
 
         public static void AddIdentity(this IServiceCollection services)
@@ -73,7 +86,8 @@ namespace Elevate.Extensions
             {
                 options.AddPolicy("DevelopmentPolicy", builder =>
                 {
-                    builder.WithOrigins(["http://localhost:8080", "http://localhost:81", "http://localhost:4200"])
+
+                    builder.WithOrigins(["http://localhost:8080", "http://localhost:81", "http://localhost:4200", "http://localhost:8100"])
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();

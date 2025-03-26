@@ -14,9 +14,10 @@ namespace Elevate.Models.Habit
         public string? Description { get; set; }
 
         [Required]
-        public required FrequencyEnum Frequency { get; set; }
+        [ValidFrequencyType(isRequired: true)]
+        public required string FrequencyType { get; set; }
 
-        public short? CustomFrequency { get; set; }
+        public sbyte? CustomFrequency { get; set; }
 
         [Required, StringLength(6)]
         public required string Color { get; set; }

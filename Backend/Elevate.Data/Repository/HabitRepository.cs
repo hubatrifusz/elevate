@@ -1,6 +1,7 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Extensions;
 using Elevate.Models.Habit;
+using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
 {
@@ -8,54 +9,46 @@ namespace Elevate.Data.Repository
     {
         readonly ElevateDbContext _context = context;
 
-        public List<HabitModel> GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)
+        public async Task<List<HabitModel>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            pageSize = Math.Min(pageSize, 20);
-            pageSize = Math.Max(pageSize, 1);
-            return _context.Set<HabitModel>()
-                .Where(h => h.UserId == userId)
+            return await _context.Habits
+                .Where(h => (h.UserId == userId || h.ChallengedFriends.Contains(userId)) && !h.Deleted)
                 .OrderBy(h => h.CreatedAt)
                 .ApplyPagination(pageNumber, pageSize)
-                .ToList();
+                .ToListAsync();
         }
 
-        public HabitModel? GetHabitById(Guid habitId)
+        public async Task<HabitModel?> GetHabitByIdAsync(Guid habitId)
         {
-            return _context.Set<HabitModel>().SingleOrDefault(h => h.Id == habitId);
+            HabitModel? habit = await _context.Habits.FindAsync(habitId);
+            return habit?.Deleted == true ? null : habit;
         }
 
-        public HabitModel? AddHabit(HabitModel habit)
+        public async Task<List<HabitModel>> GetAllHabitsAsync()
         {
-            HabitModel savedHabit = _context.Set<HabitModel>().Add(habit).Entity;
-            _context.SaveChanges();
-            return savedHabit;
+            return await _context.Habits.Where(h => !h.Deleted).ToListAsync();
         }
 
-        public HabitModel? UpdateHabit(Guid id, HabitModel habit)
+        public async Task<HabitModel?> AddHabitAsync(HabitModel habit)
         {
-            if (id != habit.Id)
-            {
-                throw new Exception("Habit ID does not match");
-            }
-            if (!_context.Set<HabitModel>().Any(h => h.Id == id))
-            {
-                throw new Exception("No such habit");
-            }
-            HabitModel updatedHabit = _context.Set<HabitModel>().Update(habit).Entity;
-            _context.SaveChanges();
-            return updatedHabit;
-        }
-
-        public HabitModel? DeleteHabit(Guid habitId) 
-        {
-            HabitModel? habit = _context.Set<HabitModel>().SingleOrDefault(h => h.Id == habitId);
-            if (habit == null)
-            {
-                throw new Exception("No such habit");
-            }
-            _context.Set<HabitModel>().Remove(habit);
-            _context.SaveChanges();
+            await _context.Habits.AddAsync(habit);
+            await _context.SaveChangesAsync();
             return habit;
+        }
+
+        public async Task<HabitModel?> UpdateHabitAsync(HabitModel habit)
+        {
+            var existingHabit = await GetHabitByIdAsync(habit.Id);
+
+            if (existingHabit != null)
+            {
+                _context.Entry(existingHabit).CurrentValues.SetValues(habit);
+
+                await _context.SaveChangesAsync();
+                return existingHabit;
+            }
+
+            return null;
         }
     }
 }

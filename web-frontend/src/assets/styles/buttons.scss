@@ -101,4 +101,57 @@
 
     border: none;
   }
+
+  // Special button for new habit
+  .button_special {
+    height: 4rem;
+    width: 4rem;
+
+    border: none;
+    border-radius: 100%;
+
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  // Delete buttons
+  .button_delete {
+    color: $alert-color-600;
+    background-color: transparent;
+
+    text-decoration: underline;
+
+    border: none;
+
+    &:hover {
+      color: $alert-color-400;
+    }
+  }
+
+  .button_primary_delete {
+    height: 3rem;
+
+    color: $alert-color-100;
+    background-color: $alert-color-700;
+
+    border-radius: 100rem;
+    border: none;
+
+    transition: background-color 100ms ease-in-out;
+
+    &:hover {
+      background-color: $alert-color-600;
+    }
+
+    &:disabled {
+      background-color: $text-color-600;
+      color: $text-color-300;
+      cursor: not-allowed;
+    }
+
+    span {
+      padding: 0rem 3rem;
+      font-size: $font-size-md;
+      font-weight: 500;
+    }
+  }
 }

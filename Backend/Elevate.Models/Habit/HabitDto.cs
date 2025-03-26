@@ -9,14 +9,16 @@ namespace Elevate.Models.Habit
         [Required]
         public required Guid UserId { get; set; }
         [Required]
+        public required List<Guid> ChallengedFriends { get; set; }
+        [Required]
         public required DateTime CreatedAt { get; set; }
         [Required, MaxLength(20)]
         public required string Title { get; set; }
         [MaxLength(100)]
         public string? Description { get; set; }
         [Required]
-        public required FrequencyEnum Frequency { get; set; }
-        public short? CustomFrequency { get; set; }
+        public required string FrequencyType { get; set; }
+        public sbyte? CustomFrequency { get; set; }
         [Required, MaxLength(6)]
         public required string Color { get; set; }
         [Required]

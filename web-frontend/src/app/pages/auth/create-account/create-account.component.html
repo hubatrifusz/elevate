@@ -31,7 +31,7 @@
         <div class="input_container" id="password_text_input_container">
           <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required />
           <label for="password_text_input" class="input_title">Enter your password</label>
-          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="togglePasswordView($event)" />
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="onTogglePassword($event)" />
         </div>
 
         <!-- Confirm Password Input (text) -->
@@ -45,7 +45,7 @@
             required
           />
           <label for="confirm_password_text_input" class="input_title">Confirm your password</label>
-          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="togglePasswordView($event)" />
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="onTogglePassword($event)" />
         </div>
 
         <!-- Create Account button (primary) -->
@@ -81,5 +81,7 @@
     </div>
   </div>
 
-  <app-login-feature-list></app-login-feature-list>
+  <!-- <app-login-feature-list></app-login-feature-list> -->
 </div>
+
+<app-loading-screen></app-loading-screen>

@@ -1,9 +1,9 @@
-﻿using Elevate.Models.User;
-using Elevate.Models.Friendship;
+﻿using Elevate.Models.Friendship;
 using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Elevate.Common.Utilities;
+using Elevate.Models.User;
 
 namespace Elevate.Controllers
 {
@@ -14,42 +14,52 @@ namespace Elevate.Controllers
     {
         private readonly IFriendshipService _friendshipService = friendshipService;
 
-        [HttpGet("{userId}/friends")]
-        public async Task<IActionResult> GetFriends(Guid userId)
+        [HttpGet("{userId:guid}/friends")]
+        public async Task<ActionResult<List<UserDto>>> GetFriendsAsync(Guid userId)
         {
-            var friends = await _friendshipService.GetFriendsAsync(userId);
+            List<UserDto> friends = await _friendshipService.GetFriendsAsync(userId);
             return Ok(friends);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddFriendship(FriendshipCreateDto friendshipCreateDto)
+        [HttpGet("{userId:guid}/friend-requests")]
+        public async Task<ActionResult<List<UserDto>>> GetFriendRequestsAsync(Guid userId)
         {
-            var userId = friendshipCreateDto.UserId;
-            if (UserPermissionUtility.IsCurrentUser(userId, User))
-            {
-                var friendship = await _friendshipService.AddFriendshipAsync(friendshipCreateDto);
-                if (friendship == null)
-                {
-                    return BadRequest("Friendship could not be established.");
-                }
-                return CreatedAtAction(nameof(GetFriends), new { userId = friendship.UserId }, friendship); 
-            }
-            return Forbid();
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<UserDto> friendRequests = await _friendshipService.GetFriendRequestsAsync(userId);
+            return Ok(friendRequests);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<FriendshipDto>> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
+        {
+            UserPermissionUtility.IsCurrentUser(friendshipCreateDto.UserId, User);
+            FriendshipDto friendship = await _friendshipService.AddFriendshipAsync(friendshipCreateDto);
+
+            return friendship;
+        }
+
+        [HttpPatch]
+        public async Task<ActionResult<FriendshipDto>> UpdateFriendshipAsync(FriendshipUpdateDto friendshipUpdateDto)
+        {
+            UserPermissionUtility.IsCurrentUser(friendshipUpdateDto.UserId, User);
+            FriendshipDto friendship = await _friendshipService.UpdateFriendshipAsync(friendshipUpdateDto);
+
+            return friendship;
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteFriendship(Guid userId, Guid friendId)
+        public async Task<ActionResult<FriendshipDto>> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
-            if (UserPermissionUtility.IsCurrentUser(userId, User))
+            try
             {
-                var result = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
+                UserPermissionUtility.IsCurrentUser(userId, User);
             }
-            return Forbid();
+            catch
+            {
+                UserPermissionUtility.IsCurrentUser(friendId, User);
+            }
+            FriendshipDto deletedFriendship = await _friendshipService.DeleteFriendshipAsync(userId, friendId);
+            return Ok(deletedFriendship);
         }
     }
 }

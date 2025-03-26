@@ -1,0 +1,9 @@
+<div class="confirmation_dialog">
+  <div class="dialog_content" [@floatIn]>
+    <h5>Are you sure you want to delete it?</h5>
+    <div class="button_container" (click)="emitResult(true)">
+      <button class="button_primary_delete"><span>Delete</span></button>
+    </div>
+    <img src="icons/cross.png" alt="cross" (click)="emitResult(false)">
+  </div>
+</div>

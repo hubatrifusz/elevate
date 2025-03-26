@@ -7,27 +7,24 @@ using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
+using Elevate.Common.Exceptions;
+using Elevate.Models.Challenge;
 
 namespace Elevate.Data.Database
 {
-    public class ElevateDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class ElevateDbContext(
+        DbContextOptions<ElevateDbContext> options,
+        DbConnectionManager connectionManager) : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
     {
-        private readonly DbConnectionManager _connectionManager;
-
-        public ElevateDbContext(
-            DbContextOptions<ElevateDbContext> options,
-            DbConnectionManager connectionManager)
-            : base(options)
-        {
-            _connectionManager = connectionManager;
-        }
+        private readonly DbConnectionManager _connectionManager = connectionManager;
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<HabitModel> Habits { get; set; }
+        public DbSet<ChallengeModel> Challenges { get; set; }
         public DbSet<AchievementModel> Achievements { get; set; }
         public DbSet<HabitLogModel> HabitLogs { get; set; }
         public DbSet<AchievementProgressModel> AchievementProgresses { get; set; }
-        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<FriendshipModel> Friendships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,11 +35,14 @@ namespace Elevate.Data.Database
                 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
                 optionsBuilder.UseMySql(connectionString, serverVersion, mySqlOptions =>
-                        mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory"));
+                        {
+                            mySqlOptions.MigrationsHistoryTable("__EFMigrationsHistory");
+                            mySqlOptions.EnablePrimitiveCollectionsSupport();
+                        });
             }
             else
             {
-                throw new Exception("Failed to retrieve connection string");
+                throw new ConnectionStringException("Failed to retrieve connection string");
             }
         }
 
@@ -62,20 +62,36 @@ namespace Elevate.Data.Database
 
             modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasIndex(f => new { f.UserId, f.FriendId })
                 .IsUnique();
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Friendship>()
+            modelBuilder.Entity<FriendshipModel>()
                 .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasIndex(c => new { c.UserId, c.FriendId })
+                .IsUnique();
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(c => c.FriendId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

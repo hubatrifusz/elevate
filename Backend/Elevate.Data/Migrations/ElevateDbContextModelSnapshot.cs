@@ -72,14 +72,59 @@ namespace Elevate.Data.Migrations
                     b.ToTable("AchievementProgresses");
                 });
 
-            modelBuilder.Entity("Elevate.Models.Friendship.Friendship", b =>
+            modelBuilder.Entity("Elevate.Models.Challenge.ChallengeModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<Guid>("FriendId")
                         .HasColumnType("char(36)");
+
+                    b.Property<Guid>("HabitId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendId");
+
+                    b.HasIndex("HabitId");
+
+                    b.HasIndex("UserId", "FriendId")
+                        .IsUnique();
+
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("Elevate.Models.Friendship.FriendshipModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("FriendId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -100,6 +145,10 @@ namespace Elevate.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.PrimitiveCollection<string>("ChallengedFriends")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -107,8 +156,8 @@ namespace Elevate.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("CustomFrequency")
-                        .HasColumnType("int");
+                    b.Property<sbyte?>("CustomFrequency")
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
@@ -151,6 +200,9 @@ namespace Elevate.Data.Migrations
 
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime(6)");
@@ -391,7 +443,30 @@ namespace Elevate.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Elevate.Models.Friendship.Friendship", b =>
+            modelBuilder.Entity("Elevate.Models.Challenge.ChallengeModel", b =>
+                {
+                    b.HasOne("Elevate.Models.User.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Elevate.Models.Habit.HabitModel", "Habit")
+                        .WithMany()
+                        .HasForeignKey("HabitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Elevate.Models.User.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Habit");
+                });
+
+            modelBuilder.Entity("Elevate.Models.Friendship.FriendshipModel", b =>
                 {
                     b.HasOne("Elevate.Models.User.ApplicationUser", null)
                         .WithMany()

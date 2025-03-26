@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Elevate.Common.Utilities;
+using Elevate.Middleware;
+using Microsoft.AspNetCore.Builder;
 
 namespace Elevate
 {
@@ -29,7 +31,6 @@ namespace Elevate
 
             builder.Services.AddIdentity();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             // Add configuration
             builder.Services.AddSingleton(builder.Configuration);
@@ -62,6 +63,9 @@ namespace Elevate
             //Configure Swagger
             builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             builder.Services.AddSwagger();
+            builder.Services.AddSwaggerGen(c =>
+                c.EnableAnnotations()
+            );
 
             builder.Services.AddCorsPolicies();
 
@@ -69,6 +73,8 @@ namespace Elevate
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
             var app = builder.Build();
+
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

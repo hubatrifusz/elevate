@@ -1,34 +1,36 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { inputValidator } from '../../../shared/input-validator';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginFeatureListComponent } from "../../../components/auth/login-feature-list/login-feature-list.component";
+import { LoginFeatureListComponent } from '../../../components/auth/login-feature-list/login-feature-list.component';
+import { LoadingScreenComponent } from '../../../components/loading-screen/loading-screen.component';
+import { PasswordToggleService } from '../../../services/password-toggle.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-create-account',
-  imports: [ReactiveFormsModule, RouterModule, LoginFeatureListComponent],
+  imports: [ReactiveFormsModule, RouterModule, LoginFeatureListComponent, LoadingScreenComponent],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private router: Router, private togglePassword: PasswordToggleService, private authService: AuthService) {}
 
   loginForm = new FormGroup({
     firstname: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
-    confirmPassword: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d).{6,}$/)]),
+    password: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)]),
+    confirmPassword: new FormControl('', [Validators.required, inputValidator(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{8,}$/)]),
   });
 
   onSubmit() {
     if (this.checkValidationErrors()) return;
-    this.postNewUser(this.loginForm.value).subscribe({
-      next: (v) => console.log(v),
+    this.authService.crateAccount(this.loginForm.value).subscribe({
+      next: (v) => this.router.navigate(['/login']),
       error: (e) => console.error(e),
-      complete: () => console.info('complete'),
     });
   }
 
@@ -77,20 +79,7 @@ export class CreateAccountComponent {
     return hasErrors;
   }
 
-  togglePasswordView(event: MouseEvent): void {
-    const icon = event.target as HTMLImageElement;
-    const input = icon.parentElement?.children[0] as HTMLInputElement;
-
-    const isPassword = input.type === 'password';
-
-    input.type = isPassword ? 'text' : 'password';
-    icon.src = isPassword ? 'icons/eye-crossed.png' : 'icons/eye.png';
-    icon.title = isPassword ? 'Hide Password' : 'Show Password';
-  }
-
-  private apiUrl = 'http://localhost:8080/api';
-
-  postNewUser(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
+  onTogglePassword(event: MouseEvent) {
+    this.togglePassword.togglePasswordView(event);
   }
 }

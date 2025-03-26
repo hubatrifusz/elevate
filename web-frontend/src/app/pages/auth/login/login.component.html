@@ -10,16 +10,16 @@
     <div id="form_container">
       <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Input (email) -->
-        <div class="input_container" id="email_email_input_container">
-          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required />
+        <div class="input_container" id="email_email_input_container" data-cy="email_text_input_container">
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" required data-cy="email_text_input"/>
           <label for="email_text_input" class="input_title">Enter your email</label>
         </div>
 
         <!-- Password Input (text) -->
-        <div class="input_container" id="password_text_input_container">
-          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required />
+        <div class="input_container" id="password_text_input_container" data-cy="password_text_input_container">
+          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" required data-cy="password_text_input"/>
           <label for="password_text_input" class="input_title">Enter your password</label>
-          <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="togglePasswordView()" />
+          <img src="icons/eye.png" alt="Show Password" title="Show Password" id="toggle_password_icon" (click)="onTogglePassword($event)" />
         </div>
 
         <div class="line_container">
@@ -42,7 +42,7 @@
 
         <!-- Login button (primary) -->
         <div class="button_container" id="login_button_container">
-          <button class="button button_primary" type="submit" id="login_button">
+          <button class="button_primary" type="submit" id="login_button" data-cy="login_button">
             <span>Login</span>
           </button>
         </div>
@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <app-login-feature-list></app-login-feature-list>
+  <!-- <app-login-feature-list></app-login-feature-list> -->
 
   <div id="blured_circle_container">
     <div id="blured_circle"></div>

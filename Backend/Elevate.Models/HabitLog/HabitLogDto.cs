@@ -14,7 +14,7 @@ namespace Elevate.Models.HabitLog
         public required DateTime DueDate { get; set; }
         [Required]
         public required bool Completed { get; set; }
-        public DateTime? CompletedDate { get; set; }
+        public DateTime? CompletedAt { get; set; }
         [MaxLength(255)]
         public string? Notes { get; set; }
         [Required]

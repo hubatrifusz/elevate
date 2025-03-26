@@ -1,0 +1,49 @@
+@import "../../../assets/styles/variables";
+
+.confirmation_dialog {
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .dialog_content {
+    aspect-ratio: 2/1;
+    width: 20rem;
+
+    border-radius: 2rem;
+
+    background-color: $main-color-100;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 4rem;
+
+    text-align: center;
+
+    position: relative;
+
+    img {
+      height: 1rem;
+
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+
+      cursor: pointer;
+    }
+  }
+}

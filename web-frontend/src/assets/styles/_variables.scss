@@ -13,7 +13,7 @@ $accent-color-900: hsl(249, 45%, 20%);
 
 // Main colors
 $main-color-100: hsl(248, 10%, 98%);
-$main-color-200: hsl(248, 10%, 95%);
+$main-color-200: hsl(248, 10%, 90%);
 $main-color-300: hsl(248, 10%, 80%);
 $main-color-400: hsl(248, 10%, 70%);
 $main-color-500: hsl(248, 10%, 60%);
@@ -43,6 +43,11 @@ $alert-color-600: hsl(0, 60%, 40%);
 $alert-color-700: hsl(0, 60%, 30%);
 $alert-color-800: hsl(0, 65%, 20%);
 $alert-color-900: hsl(0, 70%, 15%);
+
+// Task colors
+$task-color-red: $alert-color-400;
+$task-color-blue: $accent-color-800;
+$task-color-green: hsl(147, 45%, 40%);
 
 //* Dimensions
 $sidebar_width: 5rem;

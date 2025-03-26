@@ -14,91 +14,45 @@ namespace Elevate.Controllers
         private readonly IHabitService _habitService = habitService;
 
         [HttpGet]
-        public ActionResult<IEnumerable<HabitModel>> GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)
+        public async Task<ActionResult<List<HabitDto>>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            var habits = _habitService.GetHabitsByUserId(userId, pageNumber, pageSize);
-            if (habits != null)
-            {
-                if (UserPermissionUtility.IsCurrentUser(userId, User))
-                {
-                    return Ok(habits);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<HabitDto> habits = await _habitService.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
+            return Ok(habits);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<HabitModel> GetHabitById(Guid id)
+        [HttpGet("{id:guid}", Name = "GetHabitByIdAsync")]
+        public async Task<ActionResult<HabitDto>> GetHabitByIdAsync(Guid id)
         {
-            var habit = _habitService.GetHabitById(id);
-            if (habit != null)
-            {
-                if (UserPermissionUtility.IsCurrentUser(habit.UserId, User))
-                {
-                    return Ok(habit);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            HabitDto habit = await _habitService.GetHabitByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            return Ok(habit);
         }
 
         [HttpPost]
-        public ActionResult<HabitModel> AddHabit(HabitCreateDto habitCreateDto)
+        public async Task<ActionResult<HabitDto>> AddHabitAsync(HabitCreateDto habitCreateDto)
         {
-            if (UserPermissionUtility.IsCurrentUser(habitCreateDto.UserID, User))
-            {
-                var createdHabit = _habitService.AddHabit(habitCreateDto);
-                if (createdHabit == null)
-                {
-                    return BadRequest("Habit could not be created.");
-                }
-                return CreatedAtAction(nameof(GetHabitById), new { id = createdHabit.Id }, createdHabit);
-            }
-            return Forbid();
+            UserPermissionUtility.IsCurrentUser(habitCreateDto.UserID, User);
+            HabitDto createdHabit = await _habitService.AddHabitAsync(habitCreateDto);
+            return CreatedAtRoute(nameof(GetHabitByIdAsync), new { id = createdHabit.Id }, createdHabit);
         }
 
-        [HttpPatch("{id}")]
-        public ActionResult<HabitModel> UpdateHabit(Guid id, HabitUpdateDto habitUpdateDto)
+        [HttpPatch("{id:guid}")]
+        public async Task<ActionResult<HabitDto>> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
         {
-            var habit = _habitService.GetHabitById(id);
-            if (habit != null)
-            {
-                if (UserPermissionUtility.IsCurrentUser(habit.UserId, User))
-                {
-                    try
-                    {
-                        var updatedHabit = _habitService.UpdateHabit(id, habitUpdateDto);
-                        if (updatedHabit == null)
-                        {
-                            return NotFound();
-                        }
-                        return Ok(updatedHabit);
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
-                }
-                return Forbid();
-            }
-            return NotFound();
+            HabitDto habit = await _habitService.GetHabitByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            HabitDto updatedHabit = await _habitService.UpdateHabitAsync(id, habitUpdateDto);
+            return Ok(updatedHabit);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<HabitModel> DeleteHabit(Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<HabitDto>> DeleteHabitAsync(Guid id)
         {
-            var habit = _habitService.GetHabitById(id);
-            if (habit != null)
-            {
-                if (UserPermissionUtility.IsCurrentUser(habit.UserId, User))
-                {
-                    var deletedHabit = _habitService.DeleteHabit(id);
-                    return Ok(deletedHabit);
-                }
-                return Forbid();
-            }
-            return NotFound();
+            HabitDto habit = await _habitService.GetHabitByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            HabitDto deletedHabit = await _habitService.DeleteHabitAsync(habit);
+            return Ok(deletedHabit);
         }
     }
 }

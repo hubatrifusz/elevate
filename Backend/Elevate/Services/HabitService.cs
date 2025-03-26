@@ -1,43 +1,107 @@
 ﻿using AutoMapper;
+using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Habit;
+using Elevate.Models.HabitLog;
 
 namespace Elevate.Services
 {
-    public class HabitService(HabitRepository habitRepository, IMapper mapper) : IHabitService
+    public class HabitService(
+        HabitRepository habitRepository, 
+        HabitLogRepository habitLogRepository, 
+        IHabitLogGeneratorService habitLogGeneratorService, 
+        IMapper mapper)
+        : IHabitService
     {
         private readonly HabitRepository _habitRepository = habitRepository;
+        private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
+        private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
         private readonly IMapper _mapper = mapper;
 
-        public List<HabitModel>? GetHabitsByUserId(Guid userId, int pageNumber, int pageSize)
+        public async Task<List<HabitDto>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
-            return _habitRepository.GetHabitsByUserId(userId, pageNumber, pageSize);
+            List<HabitModel> habitModels = await _habitRepository.GetHabitsByUserIdAsync(userId, pageNumber, pageSize);
+
+            if (habitModels.Count == 0)
+            {
+                if(pageNumber == 1)
+                {
+                    throw new ResourceNotFoundException("User has no recorded habits.");
+                }
+                throw new ResourceNotFoundException("User has no more habits.");
+            }
+            return _mapper.Map<List<HabitDto>>(habitModels);
         }
 
-        public HabitModel? GetHabitById(Guid habitId)
+        public async Task<HabitDto> GetHabitByIdAsync(Guid habitId)
         {
-            return _habitRepository.GetHabitById(habitId);
+            HabitModel? habitModel = await _habitRepository.GetHabitByIdAsync(habitId);
+
+            return habitModel == null
+                ? throw new ResourceNotFoundException("Habit was not found.")
+                : _mapper.Map<HabitDto>(habitModel);
         }
 
-        public HabitModel? AddHabit(HabitCreateDto habit)
+        public async Task<HabitDto> AddHabitAsync(HabitCreateDto habit)
         {
-            var habitModel = _mapper.Map<HabitModel>(habit);
-            return _habitRepository.AddHabit(habitModel);
+            HabitModel habitModel = _mapper.Map<HabitModel>(habit);
+            HabitModel savedHabit = await _habitRepository.AddHabitAsync(habitModel)
+                ?? throw new BadRequestException("Failed to create habit.");
+
+            await _habitLogGeneratorService.GenerateLogsForHabitAsync(savedHabit);
+
+            return _mapper.Map<HabitDto>(savedHabit);
         }
 
-        public HabitModel? UpdateHabit(Guid id, HabitUpdateDto habitUpdateDto)
+        public async Task<HabitDto> UpdateHabitAsync(Guid id, HabitUpdateDto habitUpdateDto)
         {
-            var habitModel = _habitRepository.GetHabitById(id)
-                ?? throw new Exception("Habit not found");
+            HabitModel existingHabit = await _habitRepository.GetHabitByIdAsync(id)
+                ?? throw new ResourceNotFoundException("Habit was not found.");
+
+            HabitModel habitModel = _mapper.Map<HabitModel>(existingHabit);
 
             _mapper.Map(habitUpdateDto, habitModel);
 
-            return _habitRepository.UpdateHabit(id, habitModel);
+            HabitModel updatedHabit = await _habitRepository.UpdateHabitAsync(habitModel)
+                ?? throw new BadRequestException("Failed to update habit.");
+
+            return _mapper.Map<HabitDto>(updatedHabit);
         }
 
-        public HabitModel? DeleteHabit(Guid habitId)
+        public async Task<HabitDto> DeleteHabitAsync(HabitDto habit)
         {
-            return _habitRepository.DeleteHabit(habitId);
+            HabitModel habitToDelete = _mapper.Map<HabitModel>(habit);
+
+            habitToDelete.Deleted = true;
+
+            await DeleteAllHabitLogsForHabitAsync(habitToDelete.Id);
+
+            HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(habitToDelete);
+
+            return habitModel == null
+                ? throw new BadRequestException("Failed to delete habit.")
+                : _mapper.Map<HabitDto>(habitModel);
+        }
+
+        private async Task DeleteAllHabitLogsForHabitAsync(Guid habitId)
+        {
+            int pageNumber = 1;
+            const int batchSize = 20;
+            List<HabitLogModel> habitLogs;
+
+            do
+            {
+                habitLogs = await _habitLogRepository.GetHabitLogsByHabitIdAsync(habitId, pageNumber, batchSize);
+
+                foreach (var log in habitLogs)
+                {
+                    log.Deleted = true;
+                    await _habitLogRepository.UpdateHabitLogAsync(log);
+                }
+
+                pageNumber++;
+            }
+            while (habitLogs.Count == batchSize);
         }
     }
 }

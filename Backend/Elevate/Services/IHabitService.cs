@@ -4,10 +4,10 @@ namespace Elevate.Services
 {
     public interface IHabitService
     {
-        List<HabitModel>? GetHabitsByUserId(Guid userId, int pageNumber, int pageSize);
-        HabitModel? GetHabitById(Guid habitId);
-        HabitModel? AddHabit(HabitCreateDto habit);
-        HabitModel? UpdateHabit(Guid id, HabitUpdateDto habit);
-        HabitModel? DeleteHabit(Guid habitId);
+        Task<List<HabitDto>> GetHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize);
+        Task<HabitDto> GetHabitByIdAsync(Guid habitId);
+        Task<HabitDto> AddHabitAsync(HabitCreateDto habit);
+        Task<HabitDto> UpdateHabitAsync(Guid id, HabitUpdateDto habit);
+        Task<HabitDto> DeleteHabitAsync(HabitDto habit);
     }
 }
