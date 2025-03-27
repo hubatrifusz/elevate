@@ -6,8 +6,9 @@ ion-accordion {
 
 }
 
-ion-content {
-    --background: none;
+ion-accordion-group{
+    --ion-background-color: transparent;
+    
 }
 
 .accordion-collapsed,
@@ -239,5 +240,3 @@ ion-item {
     }
 
 }
-
-

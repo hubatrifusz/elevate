@@ -1,12 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonButtons, IonButton, IonMenuToggle } from "@ionic/angular/standalone";
+import { IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonButtons, IonButton, IonMenuToggle, IonBackButton, IonIcon, IonLabel } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [IonButton, IonButtons, IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonMenuToggle]
+  imports: [IonLabel, IonIcon, IonBackButton, IonButton, IonButtons, IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonMenuToggle]
 })
 export class HeaderComponent implements OnInit {
   user: any;

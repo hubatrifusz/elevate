@@ -29,7 +29,7 @@ import { HeaderComponent } from "../../components/header/header.component";
     IonToolbar,
     IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent, HeaderComponent]
 })
-export class CalendarPage implements OnInit {
+export class CalendarPage {
   selectedDate: IonDatetime | null = null;
   private habitService = inject(HabitService);
   private modalController = inject(ModalController);
@@ -46,9 +46,6 @@ export class CalendarPage implements OnInit {
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
   constructor(private menuCtrl: MenuController, private gestureCtrl: GestureController) {
     addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
-  }
-
-  ngOnInit() {
   }
 
 

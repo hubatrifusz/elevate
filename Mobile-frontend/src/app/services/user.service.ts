@@ -20,15 +20,15 @@ export class UserService {
       }
     });
   }
-  getUsersByEmail(pageNumber:number, pageSize:number, email:string): Observable<User[]> {
+  getUsersByEmail(email: string, pageNumber: number, pageSize: number): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/user`, {
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-      params:{
+      params: {
         email: email,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString()
+      },
+      headers: {
+        Authorization: `Bearer ${this.token}`,
       }
     });
   }

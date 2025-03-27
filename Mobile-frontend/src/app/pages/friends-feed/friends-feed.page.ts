@@ -30,7 +30,6 @@ export class FriendsFeedPage {
 
     await this.getFeed(this.page, this.pageSize);
     loading.dismiss();
-    console.log('fasz');
   }
 
   async presentLoading() {

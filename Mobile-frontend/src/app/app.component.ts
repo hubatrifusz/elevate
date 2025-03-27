@@ -4,7 +4,7 @@ import { AuthService } from './services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { add, logOutOutline, menu, menuOutline, people, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, settings } from 'ionicons/icons';
+import { add, logOutOutline, menu, menuOutline, people, person, personAddOutline, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, settings } from 'ionicons/icons';
 import { ToastService } from './services/toast.service';
 import { User } from './.models/user.model';
 import { UserService } from './services/user.service';
@@ -23,7 +23,7 @@ export class AppComponent {
   user: User | null = null;
 
   constructor(private router: Router, private menuCtrl: MenuController, private toastService: ToastService) {
-    addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu });
+    addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu, personAddOutline });
   }
 
   async ngOnInit() {
@@ -41,6 +41,10 @@ export class AppComponent {
       this.menuCtrl.close();
       this.router.navigate(['/profile', userId]);
     }
+  }
+  gotofriends(){
+    this.menuCtrl.close();
+    this.router.navigate(['/footertabs/friends']);
   }
 
   async Logout() {

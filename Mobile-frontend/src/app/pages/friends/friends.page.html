@@ -1,0 +1,105 @@
+<app-header title="Friends">
+
+</app-header>
+
+<ion-content class="ion-padding" fullscreen="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if(friendRequests.length === 0) {
+    <ion-label>
+      <h1>No friend requests found</h1>
+      <p>Start adding friends to see their habits!</p>
+    </ion-label>
+  }
+  @else{
+    <ion-label>
+      <h1>Friend Requests</h1>
+      <p>Accept or reject friend requests from other users.</p>
+
+    </ion-label>
+    <ion-list>
+      @for (friend of friendRequests; track $index) {
+      <ion-item>
+        <ion-avatar slot="start">
+          <img (click)="goToProfile(friend.id)"
+            [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+            alt="Profile Picture" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
+          <p>{{ friend.email }}</p>
+        </ion-label>
+        <ion-button fill="solid" slot="end" (click)="acceptFriendRequest(friend)">Accept</ion-button>
+        <ion-button fill="outline" slot="end" (click)="rejectFriendRequest(friend)">Reject</ion-button>
+      </ion-item>
+      }
+    </ion-list>
+  }
+
+  <ion-label>
+    <h1>Friends</h1>
+    <p>See your friends and their habits.</p>
+  </ion-label>
+  <ion-list>
+    @for (friend of friends; track $index) {
+    <ion-item>
+      <ion-avatar slot="start">
+        <img (click)="goToProfile(friend.id)"
+          [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+          alt="Profile Picture" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
+        <p>{{ friend.email }}</p>
+      </ion-label>
+      <ion-button color="danger" slot="end" (click)="DeleteFriend(friend.id)">Delete</ion-button>
+    </ion-item>
+    }
+  </ion-list>
+
+  <ion-modal #modal class="ion-padding" trigger="open-modal" [initialBreakpoint]="0.25"
+    [breakpoints]="[0, 0.25, 0.5, 0.75]">
+    <ng-template>
+      <ion-content class="ion-padding" >
+        <ion-searchbar (ionInput)="userSearch($event)" placeholder="Search"
+          (click)="modal.setCurrentBreakpoint(0.75)"></ion-searchbar>
+        @if(searchedUsers.length === 0) {
+        <ion-label>
+          <h1>No users found</h1>
+          <p>Try searching for a different name or email!</p>
+        </ion-label>
+        }
+        @else {
+        <ion-list>
+          @for(user of searchedUsers; track $index) {
+          <ion-item>
+            <ion-avatar slot="start">
+              <img
+                [src]="user.profilePictureBase64 ? 'data:image/jpeg;base64,' + user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+                alt="Profile Picture" />
+            </ion-avatar>
+            <ion-label>
+              <h2>{{user.firstName}} {{user.lastName}}</h2>
+              <p>{{user.email}}</p>
+            </ion-label>
+            <ion-button [disabled]="isButtonDisabled(user.id)" fill="solid" slot="end"
+              (click)="addFriend(user)">Add</ion-button>
+          </ion-item>
+          }
+        </ion-list>
+
+        }
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button id="open-modal">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
