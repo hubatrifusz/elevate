@@ -21,7 +21,7 @@
                 {
                     _logger.LogInformation("Checking for broken streaks");
                     using var scope = _serviceProvider.CreateScope();
-                    var streakService = scope.ServiceProvider.GetRequiredService<StreakService>();
+                    var streakService = scope.ServiceProvider.GetRequiredService<IStreakService>();
 
                     await streakService.CheckAndResetBrokenStreaks();
 
