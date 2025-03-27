@@ -6,30 +6,29 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-
+export class FriendshipService {
 
   private apiUrl = 'http://localhost:8080/api';
   token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) { }
-  getUserById(userId: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/user/${userId}`, {
+
+  getFriends(): Observable<User[]> {
+    const userId = localStorage.getItem('userId');
+    return this.http.get<User[]>(`${this.apiUrl}/friendship/${userId}/friends`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       }
     });
   }
-  getUsersByEmail(pageNumber:number, pageSize:number, email:string): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/user`, {
+  getFriendRequests(): Observable<User[]> {
+    const userId = localStorage.getItem('userId');
+    return this.http.get<User[]>(`${this.apiUrl}/friendship/${userId}/friend-requests`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
-      },
-      params:{
-        email: email,
-        pageNumber: pageNumber.toString(),
-        pageSize: pageSize.toString()
       }
     });
   }
+  // startFriendShip(friendId: string): Observable<any> {
+
 }
