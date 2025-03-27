@@ -31,7 +31,12 @@ export class FriendsComponent {
     this.searchResult = [];
 
     this.friendsService.getUsersByEmail(this.search.value).subscribe({
-      next: (response) => (this.searchResult = response as User[]),
+      next: (response) => {
+        // Filter out the current user and already existing friends
+        this.searchResult = (response as User[]).filter(
+          (user) => user.id !== this.authService.getUserId() && !this.friends.some((friend) => friend.id === user.id)
+        );
+      },
       error: (error) => console.log(error),
     });
   }
