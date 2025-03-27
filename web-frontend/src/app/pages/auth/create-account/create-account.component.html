@@ -11,25 +11,46 @@
       <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- First Name Input (text) -->
         <div class="input_container" id="first_name_text_input_container">
-          <input type="text" name="first_name_text_input" id="first_name_text_input" placeholder=" " formControlName="firstname" />
+          <input
+            type="text"
+            name="first_name_text_input"
+            id="first_name_text_input"
+            placeholder=" "
+            formControlName="firstname"
+            data-cy="first_name_text_input"
+          />
           <label for="first_name_text_input" class="input_title">Enter your first name</label>
         </div>
 
         <!-- Last Name Input (text) -->
         <div class="input_container" id="last_name_text_input_container">
-          <input type="text" name="last_name_text_input" id="last_name_text_input" placeholder=" " formControlName="lastname" />
+          <input
+            type="text"
+            name="last_name_text_input"
+            id="last_name_text_input"
+            placeholder=" "
+            formControlName="lastname"
+            data-cy="last_name_text_input"
+          />
           <label for="last_name_text_input" class="input_title">Enter your last name</label>
         </div>
 
         <!-- Email Input (email) -->
         <div class="input_container" id="email_email_input_container">
-          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" />
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" data-cy="email_text_input" />
           <label for="email_text_input" class="input_title">Enter your email</label>
         </div>
 
         <!-- Password Input (text) -->
         <div class="input_container" id="password_text_input_container">
-          <input type="password" name="password_text_input" id="password_text_input" placeholder=" " formControlName="password" />
+          <input
+            type="password"
+            name="password_text_input"
+            id="password_text_input"
+            placeholder=" "
+            formControlName="password"
+            data-cy="password_text_input"
+          />
           <label for="password_text_input" class="input_title">Enter your password</label>
           <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="onTogglePassword($event)" />
         </div>
@@ -42,6 +63,7 @@
             id="confirm_password_text_input"
             placeholder=" "
             formControlName="confirmPassword"
+            data-cy="confirm_password_text_input"
           />
           <label for="confirm_password_text_input" class="input_title">Confirm your password</label>
           <img src="icons/eye.png" alt="Show Password" title="Show Password" class="toggle_password_icon" (click)="onTogglePassword($event)" />
@@ -50,7 +72,7 @@
 
         <!-- Create Account button (primary) -->
         <div class="button_container" id="login_button_container">
-          <button class="button button_primary" type="submit" id="login_button">
+          <button class="button button_primary" type="submit" id="login_button" data-cy="create_account_button">
             <span>Create Account</span>
           </button>
         </div>

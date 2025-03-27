@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { FriendRequest } from '../models/friendRequest.model';
+import { Friendship } from '../models/friendship.model';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +38,18 @@ export class FriendsService {
 
     return this.http.get(`${this.apiUrl}/user`, {
       params,
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  getFriendRequests() {
+    return this.http.get(`${this.apiUrl}/friendship/${this.authService.getUserId()}/friend-requests`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  patchFriendship(friendRequest: FriendRequest) {
+    return this.http.patch(`${this.apiUrl}/friendship`, friendRequest, {
       headers: this.getAuthHeaders(),
     });
   }

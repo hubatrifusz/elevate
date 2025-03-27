@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "backend": "docker compose -f compose-backend.yaml up",
+    "backend": "docker compose -f compose-backend.yaml up --build",
     "start:all": "concurrently \"ng serve -o\" \"npx open-cli http://localhost:8080/swagger\" \"npx open-cli http://localhost:8000\""
   },
   "private": true,

@@ -54,6 +54,7 @@ export class CreateAccountComponent {
 
   handleFormValidationErrors() {
     let errors: string[] = [];
+
     Object.keys(this.loginForm.controls).forEach((key) => {
       const controlErrors = this.loginForm.get(key)?.errors;
       if (controlErrors) {
@@ -67,8 +68,18 @@ export class CreateAccountComponent {
       }
     });
 
+    const formErrors = this.loginForm.errors;
+    if (formErrors) {
+      Object.entries(formErrors).forEach(([errorKey, errorValue]) => {
+        if (typeof errorValue === 'object' && errorValue.message) {
+          errors.push(errorValue.message);
+        }
+      });
+    }
+
     errors.sort();
     this.formErrorMessage = errors[0];
+
     errors = [];
   }
 }

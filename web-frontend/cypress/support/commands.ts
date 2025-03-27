@@ -36,7 +36,14 @@
 //   }
 // }
 
+declare namespace Cypress {
+  interface Chainable {
+    logout(): void;
+  }
+}
 
-// Cypress.Commands.add('logout', () => {
-//   cy.visit('/');
-// });
+Cypress.Commands.add('logout', () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  cy.visit('localhost:4200/');
+});

@@ -1,18 +1,30 @@
 <div id="friends_page_container" class="page_container">
   <app-navbar></app-navbar>
   <div id="friends_container">
-    <div id="friends"></div>
+    <div id="friends">
+      <p>Friends:</p>
+      @for (friend of friends; track $index) {
+      <p>{{ friend.email }}</p>
+      }
+    </div>
     <div id="friend_requests">
       <p>Pendig friend requests:</p>
+      @for (request of friendRequests; track $index) {
+      <div style="display: flex; flex-direction: row">
+        <p>{{ request.email }}</p>
+        <button (click)="acceptFriendRequest(request)">Accept</button>
+        <button (click)="declineFriendRequest()">Decline</button>
+      </div>
+      }
     </div>
     <div id="add_friend">
       <p>Search:</p>
       <input type="search" [formControl]="search" />
-      <button type="submit" (click)="searchFriends()">Search</button>
+      <button type="submit" (click)="searchUsers()">Search</button>
       @if (searchResult.length == 0) {
       <p>No users found. :(</p>
       } @else { @for (user of searchResult; track $index) {
-      <div style="display: flex; flex-direction: row;">
+      <div style="display: flex; flex-direction: row">
         <p>{{ user.email }}</p>
         <button (click)="sendFriendsRequest(user.id)">Send friend request</button>
       </div>
