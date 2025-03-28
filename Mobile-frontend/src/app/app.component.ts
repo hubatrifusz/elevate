@@ -25,24 +25,32 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private menuCtrl: MenuController, private toastService: ToastService) {
     addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu, personAddOutline });
   }
-  
+
   async ngOnInit() {
+    // Subscribe to the userUpdated event
     this.auth.userUpdated.subscribe(() => {
-      this.getUserData();
+      this.getUserData(); // Fetch user data after login
     });
-    // this.getUserData();
+
+    // Check if the token is already available (e.g., on page reload)
+    if (this.auth.isLoggedIn()) {
+      this.getUserData();
+    }
   }
 
   async getUserData() {
-    await this.userservice.getUserById(this.userId!).subscribe({
-      next: (response) => {
-        this.user = response;
-        console.log('User loaded:', this.user);
-      },
-      error: (error) => {
-        console.error('Error loading user:', error);
-      }
-    })
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.userservice.getUserById(userId).subscribe({
+        next: (response) => {
+          this.user = response;
+          console.log('User loaded:', this.user);
+        },
+        error: (error) => {
+          console.error('Error loading user:', error);
+        }
+      });
+    }
   }
   goToUserPage(userId: string | undefined) {
     if (userId) {

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +36,13 @@ export class AuthService {
   }
   
   login(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, formResult);
+    return this.http.post(`${this.apiUrl}/auth/login`, formResult).pipe(
+      tap((response: any) => {
+        this.saveToken(response.token); // Save the token
+        localStorage.setItem('userId', response.userId); // Save the user ID
+        this.userUpdated.emit(); // Emit the event after login
+      })
+    );
   }
   postNewUser(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, formResult);

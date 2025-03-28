@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, Io
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/.models/user.model';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,7 @@ import { User } from 'src/app/.models/user.model';
   imports: [IonBackButton, IonButtons, IonLabel, IonAvatar, IonItem, IonSpinner, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ProfilePage implements OnInit {
+
   private service = inject(UserService);
   userId!: string;
   user: User | null = null;
@@ -31,7 +33,23 @@ export class ProfilePage implements OnInit {
         console.error('Error loading user:', error);
       }
     })
-    // TODO: Fetch user details from API or service using userId
   }
+  async changeProfilePicture() {
+    if (this.user!.id == localStorage.getItem('userId')) {
+      try {
+        const image = await Camera.getPhoto({
+          quality: 90,
+          allowEditing: true,
+          resultType: CameraResultType.Base64,
+          source: CameraSource.Prompt, // Camera, Photos, or Prompt
+        });
 
+        if (image.base64String) {
+          this.user!.profilePictureBase64 = image.base64String;
+        }
+      } catch (error) {
+        console.error('Error selecting image:', error);
+      }
+    }
+  }
 }

@@ -14,9 +14,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   getUserById(userId: string): Observable<User> {
+    const token = localStorage.getItem('token'); // Retrieve token dynamically
     return this.http.get<User>(`${this.apiUrl}/user/${userId}`, {
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
       }
     });
   }

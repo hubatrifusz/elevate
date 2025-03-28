@@ -15,7 +15,7 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './login-page.page.html',
   styleUrls: ['./login-page.page.scss'],
   standalone: true,
-  imports: [ IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
+  imports: [IonRouterOutlet, IonContent, CommonModule, FormsModule, IonIcon, ReactiveFormsModule]
 })
 export class LoginPagePage implements OnInit {
   private http = inject(HttpClient);
@@ -54,13 +54,10 @@ export class LoginPagePage implements OnInit {
     if (this.form.valid) {
       try {
         const response = await this.authService.login(this.form.value).toPromise();
-        this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
-        await localStorage.setItem('userId', response.userId);
-        // await this.authService.getUserInfo();
-        this.toastService.presentToast('Succesfull login');
+        this.toastService.presentToast('Successful login');
         this.router.navigate(['/footertabs/feed']);
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.toastService.presentToast('Invalid email or password');
       }
     }
@@ -73,12 +70,12 @@ export class LoginPagePage implements OnInit {
   }
 
   ngOnInit() {
-   
+
   }
 
 
 
 
 
-  
+
 }
