@@ -29,6 +29,14 @@ namespace Elevate.Controllers
             return Ok(friendRequests);
         }
 
+        [HttpGet("{userId:guid}/friend-requests-sent")]
+        public async Task<ActionResult<List<FriendshipDto>>> GetSentFriendRequestsAsync(Guid userId)
+        {
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<FriendshipDto> friendRequests = await _friendshipService.GetSentFriendRequestsAsync(userId);
+            return Ok(friendRequests);
+        }
+
         [HttpPost]
         public async Task<ActionResult<FriendshipDto>> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
         {

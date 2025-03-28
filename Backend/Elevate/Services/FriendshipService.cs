@@ -29,6 +29,15 @@ namespace Elevate.Services
                 : _mapper.Map<List<UserDto>>(users);
         }
 
+        public async Task<List<FriendshipDto>> GetSentFriendRequestsAsync(Guid userId)
+        {
+            List<FriendshipModel> requests = await _friendshipRepository.GetSentFriendRequestsAsync(userId);
+
+            return requests.Count == 0
+                ? throw new ResourceNotFoundException("User sent no friend requests.")
+                : _mapper.Map<List<FriendshipDto>>(requests);
+        }
+
         public async Task<bool> AreFriends(Guid userId, Guid friendId)
         {
             return await _friendshipRepository.AreFriends(userId, friendId);

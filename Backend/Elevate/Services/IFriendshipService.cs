@@ -7,6 +7,7 @@ namespace Elevate.Services
     {
         Task<List<UserDto>> GetFriendsAsync(Guid userId);
         Task<List<UserDto>> GetFriendRequestsAsync(Guid userId);
+        Task<List<FriendshipDto>> GetSentFriendRequestsAsync(Guid userId);
         Task<bool> AreFriends(Guid userId, Guid friendId);
         Task<FriendshipDto> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto);
         Task<FriendshipDto> UpdateFriendshipAsync(FriendshipUpdateDto friendshipUpdateDto);
