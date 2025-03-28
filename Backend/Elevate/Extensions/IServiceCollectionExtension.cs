@@ -2,7 +2,13 @@
 using Elevate.Data.Database;
 using Elevate.Data.Repository;
 using Elevate.Models.User;
-using Elevate.Services;
+using Elevate.Services.Challenge;
+using Elevate.Services.Feed;
+using Elevate.Services.Friendship;
+using Elevate.Services.Habit;
+using Elevate.Services.HabitLog;
+using Elevate.Services.Streak;
+using Elevate.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

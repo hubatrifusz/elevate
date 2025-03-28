@@ -3,8 +3,9 @@ using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Challenge;
 using Elevate.Models.Habit;
+using Elevate.Services.HabitLog;
 
-namespace Elevate.Services
+namespace Elevate.Services.Challenge
 {
     public class ChallengeService(ChallengeRepository challengeRepository, HabitRepository habitRepository, IHabitLogGeneratorService habitLogGeneratorService, IMapper mapper) : IChallengeService
     {

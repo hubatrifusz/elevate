@@ -1,6 +1,6 @@
 ﻿using Elevate.Models.HabitLog;
 using Elevate.Models.Post;
-using Elevate.Services;
+using Elevate.Services.Feed;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elevate.Controllers

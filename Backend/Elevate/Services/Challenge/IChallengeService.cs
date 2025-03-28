@@ -1,6 +1,6 @@
 ﻿using Elevate.Models.Challenge;
 
-namespace Elevate.Services
+namespace Elevate.Services.Challenge
 {
     public interface IChallengeService
     {

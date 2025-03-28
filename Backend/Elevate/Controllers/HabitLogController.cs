@@ -1,6 +1,6 @@
 ﻿using Elevate.Common.Utilities;
 using Elevate.Models.HabitLog;
-using Elevate.Services;
+using Elevate.Services.HabitLog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

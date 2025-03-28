@@ -28,6 +28,14 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<FriendshipModel>> GetSentFriendRequestsAsync(Guid userId)
+        {
+            return await _context.Friendships
+                .Where(f => f.UserId == userId &&
+                    f.Status != FriendshipStatus.Accepted)
+                .ToListAsync();
+        }
+
         public async Task<bool> AreFriends(Guid userId, Guid friendId)
         {
             return await _context.Friendships

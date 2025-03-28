@@ -1,6 +1,6 @@
 ﻿using Elevate.Models.HabitLog;
 
-namespace Elevate.Services
+namespace Elevate.Services.Streak
 {
     public interface IStreakService
     {
