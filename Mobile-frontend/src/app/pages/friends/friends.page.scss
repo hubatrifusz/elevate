@@ -17,8 +17,41 @@ ion-list {
     background-color: transparent;
 }
 
+ion-chip {
+    padding: 15px;
+
+    ion-badge {
+        margin-left: 10px;
+        font-size: 12px;
+    }
+}
+
+ion-label {
+    p {
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+ion-searchbar {
+    --border-radius: 15px;
+}
 ion-modal {
     ion-content {
         --background: unset;
+    }
+
+}
+
+.modal-card {
+    border-radius: $border-radius;
+}
+
+.no-friends-card {
+    border-radius: $border-radius;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.274);
+
+    @media (prefers-color-scheme: dark) {
+        box-shadow: 0px 10px 15px rgba(255, 255, 255, 0.1);
     }
 }

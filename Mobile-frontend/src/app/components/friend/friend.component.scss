@@ -1,0 +1,24 @@
+@use "../../../theme/fab.scss" as *;
+@use "../../../theme/variables.scss" as *;
+
+ion-item {
+    border-radius: $border-radius;
+    margin: 15px 0;
+    border: solid 1px $main-color-300;
+    background-color: $main-color-200;
+
+    @media(prefers-color-scheme: dark) {
+        background-color: $main-color-600;
+        border: solid 1px $main-color-800;
+    }
+}
+
+ion-list {
+    background-color: transparent;
+}
+
+ion-modal {
+    ion-content {
+        --background: unset;
+    }
+}
