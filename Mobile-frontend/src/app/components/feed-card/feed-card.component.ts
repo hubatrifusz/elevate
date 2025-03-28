@@ -21,7 +21,9 @@ export class FeedCardComponent implements OnInit {
 
   }
 
-  ngOnInit() { }
+
+  ngOnInit() {
+   }
   goToProfile(userId: string) {
     this.router.navigate(['/profile', userId]);
   }

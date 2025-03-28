@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class UserService {
 
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://elevate.koyeb.app/api';
   token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) { }

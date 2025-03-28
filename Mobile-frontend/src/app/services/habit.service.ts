@@ -11,7 +11,7 @@ import { HabitLog } from '../.models/HabitLog.model';
 export class HabitService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/habit';  // Replace with your API URL
+  private apiUrl = 'https://elevate.koyeb.app/api/habit';  // Replace with your API URL
 
   getHabits(userId: string, pageNumber: number, pageSize: number): Observable<Habit[]> {
     const token = localStorage.getItem('token');
@@ -44,7 +44,7 @@ export class HabitService {
     const userId = localStorage.getItem('userId') ?? '';
     const params = new HttpParams().set('userId', userId);
 
-    return this.http.get(`http://localhost:8080/api/habitlog/${date}`, { headers: headers, params: params });
+    return this.http.get(`https://elevate.koyeb.app/api/habitlog/${date}`, { headers: headers, params: params });
   }
 
   createHabit(habitData: any): Observable<Habit> {
@@ -57,7 +57,7 @@ export class HabitService {
       habitData.color = habitData.color.slice(1);
     }
 
-    return this.http.post<Habit>(this.apiUrl, habitData, { headers: headers });
+    return this.http.post<Habit>(`${this.apiUrl}`, habitData, { headers: headers });
   }
 
   editHabit(Editedhabit: Habit) {
@@ -92,6 +92,6 @@ export class HabitService {
       isPublic: Ispublic
     };
 
-    return this.http.patch(`http://localhost:8080/api/habitlog/${habitLogId}`, body, { headers: headers });
+    return this.http.patch(`https://elevate.koyeb.app/api/habitlog/${habitLogId}`, body, { headers: headers });
   }
 }

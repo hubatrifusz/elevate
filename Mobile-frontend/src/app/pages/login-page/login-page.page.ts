@@ -81,7 +81,6 @@ export class LoginPagePage implements OnInit {
     });
   }
 
-  private apiUrl = 'http://localhost:8080/api';
 
 
 

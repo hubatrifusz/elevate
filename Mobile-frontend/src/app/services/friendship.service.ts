@@ -9,7 +9,7 @@ import { Friendship } from '../.models/friendship.model';
 })
 export class FriendshipService {
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://elevate.koyeb.app/api';
   token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) { }

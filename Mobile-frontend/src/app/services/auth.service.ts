@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private router = inject(Router);
   private http= inject(HttpClient)
-  private apiUrl = 'http://localhost:8080/api';  // Replace with your API URL
+  private apiUrl = 'https://elevate.koyeb.app/api';  // Replace with your API URL
 
   saveToken(token: string) {
     localStorage.setItem('token', token);

@@ -8,7 +8,6 @@ ion-header {
 }
 
 ion-card {
-    margin: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -45,13 +44,19 @@ ion-textarea {
     margin: 10px 0;
     --border-radius: 15px;
 }
-ion-input:focus, ion-textarea:focus{
+
+ion-input:focus,
+ion-textarea:focus {
     --border-color: $accent-color-400;
 }
-.input-fill-outline.sc-ion-input-md-h, .textarea-fill-outline.sc-ion-textarea-md-h{
+
+.input-fill-outline.sc-ion-input-md-h,
+.textarea-fill-outline.sc-ion-textarea-md-h {
     --border-radius: 15px;
-   
+
 }
+
+
 
 .day-selector {
     display: flex;
@@ -82,6 +87,7 @@ ion-grid {
         --background: transparent;
         --color: #ccc;
         --border-radius: 15px;
+        border-radius: 15px;
     }
 
     ion-button.selected {
@@ -91,22 +97,23 @@ ion-grid {
     }
 }
 
-ion-button {
-    // --background: hsl(249, 86%, 67%);
-    background-color: $accent-color-400;
-    color: var(--ion-color-light);
-    margin: 10px 0;
-}
+// ion-button {
+//     // --background: hsl(249, 86%, 67%);
+//     background-color: $accent-color-400;
+//     color: var(--ion-color-light);
+//     margin: 10px 0;
+// }
 
-ion-button.selected {
-    --background: var(--ion-color-secondary);
-    --color: var(--ion-color-light);
-}
+// ion-button.selected {
+//     --background: var(--ion-color-secondary);
+//     --color: var(--ion-color-light);
+// }
 
 ion-checkbox {
     --background: var(--ion-color-light);
     --border-radius: 5px;
 }
-.color{
+
+.color {
     width: 50%;
 }

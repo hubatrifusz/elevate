@@ -26,7 +26,7 @@ export class AppComponent {
     addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu, personAddOutline });
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     await this.userservice.getUserById(this.userId!).subscribe({
       next: (response) => {
         this.user = response;
