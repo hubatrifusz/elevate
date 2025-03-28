@@ -7,6 +7,6 @@
 *.synctex.gz
 *.fdb_latexmk
 
-documentation/_minted/*
-!documentation/_minted/one-dark
-!documentation/_minted/one-dark.pygstyle
+documentation/_minted-elevate/*
+!documentation/_minted-elevate/one-dark
+!documentation/_minted-elevate/one-dark.pygstyle
