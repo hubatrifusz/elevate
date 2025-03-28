@@ -29,5 +29,17 @@ services:
       db:
         condition: service_healthy
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "8001:80"
+    depends_on:
+      - db
+
 volumes:
   db_data:

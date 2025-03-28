@@ -80,7 +80,8 @@ namespace Elevate
             app.UseMiddleware<GlobalExceptionHandler>();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())  
+                // remove production 
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
