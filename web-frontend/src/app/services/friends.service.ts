@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FriendRequest } from '../models/friendRequest.model';
-import { Friendship } from '../models/friendship.model';
 import { environment } from '../../environments/environment.prod';
 
 @Injectable({
@@ -12,7 +11,7 @@ import { environment } from '../../environments/environment.prod';
 export class FriendsService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  private apiUrl = environment.apiUrl;;
+  private apiUrl = environment.apiUrl;
 
   private getAuthHeaders() {
     const token = this.authService.getToken();
@@ -51,6 +50,15 @@ export class FriendsService {
 
   patchFriendship(friendRequest: FriendRequest) {
     return this.http.patch(`${this.apiUrl}/friendship`, friendRequest, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  deleteFriend(friendId: string) {
+    const params = new HttpParams().set('userId', this.authService.getUserId() as string).set('friendId', friendId);
+
+    return this.http.delete(`${this.apiUrl}/friendship`, {
+      params,
       headers: this.getAuthHeaders(),
     });
   }

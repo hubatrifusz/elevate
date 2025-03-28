@@ -21,6 +21,7 @@ export class FriendsComponent {
   searchResult: User[] = [];
   friendRequests: User[] = [];
   friends: User[] = [];
+  friendships: User[] = [];
 
   ngOnInit() {
     this.getFriendRequests();
@@ -52,8 +53,9 @@ export class FriendsComponent {
     const friendRequest: FriendRequest = { friendId: friendId, userId: this.authService.getUserId() as string, status: 'pending' };
 
     this.friendsService.sendFriendRequest(friendRequest).subscribe({
-      next: (response) => console.log(response),
+      next: (response) => {},
       error: (error) => console.log(error),
+      complete: () => {},
     });
   }
 
@@ -76,5 +78,25 @@ export class FriendsComponent {
     });
   }
 
-  declineFriendRequest() {}
+  declineFriendRequest(friend: User) {
+    const friendRequest: FriendRequest = { userId: this.authService.getUserId() as string, friendId: friend.id, status: 'declined' };
+    this.friendsService.patchFriendship(friendRequest).subscribe({
+      next: (response) => {
+        console.log(response);
+        const index = this.friendRequests.findIndex((friendReq) => friendReq.id === friend.id);
+        this.friendRequests.splice(index, 1);
+      },
+      error: (error) => console.log(error),
+      complete: () => this.getFriends(),
+    });
+  }
+
+  deleteFriend(friend: User) {
+    this.friendsService.deleteFriend(friend.id).subscribe({
+      next: () => {
+        this.friends = this.friends.filter((f) => f.id !== friend.id);
+      },
+      error: (error) => console.log(error),
+    });
+  }
 }

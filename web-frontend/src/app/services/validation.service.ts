@@ -53,7 +53,7 @@ export class ValidationService {
 
   static passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.]).{12,}$/;
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.()]).{12,}$/;
       if (!control.value || passwordRegex.test(control.value)) {
         return null;
       } else {

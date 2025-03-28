@@ -4,7 +4,10 @@
     <div id="friends">
       <p>Friends:</p>
       @for (friend of friends; track $index) {
-      <p>{{ friend.email }}</p>
+      <div style="display: flex; flex-direction: row">
+        <p>{{ friend.email }}</p>
+        <button (click)="deleteFriend(friend)">Delete</button>
+      </div>
       }
     </div>
     <div id="friend_requests">
@@ -13,7 +16,7 @@
       <div style="display: flex; flex-direction: row">
         <p>{{ request.email }}</p>
         <button (click)="acceptFriendRequest(request)">Accept</button>
-        <button (click)="declineFriendRequest()">Decline</button>
+        <button (click)="declineFriendRequest(request)">Decline</button>
       </div>
       }
     </div>
