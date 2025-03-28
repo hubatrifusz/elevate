@@ -23,7 +23,7 @@ namespace Elevate.Services
         public async Task CheckAndResetBrokenStreaks()
         {
             var habits = await _habitRepository.GetAllHabitsAsync();
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
 
             foreach (var habit in habits)
             {
