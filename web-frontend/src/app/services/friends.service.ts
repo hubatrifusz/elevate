@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { FriendRequest } from '../models/friendRequest.model';
 import { Friendship } from '../models/friendship.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { Friendship } from '../models/friendship.model';
 export class FriendsService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = environment.apiUrl;;
 
   private getAuthHeaders() {
     const token = this.authService.getToken();
