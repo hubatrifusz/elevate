@@ -46,7 +46,7 @@ namespace Elevate.Services
             {
                 _mapper.Map(habitLogUpdateDto, habitLogModel);
                 await _streakService.UpdateStreakForHabitLog(habitLogModel);
-                habitLogModel.CompletedAt = DateTime.Now;
+                habitLogModel.CompletedAt = DateTime.UtcNow;
             }
 
             HabitLogModel updatedHabitLog = await _habitLogRepository.UpdateHabitLogAsync(habitLogModel)

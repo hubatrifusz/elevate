@@ -13,7 +13,7 @@ namespace Elevate.Data.Repository
 
         public async Task<List<HabitLogModel>> GenerateLogsForHabitAsync(HabitModel habit, DateTime? endDate = null)
         {
-            var now = DateTimeConverter.GetCetTime();
+            var now = DateTime.UtcNow;
             var startDate = now.Date;
 
             var currentMonth = now.Month;
@@ -49,7 +49,6 @@ namespace Elevate.Data.Repository
 
         private async Task<List<HabitLogModel>> GenerateLogsForUserAsync(HabitModel habit, Guid userId, DateTime startDate, DateTime endDate)
         {
-            // Get existing dates for this specific user and habit
             var existingDates = await _context.Set<HabitLogModel>()
                 .Where(l => l.HabitId == habit.Id && l.UserId == userId)
                 .Select(l => l.DueDate.Date)

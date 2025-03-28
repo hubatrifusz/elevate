@@ -39,6 +39,7 @@ namespace Elevate.Extensions
 
             services.AddScoped<IHabitLogGeneratorService, HabitLogGeneratorService>();
             services.AddScoped<IStreakService, StreakService>();
+            services.AddScoped<StreakService>();
 
             services.AddHostedService<HabitLogGenerationBackgroundService>();
             services.AddHostedService<StreakBackgroundService>();

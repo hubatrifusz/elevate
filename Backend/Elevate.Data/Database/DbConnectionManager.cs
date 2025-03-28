@@ -1,6 +1,7 @@
-﻿using Google.Cloud.SecretManager.V1;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Npgsql;
+using System.Data.Common;
 
 namespace Elevate.Data.Database
 {
@@ -10,16 +11,9 @@ namespace Elevate.Data.Database
 
         public string? GetConnectionString()
         {
-            if (IsRunningOnGoogleCloud())
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
-                var cloudSqlBuilder = new MySqlConnectionStringBuilder
-                {
-                    ConnectionString = _configuration.GetConnectionString("CloudSqlConnection")
-                };
-                cloudSqlBuilder.UserID = GetSecret("DB_USERNAME");
-                cloudSqlBuilder.Password = GetSecret("DB_PASSWORD");
-
-                return cloudSqlBuilder.ConnectionString;
+                return _configuration.GetConnectionString("ProductionConnection");
             }
             else
             {
@@ -27,24 +21,22 @@ namespace Elevate.Data.Database
             }
         }
 
-        public MySqlConnection GetOpenConnection()
+        public DbConnection GetOpenConnection()
         {
-            var connection = new MySqlConnection(GetConnectionString());
-            connection.Open();
-            return connection;
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                var connection = new NpgsqlConnection(GetConnectionString());
+                connection.Open();
+                return connection;
+            }
+            else
+            {
+                var connection = new MySqlConnection(GetConnectionString());
+                connection.Open();
+                return connection;
+            }
         }
-
-        private static bool IsRunningOnGoogleCloud()
-        {
-            return Environment.GetEnvironmentVariable("GCE_METADATA_HOST") != null;
-        }
-
-        private string GetSecret(string secretName)
-        {
-            SecretManagerServiceClient client = SecretManagerServiceClient.Create();
-            SecretVersionName secretVersionName = new SecretVersionName("brave-set-449017-d0", secretName, "latest");
-            AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
-            return result.Payload.Data.ToStringUtf8();
-        }
+       
+        public static bool IsProduction() => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production";
     }
 }
