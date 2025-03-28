@@ -52,14 +52,15 @@ export class FeedPage {
   }
 
   ionViewWillEnter() {
-    this.userService.getUserById(localStorage.getItem('userId')!).subscribe({
-      next: (response) => {
-        this.user = response;
-      },
-      error: (error) => {
-        console.error('Error loading user:', error);
-      }
-    })
+    this.auth.userUpdated.emit();
+    // this.userService.getUserById(localStorage.getItem('userId')!).subscribe({
+    //   next: (response) => {
+    //     this.user = response;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading user:', error);
+    //   }
+    // })
   }
 
   handleScrollStart() {

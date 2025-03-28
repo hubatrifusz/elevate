@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet, IonButton, IonIcon, IonMenu, IonContent, MenuController, IonAvatar } from '@ionic/angular/standalone';
 import { AuthService } from './services/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -15,7 +15,7 @@ import { UserService } from './services/user.service';
   styleUrls: ['app.component.scss'],
   imports: [IonAvatar, IonApp, IonRouterOutlet, IonMenu, IonIcon, IonButton, IonContent],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   auth = inject(AuthService);
   http = inject(HttpClient);
   userservice = inject(UserService);
@@ -25,11 +25,19 @@ export class AppComponent {
   constructor(private router: Router, private menuCtrl: MenuController, private toastService: ToastService) {
     addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu, personAddOutline });
   }
+  
+  async ngOnInit() {
+    this.auth.userUpdated.subscribe(() => {
+      this.getUserData();
+    });
+    // this.getUserData();
+  }
 
-  async ionViewWillEnter() {
+  async getUserData() {
     await this.userservice.getUserById(this.userId!).subscribe({
       next: (response) => {
         this.user = response;
+        console.log('User loaded:', this.user);
       },
       error: (error) => {
         console.error('Error loading user:', error);
@@ -42,7 +50,7 @@ export class AppComponent {
       this.router.navigate(['/profile', userId]);
     }
   }
-  gotofriends(){
+  gotofriends() {
     this.menuCtrl.close();
     this.router.navigate(['/footertabs/friends']);
   }

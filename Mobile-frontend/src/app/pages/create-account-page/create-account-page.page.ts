@@ -61,7 +61,7 @@ export class CreateAccountPagePage implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.postNewUser(this.form.value).subscribe({
+      this.auth.postNewUser(this.form.value).subscribe({
         next: (v) => {
           this.router.navigate(['/login-page']);
           this.toastService.presentToast('Account created successfully, please log in');
@@ -77,9 +77,6 @@ export class CreateAccountPagePage implements OnInit {
     }
   }
 
-  private apiUrl = 'https://elevate.koyeb.app/api';
 
-  postNewUser(formResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
-  }
+ 
 }

@@ -51,14 +51,12 @@ export class LoginPagePage implements OnInit {
 
 
   async onSubmit() {
-    console.log(this.form.value);
-    console.log(this.form.valid);
     if (this.form.valid) {
       try {
         const response = await this.authService.login(this.form.value).toPromise();
         this.authService.saveToken(response.token); // Assuming your backend returns { token: '...', userId: '...' }
-        localStorage.setItem('userId', response.userId);
-        await this.authService.getUserInfo();
+        await localStorage.setItem('userId', response.userId);
+        // await this.authService.getUserInfo();
         this.toastService.presentToast('Succesfull login');
         this.router.navigate(['/footertabs/feed']);
       } catch (e) {
@@ -75,10 +73,7 @@ export class LoginPagePage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      console.log(params);
-
-    });
+   
   }
 
 

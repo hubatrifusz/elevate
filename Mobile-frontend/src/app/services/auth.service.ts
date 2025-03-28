@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { EventEmitter, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private router = inject(Router);
   private http= inject(HttpClient)
-  private apiUrl = 'https://elevate.koyeb.app/api';  // Replace with your API URL
+  private apiUrl = 'https://elevate.koyeb.app/api';  
+  userUpdated = new EventEmitter<void>();
+
 
   saveToken(token: string) {
     localStorage.setItem('token', token);
@@ -36,24 +38,9 @@ export class AuthService {
   login(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, formResult);
   }
-
-  async getUserInfo() {
-    const token = localStorage.getItem('token'); // Or retrieve from @ionic/storage
-
-    let headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Or however your backend expects the token
-    });
-
-    try {
-      const response: any = await this.http.get(`${this.apiUrl}/user/${localStorage.getItem('userId')}`, { headers }).toPromise();
-      localStorage.setItem('userInfo', JSON.stringify(response));
-      if (response.firstName && response.lastName) {
-        const username = `${response.firstName} ${response.lastName}`;
-        localStorage.setItem('userName', username);
-      }
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
+  postNewUser(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, formResult);
   }
+
+  
 }
