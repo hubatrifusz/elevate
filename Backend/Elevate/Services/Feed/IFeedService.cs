@@ -1,7 +1,7 @@
 ﻿using Elevate.Models.HabitLog;
 using Elevate.Models.Post;
 
-namespace Elevate.Services
+namespace Elevate.Services.Feed
 {
     public interface IFeedService
     {

@@ -4,7 +4,7 @@ using Elevate.Models.Friendship;
 using Elevate.Common.Exceptions;
 using AutoMapper;
 
-namespace Elevate.Services
+namespace Elevate.Services.Friendship
 {
     public class FriendshipService(FriendshipRepository friendshipRepository, IMapper mapper) : IFriendshipService
     {

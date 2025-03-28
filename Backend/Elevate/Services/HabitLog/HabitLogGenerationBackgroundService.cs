@@ -1,5 +1,4 @@
-﻿
-namespace Elevate.Services
+﻿namespace Elevate.Services.HabitLog
 {
     public class HabitLogGenerationBackgroundService(IServiceProvider serviceProvider, ILogger<HabitLogGenerationBackgroundService> logger) : BackgroundService
     {

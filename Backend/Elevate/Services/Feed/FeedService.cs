@@ -3,7 +3,7 @@ using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Post;
 
-namespace Elevate.Services
+namespace Elevate.Services.Feed
 {
     public class FeedService(FeedRepository feedRepository, IMapper _mapper) : IFeedService
     {

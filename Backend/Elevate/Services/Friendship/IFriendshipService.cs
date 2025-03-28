@@ -1,7 +1,7 @@
 ﻿using Elevate.Models.Friendship;
 using Elevate.Models.User;
 
-namespace Elevate.Services
+namespace Elevate.Services.Friendship
 {
     public interface IFriendshipService
     {

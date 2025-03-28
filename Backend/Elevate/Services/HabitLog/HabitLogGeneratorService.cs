@@ -2,7 +2,7 @@
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
-namespace Elevate.Services
+namespace Elevate.Services.HabitLog
 {
     public class HabitLogGeneratorService(HabitLogGeneratorRepository habitLogGeneratorRepository, HabitRepository habitRepository, ILogger<HabitLogGeneratorService> logger) : IHabitLogGeneratorService
     {

@@ -1,7 +1,8 @@
 ﻿using Elevate.Common.Utilities;
 using Elevate.Models.Challenge;
 using Elevate.Models.Habit;
-using Elevate.Services;
+using Elevate.Services.Challenge;
+using Elevate.Services.Habit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

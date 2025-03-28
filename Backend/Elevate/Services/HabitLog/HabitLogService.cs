@@ -2,8 +2,9 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
+using Elevate.Services.Streak;
 
-namespace Elevate.Services
+namespace Elevate.Services.HabitLog
 {
     public class HabitLogService(HabitLogRepository habitLogRepository, IStreakService streakService, IMapper mapper) : IHabitLogService
     {
