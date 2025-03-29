@@ -129,6 +129,9 @@ namespace Elevate
                             throw; // Critical error - rethrow to prevent app from starting with broken DB
                         }
                     }
+                    else{
+                        dbContext.Database.Migrate();
+                    }
                 }
                 catch (Exception ex)
                 {
