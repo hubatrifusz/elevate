@@ -2,7 +2,7 @@
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
-namespace Elevate.Services
+namespace Elevate.Services.Streak
 {
     public class StreakService(HabitRepository habitRepository, HabitLogRepository habitLogRepository) : IStreakService
     {

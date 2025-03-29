@@ -1,9 +1,9 @@
 ﻿using Elevate.Models.Friendship;
-using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Elevate.Common.Utilities;
 using Elevate.Models.User;
+using Elevate.Services.Friendship;
 
 namespace Elevate.Controllers
 {
@@ -26,6 +26,14 @@ namespace Elevate.Controllers
         {
             UserPermissionUtility.IsCurrentUser(userId, User);
             List<UserDto> friendRequests = await _friendshipService.GetFriendRequestsAsync(userId);
+            return Ok(friendRequests);
+        }
+
+        [HttpGet("{userId:guid}/friend-requests-sent")]
+        public async Task<ActionResult<List<FriendshipDto>>> GetSentFriendRequestsAsync(Guid userId)
+        {
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<FriendshipDto> friendRequests = await _friendshipService.GetSentFriendRequestsAsync(userId);
             return Ok(friendRequests);
         }
 

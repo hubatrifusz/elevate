@@ -6,7 +6,7 @@ using Elevate.Models.User;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace Elevate.Services
+namespace Elevate.Services.User
 {
     public class UserService(UserRepository userRepository, IMapper mapper,
         IConfiguration configuration, UserManager<ApplicationUser> userManager) : IUserService

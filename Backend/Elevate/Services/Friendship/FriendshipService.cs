@@ -4,7 +4,7 @@ using Elevate.Models.Friendship;
 using Elevate.Common.Exceptions;
 using AutoMapper;
 
-namespace Elevate.Services
+namespace Elevate.Services.Friendship
 {
     public class FriendshipService(FriendshipRepository friendshipRepository, IMapper mapper) : IFriendshipService
     {
@@ -27,6 +27,15 @@ namespace Elevate.Services
             return users.Count == 0
                 ? throw new ResourceNotFoundException("User has no friend requests.")
                 : _mapper.Map<List<UserDto>>(users);
+        }
+
+        public async Task<List<FriendshipDto>> GetSentFriendRequestsAsync(Guid userId)
+        {
+            List<FriendshipModel> requests = await _friendshipRepository.GetSentFriendRequestsAsync(userId);
+
+            return requests.Count == 0
+                ? throw new ResourceNotFoundException("User sent no friend requests.")
+                : _mapper.Map<List<FriendshipDto>>(requests);
         }
 
         public async Task<bool> AreFriends(Guid userId, Guid friendId)

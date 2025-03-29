@@ -430,6 +430,48 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
+  \item[\httpGet{/api/friendship/\{userId\}/friend-requests-sent}] - Elküldött barátkérések lekérdezése
+  
+    \vspace{0.5cm}
+    \begin{sloppypar}
+      A felhasználó által elküldött barátkérések lekérdezése a felhasználó azonosítója alapján.
+    \end{sloppypar}
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User sent no friend requests."
+          \end{minted}
+        \end{codeblock}
+      \end{itemize}
+
   \item[\httpPost{/api/friendship}] - Barát hozzáadása
   
     \vspace{0.5cm}
@@ -477,6 +519,47 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
         \end{codeblock}
     \end{itemize}
 
+  \item[\httpPatch{/api/friendship}] - Barátság státuszának módosítása
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "status": "string"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{403 Forbidden} - Nem barátok a megadott felhasználóval
+      
+    \end{itemize}
+
   \item[\httpDelete{/api/friendship}] - Barát törlése
   
     \vspace{0.5cm}
@@ -510,6 +593,8 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
       \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
       
+      \item \textbf{403 Forbidden} - Nem barátok a megadott felhasználóval
+
       \item \textbf{404 Not Found} - Nincs találat
 
         \textbf{Response body:}
@@ -1023,6 +1108,285 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
           \end{minted}
         \end{codeblock}
     \end{itemize}
+\end{description}
+
+\subsection{Kihívások}
+\begin{description}
+  \item[\httpGet{/api/challenge/\{userId\}/challenge-invites}] - Kihívási felkérések lekérdezése
+  
+    \vspace{0.5cm}
+    A felhasználó által kapott kihívási felkérések lekérdezése.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User has no challenge invites."
+          \end{minted}
+        \end{codeblock}
+
+      \end{itemize}
+
+  \item[\httpPost{/api/challenge}] - Barát kihívása
+  
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  }
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{201 Created} - Sikeres küldés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Habit not found"
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
+  \item[\httpPatch{/api/challenge/\{id\}}] - Kihívás módosítása
+
+    \vspace{0.5cm}
+    \textbf{Request body:}
+    \begin{codeblock}{JSON}
+      \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string"
+}
+      \end{minted}
+    \end{codeblock}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres módosítás
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{400 Bad Request} - Hibás vagy hiányos adatok
+
+    \end{itemize}
+
+  \item[\httpDelete{/api/challenge/\{id\}}] - Kihívás törlése
+  
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{habitId: string(\$uuid)} - A szokás azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres törlés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"Failed to remove challenge."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+
 \end{description}
 
 \chapter{Tesztelés}

@@ -1,4 +1,4 @@
-﻿namespace Elevate.Services
+﻿namespace Elevate.Services.Streak
 {
     public class StreakBackgroundService : BackgroundService
     {
