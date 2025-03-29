@@ -49,7 +49,14 @@ namespace Elevate.Services.Friendship
             {
                 throw new BadRequestException("User cannot be friends with themself.");
             }
+
+            if (await _friendshipRepository.AreFriends(friendshipCreateDto.UserId, friendshipCreateDto.FriendId))
+            {
+                throw new BadRequestException("User is already friends with this user.");
+            }
+
             FriendshipModel friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
+            
             FriendshipModel savedFriendship = await _friendshipRepository.AddFriendshipAsync(friendship)
                 ?? throw new BadRequestException("Failed to add friend.");
 
