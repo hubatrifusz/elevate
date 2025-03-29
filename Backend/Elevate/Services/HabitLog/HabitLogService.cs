@@ -2,12 +2,14 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
+using Elevate.Services.Streak;
 
-namespace Elevate.Services
+namespace Elevate.Services.HabitLog
 {
-    public class HabitLogService(HabitLogRepository habitLogRepository, IMapper mapper) : IHabitLogService
+    public class HabitLogService(HabitLogRepository habitLogRepository, IStreakService streakService, IMapper mapper) : IHabitLogService
     {
         private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
+        private readonly IStreakService _streakService = streakService;
         private readonly IMapper _mapper = mapper;
 
         public async Task<List<HabitLogDto>> GetHabitLogsByHabitIdAsync(Guid habitId, int pageNumber, int pageSize)
@@ -41,10 +43,10 @@ namespace Elevate.Services
 
             HabitLogModel habitLogModel = _mapper.Map<HabitLogModel>(existingHabitLog);
 
-            _mapper.Map(habitLogUpdateDto, habitLogModel);
-
             if (habitLogUpdateDto.Completed.HasValue && habitLogUpdateDto.Completed.Value && !existingHabitLog.Completed)
             {
+                _mapper.Map(habitLogUpdateDto, habitLogModel);
+                await _streakService.UpdateStreakForHabitLog(habitLogModel);
                 habitLogModel.CompletedAt = DateTime.UtcNow;
             }
 

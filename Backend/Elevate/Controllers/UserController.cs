@@ -1,8 +1,8 @@
 ﻿using Elevate.Models.User;
-using Elevate.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Elevate.Common.Utilities;
+using Elevate.Services.User;
 
 namespace Elevate.Controllers
 {

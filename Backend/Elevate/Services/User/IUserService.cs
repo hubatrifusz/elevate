@@ -1,6 +1,6 @@
 ﻿using Elevate.Models.User;
 
-namespace Elevate.Services
+namespace Elevate.Services.User
 {
     public interface IUserService
     {
