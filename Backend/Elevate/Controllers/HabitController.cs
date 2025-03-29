@@ -1,6 +1,6 @@
 ﻿using Elevate.Common.Utilities;
 using Elevate.Models.Habit;
-using Elevate.Services;
+using Elevate.Services.Habit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

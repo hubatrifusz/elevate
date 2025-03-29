@@ -3,8 +3,9 @@ using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
+using Elevate.Services.HabitLog;
 
-namespace Elevate.Services
+namespace Elevate.Services.Habit
 {
     public class HabitService(
         HabitRepository habitRepository, 

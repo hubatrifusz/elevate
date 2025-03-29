@@ -1,6 +1,6 @@
 ﻿using Elevate.Models.Habit;
 
-namespace Elevate.Services
+namespace Elevate.Services.Habit
 {
     public interface IHabitService
     {

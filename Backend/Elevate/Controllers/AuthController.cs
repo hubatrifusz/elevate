@@ -1,5 +1,5 @@
 ﻿using Elevate.Models.User;
-using Elevate.Services;
+using Elevate.Services.User;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
