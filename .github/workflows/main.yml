@@ -11,6 +11,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set environment variables
+      env:
+        Jwt__PrivateKey: ${{ secrets.JWT_PRIVATE_KEY }}
+        Jwt__PublicKey: ${{ secrets.JWT_PUBLIC_KEY }}
+        Jwt__Issuer: ${{ secrets.JWT_ISSUER }}
+        Jwt__Audience: ${{ secrets.JWT_AUDIENCE }}
+
     - name: Log in to Github Container Registry
       uses: docker/login-action@v2
       with:
