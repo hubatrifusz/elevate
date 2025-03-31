@@ -4,15 +4,31 @@ WORKDIR /app
 COPY . ./
 
 WORKDIR /app/Elevate
-
 RUN dotnet restore "Elevate.sln"
 RUN dotnet publish "Elevate.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM php:apache AS phpmyadmin
+WORKDIR /var/www/html/phpmyadmin
+
+RUN apt-get update && apt-get install -y \
+    unzip \
+    mariadb-client \
+    libmcrypt-dev \
+    && docker-php-ext-install mysqli
+
+RUN curl -LO https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip && \
+    unzip phpMyAdmin-5.2.1-all-languages.zip && \
+    mv phpMyAdmin-5.2.1-all-languages /var/www/html/phpmyadmin && \
+    rm phpMyAdmin-5.2.1-all-languages.zip
+
+FROM php:apache AS final
+WORKDIR /var/www/html
+
+COPY --from=phpmyadmin /var/www/html/phpmyadmin /var/www/html/phpmyadmin
+
 WORKDIR /app
+COPY --from=build /app/publish /app/backend
 
-COPY --from=build /app/publish .
+EXPOSE 80 8080
 
-EXPOSE 8080
-
-ENTRYPOINT ["dotnet", "Elevate.dll", "--urls=http://0.0.0.0:8080"]
+CMD ["bash", "-c", "apache2-foreground & dotnet /app/backend/Elevate.dll --urls=http://0.0.0.0:8080"]
