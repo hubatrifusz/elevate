@@ -1,0 +1,68 @@
+<div id="habits_page_container" class="page_container">
+  <app-navbar></app-navbar>
+  <div id="habits_container">
+    <div id="habits">
+      <div class="habits-grid">
+        @for (habit of habits; track habit.id) {
+        <div class="habit-card {{ habit.color }}">
+          <div class="habit-header">
+            <h3>{{ habit.title }}</h3>
+            <div class="habit-frequency">
+              <img src="icons/clock.png" alt="clock" />
+              <span>{{ habit.frequencyType }}</span>
+            </div>
+          </div>
+          <div class="habit-details">
+            <p>{{ habit.description }}</p>
+            <div class="habit-streak">
+              <span>Current streak: {{ habit.streak }}</span>
+            </div>
+            <div class="habit-actions">
+              <button class="button_primary" (click)="openChallengeModal(habit)">Challenge Friend</button>
+            </div>
+          </div>
+        </div>
+        }
+        @if (habits.length === 0) {
+        <div class="no-habits" style="width: auto; max-width: 300px; margin: 0 auto;">
+          <h3>No habits found</h3>
+          <p>Create a new habit from the dashboard page</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (showChallengeModal) {
+  <div class="challenge-modal-overlay">
+    <div class="challenge-modal">
+      <div class="challenge-modal-header">
+        <h3>Challenge a Friend</h3>
+        <img src="icons/cross.png" alt="close" (click)="closeChallengeModal()" />
+      </div>
+      <div class="challenge-modal-content">
+        @if (friends.length > 0) {
+        <div class="friends-list">
+          @for (friend of friends; track friend.id) {
+          <div class="friend-item">
+            <div class="friend-info">
+              <img
+                [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+                alt="Profile picture" />
+              <span>{{ friend.firstName }} {{ friend.lastName }}</span>
+            </div>
+            <button class="button_primary" (click)="challengeFriend(friend.id)">Challenge</button>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="no-friends">
+          <p>You have no friends to challenge.</p>
+          <p>Add some friends first!</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>

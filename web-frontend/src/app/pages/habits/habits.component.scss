@@ -1,0 +1,284 @@
+#habits_page_container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+#navbar {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+#habits_container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-left: 20px;
+}
+
+#habits {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.habit-card {
+  border-radius: 8px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &.red {
+    border-left: 5px solid #ff5252;
+  }
+
+  &.green {
+    border-left: 5px solid #4caf50;
+  }
+
+  &.blue {
+    border-left: 5px solid #2196f3;
+  }
+}
+
+.habit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.habit-frequency {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.habit-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    color: #555;
+    flex: 1;
+  }
+}
+
+.habit-streak {
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.habit-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .button_delete {
+    background-color: #f44336;
+    color: white;
+
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+}
+
+.no-habits {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+
+  h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.challenge-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.challenge-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.challenge-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s;
+    
+    &:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.challenge-modal-content {
+  padding: 24px;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.friend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: #f5f7fa;
+  transition: all 0.2s;
+  border: 1px solid #eaeef3;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #f0f4f9;
+  }
+}
+
+.friend-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  span {
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.friend-item button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.no-friends {
+  text-align: center;
+  padding: 32px 24px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  
+  p {
+    margin: 8px 0;
+    
+    &:first-child {
+      font-weight: 500;
+      color: #444;
+    }
+  }
+}
