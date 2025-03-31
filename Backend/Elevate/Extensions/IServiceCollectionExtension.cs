@@ -105,7 +105,7 @@ namespace Elevate.Extensions
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var publicKeyPem = configuration["Jwt:PublicKey"]
-                ?? throw new InvalidOperationException($"Public key not configured. {Jwt:PublicKey}");
+                ?? throw new InvalidOperationException($"Public key not configured. {configuration["Jwt:PublicKey"]}");
 
             var rsa = RSA.Create();
             rsa.ImportRSAPublicKeyPem(publicKeyPem);
