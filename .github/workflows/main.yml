@@ -26,7 +26,6 @@ jobs:
         Jwt__Issuer: ${{ secrets.JWT_ISSUER }}
         Jwt__Audience: ${{ secrets.JWT_AUDIENCE }}
       run: |
-        echo "$Jwt__PublicKey"
         docker compose pull
         docker compose -f compose.yaml build backend
         docker tag elevate-backend ghcr.io/${{ secrets.ACTOR }}/elevate-backend:latest
