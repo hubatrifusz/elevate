@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN curl -LO https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip && \
     unzip phpMyAdmin-5.2.1-all-languages.zip && \
+    rm -rf /var/www/html/phpmyadmin && \
     mv phpMyAdmin-5.2.1-all-languages /var/www/html/phpmyadmin && \
     rm phpMyAdmin-5.2.1-all-languages.zip
 
