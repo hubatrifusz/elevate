@@ -6,9 +6,9 @@ services:
       dockerfile: Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      Jwt_PrivateKey: ${JWT_PRIVATE_KEY}
-      Jwt_PublicKey: ${JWT_PUBLIC_KEY}
-      Jwt_Issuer: ${JWT_ISSUER}
-      Jwt_Audience: ${JWT_AUDIENCE}
+      Jwt_PrivateKey: ${JWT__PRIVATE_KEY}
+      Jwt_PublicKey: ${JWT__PUBLIC_KEY}
+      Jwt_Issuer: ${JWT__ISSUER}
+      Jwt_Audience: ${JWT__AUDIENCE}
     ports:
       - "8000:8000"
