@@ -69,7 +69,7 @@ export class FriendsComponent {
   acceptFriendRequest(friend: User) {
     const friendRequest: FriendRequest = { userId: this.authService.getUserId() as string, friendId: friend.id, status: 'accepted' };
     this.friendsService.patchFriendship(friendRequest).subscribe({
-      next: (response) => {
+      next: () => {
         const index = this.friendRequests.findIndex((friendReq) => friendReq.id === friend.id);
         this.friendRequests.splice(index, 1);
       },

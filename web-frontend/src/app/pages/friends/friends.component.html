@@ -1,37 +1,47 @@
 <div id="friends_page_container" class="page_container">
   <app-navbar></app-navbar>
-  <div id="friends_container">
-    <div id="friends">
-      <p>Friends:</p>
-      @for (friend of friends; track $index) {
-      <div style="display: flex; flex-direction: row">
-        <p>{{ friend.email }}</p>
-        <button (click)="deleteFriend(friend)">Delete</button>
+  <div id="content_container">
+    <header>Friends</header>
+    <div id="content">
+      <div id="friends_container">
+        <h4 class="section_title">Friends list</h4>
+        @if (friends.length == 0) {
+        <p>You don't have any friends. :(</p>
+        } @else { @for (friend of friends; track $index) {
+        <div class="friend">
+          <div class="name_and_email">
+            <h4>{{ friend.firstName }} {{ friend.lastName }}</h4>
+            <p>{{ friend.email }}</p>
+          </div>
+          <div class="profile_picture_and_action">
+            <img class="profile_picture" src="images/default_profile_picture.jpg" alt="" />
+            <img class="action_button" src="icons/menu-dots-vertical.png" alt="" />
+          </div>
+        </div>
+        } }
       </div>
-      }
-    </div>
-    <div id="friend_requests">
-      <p>Pendig friend requests:</p>
-      @for (request of friendRequests; track $index) {
-      <div style="display: flex; flex-direction: row">
-        <p>{{ request.email }}</p>
-        <button (click)="acceptFriendRequest(request)">Accept</button>
-        <button (click)="declineFriendRequest(request)">Decline</button>
+      <div id="friends_actions">
+        <div id="add_friend" class="friend_action">
+          <h4 class="section_title">Add friends</h4>
+          <div class="input_container">
+            <input
+              type="search"
+              id="search_friend"
+              name="search_friend"
+              data-cy="search_friend_search_input"
+              placeholder=" "
+              [formControl]="search"
+            />
+            <label for="search_friend" class="input_title">Search for a friends email</label>
+          </div>
+        </div>
+        <div id="friend_requests" class="friend_action">
+          <h4 class="section_title">Friend requests</h4>
+          @if (friendRequests.length == 0) {
+          <p>You have no pending friend requests.</p>
+          }
+        </div>
       </div>
-      }
-    </div>
-    <div id="add_friend">
-      <p>Search:</p>
-      <input type="search" [formControl]="search" />
-      <button type="submit" (click)="searchUsers()">Search</button>
-      @if (searchResult.length == 0) {
-      <p>No users found. :(</p>
-      } @else { @for (user of searchResult; track $index) {
-      <div style="display: flex; flex-direction: row">
-        <p>{{ user.email }}</p>
-        <button (click)="sendFriendsRequest(user.id)">Send friend request</button>
-      </div>
-      } }
     </div>
   </div>
 </div>

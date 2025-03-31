@@ -200,6 +200,36 @@
       font-weight: 500;
     }
   }
+
+  // Search input
+  input[type="search"] {
+    height: $input_height;
+    width: 100%;
+    padding: 1.5rem 1rem;
+
+    border: 1px solid $main-color-600;
+    border-radius: $border_radius;
+
+    // In focus
+    &:focus {
+      border: 2px solid $accent-color-400;
+      outline: none;
+    }
+
+    // Animate title on focus
+    &:focus + .input_title,
+    &:not(:placeholder-shown) + .input_title {
+      top: -15%;
+      color: $accent-color-400;
+      font-size: smaller;
+      font-weight: 500;
+    }
+
+    // Remove accent color if filled but not in focus
+    &:not(:focus):not(:placeholder-shown) + .input_title {
+      color: $text-color-700;
+    }
+  }
 }
 
 .input_container::after {
