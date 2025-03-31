@@ -49,13 +49,15 @@ export class FriendsComponent {
     });
   }
 
-  sendFriendsRequest(friendId: string) {
+  sendFriendsRequest(friendId: string, event: MouseEvent) {
     const friendRequest: FriendRequest = { friendId: friendId, userId: this.authService.getUserId() as string, status: 'pending' };
 
     this.friendsService.sendFriendRequest(friendRequest).subscribe({
       next: (response) => {},
       error: (error) => console.log(error),
-      complete: () => {},
+      complete: () => {
+        (event.target as HTMLImageElement).src = "icons/check.png";
+      },
     });
   }
 

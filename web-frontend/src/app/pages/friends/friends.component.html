@@ -21,6 +21,7 @@
         } }
       </div>
       <div id="friends_actions">
+        <!-- Add friend -->
         <div id="add_friend" class="friend_action">
           <h4 class="section_title">Add friends</h4>
           <div class="input_container">
@@ -31,15 +32,33 @@
               data-cy="search_friend_search_input"
               placeholder=" "
               [formControl]="search"
+              (keydown.enter)="searchUsers()"
             />
             <label for="search_friend" class="input_title">Search for a friends email</label>
+            <img src="icons/search-bold.png" alt="search_icon" id="search_icon" (click)="searchUsers()" />
+          </div>
+          <div id="search_result_container">
+            @if (searchResult.length != 0) { @for (user of searchResult; track $index) {
+            <div class="search_result">
+              <p>{{ user.email }}</p>
+              <img src="icons/follow.png" alt="" (click)="sendFriendsRequest(user.id, $event)" />
+            </div>
+            } }
           </div>
         </div>
+
+        <!-- List friend requests -->
         <div id="friend_requests" class="friend_action">
           <h4 class="section_title">Friend requests</h4>
           @if (friendRequests.length == 0) {
           <p>You have no pending friend requests.</p>
-          }
+          } @else { @for (user of friendRequests; track $index) {
+          <div>
+            <p>{{ user.email }}</p>
+            <img class="ui_image" src="icons/check-bold.png" alt="">
+            <img src="" alt="">
+          </div>
+          } }
         </div>
       </div>
     </div>

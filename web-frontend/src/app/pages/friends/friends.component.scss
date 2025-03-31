@@ -92,6 +92,38 @@
           background-color: $main-color-100;
         }
 
+        #search_icon {
+          height: 1.3rem;
+
+          right: 1rem;
+          position: absolute;
+
+          cursor: pointer;
+        }
+
+        #search_result_container {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          gap: 1rem;
+
+          .search_result {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            img {
+              height: 1.3rem;
+              cursor: pointer;
+
+              &:hover {
+                filter: brightness(1.2);
+              }
+            }
+          }
+        }
+
         .input_container {
           width: 100%;
         }
