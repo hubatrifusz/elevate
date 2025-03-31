@@ -18,7 +18,7 @@
               <span>Current streak: {{ habit.streak }}</span>
             </div>
             <div class="habit-actions">
-              <button class="button_primary">Challenge Friend</button>
+              <button class="button_primary" (click)="openChallengeModal(habit)">Challenge Friend</button>
             </div>
           </div>
         </div>
@@ -32,4 +32,37 @@
       </div>
     </div>
   </div>
+
+  @if (showChallengeModal) {
+  <div class="challenge-modal-overlay">
+    <div class="challenge-modal">
+      <div class="challenge-modal-header">
+        <h3>Challenge a Friend</h3>
+        <img src="icons/cross.png" alt="close" (click)="closeChallengeModal()" />
+      </div>
+      <div class="challenge-modal-content">
+        @if (friends.length > 0) {
+        <div class="friends-list">
+          @for (friend of friends; track friend.id) {
+          <div class="friend-item">
+            <div class="friend-info">
+              <img
+                [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+                alt="Profile picture" />
+              <span>{{ friend.firstName }} {{ friend.lastName }}</span>
+            </div>
+            <button class="button_primary" (click)="challengeFriend(friend.id)">Challenge</button>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="no-friends">
+          <p>You have no friends to challenge.</p>
+          <p>Add some friends first!</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
 </div>
