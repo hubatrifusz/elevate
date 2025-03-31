@@ -11,12 +11,15 @@ FROM php:apache AS phpmyadmin
 WORKDIR /var/www/html/phpmyadmin
 
 RUN apt-get update && apt-get install -y \
+    curl \
     unzip \
     mariadb-client \
-    libmcrypt-dev \
-    && docker-php-ext-install mysqli
+    libmcrypt-dev && \
+    docker-php-ext-install mysqli
 
-RUN unzip phpMyAdmin-5.2.1-all-languages.zip && \
+RUN curl -fLO https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip && \
+    ls -al . && \
+    unzip phpMyAdmin-5.2.1-all-languages.zip && \
     rm -rf /var/www/html/phpmyadmin && \
     mkdir -p /var/www/html/phpmyadmin && \
     mv phpMyAdmin-5.2.1-all-languages/* /var/www/html/phpmyadmin && \
