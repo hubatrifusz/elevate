@@ -20,6 +20,7 @@ jobs:
 
     - name: Build and push Docker image using docker-compose
       env:
+        ASPNETCORE_ENVIRONMENT: Production
         Jwt__PrivateKey: ${{ secrets.JWT_PRIVATE_KEY }}
         Jwt__PublicKey: ${{ secrets.JWT_PUBLIC_KEY }}
         Jwt__Issuer: ${{ secrets.JWT_ISSUER }}
