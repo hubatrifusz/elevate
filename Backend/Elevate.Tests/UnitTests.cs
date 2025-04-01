@@ -1,11 +1,66 @@
-﻿namespace Elevate.Tests
+﻿using System;
+using Xunit;
+using Moq;
+using Elevate.Services.User;
+using Elevate.Models.User;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Elevate.Common.Exceptions;
+
+namespace Elevate.Tests
 {
     public class UnitTests
     {
         [Fact]
-        public void Test1()
+        public async Task GetUserByIdAsync_ExistingId_ReturnsUserDto()
         {
+            var mockUserService = new Mock<IUserService>();
+            var expectedUser = new UserDto { Id = Guid.NewGuid(), Email = "test@example.com" };
+            mockUserService.Setup(service => service.GetUserByIdAsync(expectedUser.Id))
+                .ReturnsAsync(expectedUser);
 
+            var result = await mockUserService.Object.GetUserByIdAsync(expectedUser.Id);
+
+            Assert.NotNull(result);
+            Assert.Equal(expectedUser.Id, result.Id);
+            Assert.Equal(expectedUser.Email, result.Email);
+        }
+
+        [Fact]
+        public async Task GetUserByEmailAsync_ExistingEmail_ReturnsUserDto()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var expectedUser = new UserDto { Id = Guid.NewGuid(), Email = "test@example.com" };
+            mockUserService.Setup(service => service.GetUserByEmailAsync(expectedUser.Email))
+                .ReturnsAsync(expectedUser);
+
+            var result = await mockUserService.Object.GetUserByEmailAsync(expectedUser.Email);
+
+            Assert.NotNull(result);
+            Assert.Equal(expectedUser.Id, result.Id);
+            Assert.Equal(expectedUser.Email, result.Email);
+        }
+
+        [Fact]
+        public async Task AddUserAsync_ValidUser_ReturnsCreatedUser()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var userCreateDto = new UserCreateDto { Email = "newuser@example.com", Password = "Password123!" };
+            var expectedUser = new UserDto { Id = Guid.NewGuid(), Email = userCreateDto.Email };
+            var identityResult = IdentityResult.Success;
+            var identityResultWithUser = new IdentityResultWithUser { Result = identityResult, User = expectedUser };
+
+            mockUserService.Setup(service => service.AddUserAsync(userCreateDto))
+                .ReturnsAsync(identityResultWithUser);
+
+            var result = await mockUserService.Object.AddUserAsync(userCreateDto);
+
+            Assert.NotNull(result);
+            Assert.Equal(expectedUser.Id, result.User.Id);
+            Assert.Equal(expectedUser.Email, result.User.Email);
+            Assert.True(result.Result.Succeeded);
         }
     }
 }
