@@ -23,6 +23,8 @@ export class FriendsComponent {
   friends: User[] = [];
   friendships: User[] = [];
 
+  friendToDelete!: User;
+
   ngOnInit() {
     this.getFriendRequests();
     this.getFriends();
@@ -56,7 +58,7 @@ export class FriendsComponent {
       next: (response) => {},
       error: (error) => console.log(error),
       complete: () => {
-        (event.target as HTMLImageElement).src = "icons/check.png";
+        (event.target as HTMLImageElement).src = 'icons/check.png';
       },
     });
   }
@@ -100,5 +102,40 @@ export class FriendsComponent {
       },
       error: (error) => console.log(error),
     });
+
+    const optionsDiv = document.querySelector('#options') as HTMLDivElement;
+    optionsDiv.style.display = 'none';
   }
+
+  showOptions(event: MouseEvent, friend: User) {
+    const optionsDiv: HTMLDivElement = document.querySelector('#options') as HTMLDivElement;
+    if (!optionsDiv) return;
+
+    let eventPosition = (event.target as HTMLImageElement).getBoundingClientRect();
+
+    let positionTop: string = (eventPosition.top + 20).toString();
+    let positionLeft: string = (eventPosition.left - 40).toString();
+
+    optionsDiv.style.display = 'block';
+    optionsDiv.style.top = positionTop + 'px';
+    optionsDiv.style.left = positionLeft + 'px';
+
+    document.removeEventListener('click', this.hideOptions);
+
+    setTimeout(() => {
+      document.addEventListener('click', this.hideOptions);
+    }, 0);
+
+    this.friendToDelete = friend;
+  }
+
+  hideOptions = (event: MouseEvent) => {
+    const optionsDiv = document.querySelector('#options') as HTMLDivElement;
+    if (!optionsDiv) return;
+
+    if (!optionsDiv.contains(event.target as Node)) {
+      optionsDiv.style.display = 'none';
+      document.removeEventListener('click', this.hideOptions);
+    }
+  };
 }

@@ -41,4 +41,9 @@ hr {
 
 .ui_image {
   height: 1.3rem;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
 }
