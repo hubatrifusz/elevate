@@ -41,7 +41,18 @@ namespace Elevate.Data.Repository
             return await _context.Friendships
                 .AnyAsync(f =>
                     (f.UserId == userId && f.FriendId == friendId) ||
-                    (f.UserId == friendId && f.FriendId == userId)
+                    (f.UserId == friendId && f.FriendId == userId) &&
+                    f.Status == FriendshipStatus.Accepted
+                );
+        }
+
+        public async Task<bool> IsFriendRequestSent(Guid userId, Guid friendId)
+        {
+            return await _context.Friendships
+                .AnyAsync(f =>
+                    (f.UserId == userId && f.FriendId == friendId) ||
+                    (f.UserId == friendId && f.FriendId == userId) &&
+                    f.Status == FriendshipStatus.Pending
                 );
         }
 

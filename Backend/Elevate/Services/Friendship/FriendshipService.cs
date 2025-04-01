@@ -38,23 +38,21 @@ namespace Elevate.Services.Friendship
                 : _mapper.Map<List<FriendshipDto>>(requests);
         }
 
-        public async Task<bool> AreFriends(Guid userId, Guid friendId)
-        {
-            return await _friendshipRepository.AreFriends(userId, friendId);
-        }
-
         public async Task<FriendshipDto> AddFriendshipAsync(FriendshipCreateDto friendshipCreateDto)
         {
             if (friendshipCreateDto.UserId == friendshipCreateDto.FriendId)
             {
                 throw new BadRequestException("User cannot be friends with themself.");
             }
-
+            if (await _friendshipRepository.IsFriendRequestSent(friendshipCreateDto.UserId, friendshipCreateDto.FriendId))
+            {
+                throw new BadRequestException("Friend request already sent.");
+            }
             if (await _friendshipRepository.AreFriends(friendshipCreateDto.UserId, friendshipCreateDto.FriendId))
             {
                 throw new BadRequestException("User is already friends with this user.");
             }
-
+            
             FriendshipModel friendship = _mapper.Map<FriendshipModel>(friendshipCreateDto);
             
             FriendshipModel savedFriendship = await _friendshipRepository.AddFriendshipAsync(friendship)
@@ -65,26 +63,26 @@ namespace Elevate.Services.Friendship
 
         public async Task<FriendshipDto> UpdateFriendshipAsync(FriendshipUpdateDto friendshipUpdateDto)
         {
-            if (!await AreFriends(friendshipUpdateDto.UserId, friendshipUpdateDto.FriendId))
+            if (!await _friendshipRepository.IsFriendRequestSent(friendshipUpdateDto.UserId, friendshipUpdateDto.FriendId))
             {
                 throw new NotFriendsException();
             }
 
             FriendshipModel friendshipModel = _mapper.Map<FriendshipModel>(friendshipUpdateDto);
 
-            FriendshipModel updatedFriendship = await _friendshipRepository.UpdateFriendshipAsync(friendshipModel)
-                ?? throw new BadRequestException("Failed to update friendship.");
+            if(friendshipModel.Status == FriendshipStatus.Declined){
+                return await DeleteFriendshipAsync(friendshipUpdateDto.UserId, friendshipUpdateDto.FriendId);
+            }
+            else{
+                FriendshipModel updatedFriendship = await _friendshipRepository.UpdateFriendshipAsync(friendshipModel)
+                    ?? throw new BadRequestException("Failed to update friendship.");
 
-            return _mapper.Map<FriendshipDto>(updatedFriendship);
+                return _mapper.Map<FriendshipDto>(updatedFriendship);
+            }
         }
 
         public async Task<FriendshipDto> DeleteFriendshipAsync(Guid userId, Guid friendId)
         {
-            if (!await AreFriends(userId, friendId))
-            {
-                throw new NotFriendsException();
-            }
-
             FriendshipModel friendship = await _friendshipRepository.DeleteFriendshipAsync(userId, friendId)
                 ?? throw new ResourceNotFoundException("Failed to remove friend.");
 
