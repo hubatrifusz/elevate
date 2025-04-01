@@ -50,7 +50,16 @@ namespace Elevate.Controllers
         public async Task<ActionResult<FriendshipDto>> UpdateFriendshipAsync(FriendshipUpdateDto friendshipUpdateDto)
         {
             UserPermissionUtility.IsCurrentUser(friendshipUpdateDto.UserId, User);
-            FriendshipDto friendship = await _friendshipService.UpdateFriendshipAsync(friendshipUpdateDto);
+
+            FriendshipDto friendship == friendshipUpdateDto;
+            if (friendshipUpdateDto.Status == FriendshipStatus.Declined)
+            {
+                await _friendshipService.DeleteFriendshipAsync(friendshipUpdateDto.UserId, friendshipUpdateDto.FriendId);
+            }
+            else
+            {
+                friendship = await _friendshipService.UpdateFriendshipAsync(friendshipUpdateDto);
+            }
 
             return friendship;
         }
