@@ -22,7 +22,7 @@
           </div>
           <div class="profile_picture_and_action">
             <img class="profile_picture" src="images/default_profile_picture.jpg" alt="" />
-            <img class="action_button" src="icons/menu-dots-vertical.png" alt="" (click)="showOptions($event, friend)"/>
+            <img class="action_button" src="icons/menu-dots-vertical.png" alt="" (click)="showOptions($event, friend)" />
           </div>
         </div>
         } }
@@ -48,7 +48,7 @@
             @if (searchResult.length != 0) { @for (user of searchResult; track $index) {
             <div class="search_result">
               <p>{{ user.email }}</p>
-              <img src="icons/follow.png" alt="" (click)="sendFriendsRequest(user.id, $event)" />
+              <img src="icons/follow.png" alt="" (click)="sendFriendsRequest(user.id, $event)" class="ui_image" />
             </div>
             } }
           </div>
@@ -57,15 +57,20 @@
         <!-- List friend requests -->
         <div id="friend_requests" class="friend_action">
           <h4 class="section_title">Friend requests</h4>
-          @if (friendRequests.length == 0) {
-          <p>You have no pending friend requests.</p>
-          } @else { @for (user of friendRequests; track $index) {
-          <div>
-            <p>{{ user.email }}</p>
-            <img class="ui_image" src="icons/check-bold.png" alt="" (click)="acceptFriendRequest(user)" />
-            <img class="ui_image" src="icons/cross.png" alt="" (click)="declineFriendRequest(user)" />
+          <div id="friend_requests_container">
+            @if (friendRequests.length == 0) {
+            <p>You have no pending friend requests.</p>
+            } @else { @for (user of friendRequests; track $index) {
+            <div id="friend_request">
+              <p>{{ user.email }}</p>
+              <div id="friend_request_actions">
+                <img class="ui_image" src="icons/check-bold.png" alt="" (click)="acceptFriendRequest(user)" />
+                <img class="ui_image" src="icons/cross.png" alt="" (click)="declineFriendRequest(user)" />
+              </div>
+              <div class="colored_indicator"></div>
+            </div>
+            } }
           </div>
-          } }
         </div>
       </div>
     </div>

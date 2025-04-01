@@ -128,35 +128,69 @@
           border-radius: 2rem;
 
           background-color: $main-color-100;
-        }
 
-        #search_icon {
-          height: 1.3rem;
+          #search_icon {
+            height: 1.3rem;
 
-          right: 1rem;
-          position: absolute;
+            right: 1rem;
+            position: absolute;
 
-          cursor: pointer;
-        }
+            cursor: pointer;
+          }
 
-        #search_result_container {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-
-          gap: 1rem;
-
-          .search_result {
+          #search_result_container {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
+            width: 100%;
 
-            img {
-              height: 1.3rem;
-              cursor: pointer;
+            gap: 1rem;
 
-              &:hover {
-                filter: brightness(1.2);
+            .search_result {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+          }
+
+          #friend_requests_container {
+            width: 100%;
+            #friend_request {
+              position: relative;
+              display: flex;
+              justify-content: space-between;
+              width: 100%;
+
+              padding: 1rem;
+
+              border-radius: 1rem;
+              overflow: hidden;
+
+              background-color: red;
+
+              .colored_indicator {
+                position: absolute;
+
+                height: 100%;
+                width: 2rem;
+
+                background-color: black;
+
+                top: 0;
+                right: 0;
+
+                @keyframes clickActionButton {
+                  0% {
+                    width: 0rem;
+                  }
+                  100% {
+                    width: 3rem;
+                  }
+                }
+              }
+
+              #friend_request_actions {
+                display: flex;
+                gap: 1.5rem;
               }
             }
           }
