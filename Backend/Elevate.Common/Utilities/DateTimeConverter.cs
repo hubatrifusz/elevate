@@ -2,19 +2,27 @@
 {
     public static class DateTimeConverter
     {
+        private static readonly TimeZoneInfo CetZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Budapest");
+
         public static DateTime GetCetTime()
         {
-            return DateTime.UtcNow.AddHours(1);
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, CetZone);
         }
 
         public static DateTime UtcToCetTime(this DateTime dateTime)
         {
-            return dateTime.AddHours(1);
+            if (dateTime.Kind != DateTimeKind.Utc)
+                dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+                
+            return TimeZoneInfo.ConvertTimeFromUtc(dateTime, CetZone);
         }
 
         public static DateTime CetToUtcTime(this DateTime dateTime)
         {
-            return dateTime.AddHours(-1);
+            if (dateTime.Kind != DateTimeKind.Unspecified)
+                dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+                
+            return TimeZoneInfo.ConvertTimeToUtc(dateTime, CetZone);
         }
     }
 }
