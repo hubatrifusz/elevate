@@ -60,91 +60,91 @@ public class AutoMapperProfile : Profile
             .ForAllMembers(opts => opts
             .Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<HabitModel, HabitDto>()
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.UtcToCetTime()))
-            .ForMember(dest => dest.StreakStart, opt => opt
-            .MapFrom(
-                src => src.StreakStart.UtcToCetTime()
-            ));
+        CreateMap<HabitModel, HabitDto>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.UtcToCetTime()))
+            // .ForMember(dest => dest.StreakStart, opt => opt
+            // .MapFrom(
+            //     src => src.StreakStart.UtcToCetTime()
+            // ));
 
         CreateMap<HabitCreateDto, HabitModel>();
 
         CreateMap<HabitUpdateDto, HabitModel>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             
-        CreateMap<HabitDto, HabitModel>()
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src => DateTimeConverter.CetToUtcTime(src.CreatedAt)))
-            .ForMember(dest => dest.StreakStart, opt => opt
-            .MapFrom(src => 
-                src.StreakStart.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.StreakStart.Value) : (DateTime?)null
-            ));
+        CreateMap<HabitDto, HabitModel>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src => DateTimeConverter.CetToUtcTime(src.CreatedAt)))
+            // .ForMember(dest => dest.StreakStart, opt => opt
+            // .MapFrom(src => 
+            //     src.StreakStart.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.StreakStart.Value) : (DateTime?)null
+            // ));
 
-        CreateMap<HabitLogModel, HabitLogDto>()
-            .ForMember(dest => dest.CompletedAt, opt => opt
-            .MapFrom(src => 
-                src.CompletedAt.HasValue ? 
-                src.CompletedAt.Value.UtcToCetTime() : (DateTime?)null
-            ))
-            .ForMember(dest => dest.DueDate, opt => opt
-            .MapFrom(src => src.DueDate.UtcToCetTime()));
+        CreateMap<HabitLogModel, HabitLogDto>();
+            // .ForMember(dest => dest.CompletedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.CompletedAt.HasValue ? 
+            //     src.CompletedAt.Value.UtcToCetTime() : (DateTime?)null
+            // ))
+            // .ForMember(dest => dest.DueDate, opt => opt
+            // .MapFrom(src => src.DueDate.UtcToCetTime()));
             
-        CreateMap<HabitLogCreateDto, HabitLogModel>()
-            .ForMember(dest => dest.DueDate, opt => opt
-            .MapFrom(src => 
-                src.DueDate.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.DueDate.Value) : (DateTime?)null 
-            ))
-            .ForMember(dest => dest.CompletedAt, opt => opt
-            .MapFrom(src => 
-                src.CompletedAt.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.CompletedAt.Value) : (DateTime?)null));
+        CreateMap<HabitLogCreateDto, HabitLogModel>();
+            // .ForMember(dest => dest.DueDate, opt => opt
+            // .MapFrom(src => 
+            //     src.DueDate.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.DueDate.Value) : (DateTime?)null 
+            // ))
+            // .ForMember(dest => dest.CompletedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.CompletedAt.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.CompletedAt.Value) : (DateTime?)null));
 
         CreateMap<HabitLogUpdateDto, HabitLogModel>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<HabitLogDto, HabitLogModel>()
-            .ForMember(dest => dest.DueDate, opt => opt
-            .MapFrom(src => DateTimeConverter.CetToUtcTime(src.DueDate)))
-            .ForMember(dest => dest.CompletedAt, opt => opt
-            .MapFrom(src => 
-                src.CompletedAt.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.CompletedAt.Value) : (DateTime?)null
-            ));
+        CreateMap<HabitLogDto, HabitLogModel>();
+            // .ForMember(dest => dest.DueDate, opt => opt
+            // .MapFrom(src => DateTimeConverter.CetToUtcTime(src.DueDate)))
+            // .ForMember(dest => dest.CompletedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.CompletedAt.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.CompletedAt.Value) : (DateTime?)null
+            // ));
 
-        CreateMap<ChallengeModel, ChallengeDto>()
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src => src.CreatedAt.UtcToCetTime()))
-            .ForMember(dest => dest.UpdatedAt, opt => opt
-            .MapFrom(src => 
-                src.UpdatedAt.HasValue ? 
-                src.UpdatedAt.Value.UtcToCetTime() : (DateTime?)null
-            ));
+        CreateMap<ChallengeModel, ChallengeDto>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src => src.CreatedAt.UtcToCetTime()))
+            // .ForMember(dest => dest.UpdatedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.UpdatedAt.HasValue ? 
+            //     src.UpdatedAt.Value.UtcToCetTime() : (DateTime?)null
+            // ));
 
         CreateMap<ChallengeCreateDto, ChallengeModel>();
 
         CreateMap<ChallengeUpdateDto, ChallengeModel>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         
-        CreateMap<ChallengeDto, ChallengeModel>()
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src => DateTimeConverter.CetToUtcTime(src.CreatedAt)))
-            .ForMember(dest => dest.UpdatedAt, opt => opt
-            .MapFrom(src => 
-                src.UpdatedAt.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.UpdatedAt.Value) : (DateTime?)null
-            ));
+        CreateMap<ChallengeDto, ChallengeModel>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src => DateTimeConverter.CetToUtcTime(src.CreatedAt)))
+            // .ForMember(dest => dest.UpdatedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.UpdatedAt.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.UpdatedAt.Value) : (DateTime?)null
+            // ));
 
         CreateMap<PostModel, PostDto>();
 
         CreateMap<AchievementModel, AchievementDto>();
 
-        CreateMap<AchievementProgressModel, AchievementProgressDto>()
-            .ForMember(dest => dest.CompletedAt, opt => opt
-            .MapFrom(src => 
-                src.CompletedAt.HasValue ? 
-                src.CompletedAt.Value.UtcToCetTime() : (DateTime?)null
-            ));
+        CreateMap<AchievementProgressModel, AchievementProgressDto>();
+            // .ForMember(dest => dest.CompletedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.CompletedAt.HasValue ? 
+            //     src.CompletedAt.Value.UtcToCetTime() : (DateTime?)null
+            // ));
     }
 }
