@@ -18,10 +18,14 @@ export class FeedCardComponent implements OnInit {
 
   constructor() {
     addIcons({ flameOutline });
+   
 
   }
 
-  ngOnInit() { }
+
+  ngOnInit() {
+    console.log(this.post);
+   }
   goToProfile(userId: string) {
     this.router.navigate(['/profile', userId]);
   }

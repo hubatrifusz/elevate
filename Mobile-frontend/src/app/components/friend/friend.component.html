@@ -1,0 +1,12 @@
+<ion-item>
+  <ion-avatar slot="start">
+    <img (click)="goToProfile(friend.id)"
+      [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+      alt="Profile Picture" />
+  </ion-avatar>
+  <ion-label>
+    <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
+    <p>{{ friend.email }}</p>
+  </ion-label>
+  <ion-button color="danger" slot="end" (click)="onDeleteFriend()">Delete</ion-button>
+</ion-item>

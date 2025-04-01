@@ -34,6 +34,6 @@
 
   <ion-card-content>
     <p><strong>Notes:</strong> {{ post.habitLog.notes || 'No notes available' }}</p>
-    <p><strong>Completed At:</strong> {{ post.habitLog.completedAt| date: 'MMM d, y • HH:mm' }}</p>
+    <p><strong>Completed At:</strong> {{ post.habitLog.completedAt | date: 'MMM d, y • HH:mm' : 'UTC' }}</p>
   </ion-card-content>
 </ion-card>

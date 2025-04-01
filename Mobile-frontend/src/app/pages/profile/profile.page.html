@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button ></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{user?.firstName}} {{user?.lastName}}</ion-title>
   </ion-toolbar>
@@ -19,7 +19,7 @@
       <ion-avatar slot="start">
         <img
           [src]="user.profilePictureBase64 ? 'data:image/png;base64,' + user.profilePictureBase64 : 'https://www.gravatar.com/avatar?d=mp'"
-          alt="Profile Picture" />
+          alt="Profile Picture" (click)="changeProfilePicture()" />
       </ion-avatar>
       <ion-label>
         <h2>{{ user.firstName }} {{ user.lastName }}</h2>

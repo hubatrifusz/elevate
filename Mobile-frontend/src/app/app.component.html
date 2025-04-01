@@ -10,9 +10,9 @@
       </div>
       <h2 (click)="goToUserPage(user?.id)" class="text-center">{{user?.firstName}} {{user?.lastName}}</h2>
 
-      <ion-button shape="round" fill="clear" class="menu-item">
-        <ion-icon name="ribbon-outline"></ion-icon>
-        <span>Achievements</span>
+      <ion-button shape="round" (click)="gotofriends()" fill="clear" class="menu-item">
+        <ion-icon name="person-add-outline"></ion-icon>
+        <span>Friends</span>
       </ion-button>
       <hr class="divider">
       <ion-button shape="round" fill="clear" class="menu-item">

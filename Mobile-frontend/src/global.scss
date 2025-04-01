@@ -49,16 +49,19 @@
 }
 
 ion-content {
-  --ion-background-color: linear-gradient(35deg, #9a8af675, #eeeeee, #ffffff75, #9a8af675);
+  --background: linear-gradient(35deg, #9a8af675, #eeeeee, #ffffff75, #9a8af675);
 
   .menu-content {
     --ion-background-color: black;
   }
 
   @media (prefers-color-scheme: dark) {
-    --ion-background-color: linear-gradient(35deg, #9a8af675, #000000, #00000075, #9a8af675);
+    --background: linear-gradient(35deg, #9a8af675, #000000, #00000075, #9a8af675);
   }
 }
+
+
+
 @font-face {
   font-family: 'Inter';
   src: url('../src/theme/fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');

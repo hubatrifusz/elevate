@@ -20,6 +20,10 @@ export const routes: Routes = [
                 path: 'friendFeed',
                 loadComponent: () => import('../../pages/friends-feed/friends-feed.page').then(m => m.FriendsFeedPage)
             },
+            {
+                path:"friends",
+                loadComponent: () => import('../../pages/friends/friends.page').then(m => m.FriendsPage)
+            }
         ]
     },
     {

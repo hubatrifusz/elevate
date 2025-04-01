@@ -19,7 +19,7 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput]
 })
-export class TaskCardComponent implements OnInit {
+export class TaskCardComponent  {
 
   @Input() loadMoreHabits!: EventEmitter<void>;
   @Input() set habitlogsDate(value: string | null) {
@@ -59,7 +59,7 @@ export class TaskCardComponent implements OnInit {
   }
 
 
-  async ngOnInit() {
+  async ionWillEnter() {
     const loading = await this.presentLoading();
     if (!this.habitlogsDate) {
       await this.loadHabits(); // Await for better flow control

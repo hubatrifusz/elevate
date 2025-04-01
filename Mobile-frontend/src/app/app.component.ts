@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet, IonButton, IonIcon, IonMenu, IonContent, MenuController, IonAvatar } from '@ionic/angular/standalone';
 import { AuthService } from './services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { add, logOutOutline, menu, menuOutline, people, person, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, settings } from 'ionicons/icons';
+import { add, logOutOutline, menu, menuOutline, people, person, personAddOutline, personCircle, personCircleOutline, personOutline, ribbon, ribbonOutline, settings } from 'ionicons/icons';
 import { ToastService } from './services/toast.service';
 import { User } from './.models/user.model';
 import { UserService } from './services/user.service';
@@ -15,7 +15,7 @@ import { UserService } from './services/user.service';
   styleUrls: ['app.component.scss'],
   imports: [IonAvatar, IonApp, IonRouterOutlet, IonMenu, IonIcon, IonButton, IonContent],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   auth = inject(AuthService);
   http = inject(HttpClient);
   userservice = inject(UserService);
@@ -23,24 +23,44 @@ export class AppComponent {
   user: User | null = null;
 
   constructor(private router: Router, private menuCtrl: MenuController, private toastService: ToastService) {
-    addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu });
+    addIcons({ personCircleOutline, ribbonOutline, settings, logOutOutline, menuOutline, add, ribbon, personOutline, personCircle, person, people, menu, personAddOutline });
   }
 
   async ngOnInit() {
-    await this.userservice.getUserById(this.userId!).subscribe({
-      next: (response) => {
-        this.user = response;
-      },
-      error: (error) => {
-        console.error('Error loading user:', error);
-      }
-    })
+    // Subscribe to the userUpdated event
+    this.auth.userUpdated.subscribe(() => {
+      this.getUserData(); // Fetch user data after login
+    });
+
+    // Check if the token is already available (e.g., on page reload)
+    if (this.auth.isLoggedIn()) {
+      this.getUserData();
+    }
+  }
+
+  async getUserData() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.userservice.getUserById(userId).subscribe({
+        next: (response) => {
+          this.user = response;
+          console.log('User loaded:', this.user);
+        },
+        error: (error) => {
+          console.error('Error loading user:', error);
+        }
+      });
+    }
   }
   goToUserPage(userId: string | undefined) {
     if (userId) {
       this.menuCtrl.close();
       this.router.navigate(['/profile', userId]);
     }
+  }
+  gotofriends() {
+    this.menuCtrl.close();
+    this.router.navigate(['/footertabs/friends']);
   }
 
   async Logout() {

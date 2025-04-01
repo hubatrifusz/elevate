@@ -9,16 +9,28 @@ import { Observable } from 'rxjs';
 export class UserService {
 
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'https://elevate.koyeb.app/api';
   token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) { }
   getUserById(userId: string): Observable<User> {
+    const token = localStorage.getItem('token'); // Retrieve token dynamically
     return this.http.get<User>(`${this.apiUrl}/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+  }
+  getUsersByEmail(email: string, pageNumber: number, pageSize: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/user`, {
+      params: {
+        email: email,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString()
+      },
       headers: {
         Authorization: `Bearer ${this.token}`,
       }
     });
-
   }
 }
