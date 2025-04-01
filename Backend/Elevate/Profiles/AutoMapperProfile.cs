@@ -13,23 +13,26 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<DateTime, DateTime>().ConvertUsing(src => src.Kind == DateTimeKind.Utc ? src.UtcToCetTime() : src);
+        // CreateMap<DateTime, DateTime>().ConvertUsing(src => src.Kind == DateTimeKind.Utc ? src.UtcToCetTime() : src);
+
+        CreateMap<DateTime, DateTime>().ConvertUsing(src => 
+        src.Kind != DateTimeKind.Utc ? DateTime.SpecifyKind(src, DateTimeKind.Utc) : src);
 
         CreateMap<ApplicationUser, UserDto>()
             .ForMember(dest => dest.ProfilePictureBase64, opt => opt
             .MapFrom(src =>
                 src.ProfilePicture != null && src.ProfilePicture.Length > 0 ?
                 Convert.ToBase64String(src.ProfilePicture) : null
-            ))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.UtcToCetTime()));
+            ));
+            // .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.UtcToCetTime()));
 
         CreateMap<UserCreateDto, ApplicationUser>()
-            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src =>
-                src.CreatedAt.HasValue ? 
-                DateTimeConverter.CetToUtcTime(src.CreatedAt.Value) : (DateTime?)null 
-            ));
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src =>
+            //     src.CreatedAt.HasValue ? 
+            //     DateTimeConverter.CetToUtcTime(src.CreatedAt.Value) : (DateTime?)null 
+            // ));
             
         CreateMap<UserUpdateDto, ApplicationUser>()
             .ForMember(dest => dest.ProfilePicture, opt => opt
@@ -38,21 +41,21 @@ public class AutoMapperProfile : Profile
                 Convert.FromBase64String(src.ProfilePictureBase64) : null
             ));
             
-        CreateMap<UserDto, ApplicationUser>()
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src => 
-                DateTimeConverter.CetToUtcTime(src.CreatedAt!.Value)
-            ));
+        CreateMap<UserDto, ApplicationUser>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src => 
+            //     DateTimeConverter.CetToUtcTime(src.CreatedAt!.Value)
+            // ));
 
-        CreateMap<FriendshipModel, FriendshipDto>()
-            .ForMember(dest => dest.CreatedAt, opt => opt
-            .MapFrom(src => 
-                src.CreatedAt.UtcToCetTime()))
-            .ForMember(dest => dest.UpdatedAt, opt => opt
-            .MapFrom(src => 
-                src.UpdatedAt.HasValue ? 
-                src.UpdatedAt.Value.UtcToCetTime() : (DateTime?)null
-            ));
+        CreateMap<FriendshipModel, FriendshipDto>();
+            // .ForMember(dest => dest.CreatedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.CreatedAt.UtcToCetTime()))
+            // .ForMember(dest => dest.UpdatedAt, opt => opt
+            // .MapFrom(src => 
+            //     src.UpdatedAt.HasValue ? 
+            //     src.UpdatedAt.Value.UtcToCetTime() : (DateTime?)null
+            // ));
 
         CreateMap<FriendshipCreateDto, FriendshipModel>();
 
