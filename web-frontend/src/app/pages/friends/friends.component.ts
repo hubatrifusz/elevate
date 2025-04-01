@@ -22,12 +22,14 @@ export class FriendsComponent {
   friendRequests: User[] = [];
   friends: User[] = [];
   friendships: User[] = [];
+  sentFriendRequests: Friendship[] = [];
 
   friendToDelete!: User;
 
   ngOnInit() {
     this.getFriendRequests();
     this.getFriends();
+    this.getSentFriendRequests();
   }
 
   searchUsers() {
@@ -58,7 +60,9 @@ export class FriendsComponent {
       next: (response) => {},
       error: (error) => console.log(error),
       complete: () => {
-        (event.target as HTMLImageElement).src = 'icons/check.png';
+        let button = event.target as HTMLImageElement;
+        button.src = 'icons/check.png';
+        button.style.pointerEvents = 'none';
       },
     });
   }
@@ -66,6 +70,13 @@ export class FriendsComponent {
   getFriendRequests() {
     this.friendsService.getFriendRequests().subscribe({
       next: (response) => (this.friendRequests = response as User[]),
+      error: (error) => console.log(error),
+    });
+  }
+
+  getSentFriendRequests() {
+    this.friendsService.getSentFriendRequests().subscribe({
+      next: (response) => (this.sentFriendRequests = response as Friendship[]),
       error: (error) => console.log(error),
     });
   }

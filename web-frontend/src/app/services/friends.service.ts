@@ -48,6 +48,12 @@ export class FriendsService {
     });
   }
 
+  getSentFriendRequests() {
+    return this.http.get(`${this.apiUrl}/friendship/${this.authService.getUserId()}/friend-requests-sent`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
   patchFriendship(friendRequest: FriendRequest) {
     return this.http.patch(`${this.apiUrl}/friendship`, friendRequest, {
       headers: this.getAuthHeaders(),

@@ -165,29 +165,6 @@
               border-radius: 1rem;
               overflow: hidden;
 
-              background-color: red;
-
-              .colored_indicator {
-                position: absolute;
-
-                height: 100%;
-                width: 2rem;
-
-                background-color: black;
-
-                top: 0;
-                right: 0;
-
-                @keyframes clickActionButton {
-                  0% {
-                    width: 0rem;
-                  }
-                  100% {
-                    width: 3rem;
-                  }
-                }
-              }
-
               #friend_request_actions {
                 display: flex;
                 gap: 1.5rem;
