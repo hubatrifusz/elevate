@@ -1,4 +1,5 @@
-﻿using Elevate.Models.Habit;
+﻿using Elevate.Common.Utilities;
+using Elevate.Models.Habit;
 
 namespace Elevate.Models.Challenge
 {
@@ -13,7 +14,7 @@ namespace Elevate.Models.Challenge
 
         public ChallengeInviteStatus Status { get; set; } = ChallengeInviteStatus.Pending;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
+        public DateTime? UpdatedAt { get; set; } = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
     }
 }

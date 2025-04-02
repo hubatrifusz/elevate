@@ -111,8 +111,10 @@ namespace Elevate.Data.Database
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ChallengeModel>()
-                .HasIndex(c => new { c.UserId, c.FriendId })
-                .IsUnique();
+                .HasIndex(c => c.UserId);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasIndex(c => c.FriendId);
 
             modelBuilder.Entity<ChallengeModel>()
                 .HasOne<ApplicationUser>()

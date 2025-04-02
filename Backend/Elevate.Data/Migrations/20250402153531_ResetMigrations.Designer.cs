@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elevate.Data.Migrations
 {
     [DbContext(typeof(ElevateDbContext))]
-    [Migration("20250323173838_UpdatedChallengeModel")]
-    partial class UpdatedChallengeModel
+    [Migration("20250402153531_ResetMigrations")]
+    partial class ResetMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,8 +105,7 @@ namespace Elevate.Data.Migrations
 
                     b.HasIndex("HabitId");
 
-                    b.HasIndex("UserId", "FriendId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Challenges");
                 });

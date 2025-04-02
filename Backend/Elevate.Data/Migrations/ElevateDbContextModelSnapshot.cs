@@ -102,8 +102,7 @@ namespace Elevate.Data.Migrations
 
                     b.HasIndex("HabitId");
 
-                    b.HasIndex("UserId", "FriendId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Challenges");
                 });

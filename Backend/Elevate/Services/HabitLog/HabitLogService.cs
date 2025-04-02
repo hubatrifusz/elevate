@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
+using Elevate.Common.Utilities;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
 using Elevate.Services.Streak;
@@ -47,7 +48,7 @@ namespace Elevate.Services.HabitLog
             {
                 _mapper.Map(habitLogUpdateDto, habitLogModel);
                 await _streakService.UpdateStreakForHabitLog(habitLogModel);
-                habitLogModel.CompletedAt = DateTime.UtcNow;
+                habitLogModel.CompletedAt = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
             }
 
             HabitLogModel updatedHabitLog = await _habitLogRepository.UpdateHabitLogAsync(habitLogModel)
