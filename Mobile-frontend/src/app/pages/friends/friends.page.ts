@@ -150,6 +150,9 @@ export class FriendsPage {
           }
         }
       });
+    }
+    else{
+      this.searchedUsers = []; 
 
     }
   }

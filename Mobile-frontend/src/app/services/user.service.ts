@@ -10,7 +10,6 @@ export class UserService {
 
 
   private apiUrl = 'https://elevate.koyeb.app/api';
-  token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) { }
   getUserById(userId: string): Observable<User> {
@@ -22,6 +21,8 @@ export class UserService {
     });
   }
   getUsersByEmail(email: string, pageNumber: number, pageSize: number): Observable<User[]> {
+    const token = localStorage.getItem('token'); // Retrieve token dynamically
+
     return this.http.get<User[]>(`${this.apiUrl}/user`, {
       params: {
         email: email,
@@ -29,7 +30,7 @@ export class UserService {
         pageSize: pageSize.toString()
       },
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
       }
     });
   }

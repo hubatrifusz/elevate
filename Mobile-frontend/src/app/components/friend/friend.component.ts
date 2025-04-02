@@ -11,7 +11,7 @@ import { HabitService } from 'src/app/services/habit.service';
   styleUrls: ['./friend.component.scss'],
   imports: [IonItem, IonAvatar, IonLabel, IonButton]
 })
-export class FriendComponent implements OnInit {
+export class FriendComponent  {
   challengeService = inject(ChallengeService);
 
   @Input() friend!: User;
@@ -22,7 +22,7 @@ export class FriendComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
    }
 
   onDeleteFriend() {
