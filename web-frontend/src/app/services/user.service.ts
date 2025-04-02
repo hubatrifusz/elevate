@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment.prod';
@@ -25,7 +24,7 @@ export class UserService {
   }
 
   getHabits(): Observable<any> {
-    const userId = localStorage.getItem('id') ?? '';
+    const userId = this.authService.getUserId() ?? '';
     const params = new HttpParams().set('userId', userId).set('pageNumber', 1).set('pageSize', 20);
 
     return this.http.get(`${this.apiUrl}/habit`, {
@@ -53,7 +52,7 @@ export class UserService {
   }
 
   getTodaysHabitlogs(date: string): Observable<any> {
-    const userId = localStorage.getItem('id') ?? '';
+    const userId = this.authService.getUserId() ?? '';
     const params = new HttpParams().set('userId', userId);
 
     return this.http.get(`${this.apiUrl}/habitlog/${date}`, {
