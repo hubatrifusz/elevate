@@ -102,7 +102,7 @@ namespace Elevate.Data.Migrations
 
                     b.HasIndex("HabitId");
 
-                    b.HasIndex("UserId", "FriendId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Challenges");
                 });
