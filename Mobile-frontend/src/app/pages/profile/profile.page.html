@@ -32,7 +32,27 @@
       <p><strong>Longest Streak:</strong> {{ user.longestStreak }} days</p>
     </ion-card-content>
   </ion-card>
+  @if(loginedUserId != user.id){
+  <ion-card color="light" class="friend-card">
+    <ion-card-header>
+      <ion-card-title>Friendship</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      @if(isFriend){
+      <p>You are friends with this user.</p>
+      }
+      @else if(isPending){
+      <p>Friend request pending.</p>
+      }
+      @else {
+      <!-- <ion-button (click)="sendFriendRequest(user.id)">Send Friend Request</ion-button> -->
+      }
+    </ion-card-content>
+  </ion-card>
   }
+  }
+
 
 
   @if(user == null){

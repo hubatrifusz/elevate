@@ -64,7 +64,7 @@ export class TaskCardComponent  {
   }
 
 
-  async ionWillEnter() {
+  async ionViewWillEnter() {
     const loading = await this.presentLoading();
     if (!this.habitlogsDate) {
       await this.loadHabits();

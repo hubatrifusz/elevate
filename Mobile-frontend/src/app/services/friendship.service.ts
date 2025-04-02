@@ -63,4 +63,12 @@ export class FriendshipService {
       params: params, // Attach the query parameters
     });
   }
+  getSentRequests(): Observable<Friendship[]> {
+    const userId = localStorage.getItem('userId');
+    return this.http.get<Friendship[]>(`${this.apiUrl}/friendship/${userId}/sent-requests`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      }
+    });
+  }
 }

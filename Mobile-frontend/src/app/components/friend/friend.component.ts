@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, input, Input, OnInit, Output } from '@
 import { IonItem, IonAvatar, IonLabel, IonButton } from "@ionic/angular/standalone";
 import { Habit } from 'src/app/.models/Habit.model';
 import { User } from 'src/app/.models/user.model';
+import { ChallengeService } from 'src/app/services/challenge.service';
 import { HabitService } from 'src/app/services/habit.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { HabitService } from 'src/app/services/habit.service';
   imports: [IonItem, IonAvatar, IonLabel, IonButton]
 })
 export class FriendComponent implements OnInit {
-  habitService = inject(HabitService);
+  challengeService = inject(ChallengeService);
 
   @Input() friend!: User;
   @Input() isChallenge = false;
@@ -33,7 +34,7 @@ export class FriendComponent implements OnInit {
   onChallengeFriend(friendId: string) {
     if (this.Habit?.color.includes('#')) {
       this.Habit.color = this.Habit.color.slice(1);
-      this.habitService.sendChallenge(this.Habit, friendId).subscribe({
+      this.challengeService.sendChallenge(this.Habit, friendId).subscribe({
         next: () => {
           console.log('Challenge sent successfully');
         },
@@ -42,6 +43,5 @@ export class FriendComponent implements OnInit {
         }
       })
     }
-
   }
 }

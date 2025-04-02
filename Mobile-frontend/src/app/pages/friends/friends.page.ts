@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonListHeader, LoadingController, IonSearchbar, IonAvatar, IonIcon, IonFab, IonFabButton, IonModal, IonImg, IonButtons, IonBackButton, IonRefresher, IonRefresherContent, RefresherEventDetail, IonBadge, IonCard, IonCardContent, IonChip, IonGrid, IonRow, IonCol, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInfiniteScrollContent, IonInfiniteScroll } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonListHeader, LoadingController, IonSearchbar, IonAvatar, IonIcon, IonFab, IonFabButton, IonModal, IonImg, IonButtons, IonBackButton, IonRefresher, IonRefresherContent, RefresherEventDetail, IonBadge, IonCard, IonCardContent, IonChip, IonGrid, IonRow, IonCol, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInfiniteScrollContent, IonInfiniteScroll, IonFooter } from '@ionic/angular/standalone';
 import { FriendsFeedService } from 'src/app/services/friends-feed.service';
 import { User } from 'src/app/.models/user.model';
 import { FriendshipService } from 'src/app/services/friendship.service';
@@ -12,14 +12,17 @@ import { ToastService } from 'src/app/services/toast.service';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core';
 import { FriendComponent } from "../../components/friend/friend.component";
 import { addIcons } from 'ionicons';
-import { checkmark, close, happyOutline, people, add, sad } from 'ionicons/icons';
+import { checkmark, close, happyOutline, people, add, sad, trophyOutline } from 'ionicons/icons';
+import { ChallengeService } from 'src/app/services/challenge.service';
+import { Challenge } from 'src/app/.models/challenge.model';
+import { ChallengeRequestComponent } from "../../components/challenge-request/challenge-request.component";
 
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScroll, IonInfiniteScrollContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent, IonCard, IonBadge, IonRefresherContent, IonRefresher, IonBackButton, IonButtons, IonImg, IonModal, IonFabButton, IonFab, IonIcon, IonAvatar, IonSearchbar, IonListHeader, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, HeaderComponent, FriendComponent]
+  imports: [IonFooter, IonInfiniteScroll, IonInfiniteScrollContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent, IonCard, IonBadge, IonRefresherContent, IonRefresher, IonBackButton, IonButtons, IonImg, IonModal, IonFabButton, IonFab, IonIcon, IonAvatar, IonSearchbar, IonListHeader, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
 })
 export class FriendsPage {
 
@@ -29,23 +32,27 @@ export class FriendsPage {
   friendService = inject(FriendshipService);
   userService = inject(UserService);
   router = inject(Router);
+  challengeService = inject(ChallengeService);
   friends: User[] = [];
   friendRequests: User[] = [];
   searchedUsers: User[] = [];
+  challengeRequests: Challenge[] = [];
+  isChallengeModalOpen = false;
+
   private page = 1;
   private pageSize = 15;
   isModalOpen = false;
 
 
   constructor(private loadingController: LoadingController) {
-    addIcons({people,happyOutline,close,checkmark,sad,add});
+    addIcons({ trophyOutline, people, happyOutline, close, checkmark, add, sad });
   }
 
   async ionViewWillEnter() {
     this.friendRequests = [];
     this.page = 1;
     const loading = await this.presentLoading();
-
+    await this.getChallengeRequests();
     await this.getFriendRequests();
     await this.getFriends(); // Fetch friends after friend requests
     loading.dismiss();
@@ -59,6 +66,40 @@ export class FriendsPage {
   onIonInfinite($event: IonInfiniteScrollCustomEvent<void>) {
     throw new Error('Method not implemented.');
   }
+
+
+  setChallengeModalOpen(isOpen: boolean) {
+    this.isChallengeModalOpen = isOpen;
+  }
+
+  async getChallengeRequests() {
+    this.challengeRequests = [];
+    this.challengeService.getChallengeRequest().subscribe({
+      next: async (response) => {
+        // Fetch user details for each challenge request
+        this.challengeRequests = await Promise.all(
+          response.map(async (challenge) => {
+            const userDetails = await this.userService.getUserById(challenge.userId).toPromise();
+            return { ...challenge, user: userDetails }; // Attach user details to the challenge
+          })
+        );
+        console.log('Challenge Requests with User Details:', this.challengeRequests);
+      },
+      error: (error) => {
+        console.error('Error loading challenge requests:', error);
+      }
+    });
+  }
+  acceptChallengeRequest(challenge: Challenge) {
+    console.log('Accepting challenge:', challenge);
+    // Add logic to accept the challenge
+  }
+
+  rejectChallengeRequest(challenge: Challenge) {
+    console.log('Rejecting challenge:', challenge);
+    // Add logic to reject the challenge
+  }
+
 
   async presentLoading() {
     const loading = await this.loadingController.create({
@@ -81,6 +122,8 @@ export class FriendsPage {
       }
     });
   }
+
+
 
   getFriends() {
     this.friends = [];
@@ -171,6 +214,7 @@ export class FriendsPage {
 
 
   goToProfile(userId: string) {
+    this.setChallengeModalOpen(false); 
     this.router.navigate(['/profile', userId]);
   }
 }
