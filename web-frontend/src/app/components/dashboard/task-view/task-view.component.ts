@@ -14,7 +14,7 @@ import { HabitLog } from '../../../models/habitlog.model';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) {}
+  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) { }
 
   userId!: string | null;
   habitlogList: HabitLog[] = [];
@@ -34,8 +34,10 @@ export class TaskViewComponent {
   });
 
   ngOnInit() {
-    this.userId = this.authService.getToken();
-    this.addNewTaskForm.value.userID = this.authService.getToken();
+    this.userId = this.authService.getUserId();
+    this.addNewTaskForm.patchValue({
+      userID: this.userId
+    });
     this.getTodaysHabitlogs(this.date.toISOString());
   }
 
