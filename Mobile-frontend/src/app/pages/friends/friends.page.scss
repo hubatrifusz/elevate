@@ -18,10 +18,16 @@ ion-list {
 }
 
 ion-chip {
-    padding: 15px;
+    // padding: 15px;
+    margin: 0;
+    padding: 20px 10px;
+    height: fit-content;
+    ion-label{
+        font-size: 13px;
+    }
 
     ion-badge {
-        margin-left: 10px;
+        margin-left: 5px;
         font-size: 12px;
     }
 }
@@ -36,6 +42,7 @@ ion-label {
 ion-searchbar {
     --border-radius: 15px;
 }
+
 ion-modal {
     ion-content {
         --background: unset;
@@ -56,3 +63,8 @@ ion-modal {
     }
 }
 
+.chips-row {
+    justify-content: center;
+    align-items: center;
+    // gap: 8px;
+}

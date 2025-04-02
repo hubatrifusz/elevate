@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core';
 import { FriendComponent } from "../../components/friend/friend.component";
 import { addIcons } from 'ionicons';
-import { checkmark, close, happyOutline, people, add, sad, trophyOutline } from 'ionicons/icons';
+import { checkmark, close, happyOutline, people, add, sad, trophyOutline, trophy } from 'ionicons/icons';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { Challenge } from 'src/app/.models/challenge.model';
 import { ChallengeRequestComponent } from "../../components/challenge-request/challenge-request.component";
@@ -45,7 +45,7 @@ export class FriendsPage {
 
 
   constructor(private loadingController: LoadingController) {
-    addIcons({ trophyOutline, people, happyOutline, close, checkmark, add, sad });
+    addIcons({trophy,people,happyOutline,close,trophyOutline,checkmark,add,sad});
   }
 
   async ionViewWillEnter() {

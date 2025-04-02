@@ -8,41 +8,41 @@
   </ion-refresher>
 
   <ion-grid>
-    <ion-row class="align-center">
-      <ion-col>
-        <ion-chip (click)="setChallengeModalOpen(true)">
-          <ion-icon name="trophy-outline"></ion-icon>
-          <ion-label>Challenge Requests</ion-label>
-          @if(challengeRequests.length > 0) {
-          <ion-badge color="danger">
-            {{ challengeRequests.length }}
-          </ion-badge>
-          }
-        </ion-chip>
-        <!-- <ion-label>
-          @if(friends.length > 0) {
-          <h1>Friends</h1>
-          <p>See your friends and their habits.</p>
-          }
-          @else {
-          <h1>Find Friends</h1>
-          <p>Search for users to add as friends.</p>
-          }
-        </ion-label> -->
-      </ion-col>
-      <ion-col size="auto">
-        <ion-chip (click)="setOpen(true)">
-          <ion-icon name="people"></ion-icon>
-          <ion-label>Friend Requests</ion-label>
-          @if(friendRequests.length > 0) {
-          <ion-badge color="danger">
-            {{ friendRequests.length }}
-          </ion-badge>
-          }
-        </ion-chip>
-      </ion-col>
-    </ion-row>
+<ion-row class="align-center chips-row">
+  <ion-col size="auto">
+    <ion-chip (click)="setChallengeModalOpen(true)">
+      <ion-icon name="trophy"></ion-icon>
+      <ion-label>Challenge Requests</ion-label>
+      @if(challengeRequests.length > 0) {
+      <ion-badge color="danger">
+        {{ challengeRequests.length }}
+      </ion-badge>
+      }
+    </ion-chip>
+  </ion-col>
+  <ion-col size="auto">
+    <ion-chip (click)="setOpen(true)">
+      <ion-icon name="people"></ion-icon>
+      <ion-label>Friend Requests</ion-label>
+      @if(friendRequests.length > 0) {
+      <ion-badge color="danger">
+        {{ friendRequests.length }}
+      </ion-badge>
+      }
+    </ion-chip>
+  </ion-col>
+</ion-row>
   </ion-grid>
+  <ion-label class="ion-padding">
+    @if(friends.length > 0) {
+    <h1>Friends</h1>
+    <p>See your friends and their habits.</p>
+    }
+    @else {
+    <h1>Find Friends</h1>
+    <p>Search for users to add as friends.</p>
+    }
+  </ion-label>
   @if(friends.length > 0){
   <ion-list>
     @for (friend of friends; track $index) {
@@ -89,7 +89,8 @@
             @if(challengeRequests.length > 0) {
             <ion-list>
               @for (challenge of challengeRequests; track $index) {
-              <app-challenge-request (profileClick)="goToProfile(challenge.userId)" [challenge]="challenge"></app-challenge-request>
+              <app-challenge-request (profileClick)="goToProfile(challenge.userId)"
+                [challenge]="challenge"></app-challenge-request>
 
               }
             </ion-list>
