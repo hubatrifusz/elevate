@@ -2,6 +2,7 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Challenge;
+using Elevate.Models.Friendship;
 using Elevate.Models.Habit;
 using Elevate.Services.HabitLog;
 
@@ -28,6 +29,10 @@ namespace Elevate.Services.Challenge
             if (challengeCreateDto.UserId == challengeCreateDto.FriendId)
             {
                 throw new BadRequestException("User cannot challenge themself.");
+            }
+            if (await _challengeRepository.IsChallengeRequestSent(challengeCreateDto.UserId, challengeCreateDto.FriendId, challengeCreateDto.Habit.Id))
+            {
+                throw new BadRequestException("Challenge request already sent.");
             }
 
             var existingHabit = await _habitRepository.GetHabitByIdAsync(challengeCreateDto.Habit.Id);

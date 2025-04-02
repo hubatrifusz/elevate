@@ -1,5 +1,6 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Models.Challenge;
+using Elevate.Models.Friendship;
 using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
@@ -15,6 +16,16 @@ namespace Elevate.Data.Repository
                 .Where(c => c.FriendId == userId &&
                   c.Status == ChallengeInviteStatus.Pending)
                 .ToListAsync();
+        }
+
+        public async Task<bool> IsChallengeRequestSent(Guid userId, Guid friendId, Guid habitId)
+        {
+            return await _context.Challenges
+                .AnyAsync(c =>
+                    c.UserId == userId && c.FriendId == friendId &&
+                    c.Habit.Id == habitId &&
+                    c.Status == ChallengeInviteStatus.Pending
+                );
         }
 
         public async Task<ChallengeModel?> AddChallengeAsync(ChallengeModel challenge)
