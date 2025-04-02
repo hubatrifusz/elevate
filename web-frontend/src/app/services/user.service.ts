@@ -60,4 +60,10 @@ export class UserService {
       headers: this.getAuthHeaders(),
     });
   }
+
+  updateHabitLog(habitlogId: string, formResult: any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/habitlog/${habitlogId}`, formResult, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

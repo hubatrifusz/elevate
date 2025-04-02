@@ -56,6 +56,10 @@ export class TaskViewComponent {
     });
   }
 
+  getHabitForLog(habitLog: HabitLog): Habit | undefined {
+    return this.habitList.find(habit => habit.id === habitLog.habitId);
+  }
+
   addNewHabit() {
     this.userService.addNewHabit(this.addNewTaskForm.value).subscribe({
       next: (response) => this.habitList.push(response as Habit),
@@ -63,6 +67,13 @@ export class TaskViewComponent {
     });
 
     this.toggleFormVisibility();
+  }
+
+  patchHabitLog(event: HabitLog) {
+    this.userService.updateHabitLog(event.id, event).subscribe({
+      next: () => this.alertService.showAlert('Task updated successfully!'),
+      error: (error) => this.alertService.showAlert(error),
+    });
   }
 
   deleteHabit(event: Habit) {

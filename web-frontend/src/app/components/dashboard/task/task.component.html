@@ -6,17 +6,17 @@
   <div id="task_header_container">
     <div id="left">
       <div class="input_container" id="remember_me_checkbox_input_container">
-        <input type="checkbox" name="task_checkbox_input" id="{{ habitData.id }}" data-cy="task_checkbox_input" formControlName="taskDone" />
-        <label for="{{ habitData.id }}" class="checkbox">
+        <input type="checkbox" name="task_checkbox_input" id="{{ habitLogData.id }}" data-cy="task_checkbox_input" formControlName="taskDone" [checked]="taskDone()"/>
+        <label for="{{ habitLogData.id }}" class="checkbox">
           <div class="checkmark"></div>
         </label>
-        <label for="{{ habitData.id }}" class="checkbox_label">{{ habitData.title }}</label>
+        <label for="{{ habitLogData.id }}" class="checkbox_label">{{ habitData.title }}</label>
       </div>
     </div>
     <div id="right">
       <div id="time_container">
         <img src="icons/clock.png" alt="clock" />
-        <span>{{ habitData.frequencyType }}</span>
+        <span>{{ habitLogData.dueDate }}</span>
       </div>
       <div id="options_container">
         <img src="icons/menu-dots-vertical.png" alt="menu-dots-vertical" (click)="expandTask($event)" />
@@ -25,6 +25,7 @@
   </div>
   <div id="task_details_container">
     <p>{{ habitData.description }}</p>
+    <input type="text" id="task_notes" placeholder="Add some notes..." formControlName="notes" />
     <div id="task_actions">
       <div class="button_container" (click)="openConfirmationDialog()">
         <button class="button_delete"><span>Delete</span></button>
