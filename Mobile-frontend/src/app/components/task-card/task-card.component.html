@@ -52,11 +52,38 @@
           (ionChange)="onPositiveChange(habit, $event)"></ion-checkbox>
       </ion-item>
 
-      <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
-        Delete
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-button>
+      <ion-row>
+        <ion-col size="5">
+          <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
+            Delete
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="7">
+          <ion-button expand="block" (click)="getFriends()">
+            Challenge friend
+            <ion-icon slot="end" name="people-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
 
+      <ion-modal [isOpen]="isModalOpen">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Modal</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="setOpen(false)">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            @for (friend of friends; track $index) {
+              <app-friend  [Habit]="habit" [isChallenge]="true" [friend]="friend"></app-friend>
+            }
+          </ion-content>
+        </ng-template>
+      </ion-modal>
 
     </div>
   </ion-accordion>

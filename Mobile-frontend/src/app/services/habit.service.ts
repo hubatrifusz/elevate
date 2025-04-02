@@ -95,16 +95,17 @@ export class HabitService {
     return this.http.patch(`https://elevate.koyeb.app/api/habitlog/${habitLogId}`, body, { headers: headers });
   }
 
-  sendChallenge(habit: Habit, friendId: string) {
+  sendChallenge(habit: Habit, friendId: string):Observable<any> {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Or however your backend expects the token
     });
+    const UserId = localStorage.getItem('userId');
 
     const body = {
-      userId: localStorage.getItem('userId'),
+      userId: UserId,
       friendId: friendId,
-      habitId: habit.id
+      habit: habit
     };
 
     return this.http.post(`https://elevate.koyeb.app/api/challenge`, body, { headers: headers });

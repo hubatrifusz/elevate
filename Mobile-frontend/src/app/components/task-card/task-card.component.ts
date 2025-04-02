@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronDownOutline, flameOutline, starOutline, time, trashOutline } from 'ionicons/icons';
+import { chevronDownOutline, flameOutline, peopleOutline, starOutline, time, trashOutline } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { HabitService } from 'src/app/services/habit.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HabitLog } from 'src/app/.models/HabitLog.model';
+import { FriendComponent } from '../friend/friend.component';
+import { FriendshipService } from 'src/app/services/friendship.service';
+import { User } from 'src/app/.models/user.model';
 
 @Component({
   selector: 'app-task-card',
@@ -17,7 +20,7 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
   imports: [IonTabButton, IonAlert, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
-    IonSelect, IonSelectOption, FormsModule, IonInput]
+    IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle, FriendComponent]
 })
 export class TaskCardComponent  {
 
@@ -36,11 +39,13 @@ export class TaskCardComponent  {
 
   private habitService = inject(HabitService);
   private router = inject(Router);
+  private friendShipService = inject(FriendshipService);
   private _habitlogsDate: string | null = null;
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
   public checked = false;
+  public friends: User[] = [];
 
 
   weekDays = [
@@ -54,15 +59,16 @@ export class TaskCardComponent  {
   ];
 
 
-  constructor(private loadingController: LoadingController, private alertController: AlertController) {
-    addIcons({ time, chevronDownOutline, flameOutline, trashOutline });
+  constructor(private loadingController: LoadingController, private alertController: AlertController, private modalController: ModalController) {
+    addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline });
   }
 
 
   async ionWillEnter() {
     const loading = await this.presentLoading();
     if (!this.habitlogsDate) {
-      await this.loadHabits(); // Await for better flow control
+      await this.loadHabits();
+       // Await for better flow control
       loading.dismiss();
 
       this.loadMoreHabits.subscribe(async () => {
@@ -320,5 +326,25 @@ export class TaskCardComponent  {
     await alert.present();
   }
 
+  async getFriends() {
+    await this.friendShipService.getFriends().subscribe(
+      (response) => {
+        console.log('Friends:', response);
+        this.friends = response;
+        this.setOpen(true);
+      },
+      (error) => {
+        console.error('Error loading friends:', error);
+      }
+    );
+  }
+  isModalOpen = false;
 
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+
+  async presentModal(){
+    
+  }
 }
