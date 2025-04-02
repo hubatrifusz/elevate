@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { add, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpStatusCode, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -58,7 +58,15 @@ export class LoginPagePage implements OnInit {
         this.router.navigate(['/footertabs/feed']);
       } catch (e) {
         console.error(e);
-        this.toastService.presentToast('Invalid email or password');
+        if (e instanceof HttpErrorResponse && e.status === 403) {
+          this.toastService.presentToast('Invalid login details');
+        }
+        if (e instanceof HttpErrorResponse && e.status === 400) {
+          this.toastService.presentToast('Invalid credentials');
+        }
+        else{
+          this.toastService.presentToast("Something went wrong");
+        }
       }
     }
   }
