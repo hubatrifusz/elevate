@@ -1,9 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment.prod';
 import { Habit } from '../models/habit.model';
+import { Challenge } from '../models/challenge.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +45,17 @@ export class HabitService {
     return this.http.post(`${this.apiUrl}/challenge`, challenge, {
       headers: this.getAuthHeaders(),
     });
+  }
+
+  getChallengeByHabitId(habitId: string): Observable<Challenge | null> {
+    const userId = this.authService.getUserId();
+
+    const sentChallengeInvites: Observable<Challenge[]> = this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites-sent`, {
+      headers: this.getAuthHeaders(),
+    });
+
+    return sentChallengeInvites.pipe(
+      map((response: Challenge[]) => response.find((invite: Challenge) => invite.habit.id === habitId)!)
+    );
   }
 }

@@ -51,7 +51,9 @@
                 alt="Profile picture" />
               <span>{{ friend.firstName }} {{ friend.lastName }}</span>
             </div>
-            <button class="button_primary" (click)="challengeFriend(friend.id)">Challenge</button>
+            <button class="button_primary" [disabled]="isFriendAlreadyChallenged(friend.id)" (click)="challengeFriend(friend.id)">
+              {{ isFriendAlreadyChallenged(friend.id) ? 'Already Challenged' : 'Challenge' }}
+            </button>
           </div>
           }
         </div>
