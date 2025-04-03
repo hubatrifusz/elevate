@@ -1,7 +1,14 @@
 @use "../../../theme/variables.scss" as *;
 
-
-
+.ion-valid.sc-ion-input-md-h {
+    --highlight-color: var(--ion-color-tertiary);
+}
+.ion-valid.sc-ion-textarea-md-h {
+    --highlight-color: var(--ion-color-tertiary);
+}
+:host(.ion-valid) {
+    --highlight-color: var(--ion-color-tertiary);
+}
 ion-header {
     --background: var(--ion-color-primary);
     --color: var(--ion-color-light);
@@ -43,6 +50,7 @@ ion-textarea {
     --color: var(--ion-color-dark);
     margin: 10px 0;
     --border-radius: 15px;
+    --highlight-color: red;
 }
 
 ion-input:focus,

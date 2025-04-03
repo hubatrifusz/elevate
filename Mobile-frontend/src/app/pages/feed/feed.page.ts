@@ -9,7 +9,7 @@ import { TaskCardComponent } from "../../components/task-card/task-card.componen
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { IonRefresherCustomEvent } from '@ionic/core';
+import { createGesture, IonRefresherCustomEvent } from '@ionic/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/.models/user.model';
 import { HeaderComponent } from "../../components/header/header.component";

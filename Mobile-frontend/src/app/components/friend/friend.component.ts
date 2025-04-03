@@ -4,6 +4,7 @@ import { Habit } from 'src/app/.models/Habit.model';
 import { User } from 'src/app/.models/user.model';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { HabitService } from 'src/app/services/habit.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-friend',
@@ -13,6 +14,7 @@ import { HabitService } from 'src/app/services/habit.service';
 })
 export class FriendComponent  {
   challengeService = inject(ChallengeService);
+  toast = inject(ToastService)
 
   @Input() friend!: User;
   @Input() isChallenge = false;
@@ -36,10 +38,11 @@ export class FriendComponent  {
       this.Habit.color = this.Habit.color.slice(1);
       this.challengeService.sendChallenge(this.Habit, friendId).subscribe({
         next: () => {
-          console.log('Challenge sent successfully');
+          this.toast.presentToast('Challenge sent successfully');
         },
         error: (error) => {
           console.error('Error sending challenge:', error);
+          this.toast.presentToast(error.error);
         }
       })
     }

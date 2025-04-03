@@ -37,23 +37,17 @@ export class ChallengeService {
     const UserId = localStorage.getItem('userId');
     return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${UserId}/challenge-invites`, { headers: headers });
   }
-  statusChallenge(challenge: Challenge, status: 'accepted' | 'rejected'): Observable<Challenge> {
+  statusChallenge(challenge: Challenge, status: 'accepted' | 'declined'): Observable<Challenge> {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}` // Add authorization header
     });
+    challenge.status = status; // Update the status of the challenge
 
-    // Construct the payload
-    const payload = {
-      userId: userId,
-      friendId: challenge.friendId,
-      habit: challenge.habit,
-      status: status // Use 'accepted' or 'rejected'
-    };
 
     // Send the PATCH request
-    return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, payload, { headers: headers });
+    return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, { headers: headers });
   }
 
 }

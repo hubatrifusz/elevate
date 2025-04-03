@@ -91,12 +91,11 @@ export class FriendsPage {
     });
   }
   acceptChallengeRequest(challenge: Challenge) {
-    console.log('Accepting challenge:', challenge);
-    // Add logic to accept the challenge
+    this.challengeRequests = this.challengeRequests.filter((c) => c.id !== challenge.id); // Remove the accepted challenge from the list
   }
 
   rejectChallengeRequest(challenge: Challenge) {
-    console.log('Rejecting challenge:', challenge);
+    this.challengeRequests = this.challengeRequests.filter((c) => c.id !== challenge.id); // Remove the rejected challenge from the list
     // Add logic to reject the challenge
   }
 
@@ -214,7 +213,7 @@ export class FriendsPage {
     });
   }
 
-
+ 
 
   goToProfile(userId: string) {
     this.setChallengeModalOpen(false); 

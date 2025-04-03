@@ -9,6 +9,8 @@ export interface Habit {
     is_positive: boolean;
     streak: number;
     streak_start?: Date;
+    challengedFriends?: string[];
+
 }
 export enum Frequency {
     Daily = 'daily',
