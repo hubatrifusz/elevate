@@ -14,7 +14,7 @@ import { HabitLog } from '../../../models/habitlog.model';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) { }
+  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) {}
 
   userId!: string | null;
   habitlogList: HabitLog[] = [];
@@ -29,14 +29,14 @@ export class TaskViewComponent {
     description: new FormControl('', [Validators.required]),
     frequencyType: new FormControl('', [Validators.required]),
     customFrequency: new FormControl(0), //TODO
-    color: new FormControl('blue', [Validators.required]),
+    color: new FormControl('000000', [Validators.required]),
     isPositive: new FormControl(true),
   });
 
   ngOnInit() {
     this.userId = this.authService.getUserId();
     this.addNewTaskForm.patchValue({
-      userID: this.userId
+      userID: this.userId,
     });
     this.getTodaysHabitlogs(this.date.toISOString());
   }
@@ -46,6 +46,11 @@ export class TaskViewComponent {
       console.log('form is not valid');
       return;
     }
+    this.addNewTaskForm.patchValue({
+      color: this.addNewTaskForm.value.color!.replace('#', ''),
+    });
+    console.log(this.addNewTaskForm.value);
+
     this.addNewHabit();
   }
 
@@ -57,7 +62,7 @@ export class TaskViewComponent {
   }
 
   getHabitForLog(habitLog: HabitLog): Habit | undefined {
-    return this.habitList.find(habit => habit.id === habitLog.habitId);
+    return this.habitList.find((habit) => habit.id === habitLog.habitId);
   }
 
   addNewHabit() {

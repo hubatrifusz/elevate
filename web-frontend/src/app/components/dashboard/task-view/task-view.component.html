@@ -10,23 +10,13 @@
   </div>
 
   <!-- Tasks -->
-  <div id="task_container">
+  <div id="tasks_container">
     @if (habitList.length == 0) {
     <h3>All done! 🎉</h3>
     <p>Click 'Add' to create a new habit.</p>
-    }
-    @else {
-      @for (habitLog of habitlogList; track $index) {
-        @if (getHabitForLog(habitLog)) {
-          <app-task
-            [habitData]="getHabitForLog(habitLog)!"
-            [habitLogData]="habitLog"
-            (dataEmitter)="deleteHabit($event)"
-            (taskDoneEmitter)="patchHabitLog($event)">
-          </app-task>
-        }
-      }
-    }
+    } @else { @for (habitLog of habitlogList; track $index) { @if (getHabitForLog(habitLog)) {
+    <app-task [habitData]="getHabitForLog(habitLog)!" [habitLogData]="habitLog" (dataEmitter)="deleteHabit($event)"></app-task>
+    } } }
   </div>
 
   <!-- Add new task button -->
@@ -43,26 +33,22 @@
   @if (isVisible) {
   <form [formGroup]="addNewTaskForm" (ngSubmit)="onSubmit()" (keydown.escape)="toggleFormVisibility()">
     <img src="icons/cross.png" alt="cross" (click)="toggleFormVisibility()" />
+    <!-- Title -->
     <div class="input_container" id="title_text_input_container" data-cy="title_text_input_container">
       <input type="text" name="title_text_input" id="title_text_input" placeholder=" " [formControlName]="'title'" />
       <label for="title" class="input_title">Add a title</label>
     </div>
 
+    <!-- Description -->
     <div class="input_container" id="description_text_input_container" data-cy="description_text_input_container">
-      <input type="text" name="description_text_input" id="description_text_input" placeholder=" "
-        [formControlName]="'description'" />
+      <input type="text" name="description_text_input" id="description_text_input" placeholder=" " [formControlName]="'description'" />
       <label for="title" class="input_title">Add a description</label>
     </div>
 
-    <div class="input_container" id="color_radio_input_container" data-cy="color_radio_input_container">
-      <input type="radio" id="red_color_radio_input" [formControlName]="'color'" value="red" />
-      <label for="red_color_radio_input" class="radio_label"></label>
-
-      <input type="radio" id="blue_color_radio_input" [formControlName]="'color'" value="blue" />
-      <label for="blue_color_radio_input" class="radio_label"></label>
-
-      <input type="radio" id="green_color_radio_input" [formControlName]="'color'" value="green" />
-      <label for="green_color_radio_input" class="radio_label"></label>
+    <!-- Color -->
+    <div class="input_container" id="color_picker_input_container" data-cy="color_picker_input_container">
+      <input type="color" name="color_picker_input" id="color_picker_input" [formControlName]="'color'" />
+      <label for="color_picker_input">Pick an indicator color</label>
     </div>
 
     <div class="input_container">

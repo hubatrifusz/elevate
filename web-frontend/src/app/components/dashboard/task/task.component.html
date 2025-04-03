@@ -2,11 +2,19 @@
 <app-confirm-dialog (dataEmitter)="deleteHabit($event)"></app-confirm-dialog>
 }
 
-<div id="task_container" class="{{ habitData.color }}">
-  <div id="task_header_container">
+<div class="task_container" #taskElement [ngStyle]="{ 'border-left': '1rem solid #' + habitData.color }">
+  <div class="task_header_container">
     <div id="left">
+      <!-- Checkbox for marking task done -->
       <div class="input_container" id="remember_me_checkbox_input_container">
-        <input type="checkbox" name="task_checkbox_input" id="{{ habitLogData.id }}" data-cy="task_checkbox_input" formControlName="taskDone" [checked]="taskDone()"/>
+        <input
+          type="checkbox"
+          name="task_checkbox_input"
+          id="{{ habitLogData.id }}"
+          data-cy="task_checkbox_input"
+          [formControl]="taskCheckbox"
+          (change)="taskDone($event)"
+        />
         <label for="{{ habitLogData.id }}" class="checkbox">
           <div class="checkmark"></div>
         </label>
@@ -15,17 +23,29 @@
     </div>
     <div id="right">
       <div id="time_container">
-        <img src="icons/clock.png" alt="clock" />
-        <span>{{ habitLogData.dueDate }}</span>
+        <img src="icons/flame.png" alt="clock" />
+        <span>{{ habitData.streak }}</span>
       </div>
       <div id="options_container">
         <img src="icons/menu-dots-vertical.png" alt="menu-dots-vertical" (click)="expandTask($event)" />
       </div>
     </div>
   </div>
-  <div id="task_details_container">
-    <p>{{ habitData.description }}</p>
-    <input type="text" id="task_notes" placeholder="Add some notes..." formControlName="notes" />
+  <div class="task_details_container">
+    <div class="task_description">
+      <p class="p_dark">Description:</p>
+      <p>{{ habitData.description }}</p>
+    </div>
+    <div class="task_notes">
+      <div class="input_container">
+        <!-- TODO make a textarea input -->
+        <input type="text" id="task_notes" name="task_notes" placeholder=" " [formControl]="notes" (keydown.enter)="saveNotes()"/>
+        <label for="task_notes" class="input_title">Add some notes</label>
+      </div>
+      <p>{{ notesValue }}</p>
+    </div>
+
+    <!-- Delete button -->
     <div id="task_actions">
       <div class="button_container" (click)="openConfirmationDialog()">
         <button class="button_delete"><span>Delete</span></button>

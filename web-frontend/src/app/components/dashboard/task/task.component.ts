@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Habit } from '../../../models/habit.model';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { HabitLog } from '../../../models/habitlog.model';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule, ConfirmDialogComponent],
+  imports: [CommonModule, ConfirmDialogComponent, ReactiveFormsModule],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
 })
@@ -15,20 +17,54 @@ export class TaskComponent {
   @Input() habitLogData!: HabitLog;
   @Output() dataEmitter = new EventEmitter<Habit>();
   @Output() taskDoneEmitter = new EventEmitter<HabitLog>();
+  @ViewChild('taskElement', { static: true }) taskElement!: ElementRef;
+
+  constructor(private userService: UserService) {}
 
   showConfirmDialog: boolean = false;
 
+  taskCheckbox = new FormControl();
+  notes = new FormControl('');
+
+  notesValue: string = '';
+
+  taskCheckboxChecked = this.taskCheckbox.value;
+
+  ngOnInit() {
+    if (this.habitLogData.completed) {
+      this.taskElement.nativeElement.classList.add('task_container_disabled');
+    }
+  }
+
   expandTask(event: MouseEvent) {
-    let task_details = (event.target as HTMLElement).closest('#task_container')?.querySelector('#task_details_container');
-    task_details?.classList.toggle('expand');
+    let taskDetails = (event.target as HTMLElement).closest('.task_container')?.querySelector('.task_details_container');
+    taskDetails?.classList.toggle('expand');
+  }
+
+  saveNotes() {
+    this.notesValue = this.notes.value!;
   }
 
   openConfirmationDialog() {
     this.showConfirmDialog = true;
   }
 
-  taskDone() {
-    // this.taskDoneEmitter.emit(this.habitData);
+  taskDone(event: Event) {
+    const taskContainer = (event.target as HTMLElement).closest('.task_container') as HTMLElement;
+    taskContainer.classList.add('task_container_disabled');
+
+    let updatedHabitLog = {
+      completed: this.taskCheckbox.value,
+      notes: this.notes.value,
+      isPublic: this.habitLogData.isPublic,
+    };
+
+    this.userService.updateHabitLog(this.habitLogData.id, updatedHabitLog).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (error) => console.log(error),
+    });
   }
 
   deleteHabit(result: boolean) {
