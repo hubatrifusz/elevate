@@ -6,6 +6,8 @@ import { User } from '../../models/user.model';
 import { HabitService } from '../../services/habit.service';
 import { FriendsService } from '../../services/friends.service';
 import { AlertService } from '../../services/alert.service';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-habits',
@@ -74,5 +76,24 @@ export class HabitsComponent implements OnInit {
         this.alertService.showAlert('Failed to send challenge');
       }
     });
+  }
+
+  isFriendAlreadyChallenged(friendId: string): Observable<boolean> {
+    if (!this.selectedHabit) {
+      return of(false);
+    }
+
+    return this.habitService.getChallengeByHabitId(this.selectedHabit.id).pipe(
+      map(challenge => {
+        if (challenge && challenge.friendId === friendId) {
+          return true;
+        }
+        return false;
+      }),
+      catchError(error => {
+        console.error('Error fetching challenge:', error);
+        return of(false);
+      })
+    );
   }
 }
