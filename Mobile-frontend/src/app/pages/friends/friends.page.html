@@ -33,6 +33,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+<!-- Friends     -----------------------------      -->
+
   <ion-label class="ion-padding">
     @if(friends.length > 0) {
     <h1>Friends</h1>
@@ -63,6 +66,8 @@
     </ion-card-content>
   </ion-card>
   }
+
+  <!-- Challenges -->
 
   <ion-modal [isOpen]="isChallengeModalOpen" class="challenge-modal">
     <ng-template>
@@ -199,7 +204,8 @@
           @for(user of searchedUsers; track $index) {
           <ion-item>
             <ion-avatar slot="start">
-              <img
+              <img (click)="goToProfile(user.id)"
+                (click)="modal.setCurrentBreakpoint(0)"
                 [src]="user.profilePictureBase64 ? 'data:image/jpeg;base64,' + user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
                 alt="Profile Picture" />
             </ion-avatar>

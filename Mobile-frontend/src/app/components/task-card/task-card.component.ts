@@ -17,7 +17,7 @@ import { User } from 'src/app/.models/user.model';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonTabButton, IonAlert, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
+  imports: [ IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle, FriendComponent]

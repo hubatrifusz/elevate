@@ -16,18 +16,10 @@ import { HeaderComponent } from "../../components/header/header.component";
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
   standalone: true,
-  imports: [IonFabButton, IonFab, IonInfiniteScroll, IonInfiniteScrollContent, IonText, IonAvatar,
+  imports: [IonFabButton, IonFab, IonText,
     IonButton,
     IonContent,
-    IonHeader,
-    IonImg,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonModal,
-    IonTitle,
-    IonToolbar,
-    IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent, HeaderComponent]
+    IonIcon,  TaskCardComponent, HeaderComponent]
 })
 export class CalendarPage {
   selectedDate: IonDatetime | null = null;

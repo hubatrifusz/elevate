@@ -12,7 +12,7 @@ import { HeaderComponent } from "../../components/header/header.component";
   templateUrl: './friends-feed.page.html',
   styleUrls: ['./friends-feed.page.scss'],
   standalone: true,
-  imports: [IonSpinner, IonInfiniteScroll, IonInfiniteScrollContent, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuToggle, IonButton, IonIcon, FeedCardComponent, HeaderComponent, IonRefresher, IonRefresherContent]
+  imports: [ IonInfiniteScroll, IonInfiniteScrollContent, IonContent, CommonModule, FormsModule, FeedCardComponent, HeaderComponent, IonRefresher, IonRefresherContent]
 })
 export class FriendsFeedPage {
   friendFeedService = inject(FriendsFeedService);

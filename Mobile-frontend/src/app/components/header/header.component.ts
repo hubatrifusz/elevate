@@ -6,7 +6,7 @@ import { IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonButtons, I
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [IonLabel, IonIcon, IonBackButton, IonButton, IonButtons, IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonMenuToggle]
+  imports: [ IonButton, IonButtons, IonHeader, IonAvatar, IonToolbar, IonTitle, IonSearchbar, IonMenuToggle]
 })
 export class HeaderComponent implements OnInit {
   user: any;

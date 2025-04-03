@@ -65,7 +65,7 @@ export class FriendshipService {
   }
   getSentRequests(): Observable<Friendship[]> {
     const userId = localStorage.getItem('userId');
-    return this.http.get<Friendship[]>(`${this.apiUrl}/friendship/${userId}/sent-requests`, {
+    return this.http.get<Friendship[]>(`${this.apiUrl}/friendship/${userId}/friend-requests-sent`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       }

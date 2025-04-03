@@ -22,7 +22,10 @@ import { ChallengeRequestComponent } from "../../components/challenge-request/ch
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonFooter, IonInfiniteScroll, IonInfiniteScrollContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent, IonCard, IonBadge, IonRefresherContent, IonRefresher, IonBackButton, IonButtons, IonImg, IonModal, IonFabButton, IonFab, IonIcon, IonAvatar, IonSearchbar, IonListHeader, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
+  imports: [IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent, 
+    IonCard, IonBadge, IonRefresherContent, IonRefresher,  IonButtons, IonModal, IonFabButton, IonFab, IonIcon,
+    IonAvatar, IonSearchbar,  IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar,
+    CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
 })
 export class FriendsPage {
 

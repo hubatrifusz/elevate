@@ -23,7 +23,7 @@ export const passwordMatchValidator = (control: AbstractControl): ValidationErro
   templateUrl: './create-account-page.page.html',
   styleUrls: ['./create-account-page.page.scss'],
   standalone: true,
-  imports: [IonToast, IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class CreateAccountPagePage implements OnInit {
   showPassword = false;

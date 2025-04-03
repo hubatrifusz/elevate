@@ -19,7 +19,8 @@ import { HeaderComponent } from "../../components/header/header.component";
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
   standalone: true,
-  imports: [IonAvatar, IonRefresherContent, IonRefresher, IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, IonSearchbar, IonTabButton, IonCheckbox, IonLabel, IonList, IonCardTitle, IonItem, IonCardContent, IonCardHeader, IonCard, IonMenuToggle, IonButton, IonButtons, IonContent, IonHeader, IonMenu, IonTitle, IonToolbar, IonIcon, TaskCardComponent, FootertabsComponent, HeaderComponent]
+  imports: [IonRefresherContent, IonRefresher, IonInfiniteScrollContent, IonInfiniteScroll, IonFabButton, IonFab, 
+     IonContent,  IonIcon, TaskCardComponent,  HeaderComponent]
 })
 export class FeedPage {
 
