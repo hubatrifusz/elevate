@@ -34,7 +34,7 @@
     </ion-row>
   </ion-grid>
 
-<!-- Friends     -----------------------------      -->
+  <!-- Friends     -----------------------------      -->
 
   <ion-label class="ion-padding">
     @if(friends.length > 0) {
@@ -95,8 +95,8 @@
             <ion-list>
               @for (challenge of challengeRequests; track $index) {
               <app-challenge-request (acceptChallenge)="acceptChallengeRequest(challenge)"
-                (rejectChallenge)="rejectChallengeRequest(challenge)" 
-                (profileClick)="goToProfile(challenge.userId)" [challenge]="challenge"></app-challenge-request>
+                (rejectChallenge)="rejectChallengeRequest(challenge)" (profileClick)="goToProfile(challenge.userId)"
+                [challenge]="challenge"></app-challenge-request>
 
               }
             </ion-list>
@@ -204,8 +204,7 @@
           @for(user of searchedUsers; track $index) {
           <ion-item>
             <ion-avatar slot="start">
-              <img (click)="goToProfile(user.id)"
-                (click)="modal.setCurrentBreakpoint(0)"
+              <img (click)="goToProfile(user.id)" (click)="modal.setCurrentBreakpoint(0)"
                 [src]="user.profilePictureBase64 ? 'data:image/jpeg;base64,' + user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
                 alt="Profile Picture" />
             </ion-avatar>
@@ -213,7 +212,13 @@
               <h2>{{user.firstName}} {{user.lastName}}</h2>
               <p>{{user.email}}</p>
             </ion-label>
+            @if(isPendingRequest(user.id)){
+            <ion-button fill="solid" slot="end" color="tertiary" disabled>Pending</ion-button>
+            }
+            @else {
             <ion-button fill="solid" slot="end" (click)="addFriend(user)">Add</ion-button>
+            }
+
           </ion-item>
           }
         </ion-list>

@@ -16,21 +16,22 @@ import { checkmark, close, happyOutline, people, add, sad, trophyOutline, trophy
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { Challenge } from 'src/app/.models/challenge.model';
 import { ChallengeRequestComponent } from "../../components/challenge-request/challenge-request.component";
+import { Friendship } from 'src/app/.models/friendship.model';
 
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent, 
-    IonCard, IonBadge, IonRefresherContent, IonRefresher,  IonButtons, IonModal, IonFabButton, IonFab, IonIcon,
-    IonAvatar, IonSearchbar,  IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar,
+  imports: [IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent,
+    IonCard, IonBadge, IonRefresherContent, IonRefresher, IonButtons, IonModal, IonFabButton, IonFab, IonIcon,
+    IonAvatar, IonSearchbar, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
 })
 export class FriendsPage {
 
 
-
+  loggendUserId = localStorage.getItem('userId') || '';
   toastService = inject(ToastService);
   friendService = inject(FriendshipService);
   userService = inject(UserService);
@@ -38,6 +39,7 @@ export class FriendsPage {
   challengeService = inject(ChallengeService);
   friends: User[] = [];
   friendRequests: User[] = [];
+  sentFriendRequests: Friendship[] = [];
   searchedUsers: User[] = [];
   challengeRequests: Challenge[] = [];
   isChallengeModalOpen = false;
@@ -48,19 +50,21 @@ export class FriendsPage {
 
 
   constructor(private loadingController: LoadingController) {
-    addIcons({trophy,people,happyOutline,close,trophyOutline,checkmark,add,sad});
+    addIcons({ trophy, people, happyOutline, close, trophyOutline, checkmark, add, sad });
   }
 
   async ionViewWillEnter() {
     this.friendRequests = [];
     this.page = 1;
     const loading = await this.presentLoading();
+    await this.getSentFriendRequests();
     await this.getChallengeRequests();
     await this.getFriendRequests();
     await this.getFriends(); // Fetch friends after friend requests
     loading.dismiss();
 
   }
+
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
@@ -125,6 +129,19 @@ export class FriendsPage {
     });
   }
 
+  async getSentFriendRequests() {
+    this.sentFriendRequests = [];
+    this.friendService.getSentRequests().subscribe({
+      next: (response) => {
+        this.sentFriendRequests = response;
+        console.log(response) // Assign the response to the friends array
+      },
+      error: (error) => {
+        this.toastService.presentToast(error.error);
+      }
+    });
+
+  }
 
 
   getFriends() {
@@ -144,7 +161,9 @@ export class FriendsPage {
     if (email !== '') {
       this.userService.getUsersByEmail(email, this.page, this.pageSize).subscribe({
         next: (response) => {
-          this.searchedUsers = response; // Assign the response to the friends array
+          this.searchedUsers = response.filter((user) => user.id !== this.loggendUserId); // Filter out the logged-in user
+
+          // Assign the response to the friends array
         },
         error: (error) => {
           if (error.status === 404) {
@@ -153,8 +172,8 @@ export class FriendsPage {
         }
       });
     }
-    else{
-      this.searchedUsers = []; 
+    else {
+      this.searchedUsers = [];
 
     }
   }
@@ -216,10 +235,14 @@ export class FriendsPage {
     });
   }
 
- 
+
 
   goToProfile(userId: string) {
-    this.setChallengeModalOpen(false); 
+    this.setChallengeModalOpen(false);
     this.router.navigate(['/profile', userId]);
+  }
+
+  isPendingRequest(userId: string | number): boolean {
+    return this.sentFriendRequests?.some(request => request.friendId === userId) ?? false;
   }
 }
