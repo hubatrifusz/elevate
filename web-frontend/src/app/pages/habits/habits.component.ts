@@ -25,6 +25,8 @@ export class HabitsComponent implements OnInit {
   friendChallengeStatus: Map<string, boolean> = new Map();
   challengeInvites: Challenge[] = [];
 
+  isLoading = false;
+
   constructor(
     private habitService: HabitService,
     private friendsService: FriendsService,
@@ -60,28 +62,45 @@ export class HabitsComponent implements OnInit {
 
   openChallengeModal(habit: Habit): void {
     this.selectedHabit = habit;
-    this.loadFriends();
+    this.isLoading = true;
     this.showChallengeModal = true;
-  }
 
-  closeChallengeModal(): void {
-    this.showChallengeModal = false;
-    this.selectedHabit = null;
-  }
-
-  loadFriends(): void {
     this.friendsService.getFriends().subscribe({
       next: (response) => {
         this.friends = response as User[];
         if (this.selectedHabit) {
-          this.checkChallengedFriends();
+          this.habitService.getChallengesByHabitId(this.selectedHabit.id).subscribe({
+            next: (challenges) => {
+              this.friendChallengeStatus.clear();
+
+              this.friends.forEach(friend => {
+                const isAlreadyChallenged = challenges.some(challenge =>
+                  challenge.friendId === friend.id
+                );
+                this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
+              });
+              this.isLoading = false;
+            },
+            error: () => {
+              this.friends.forEach(friend => {
+                this.friendChallengeStatus.set(friend.id, false);
+              });
+              this.isLoading = false;
+            }
+          });
         }
       },
       error: (error) => {
         console.error('Error loading friends:', error);
         this.alertService.showAlert('Failed to load friends');
+        this.isLoading = false;
       }
     });
+  }
+
+  closeChallengeModal(): void {
+    this.showChallengeModal = false;
+    this.selectedHabit = null;
   }
 
   checkChallengedFriends(): void {

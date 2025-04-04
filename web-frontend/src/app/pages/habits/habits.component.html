@@ -63,29 +63,33 @@
         <img src="icons/cross.png" alt="close" (click)="closeChallengeModal()" />
       </div>
       <div class="challenge-modal-content">
-        @if (friends.length > 0) {
-        <div class="friends-list">
-          @for (friend of friends; track friend.id) {
-          <div class="friend-item">
-            <div class="friend-info">
-              <img
-                [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
-                alt="Profile picture" />
-              <span>{{ friend.firstName }} {{ friend.lastName }}</span>
-            </div>
-            <button class="button_primary" [disabled]="friendChallengeStatus.get(friend.id)" (click)="challengeFriend(friend.id)">
-              {{ friendChallengeStatus.get(friend.id) ? 'Already Challenged' : 'Challenge' }}
-            </button>
-          </div>
-          }
+  @if (isLoading) {
+    <div class="loading-spinner">
+      <p>Loading friends...</p>
+    </div>
+  } @else if (friends.length > 0) {
+    <div class="friends-list">
+      @for (friend of friends; track friend.id) {
+      <div class="friend-item">
+        <div class="friend-info">
+          <img
+            [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+            alt="Profile picture" />
+          <span>{{ friend.firstName }} {{ friend.lastName }}</span>
         </div>
-        } @else {
-        <div class="no-friends">
-          <p>You have no friends to challenge.</p>
-          <p>Add some friends first!</p>
-        </div>
-        }
+        <button class="button_primary" [disabled]="friendChallengeStatus.get(friend.id)" (click)="challengeFriend(friend.id)">
+          {{ friendChallengeStatus.get(friend.id) ? 'Already Challenged' : 'Challenge' }}
+        </button>
       </div>
+      }
+    </div>
+  } @else {
+    <div class="no-friends">
+      <p>You have no friends to challenge.</p>
+      <p>Add some friends first!</p>
+    </div>
+  }
+</div>
     </div>
   </div>
   }
