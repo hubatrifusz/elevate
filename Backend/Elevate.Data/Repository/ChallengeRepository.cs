@@ -30,6 +30,7 @@ namespace Elevate.Data.Repository
         public async Task<bool> IsChallengeRequestSent(Guid userId, Guid friendId, Guid habitId)
         {
             return await _context.Challenges
+                .Include(c => c.Habit)
                 .AnyAsync(c =>
                     c.UserId == userId && c.FriendId == friendId &&
                     c.Habit.Id == habitId &&
@@ -47,6 +48,7 @@ namespace Elevate.Data.Repository
         public async Task<ChallengeModel?> UpdateChallengeAsync(ChallengeModel challenge)
         {
             var existingChallenge = await _context.Challenges
+                .Include(c => c.Habit)
                 .FirstOrDefaultAsync(c => c.UserId == challenge.UserId && c.FriendId == challenge.FriendId);
 
             if (existingChallenge != null)
@@ -62,6 +64,7 @@ namespace Elevate.Data.Repository
         public async Task<ChallengeModel?> DeleteChallengeAsync(Guid challengeId)
         {
             var challenge = await _context.Challenges
+                .Include(c => c.Habit)
                 .FirstOrDefaultAsync(c => c.Id == challengeId);
 
             if (challenge != null)
