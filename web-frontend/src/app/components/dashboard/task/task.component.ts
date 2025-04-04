@@ -18,6 +18,9 @@ export class TaskComponent {
   @Output() dataEmitter = new EventEmitter<Habit>();
   @Output() taskDoneEmitter = new EventEmitter<HabitLog>();
   @ViewChild('taskElement', { static: true }) taskElement!: ElementRef;
+  @ViewChild('task_checkbox_input', { static: true }) taskCheckboxInput!: ElementRef;
+  @ViewChild('checkmark', { static: true }) checkmark!: ElementRef;
+  @ViewChild('checkbox', { static: true }) checkbox!: ElementRef;
 
   constructor(private userService: UserService) {}
 
@@ -33,12 +36,19 @@ export class TaskComponent {
   ngOnInit() {
     if (this.habitLogData.completed) {
       this.taskElement.nativeElement.classList.add('task_container_disabled');
+      this.checkmark.nativeElement.style.opacity = '1';
+      this.checkbox.nativeElement.style.border = '2px solid hsl(249, 40%, 50%)';
     }
   }
 
   expandTask() {
     let taskDetails = this.taskElement.nativeElement.querySelector('.task_details_container');
     taskDetails?.classList.toggle('expand');
+  }
+
+  closeTask() {
+    let taskDetails = this.taskElement.nativeElement.querySelector('.task_details_container');
+    taskDetails?.classList.remove('expand');
   }
 
   saveNotes() {
@@ -50,7 +60,7 @@ export class TaskComponent {
   }
 
   taskDone(event: Event) {
-    this.expandTask();
+    this.closeTask();
     const taskContainer = (event.target as HTMLElement).closest('.task_container') as HTMLElement;
 
     let updatedHabitLog = {

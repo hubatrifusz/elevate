@@ -9,14 +9,16 @@
       <div class="input_container" id="remember_me_checkbox_input_container">
         <input
           type="checkbox"
+          #task_checkbox_input
           name="task_checkbox_input"
           id="{{ habitLogData.id }}"
           data-cy="task_checkbox_input"
+          [checked]="habitLogData.completed"
           [formControl]="taskCheckbox"
           (change)="taskDone($event)"
         />
-        <label for="{{ habitLogData.id }}" class="checkbox">
-          <div class="checkmark"></div>
+        <label for="{{ habitLogData.id }}" class="checkbox" #checkbox>
+          <div class="checkmark" #checkmark></div>
         </label>
         <label for="{{ habitLogData.id }}" class="checkbox_label">{{ habitData.title }}</label>
       </div>
@@ -39,7 +41,7 @@
     <div class="task_notes">
       <div class="input_container">
         <!-- TODO make a textarea input -->
-        <input type="text" id="task_notes" name="task_notes" placeholder=" " [formControl]="notes" (keydown.enter)="saveNotes()"/>
+        <input type="text" id="task_notes" name="task_notes" placeholder=" " [formControl]="notes" (keydown.enter)="saveNotes()" />
         <label for="task_notes" class="input_title">Add some notes</label>
       </div>
       <p>{{ notesValue }}</p>
