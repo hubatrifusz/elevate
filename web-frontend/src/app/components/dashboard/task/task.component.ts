@@ -36,8 +36,8 @@ export class TaskComponent {
     }
   }
 
-  expandTask(event: MouseEvent) {
-    let taskDetails = (event.target as HTMLElement).closest('.task_container')?.querySelector('.task_details_container');
+  expandTask() {
+    let taskDetails = this.taskElement.nativeElement.querySelector('.task_details_container');
     taskDetails?.classList.toggle('expand');
   }
 
@@ -50,8 +50,8 @@ export class TaskComponent {
   }
 
   taskDone(event: Event) {
+    this.expandTask();
     const taskContainer = (event.target as HTMLElement).closest('.task_container') as HTMLElement;
-    taskContainer.classList.add('task_container_disabled');
 
     let updatedHabitLog = {
       completed: this.taskCheckbox.value,
@@ -64,6 +64,9 @@ export class TaskComponent {
         console.log(res);
       },
       error: (error) => console.log(error),
+      complete: () => {
+        taskContainer.classList.add('task_container_disabled');
+      },
     });
   }
 
