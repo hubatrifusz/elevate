@@ -2,7 +2,6 @@
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
 using Elevate.Models.Challenge;
-using Elevate.Models.Friendship;
 using Elevate.Models.Habit;
 using Elevate.Services.HabitLog;
 
