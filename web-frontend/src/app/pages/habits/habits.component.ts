@@ -9,12 +9,11 @@ import { AlertService } from '../../services/alert.service';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Challenge } from '../../models/challenge.model';
-import { AlertComponent } from "../../components/alert/alert.component";
 
 @Component({
   selector: 'app-habits',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, AlertComponent],
+  imports: [NavbarComponent, CommonModule],
   templateUrl: './habits.component.html',
   styleUrl: './habits.component.scss'
 })
@@ -23,7 +22,7 @@ export class HabitsComponent implements OnInit {
   friends: User[] = [];
   showChallengeModal = false;
   selectedHabit: Habit | null = null;
-
+  friendChallengeStatus: Map<string, boolean> = new Map();
   challengeInvites: Challenge[] = [];
 
   constructor(
@@ -50,8 +49,6 @@ export class HabitsComponent implements OnInit {
   loadChallengeInvites(): void {
     this.habitService.getChallengeInvites().subscribe({
       next: (response) => {
-        console.log(this.challengeInvites);
-
         this.challengeInvites = response as Challenge[];
       },
       error: (error) => {
@@ -74,10 +71,37 @@ export class HabitsComponent implements OnInit {
 
   loadFriends(): void {
     this.friendsService.getFriends().subscribe({
-      next: (response) => this.friends = response as User[],
+      next: (response) => {
+        this.friends = response as User[];
+        if (this.selectedHabit) {
+          this.checkChallengedFriends();
+        }
+      },
       error: (error) => {
         console.error('Error loading friends:', error);
         this.alertService.showAlert('Failed to load friends');
+      }
+    });
+  }
+
+  checkChallengedFriends(): void {
+    if (!this.selectedHabit) return;
+
+    this.habitService.getChallengesByHabitId(this.selectedHabit.id).subscribe({
+      next: (challenges) => {
+        this.friendChallengeStatus.clear();
+
+        this.friends.forEach(friend => {
+          const isAlreadyChallenged = challenges.some(challenge =>
+            challenge.friendId === friend.id
+          );
+          this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
+        });
+      },
+      error: () => {
+        this.friends.forEach(friend => {
+          this.friendChallengeStatus.set(friend.id, false);
+        });
       }
     });
   }
@@ -88,7 +112,7 @@ export class HabitsComponent implements OnInit {
     this.habitService.sendChallenge(this.selectedHabit, friendId).subscribe({
       next: () => {
         this.alertService.showAlert('Challenge sent successfully!');
-        this.closeChallengeModal();
+        this.friendChallengeStatus.set(friendId, true);
       },
       error: (error) => {
         console.error('Error sending challenge:', error);
@@ -99,11 +123,9 @@ export class HabitsComponent implements OnInit {
 
   acceptChallenge(challenge: Challenge): void {
     this.habitService.acceptChallenge(challenge).subscribe({
-      next: () => {
+      next: (response) => {
         this.alertService.showAlert('Challenge accepted!');
         this.loadChallengeInvites();
-        console.log(this.challengeInvites);
-
       },
       error: (error) => {
         console.error('Error accepting challenge:', error);
@@ -117,15 +139,13 @@ export class HabitsComponent implements OnInit {
       return of(false);
     }
 
-    return this.habitService.getChallengeByHabitId(this.selectedHabit.id).pipe(
-      map(challenge => {
-        if (challenge && challenge.friendId === friendId) {
-          return true;
-        }
-        return false;
+    return this.habitService.getChallengesByHabitId(this.selectedHabit.id).pipe(
+      map(challenges => {
+        console.log(challenges);
+        return challenges.some(challenge => challenge.friendId === friendId);
       }),
       catchError(error => {
-        console.error('Error fetching challenge:', error);
+        console.error('Error fetching challenges:', error);
         return of(false);
       })
     );

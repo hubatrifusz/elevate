@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment.prod';
 import { Habit } from '../models/habit.model';
@@ -47,32 +47,37 @@ export class HabitService {
     });
   }
 
-  getChallengeByHabitId(habitId: string): Observable<Challenge | null> {
+  getChallengesByHabitId(habitId: string): Observable<Challenge[]> {
     const userId = this.authService.getUserId();
 
-    const sentChallengeInvites: Observable<Challenge[]> = this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites-sent`, {
+    return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites-sent`, {
       headers: this.getAuthHeaders(),
-    });
-
-    return sentChallengeInvites.pipe(
-      map((response: Challenge[]) => response.find((invite: Challenge) => invite.habit.id === habitId)!)
+    }).pipe(
+      map((response: Challenge[]) => {
+        return response.filter(invite => invite.habit.id === habitId);
+      }),
+      catchError(error => {
+        console.log('No challenges found, returning empty array');
+        return of([]);
+      })
     );
   }
 
   getChallengeInvites(): Observable<Challenge[]> {
     const userId = this.authService.getUserId();
 
-    const challengeInvites: Observable<Challenge[]> = this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites`, {
+    return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites`, {
       headers: this.getAuthHeaders()
     });
-
-    return challengeInvites;
   }
 
   acceptChallenge(challenge: Challenge): Observable<Challenge> {
     const userId = this.authService.getUserId();
     challenge.status = "accepted";
     challenge.friendId = userId!;
+
+    console.log(challenge);
+
 
     return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
       headers: this.getAuthHeaders(),
