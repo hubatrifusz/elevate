@@ -1173,6 +1173,67 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 
       \end{itemize}
 
+  \hfill \\
+  \item[\httpGet{/api/challenge/\{userId\}/challenge-invites-sent}] 
+  \hfill \\ - Aktív kihívási felkérések lekérdezése
+    \vspace{0.5cm}
+    A felhasználó által küldött aktív kihívási felkérések lekérdezése.
+
+    \vspace{0.5cm}
+    \textbf{Paraméterek:}
+    \begin{itemize}
+      \item \textbf{userId: string(\$uuid)} - A felhasználó azonosítója
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Válaszok:}
+    \begin{itemize}
+      \item \textbf{200 OK} - Sikeres lekérdezés
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+{
+  "id": "string($uuid)",
+  "userId": "string($uuid)",
+  "friendId": "string($uuid)",
+  "habit": 
+  {
+    "id": "string($uuid)",
+    "userId": "string($uuid)",
+    "challengedFriends": [
+      "string($uuid)"
+    ],
+    "createdAt": "string($date-time)",
+    "title": "string",
+    "description": "string",
+    "frequencyType": "string",
+    "customFrequency": Number,
+    "color": "string",
+    "isPositive": bool,
+    "streak": Number,
+    "streakStart": "string($date-time)",
+    "deleted": bool
+  },
+  "status": "string",
+  "createdAt": "string($date-time)",
+  "updatedAt": "string($date-time)"
+}
+          \end{minted}
+        \end{codeblock}
+
+      \item \textbf{401 Unauthorized} - A felhasználó nincs bejelentkezve
+
+      \item \textbf{404 Not Found} - Nincs találat
+
+        \textbf{Response body:}
+        \begin{codeblock}{JSON}
+          \begin{minted}[breaklines, linenos, style=one-dark]{json}
+"User sent no challenge invites."
+          \end{minted}
+        \end{codeblock}
+    \end{itemize}
+  
   \item[\httpPost{/api/challenge}] - Barát kihívása
   
     \vspace{0.5cm}
@@ -1180,6 +1241,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
     \begin{codeblock}{JSON}
       \begin{minted}[breaklines, linenos, style=one-dark]{json}
 {
+  "id": "string($uuid)",
   "userId": "string($uuid)",
   "friendId": "string($uuid)",
   "habit": 
@@ -1262,6 +1324,7 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
     \begin{codeblock}{JSON}
       \begin{minted}[breaklines, linenos, style=one-dark]{json}
 {
+  "id": "string($uuid)",
   "userId": "string($uuid)",
   "friendId": "string($uuid)",
   "habit": 
