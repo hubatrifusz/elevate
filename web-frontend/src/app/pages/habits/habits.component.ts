@@ -8,6 +8,7 @@ import { FriendsService } from '../../services/friends.service';
 import { AlertService } from '../../services/alert.service';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Challenge } from '../../models/challenge.model';
 
 @Component({
   selector: 'app-habits',
@@ -21,6 +22,10 @@ export class HabitsComponent implements OnInit {
   friends: User[] = [];
   showChallengeModal = false;
   selectedHabit: Habit | null = null;
+  friendChallengeStatus: Map<string, boolean> = new Map();
+  challengeInvites: Challenge[] = [];
+
+  isLoading = false;
 
   constructor(
     private habitService: HabitService,
@@ -30,6 +35,7 @@ export class HabitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHabits();
+    this.loadChallengeInvites();
   }
 
   loadHabits(): void {
@@ -42,10 +48,54 @@ export class HabitsComponent implements OnInit {
     });
   }
 
+  loadChallengeInvites(): void {
+    this.habitService.getChallengeInvites().subscribe({
+      next: (response) => {
+        this.challengeInvites = response as Challenge[];
+      },
+      error: (error) => {
+        console.error('Error loading challenge invites:', error);
+        this.alertService.showAlert('Failed to load challenge invites');
+      }
+    });
+  }
+
   openChallengeModal(habit: Habit): void {
     this.selectedHabit = habit;
-    this.loadFriends();
+    this.isLoading = true;
     this.showChallengeModal = true;
+
+    this.friendsService.getFriends().subscribe({
+      next: (response) => {
+        this.friends = response as User[];
+        if (this.selectedHabit) {
+          this.habitService.getChallengesByHabitId(this.selectedHabit.id).subscribe({
+            next: (challenges) => {
+              this.friendChallengeStatus.clear();
+
+              this.friends.forEach(friend => {
+                const isAlreadyChallenged = challenges.some(challenge =>
+                  challenge.friendId === friend.id
+                );
+                this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
+              });
+              this.isLoading = false;
+            },
+            error: () => {
+              this.friends.forEach(friend => {
+                this.friendChallengeStatus.set(friend.id, false);
+              });
+              this.isLoading = false;
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error loading friends:', error);
+        this.alertService.showAlert('Failed to load friends');
+        this.isLoading = false;
+      }
+    });
   }
 
   closeChallengeModal(): void {
@@ -53,12 +103,24 @@ export class HabitsComponent implements OnInit {
     this.selectedHabit = null;
   }
 
-  loadFriends(): void {
-    this.friendsService.getFriends().subscribe({
-      next: (response) => this.friends = response as User[],
-      error: (error) => {
-        console.error('Error loading friends:', error);
-        this.alertService.showAlert('Failed to load friends');
+  checkChallengedFriends(): void {
+    if (!this.selectedHabit) return;
+
+    this.habitService.getChallengesByHabitId(this.selectedHabit.id).subscribe({
+      next: (challenges) => {
+        this.friendChallengeStatus.clear();
+
+        this.friends.forEach(friend => {
+          const isAlreadyChallenged = challenges.some(challenge =>
+            challenge.friendId === friend.id
+          );
+          this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
+        });
+      },
+      error: () => {
+        this.friends.forEach(friend => {
+          this.friendChallengeStatus.set(friend.id, false);
+        });
       }
     });
   }
@@ -69,11 +131,24 @@ export class HabitsComponent implements OnInit {
     this.habitService.sendChallenge(this.selectedHabit, friendId).subscribe({
       next: () => {
         this.alertService.showAlert('Challenge sent successfully!');
-        this.closeChallengeModal();
+        this.friendChallengeStatus.set(friendId, true);
       },
       error: (error) => {
         console.error('Error sending challenge:', error);
         this.alertService.showAlert('Failed to send challenge');
+      }
+    });
+  }
+
+  acceptChallenge(challenge: Challenge): void {
+    this.habitService.acceptChallenge(challenge).subscribe({
+      next: (response) => {
+        this.alertService.showAlert('Challenge accepted!');
+        this.loadChallengeInvites();
+      },
+      error: (error) => {
+        console.error('Error accepting challenge:', error);
+        this.alertService.showAlert('Failed to accept challenge');
       }
     });
   }
@@ -83,15 +158,13 @@ export class HabitsComponent implements OnInit {
       return of(false);
     }
 
-    return this.habitService.getChallengeByHabitId(this.selectedHabit.id).pipe(
-      map(challenge => {
-        if (challenge && challenge.friendId === friendId) {
-          return true;
-        }
-        return false;
+    return this.habitService.getChallengesByHabitId(this.selectedHabit.id).pipe(
+      map(challenges => {
+        console.log(challenges);
+        return challenges.some(challenge => challenge.friendId === friendId);
       }),
       catchError(error => {
-        console.error('Error fetching challenge:', error);
+        console.error('Error fetching challenges:', error);
         return of(false);
       })
     );
