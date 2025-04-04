@@ -8,11 +8,13 @@ import { FriendsService } from '../../services/friends.service';
 import { AlertService } from '../../services/alert.service';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Challenge } from '../../models/challenge.model';
+import { AlertComponent } from "../../components/alert/alert.component";
 
 @Component({
   selector: 'app-habits',
   standalone: true,
-  imports: [NavbarComponent, CommonModule],
+  imports: [NavbarComponent, CommonModule, AlertComponent],
   templateUrl: './habits.component.html',
   styleUrl: './habits.component.scss'
 })
@@ -22,6 +24,8 @@ export class HabitsComponent implements OnInit {
   showChallengeModal = false;
   selectedHabit: Habit | null = null;
 
+  challengeInvites: Challenge[] = [];
+
   constructor(
     private habitService: HabitService,
     private friendsService: FriendsService,
@@ -30,6 +34,7 @@ export class HabitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHabits();
+    this.loadChallengeInvites();
   }
 
   loadHabits(): void {
@@ -38,6 +43,20 @@ export class HabitsComponent implements OnInit {
       error: (error) => {
         console.error(error);
         this.alertService.showAlert('Failed to load habits');
+      }
+    });
+  }
+
+  loadChallengeInvites(): void {
+    this.habitService.getChallengeInvites().subscribe({
+      next: (response) => {
+        console.log(this.challengeInvites);
+
+        this.challengeInvites = response as Challenge[];
+      },
+      error: (error) => {
+        console.error('Error loading challenge invites:', error);
+        this.alertService.showAlert('Failed to load challenge invites');
       }
     });
   }
@@ -74,6 +93,21 @@ export class HabitsComponent implements OnInit {
       error: (error) => {
         console.error('Error sending challenge:', error);
         this.alertService.showAlert('Failed to send challenge');
+      }
+    });
+  }
+
+  acceptChallenge(challenge: Challenge): void {
+    this.habitService.acceptChallenge(challenge).subscribe({
+      next: () => {
+        this.alertService.showAlert('Challenge accepted!');
+        this.loadChallengeInvites();
+        console.log(this.challengeInvites);
+
+      },
+      error: (error) => {
+        console.error('Error accepting challenge:', error);
+        this.alertService.showAlert('Failed to accept challenge');
       }
     });
   }

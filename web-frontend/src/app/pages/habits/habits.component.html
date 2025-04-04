@@ -23,6 +23,28 @@
           </div>
         </div>
         }
+
+        @for (challenge of challengeInvites; track challenge.id) {
+        <div class="habit-card {{ challenge.habit.color }}">
+          <div class="habit-header">
+            <h3>{{ challenge.habit.title }}</h3>
+            <div class="habit-frequency">
+              <img src="icons/clock.png" alt="clock" />
+              <span>{{ challenge.habit.frequencyType }}</span>
+            </div>
+          </div>
+          <div class="habit-details">
+            <p>{{ challenge.habit.description }}</p>
+            <div class="habit-streak">
+              <span>Current streak: {{ challenge.habit.streak }}</span>
+            </div>
+            <div class="habit-actions">
+              <button class="button_primary" (click)="acceptChallenge(challenge)">Accept Challenge</button>
+            </div>
+          </div>
+        </div>
+        }
+
         @if (habits.length === 0) {
         <div class="no-habits" style="width: auto; max-width: 300px; margin: 0 auto;">
           <h3>No habits found</h3>

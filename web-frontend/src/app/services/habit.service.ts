@@ -58,4 +58,24 @@ export class HabitService {
       map((response: Challenge[]) => response.find((invite: Challenge) => invite.habit.id === habitId)!)
     );
   }
+
+  getChallengeInvites(): Observable<Challenge[]> {
+    const userId = this.authService.getUserId();
+
+    const challengeInvites: Observable<Challenge[]> = this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites`, {
+      headers: this.getAuthHeaders()
+    });
+
+    return challengeInvites;
+  }
+
+  acceptChallenge(challenge: Challenge): Observable<Challenge> {
+    const userId = this.authService.getUserId();
+    challenge.status = "accepted";
+    challenge.friendId = userId!;
+
+    return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

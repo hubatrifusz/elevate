@@ -1,6 +1,7 @@
 import { FrequencyEnum } from "./habit.model";
 
 export interface Challenge {
+  id: string,
   userId: string;
   friendId: string;
   habit: {
