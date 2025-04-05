@@ -32,6 +32,15 @@ namespace Elevate.Services.Challenge
                 : _mapper.Map<List<ChallengeDto>>(invites);
         }
 
+        public async Task<List<ChallengeDto>> GetChallengesByUserIdAsync(Guid userId)
+        {
+            List<ChallengeModel> challenges = await _challengeRepository.GetChallengesByUserIdAsync(userId);
+
+            return challenges.Count == 0
+                ? throw new ResourceNotFoundException("User has no challenges.")
+                : _mapper.Map<List<ChallengeDto>>(challenges);
+        }
+
         public async Task<ChallengeDto> AddChallengeAsync(ChallengeCreateDto challengeCreateDto)
         {
             if (challengeCreateDto.UserId == challengeCreateDto.FriendId)
