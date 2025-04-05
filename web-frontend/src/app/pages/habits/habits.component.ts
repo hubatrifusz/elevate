@@ -9,6 +9,7 @@ import { AlertService } from '../../services/alert.service';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Challenge } from '../../models/challenge.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-habits',
@@ -20,17 +21,19 @@ import { Challenge } from '../../models/challenge.model';
 export class HabitsComponent implements OnInit {
   habits: Habit[] = [];
   friends: User[] = [];
-  showChallengeModal = false;
-  selectedHabit: Habit | null = null;
-  friendChallengeStatus: Map<string, boolean> = new Map();
   challengeInvites: Challenge[] = [];
 
+  friendChallengeStatus: Map<string, boolean> = new Map();
+
+  showChallengeModal = false;
+  selectedHabit: Habit | null = null;
   isLoading = false;
 
   constructor(
     private habitService: HabitService,
     private friendsService: FriendsService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -151,6 +154,7 @@ export class HabitsComponent implements OnInit {
         this.alertService.showAlert('Failed to accept challenge');
       }
     });
+    this.loadHabits();
   }
 
   isFriendAlreadyChallenged(friendId: string): Observable<boolean> {
@@ -168,5 +172,10 @@ export class HabitsComponent implements OnInit {
         return of(false);
       })
     );
+  }
+
+  isHabitOwner(habit: Habit): boolean {
+    const currentUserId = this.authService.getUserId();
+    return habit.userId === currentUserId;
   }
 }

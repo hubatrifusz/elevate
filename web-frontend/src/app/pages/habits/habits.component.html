@@ -17,7 +17,7 @@
             <div class="habit-streak">
               <span>Current streak: {{ habit.streak }}</span>
             </div>
-            <div class="habit-actions">
+            <div class="habit-actions" [style.display]="isHabitOwner(habit) ? 'block' : 'none'">
               <button class="button_primary" (click)="openChallengeModal(habit)">Challenge Friend</button>
             </div>
           </div>
