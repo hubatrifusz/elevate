@@ -1,4 +1,5 @@
-﻿using Elevate.Common.Utilities;
+﻿using Elevate.Common.Exceptions;
+using Elevate.Common.Utilities;
 using Elevate.Models.Habit;
 using Elevate.Services.Habit;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,13 @@ namespace Elevate.Controllers
         public async Task<ActionResult<HabitDto>> GetHabitByIdAsync(Guid id)
         {
             HabitDto habit = await _habitService.GetHabitByIdAsync(id);
-            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            var userId = UserPermissionUtility.GetCurrentUserId(User);
+
+            if (habit.UserId != userId && !habit.ChallengedFriends.Contains(userId))
+            {
+                throw new AuthorizationException("You do not have permission to view this habit.");
+            }
+
             return Ok(habit);
         }
 
