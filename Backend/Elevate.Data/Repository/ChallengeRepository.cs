@@ -27,6 +27,15 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<ChallengeModel>> GetChallengesByUserIdAsync(Guid userId)
+        {
+            return await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.Habit.ChallengedFriends.Contains(userId) &&
+                    c.Status == ChallengeInviteStatus.Accepted)
+                .ToListAsync();
+        }
+
         public async Task<bool> IsChallengeRequestSent(Guid userId, Guid friendId, Guid habitId)
         {
             return await _context.Challenges
