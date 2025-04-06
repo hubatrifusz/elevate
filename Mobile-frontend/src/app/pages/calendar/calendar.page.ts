@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, NgZone, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton, GestureController, Gesture } from '@ionic/angular/standalone';
@@ -19,7 +19,7 @@ import { HeaderComponent } from "../../components/header/header.component";
   imports: [IonFabButton, IonFab, IonText,
     IonButton,
     IonContent,
-    IonIcon,  TaskCardComponent, HeaderComponent]
+    IonIcon, TaskCardComponent, HeaderComponent]
 })
 export class CalendarPage {
   selectedDate: IonDatetime | null = null;
@@ -28,7 +28,7 @@ export class CalendarPage {
   private router = inject(Router);
   habitLogs: HabitLog[] = [];
 
-  @Output() loadMoreHabits = new EventEmitter<void>();
+  @ViewChild('swipeArea', { static: true }) swipeArea!: ElementRef;
   @Output() refreshHabits = new EventEmitter<void>();
   public hasMoreHabits: boolean = true;
 
@@ -36,18 +36,50 @@ export class CalendarPage {
   datestring = this.date.toISOString()
   weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-  constructor(private menuCtrl: MenuController, private gestureCtrl: GestureController) {
+  constructor(private menuCtrl: MenuController, private zone: NgZone,
+    private cdr: ChangeDetectorRef, private gestureCtrl: GestureController) {
     addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
+
+  }
+  ngOnInit() {
+    this.initializeSwipeGesture();
   }
 
 
+  initializeSwipeGesture() {
+    if (!this.swipeArea) {
+      console.error('swipeArea is not initialized');
+      return;
+    }
 
+    const gesture: Gesture = this.gestureCtrl.create({
+      el: this.swipeArea.nativeElement,
+      gestureName: 'swipe',
+      onEnd: (ev) => {
+        console.log('Gesture detected with deltaX:', ev.deltaX);
+        this.zone.run(() => { // Ensure Angular detects changes
+          if (ev.deltaX > 50) {
+            console.log('Swiped right');
+            this.previousDay();
+          } else if (ev.deltaX < -50) {
+            console.log('Swiped left');
+            this.nextDay();
+          }
+        });
+      },
+    });
+    gesture.enable();
+    console.log('Gesture enabled');
+  }
   previousDay() {
+    console.log('previousDay called');
     this.date.setDate(this.date.getDate() - 1);
     this.updateDateDisplay();
+    this.cdr.detectChanges();
   }
 
   nextDay() {
+    console.log('nextDay called');
     this.date.setDate(this.date.getDate() + 1);
     this.updateDateDisplay();
   }

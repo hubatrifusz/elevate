@@ -137,7 +137,7 @@ export class FriendsPage {
         console.log(response) // Assign the response to the friends array
       },
       error: (error) => {
-        this.toastService.presentToast(error.error);
+        // this.toastService.presentToast(error.error);
       }
     });
 
