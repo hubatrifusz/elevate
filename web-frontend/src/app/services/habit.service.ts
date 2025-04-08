@@ -73,11 +73,18 @@ export class HabitService {
 
   acceptChallenge(challenge: Challenge): Observable<Challenge> {
     const userId = this.authService.getUserId();
-    challenge.status = "accepted";
+    challenge.status = "Accepted";
     challenge.friendId = userId!;
 
-    console.log(challenge);
+    return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 
+  declineChallenge(challenge: Challenge): Observable<Challenge> {
+    const userId = this.authService.getUserId();
+    challenge.status = "Declined";
+    challenge.friendId = userId!;
 
     return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
       headers: this.getAuthHeaders(),

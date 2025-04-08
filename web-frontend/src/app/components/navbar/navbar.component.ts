@@ -10,7 +10,7 @@ import { UserService } from '../../services/user.service';
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService, private router: Router, private userService: UserService) {}
+  constructor(private authService: AuthService, private router: Router, private userService: UserService) { }
 
   id: string | null = null;
 
