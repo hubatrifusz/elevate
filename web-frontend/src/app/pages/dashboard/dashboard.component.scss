@@ -9,6 +9,17 @@
     flex-direction: column;
 
     background-color: $main-color-200;
+    
+    header {
+      height: 6rem;
+      flex-grow: 0;
+      background-color: $main-color-100;
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      color: $text-color-700;
+      font-size: $font-size-xl;
+    }
 
     #dashboard {
       flex: 1;

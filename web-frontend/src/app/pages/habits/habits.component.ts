@@ -99,7 +99,7 @@ export class HabitsComponent implements OnInit {
 
               this.friends.forEach(friend => {
                 const isAlreadyChallenged = challenges.some(challenge =>
-                  challenge.friendId === friend.id
+                  challenge.friendId === friend.id && challenge.status !== 'Declined'
                 );
                 this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
               });
@@ -143,17 +143,36 @@ export class HabitsComponent implements OnInit {
   }
 
   acceptChallenge(challenge: Challenge): void {
+    this.challengeInvites = this.challengeInvites.filter(c => c.id !== challenge.id);
+
     this.habitService.acceptChallenge(challenge).subscribe({
       next: (response) => {
         this.alertService.showAlert('Challenge accepted!');
-        this.loadChallengeInvites();
+
+        setTimeout(() => {
+          this.loadChallengeInvites();
+          this.loadHabits();
+        }, 300);
       },
       error: (error) => {
+        this.loadChallengeInvites();
         console.error('Error accepting challenge:', error);
         this.alertService.showAlert('Failed to accept challenge');
       }
     });
-    this.loadHabits();
+  }
+
+  declineChallenge(challenge: Challenge): void {
+    this.habitService.declineChallenge(challenge).subscribe({
+      next: (response) => {
+        this.alertService.showAlert('Challenge declined!');
+        this.loadChallengeInvites();
+      },
+      error: (error) => {
+        console.error('Error declining challenge:', error);
+        this.alertService.showAlert('Failed to decline challenge');
+      }
+    });
   }
 
   isFriendAlreadyChallenged(friendId: string): Observable<boolean> {

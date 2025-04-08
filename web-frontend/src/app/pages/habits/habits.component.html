@@ -1,11 +1,12 @@
 <div id="habits_page_container" class="page_container">
   <app-navbar></app-navbar>
   <div id="habits_container">
+    <header>Habits</header>
     <div id="habits">
       <div class="habits-grid">
         @for (habit of habits; track habit.id) {
         <div class="habit-card" [ngStyle]="{ 'border-left': '5px solid #' + habit.color }">
-          <div class="owner-header">
+          <div class="owner-header" *ngIf="!isHabitOwner(habit)">
             @if (challengeSenders.get(habit.userId); as owner) {
             <div class="owner-info">
               <img
@@ -35,7 +36,17 @@
         }
 
         @for (challenge of challengeInvites; track challenge.id) {
-        <div class="habit-card {{ challenge.habit.color }}">
+        <div class="habit-card challenge-card" [ngStyle]="{ 'border-left': '5px solid #' + challenge.habit.color }">
+          <div class="owner-header">
+            <div class="owner-info">
+              <img
+                [src]="challenge.habit.userId ? (challengeSenders.get(challenge.habit.userId)?.profilePictureBase64 ? 'data:image/jpeg;base64,' + challengeSenders.get(challenge.habit.userId)!.profilePictureBase64 : '/images/default_profile_picture.jpg') : '/images/default_profile_picture.jpg'"
+                alt="Profile picture" class="owner-avatar" />
+              <span class="challenger-name">Challenged by: {{ challengeSenders.get(challenge.userId)?.firstName ||
+                'User' }} {{
+                challengeSenders.get(challenge.userId)?.lastName || '' }}</span>
+            </div>
+          </div>
           <div class="habit-header">
             <h3>{{ challenge.habit.title }}</h3>
             <div class="habit-frequency">
@@ -43,19 +54,20 @@
               <span>{{ challenge.habit.frequencyType }}</span>
             </div>
           </div>
-          <div class="habit-details">
-            <p>{{ challenge.habit.description }}</p>
+          <div class="habit-details challenge-details">
+            <p class="challenge-description">{{ challenge.habit.description }}</p>
             <div class="habit-streak">
               <span>Current streak: {{ challenge.habit.streak }}</span>
             </div>
-            <div class="habit-actions">
-              <button class="button_primary" (click)="acceptChallenge(challenge)">Accept Challenge</button>
+            <div class="challenge-actions">
+              <button class="button_delete" (click)="declineChallenge(challenge)">Decline</button>
+              <button class="button_primary accept-button" (click)="acceptChallenge(challenge)">Accept</button>
             </div>
           </div>
         </div>
         }
 
-        @if (habits.length === 0) {
+        @if (habits.length === 0 && challengeInvites.length === 0) {
         <div class="no-habits" style="width: aut; max-width: 300px; margin: 0 auto;">
           <h3>No habits found</h3>
           <p>Create a new habit from the dashboard page</p>

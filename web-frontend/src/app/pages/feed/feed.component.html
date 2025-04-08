@@ -1,7 +1,7 @@
 <div id="feed_page_container" class="page_container">
   <app-navbar></app-navbar>
   <div id="feed_container">
-    <app-toolbar></app-toolbar>
+    <header>Feed</header>
     <div id="feed">
       @for (post of posts; track $index) {
       <app-task-feed [post]="post"></app-task-feed>

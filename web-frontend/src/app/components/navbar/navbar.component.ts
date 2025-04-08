@@ -10,7 +10,7 @@ import { UserService } from '../../services/user.service';
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService, private router: Router, private userService: UserService) {}
+  constructor(private authService: AuthService, private router: Router, private userService: UserService) { }
 
   id: string | null = null;
 
@@ -35,7 +35,7 @@ export class NavbarComponent {
       },
       error: (error) => console.log(error),
       complete: () => {
-        this.navbarImageSrc = 'data:image/png;base64,' + profilePictureBase64;
+        this.navbarImageSrc = profilePictureBase64 ? 'data:image/png;base64,' + profilePictureBase64 : 'images/default_profile_picture.jpg';
       },
     });
   }

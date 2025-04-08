@@ -12,6 +12,6 @@
   </div>
   <div id="task_body">
     <p>{{ post.habitLog.notes}}</p>
-    <p>{{ post.habitLog.completedAt | date:'MMM d, y • h:mm a' }}</p>
+    <p>{{ post.habitLog.completedAt | date:'MMM d, y • HH:mm' : 'UTC' }}</p>
   </div>
 </div>
