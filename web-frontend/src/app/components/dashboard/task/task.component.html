@@ -34,17 +34,18 @@
     </div>
   </div>
   <div class="task_details_container">
+    <!-- Description -->
     <div class="task_description">
       <p class="p_dark">Description:</p>
       <p>{{ habitData.description }}</p>
     </div>
+
+    <!-- Notes -->
     <div class="task_notes">
       <div class="input_container">
         <!-- TODO make a textarea input -->
-        <input type="text" id="task_notes" name="task_notes" placeholder=" " [formControl]="notes" (keydown.enter)="saveNotes()" />
-        <label for="task_notes" class="input_title">Add some notes</label>
+        <textarea name="" id="" placeholder="Add some notes" rows="3" [formControl]="notes" (blur)="saveNotes()"></textarea>
       </div>
-      <p>{{ notesValue }}</p>
     </div>
 
     <!-- Delete button -->

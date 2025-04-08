@@ -29,8 +29,6 @@ export class TaskComponent {
   taskCheckbox = new FormControl();
   notes = new FormControl('');
 
-  notesValue: string = '';
-
   taskCheckboxChecked = this.taskCheckbox.value;
 
   ngOnInit() {
@@ -52,7 +50,7 @@ export class TaskComponent {
   }
 
   saveNotes() {
-    this.notesValue = this.notes.value!;
+    // TODO
   }
 
   openConfirmationDialog() {
