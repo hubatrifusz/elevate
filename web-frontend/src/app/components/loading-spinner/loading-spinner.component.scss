@@ -1,0 +1,49 @@
+@import '../../../assets/styles/variables';
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-top-color: $main-color-500;
+  animation: spin 1s linear infinite;
+}
+
+.small {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.medium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.large {
+  width: 5rem;
+  height: 5rem;
+}
+
+.spinner-message {
+  font-size: 0.9rem;
+  color: $text-color-700;
+  margin: 0;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,8 @@
+<div class="spinner-container">
+  <div class="spinner {{size}}" [ngStyle]="{
+      'border-width': thickness + 'px',
+      'border-top-color': color ? color : null
+    }">
+  </div>
+  <p *ngIf="message" class="spinner-message">{{message}}</p>
+</div>
