@@ -89,7 +89,7 @@ namespace Elevate.Data.Repository
             return null;
         }
 
-        public async void DeleteChallengesForHabitAsync(Guid habitId)
+        public async Task<bool> DeleteChallengesForHabitAsync(Guid habitId)
         {
             var challenges = await _context.Challenges
                 .Include(c => c.Habit)
@@ -99,7 +99,9 @@ namespace Elevate.Data.Repository
             {
                 _context.Challenges.RemoveRange(challenges);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
     }
 }
