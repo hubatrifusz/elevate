@@ -69,6 +69,9 @@ export class TaskViewComponent {
     this.userService.addNewHabit(this.addNewTaskForm.value).subscribe({
       next: (response) => this.habitList.push(response as Habit),
       error: (error) => console.log(error),
+      complete: () => {
+        this.getTodaysHabitlogs(this.date.toISOString());
+      },
     });
 
     this.toggleFormVisibility();

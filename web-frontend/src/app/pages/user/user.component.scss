@@ -1,4 +1,4 @@
-@import "../../../assets/styles/variables";
+@import '../../../assets/styles/variables';
 
 #user_page_container {
   #user_details_container {
@@ -24,18 +24,51 @@
       }
 
       #profile_picture {
-        position: absolute;
-        bottom: 0;
-        left: 3rem;
+        position: relative;
+        width: fit-content;
 
-        transform: translateY(50%);
+        margin: -2.5rem 0 0 3rem;
 
-        img {
+        border-radius: 100rem;
+
+        &:hover > #profile_picture_image {
+          filter: brightness(0.9);
+          cursor: pointer;
+        }
+
+        &:hover > #edit_profile_picture_icon {
+          opacity: 1;
+          cursor: pointer;
+        }
+
+        #profile_picture_image {
           height: 5rem;
+          width: 5rem;
+          object-fit: cover;
 
           border-radius: 100rem;
           border: 5px solid $main-color-200;
+
+          transition: all 100ms;
         }
+
+        #edit_profile_picture_icon {
+          opacity: 0;
+
+          height: 1.5rem;
+
+          position: absolute;
+
+          bottom: 50%;
+          right: 50%;
+          transform: translate(50%, 50%);
+
+          transition: all 100ms;
+        }
+      }
+
+      input[type='file'] {
+        display: none;
       }
     }
 

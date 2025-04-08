@@ -71,7 +71,7 @@ export class TaskComponent {
 
     this.userService.updateHabitLog(this.habitLogData.id, updatedHabitLog).subscribe({
       next: (res) => {
-        console.log(res);
+        this.habitData.streak++;
       },
       error: (error) => console.log(error),
       complete: () => {
