@@ -3,9 +3,11 @@
   <div id="user_details_container">
     <div id="profile_picture_container">
       <div id="banner"></div>
-      <div id="profile_picture">
-        <img src="images/default_profile_picture.jpg" alt="pfp" />
+      <div id="profile_picture" (click)="triggerFileInput()">
+        <img [src]="imageSrc" alt="pfp" id="profile_picture_image" #profilePicture/>
+        <img src="icons/pencil.png" alt="" id="edit_profile_picture_icon">
       </div>
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*">
     </div>
     <div id="user_details">
       <div>

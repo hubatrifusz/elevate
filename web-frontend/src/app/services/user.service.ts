@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment.prod';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = environment.apiUrl;;
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -63,6 +63,12 @@ export class UserService {
 
   updateHabitLog(habitlogId: string, formResult: any): Observable<any> {
     return this.http.patch(`${this.apiUrl}/habitlog/${habitlogId}`, formResult, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  updateUser(id: string | null, updatedUser: any) {
+    return this.http.patch(`${this.apiUrl}/user/${id}`, updatedUser, {
       headers: this.getAuthHeaders(),
     });
   }
