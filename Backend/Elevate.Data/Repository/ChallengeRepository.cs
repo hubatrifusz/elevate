@@ -22,8 +22,7 @@ namespace Elevate.Data.Repository
         {
             return await _context.Challenges
                 .Include(c => c.Habit)
-                .Where(c => c.UserId == userId &&
-                    c.Status != ChallengeInviteStatus.Accepted)
+                .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
 
