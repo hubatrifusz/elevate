@@ -82,7 +82,9 @@ export class UserComponent {
       },
       error: (error) => console.log(error),
       complete: () => {
-        this.imageSrc = 'data:image/png;base64,' + profilePictureBase64;
+        if (profilePictureBase64 != null) {
+          this.imageSrc = 'data:image/png;base64,' + profilePictureBase64;
+        }
       },
     });
   }
