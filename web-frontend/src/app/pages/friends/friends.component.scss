@@ -90,8 +90,10 @@
             align-items: center;
 
             .profile_picture {
+              width: 4rem;
               height: 4rem;
-              border-radius: 100rem;
+              border-radius: 50%;
+              object-fit: cover;
             }
 
             .action_button {

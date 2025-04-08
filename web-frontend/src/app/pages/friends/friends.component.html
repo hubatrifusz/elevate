@@ -21,7 +21,7 @@
             <p>{{ friend.email }}</p>
           </div>
           <div class="profile_picture_and_action">
-            <img class="profile_picture" src="images/default_profile_picture.jpg" alt="" />
+            <img class="profile_picture" [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'" alt="" />
             <img class="action_button" src="icons/menu-dots-vertical.png" alt="" (click)="showOptions($event, friend)" />
           </div>
         </div>
