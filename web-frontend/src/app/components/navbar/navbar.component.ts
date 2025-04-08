@@ -35,7 +35,9 @@ export class NavbarComponent {
       },
       error: (error) => console.log(error),
       complete: () => {
-        this.navbarImageSrc = 'data:image/png;base64,' + profilePictureBase64;
+        if (profilePictureBase64 != null) {
+          this.navbarImageSrc = 'data:image/png;base64,' + profilePictureBase64;
+        }
       },
     });
   }
