@@ -82,7 +82,7 @@
         </ion-col>
         <ion-col size="7">
           <ion-button [disabled]="habit.userId !== currentUserId" expand="block"
-            (click)="getFriends(); getSentInvites(habit.id)">
+            (click)="getFriends(habit); getSentInvites(habit.id)">
             Challenge friend
             <ion-icon slot="end" name="people-outline"></ion-icon>
           </ion-button>
@@ -103,6 +103,8 @@
             <h3>Friends</h3>
             <ion-list>
               @for (friend of friends; track $index) {
+                <!-- <app-friend [friend]="friend"></app-friend> -->
+
               <ion-item>
                 <ion-avatar slot="start">
                   <img (click)="setOpen(false)" (click)="goToProfile(friend.id)" 
@@ -113,8 +115,8 @@
                   <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
                   <p>{{ friend.email }}</p>
                 </ion-label>
-                <ion-button [disabled]="hasSentInvite(friend.id)" color="success" slot="end" (click)="onChallengeFriend(friend.id, habit)">
-                  {{ hasSentInvite(friend.id) ? 'Invite Sent' : 'Challenge' }}
+                <ion-button [disabled]="hasSentInvite(friend.id)" color="success" slot="end" (click)="onChallengeFriend(friend.id)">
+                  {{ hasSentInvite(friend.id) ? 'Invited' : 'Challenge' }}
                 </ion-button>
               </ion-item>
               }

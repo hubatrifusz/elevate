@@ -57,6 +57,7 @@ export class TaskCardComponent {
   public currentUserId = localStorage.getItem('userId') || '';
   public inviter: User | null = null;
   public sentChallengeInvites: Challenge[] = []; 
+  public selectedHabit : Habit | null = null; // Track the selected habit for challenge
 
 
   weekDays = [
@@ -356,7 +357,8 @@ export class TaskCardComponent {
     await alert.present();
   }
 
-  async getFriends() {
+  async getFriends(habit: Habit) {
+    this.selectedHabit = habit
     await this.friendShipService.getFriends().subscribe(
       (response) => {
         console.log('Friends:', response);
@@ -369,9 +371,10 @@ export class TaskCardComponent {
     );
   }
   async getSentInvites(habitId: string) {
-    this.sentChallengeInvites = []; // Clear previous invites
+    this.sentChallengeInvites = [];
     await this.challengeService.getSentChallengeInvites().subscribe(
       (response) => {
+        console.log('Sent Invites:', response);
         this.sentChallengeInvites = response.filter((invite) => invite.habit.id === habitId);
         console.log('Filtered Sent Invites:', this.sentChallengeInvites);
       },
@@ -380,7 +383,9 @@ export class TaskCardComponent {
       }
     );
   }
-  onChallengeFriend(friendId: string, habit: Habit) {
+  onChallengeFriend(friendId: string) {
+    const habit = this.selectedHabit;
+    console.log(habit?.id)
     if (this.sentChallengeInvites.some(invite => invite.friendId === friendId)) {
       console.log('Invite already sent to this friend.');
       return;
@@ -390,10 +395,12 @@ export class TaskCardComponent {
       habit.color = habit.color.slice(1);
     }
 
-    this.challengeService.sendChallenge(habit, friendId).subscribe({
+    this.challengeService.sendChallenge(habit!, friendId).subscribe({
       next: () => {
         console.log('Challenge sent successfully');
+        console.log(habit)
         this.toast.presentToast('Challenge sent successfully');
+
 
         // Add the friend to the sentChallengeInvites array
         this.sentChallengeInvites.push({
@@ -408,6 +415,7 @@ export class TaskCardComponent {
       },
       error: (error) => {
         console.error('Error sending challenge:', error);
+        console.log(habit)
         this.toast.presentToast(error.error);
       },
     });
