@@ -43,3 +43,18 @@ ion-toolbar {
     @media(prefers-color-scheme: dark) {}
 }
 
+.avatar-container {
+    position: relative;
+}
+
+.avatar-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    min-width: 12px;
+    font-size: 0;
+    padding: 0;
+}

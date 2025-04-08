@@ -1,2 +1,20 @@
 @use "./pages/feed/feed.page.scss" as *;
 
+.button-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.menu-badge {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    min-width: 12px;
+    font-size: 0;
+    padding: 0;
+}

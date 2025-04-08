@@ -1,6 +1,11 @@
 <app-header title="Calendar Page" [showGreeting]="false"></app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding"  >
+
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <div class="date-picker" #swipeArea>
       <ion-button fill="clear" (click)="previousDay()">
         <ion-icon name="chevron-back-outline"></ion-icon>
