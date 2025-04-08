@@ -1,7 +1,7 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle } from '@ionic/angular/standalone';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle, IonBadge, IonAvatar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronDownOutline, flameOutline, peopleOutline, starOutline, time, trashOutline } from 'ionicons/icons';
+import { chevronDownOutline, flameOutline, peopleOutline, starOutline, time, trashOutline, trophyOutline, trophySharp } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -12,17 +12,21 @@ import { HabitLog } from 'src/app/.models/HabitLog.model';
 import { FriendComponent } from '../friend/friend.component';
 import { FriendshipService } from 'src/app/services/friendship.service';
 import { User } from 'src/app/.models/user.model';
+import { UserService } from 'src/app/services/user.service';
+import { ChallengeService } from 'src/app/services/challenge.service';
+import { Challenge } from 'src/app/.models/challenge.model';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [ IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
+  imports: [IonAvatar, IonBadge, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle, FriendComponent]
 })
-export class TaskCardComponent  {
+export class TaskCardComponent {
 
   @Input() loadMoreHabits!: EventEmitter<void>;
   @Input() set habitlogsDate(value: string | null) {
@@ -36,16 +40,23 @@ export class TaskCardComponent  {
   habits: Habit[] = [];
   habitLogs: HabitLog[] = [];
 
-
+  @ViewChild(IonAccordionGroup, { static: false }) accordionGroup!: IonAccordionGroup;
   private habitService = inject(HabitService);
   private router = inject(Router);
   private friendShipService = inject(FriendshipService);
+  private userService = inject(UserService);
+  private challengeService = inject(ChallengeService);
+  private toast = inject(ToastService);
   private _habitlogsDate: string | null = null;
   private pageNumber = 1; // Set initial page number
   private pageSize = 10; // Set page size
   public hasMoreHabits: boolean = true;
   public checked = false;
   public friends: User[] = [];
+  isModalOpen = false;
+  public currentUserId = localStorage.getItem('userId') || '';
+  public inviter: User | null = null;
+  public sentChallengeInvites: Challenge[] = []; 
 
 
   weekDays = [
@@ -60,15 +71,16 @@ export class TaskCardComponent  {
 
 
   constructor(private loadingController: LoadingController, private alertController: AlertController, private modalController: ModalController) {
-    addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline });
+    addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline, trophySharp });
   }
 
 
   async ionViewWillEnter() {
     const loading = await this.presentLoading();
+
     if (!this.habitlogsDate) {
       await this.loadHabits();
-       // Await for better flow control
+      // Await for better flow control
       loading.dismiss();
 
       this.loadMoreHabits.subscribe(async () => {
@@ -126,6 +138,9 @@ export class TaskCardComponent  {
           }
           this.habits.forEach((habit) => {
             console.log(habit);
+            if (habit.userId !== this.currentUserId) {
+              this.getUsersData(habit.userId!);
+            }
             if (!habit.color.startsWith('#')) {
               habit.color = '#' + habit.color;
             }
@@ -148,12 +163,8 @@ export class TaskCardComponent  {
 
   async loadMore() {
     this.pageNumber++;
-    if (this.habitlogsDate != null) {
-      await this.loadHabitLogs(); // Await loadHabitLogs
-    }
-    else {
-
-      await this.loadHabits(); // Await loadHabits
+    if (this.habitlogsDate == null) {
+      await this.loadHabits(); // Await loadHabitLogs
     }
   }
 
@@ -176,6 +187,9 @@ export class TaskCardComponent  {
     try {
       const response = await this.habitService.getHabitByID(habitId).toPromise();
       const habit = response as Habit;
+      if (habit.userId !== this.currentUserId) {
+        this.getUsersData(habit.userId!);
+      }
       if (!habit.color.startsWith('#')) {
         habit.color = '#' + habit.color;
       }
@@ -208,6 +222,18 @@ export class TaskCardComponent  {
 
     console.log(habit.customFrequency);
     console.log(habit);
+  }
+
+  getUsersData(id: string) {
+    this.userService.getUserById(id).subscribe(
+      (response) => {
+        // console.log('User data:', response);
+        this.inviter = response;
+      },
+      (error) => {
+        console.error('Error loading user data:', error);
+      }
+    );
   }
 
   isSelectedDay(customFrequency: number, dayIndex: number): boolean {
@@ -276,7 +302,6 @@ export class TaskCardComponent  {
       console.error('Error editing habit:', error);
     }
   }
-
   completed(habitId: string, Ispublic: boolean) {
     const habitLog = this.habitLogs.find(habitLog => habitLog.habitId === habitId);
     if (habitLog) {
@@ -288,6 +313,10 @@ export class TaskCardComponent  {
 
           // Update the habitLog locally instead of reloading all habit logs
           habitLog.completed = true;
+
+          if (this.accordionGroup) {
+            this.accordionGroup.value = null; // Collapse all accordions
+          }
 
           // Optionally, update the UI if needed
           console.log('Updated habitLog:', habitLog);
@@ -307,7 +336,7 @@ export class TaskCardComponent  {
       buttons: [
         {
           text: 'No, thanks',
-          role: 'cancel',
+          role: '',
           handler: () => {
             console.log('Alert canceled');
             this.completed(habitID, false);
@@ -320,7 +349,8 @@ export class TaskCardComponent  {
             console.log('Alert confirmed');
             this.completed(habitID, true);
           },
-        },],
+        }
+      ],
     });
 
     await alert.present();
@@ -338,13 +368,76 @@ export class TaskCardComponent  {
       }
     );
   }
-  isModalOpen = false;
+  async getSentInvites(habitId: string) {
+    this.sentChallengeInvites = []; // Clear previous invites
+    await this.challengeService.getSentChallengeInvites().subscribe(
+      (response) => {
+        this.sentChallengeInvites = response.filter((invite) => invite.habit.id === habitId);
+        console.log('Filtered Sent Invites:', this.sentChallengeInvites);
+      },
+      (error) => {
+        console.error('Error loading sent invites:', error);
+      }
+    );
+  }
+  onChallengeFriend(friendId: string, habit: Habit) {
+    if (this.sentChallengeInvites.some(invite => invite.friendId === friendId)) {
+      console.log('Invite already sent to this friend.');
+      return;
+    }
+
+    if (habit?.color.includes('#')) {
+      habit.color = habit.color.slice(1);
+    }
+
+    this.challengeService.sendChallenge(habit, friendId).subscribe({
+      next: () => {
+        console.log('Challenge sent successfully');
+        this.toast.presentToast('Challenge sent successfully');
+
+        // Add the friend to the sentChallengeInvites array
+        this.sentChallengeInvites.push({
+          id: '', // You can set a unique ID if available
+          userId: this.currentUserId,
+          friendId: friendId,
+          habit: habit,
+          status: 'sent',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as Challenge);
+      },
+      error: (error) => {
+        console.error('Error sending challenge:', error);
+        this.toast.presentToast(error.error);
+      },
+    });
+  }
+
+  // onChallengeFriend(friendId: string) {
+  //   if (this.Habit?.color.includes('#')) {
+  //     this.Habit.color = this.Habit.color.slice(1);
+  //     this.challengeService.sendChallenge(this.Habit, friendId).subscribe({
+  //       next: () => {
+  //         this.toast.presentToast('Challenge sent successfully');
+  //       },
+  //       error: (error) => {
+  //         console.error('Error sending challenge:', error);
+  //         this.toast.presentToast(error.error);
+  //       }
+  //     })
+  //   }
+  // }
+
+  hasSentInvite(friendId: string): boolean {
+    return this.sentChallengeInvites?.some(invite => invite.friendId === friendId) ?? false;
+  }
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
 
-  async presentModal(){
-    
+  goToProfile(userId: string) {
+    this.router.navigate(['/profile', userId]);
   }
+
 }

@@ -33,18 +33,5 @@ export class FriendComponent  {
   goToProfile(friendId: string) {
     this.profileClick.emit(friendId); // Emit the friend's ID to the parent component
   }
-  onChallengeFriend(friendId: string) {
-    if (this.Habit?.color.includes('#')) {
-      this.Habit.color = this.Habit.color.slice(1);
-      this.challengeService.sendChallenge(this.Habit, friendId).subscribe({
-        next: () => {
-          this.toast.presentToast('Challenge sent successfully');
-        },
-        error: (error) => {
-          console.error('Error sending challenge:', error);
-          this.toast.presentToast(error.error);
-        }
-      })
-    }
-  }
+  
 }

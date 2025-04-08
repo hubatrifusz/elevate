@@ -50,4 +50,14 @@ export class ChallengeService {
     return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, { headers: headers });
   }
 
+  getSentChallengeInvites(): Observable<Challenge[]> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+    });
+    const UserId = localStorage.getItem('userId');
+    return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${UserId}/challenge-invites-sent`, { headers: headers });
+
+  }
+
 }

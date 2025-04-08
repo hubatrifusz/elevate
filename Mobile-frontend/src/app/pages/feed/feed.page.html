@@ -1,8 +1,7 @@
 <div class="ion-page" id="main-content">
  <app-header [showGreeting]="true" ></app-header>
   
-  <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
-    (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
+  <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true">
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>

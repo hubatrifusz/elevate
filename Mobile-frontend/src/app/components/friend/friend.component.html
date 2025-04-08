@@ -8,10 +8,8 @@
     <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
     <p>{{ friend.email }}</p>
   </ion-label>
-  @if(this.isChallenge) {
-    <ion-button color="success" slot="end" (click)="onChallengeFriend(friend.id)">Challenge</ion-button>
-  }@else {
+
   <ion-button color="danger" slot="end" (click)="onDeleteFriend()">Delete</ion-button>
 
-  }
+  
 </ion-item>
