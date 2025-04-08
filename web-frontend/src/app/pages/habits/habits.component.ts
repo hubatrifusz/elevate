@@ -10,6 +10,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Challenge } from '../../models/challenge.model';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-habits',
@@ -19,11 +20,14 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './habits.component.scss'
 })
 export class HabitsComponent implements OnInit {
+  currentUserId: string | null = null;
+
   habits: Habit[] = [];
   friends: User[] = [];
   challengeInvites: Challenge[] = [];
 
   friendChallengeStatus: Map<string, boolean> = new Map();
+  challengeSenders: Map<string, User> = new Map();
 
   showChallengeModal = false;
   selectedHabit: Habit | null = null;
@@ -33,17 +37,34 @@ export class HabitsComponent implements OnInit {
     private habitService: HabitService,
     private friendsService: FriendsService,
     private alertService: AlertService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
     this.loadHabits();
     this.loadChallengeInvites();
+    this.currentUserId = this.authService.getUserId();
   }
 
   loadHabits(): void {
     this.habitService.getHabits().subscribe({
-      next: (response) => this.habits = response as Habit[],
+      next: (response) => {
+        this.habits = response as Habit[];
+
+        this.habits.forEach(habit => {
+          if (habit.userId !== this.currentUserId) {
+            this.userService.getUserData(habit.userId).subscribe({
+              next: (user) => {
+                this.challengeSenders.set(habit.userId, user);
+              },
+              error: (error) => {
+                console.error(`Error fetching user info for habit ${habit.id}:`, error);
+              }
+            });
+          }
+        });
+      },
       error: (error) => {
         console.error(error);
         this.alertService.showAlert('Failed to load habits');

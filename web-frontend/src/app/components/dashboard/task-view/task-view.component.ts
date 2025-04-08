@@ -14,7 +14,7 @@ import { HabitLog } from '../../../models/habitlog.model';
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) {}
+  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) { }
 
   userId!: string | null;
   habitlogList: HabitLog[] = [];
@@ -22,6 +22,9 @@ export class TaskViewComponent {
   date = new Date();
   weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+
+  isPreviousDisabled: boolean = false;
+  isNextDisabled: boolean = false;
 
   addNewTaskForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -138,6 +141,12 @@ export class TaskViewComponent {
   updateDateDisplay() {
     this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
     this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+
+    const today = new Date();
+    this.isPreviousDisabled = this.date.toDateString() === today.toDateString();
+    this.isNextDisabled =
+      this.date.getDate() === today.getDate() &&
+      this.date.getMonth() === (today.getMonth() + 1) % 12;
 
     this.getTodaysHabitlogs(this.date.toISOString());
   }
