@@ -19,19 +19,6 @@
       </div>
 
 
-      <!-- <fieldset class="input-container">
-        <legend>Enter your email</legend>
-        <input type="email" class="input" name="email" formControlName="email" placeholder="gipzsjakab@kukac.com">
-        @if(form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
-        @if(form.controls.email.errors?.["required"]){
-        <small>Email is required</small>
-        }
-        @else if(form.controls.email.errors?.["email"]){
-        <small>Invalid email format</small>
-        }
-        }
-      </fieldset> -->
-
       <div class="input_container" id="password_text_input_container">
         <input type="password" name="password_text_input" [type]="showPassword ? 'text' : 'password'"
           id="password_text_input" placeholder=" " formControlName="password" required />
@@ -54,29 +41,7 @@
         }
       </div>
 
-      <!-- <fieldset class="input-container">
-        <legend>Enter your password</legend>
-        <div class="password-input-wrapper">
-          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="input">
-          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="password-toggle"
-            (click)="togglePasswordVisibility('password')">
-          </ion-icon>
-        </div>
-        @if(form.controls.password.invalid && (form.controls.password.touched || form.controls.password.dirty)){
-        @if(form.controls.password.errors?.["minlength"]){
-        <small>Password must be at least 8 characters long </small>
-        }
-        @else if(form.controls.password.errors?.["required"]){
-        <small>Password is required</small>
-        }
-        @else if(form.controls.password.errors?.["pattern"]){
-        <small>Password must contain at least one uppercase letter, one lowercase letter, one number and one special
-          character
-        </small>
-        }
-        }
-      </fieldset> -->
-
+  
       <div id="checkbox">
         <input type="checkbox" name="RememberMe" id="RememberMe">
         <label for="RememberMe">Remember me</label>

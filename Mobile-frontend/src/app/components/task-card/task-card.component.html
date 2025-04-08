@@ -2,7 +2,7 @@
 
 <ion-accordion-group expand="inset">
   @for(habit of habits ; track $index) {
-  <ion-accordion [disabled]="isHabitCompleted(habit.id) ">
+  <ion-accordion [disabled]="isHabitCompleted(habit.id) || Disabled">
     <ion-item slot="header" color="light" class="habit-item">
       <div class="color" [style.backgroundColor]="habit.color"></div>
       <ion-input [readonly]="true" type="text" [value]="habit.title"></ion-input>
@@ -33,7 +33,7 @@
         </ion-label>
       </ion-item>
       }
-      <ion-textarea inputmode="text" [readonly]="this.habitlogsDate || habit.userId !== currentUserId"
+      <ion-textarea maxlength="200" inputmode="text" [readonly]="this.habitlogsDate || habit.userId !== currentUserId"
         label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
         (ionBlur)="onDescriptionBlur(habit)" maxlength="100"></ion-textarea>
       <ion-list>
@@ -67,11 +67,6 @@
         <ion-input [disabled]="!!this.habitlogsDate || habit.userId !== currentUserId" type="color"
           [(ngModel)]="habit.color" (ionChange)="onColorChange(habit, $event)"></ion-input>
       </ion-item>
-      <!-- <ion-item>
-        <ion-label>Is it a Positive Habit?</ion-label>
-        <ion-checkbox slot="end" [disabled]="!!this.habitlogsDate" [(ngModel)]="habit.is_positive"
-          (ionChange)="onPositiveChange(habit, $event)"></ion-checkbox>
-      </ion-item> -->
 
       <ion-row>
         <ion-col size="5">
@@ -101,11 +96,10 @@
           </ion-header>
           <ion-content class="ion-padding">
             <h3>Friends</h3>
-            <ion-list>
+            <ion-list color="light">
               @for (friend of friends; track $index) {
-                <!-- <app-friend [friend]="friend"></app-friend> -->
 
-              <ion-item>
+              <ion-item >
                 <ion-avatar slot="start">
                   <img (click)="setOpen(false)" (click)="goToProfile(friend.id)" 
                     [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"

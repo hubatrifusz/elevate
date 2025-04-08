@@ -155,13 +155,15 @@ export class FriendsPage {
       }
     });
   }
+
   userSearch(event: any) {
     const email = event.target.value.toLowerCase();
 
     if (email !== '') {
       this.userService.getUsersByEmail(email, this.page, this.pageSize).subscribe({
         next: (response) => {
-          this.searchedUsers = response.filter((user) => user.id !== this.loggendUserId); // Filter out the logged-in user
+          this.searchedUsers = response.filter((user) => user.id !== this.loggendUserId);
+          // Filter out the logged-in user
 
           // Assign the response to the friends array
         },
@@ -181,6 +183,7 @@ export class FriendsPage {
     this.friendService.addFriend(friend.id).subscribe({
       next: (response) => {
         console.log('Friend request sent successfully:', response);
+        this.getSentFriendRequests();
         this.toastService.presentToast('Friend request sent successfully!');
       },
       error: (error) => {
@@ -244,5 +247,9 @@ export class FriendsPage {
 
   isPendingRequest(userId: string | number): boolean {
     return this.sentFriendRequests?.some(request => request.friendId === userId) ?? false;
+  }
+  isFriend(userId: string): boolean{
+
+    return this.friends?.some(friend => friend.id === userId) ?? false;
   }
 }

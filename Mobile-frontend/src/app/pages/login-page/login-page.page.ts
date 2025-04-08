@@ -71,8 +71,6 @@ export class LoginPagePage implements OnInit {
     }
   }
 
-
-
   CreateAccount() {
     this.router.navigate(['/create-account-page']);
   }
@@ -80,10 +78,6 @@ export class LoginPagePage implements OnInit {
   ngOnInit() {
 
   }
-
-
-
-
 
 
 }

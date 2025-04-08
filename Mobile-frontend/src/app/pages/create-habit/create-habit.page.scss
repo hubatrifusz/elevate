@@ -1,14 +1,14 @@
 @use "../../../theme/variables.scss" as *;
 
-.ion-valid.sc-ion-input-md-h {
-    --highlight-color: var(--ion-color-tertiary);
-}
-.ion-valid.sc-ion-textarea-md-h {
-    --highlight-color: var(--ion-color-tertiary);
-}
-:host(.ion-valid) {
-    --highlight-color: var(--ion-color-tertiary);
-}
+// .ion-valid.sc-ion-input-md-h {
+//     --highlight-color: var(--ion-color-tertiary);
+// }
+// .ion-valid.sc-ion-textarea-md-h {
+//     --highlight-color: var(--ion-color-tertiary);
+// }
+// :host(.ion-valid) {
+//     --highlight-color: var(--ion-color-tertiary);
+// }
 ion-header {
     --background: var(--ion-color-primary);
     --color: var(--ion-color-light);
@@ -20,7 +20,7 @@ ion-card {
 }
 
 ion-card-header {
-    background-color: $accent-color-400;
+    // background-color: $accent-color-400;
     color: var(--ion-color-light);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -105,17 +105,7 @@ ion-grid {
     }
 }
 
-// ion-button {
-//     // --background: hsl(249, 86%, 67%);
-//     background-color: $accent-color-400;
-//     color: var(--ion-color-light);
-//     margin: 10px 0;
-// }
 
-// ion-button.selected {
-//     --background: var(--ion-color-secondary);
-//     --color: var(--ion-color-light);
-// }
 
 ion-checkbox {
     --background: var(--ion-color-light);

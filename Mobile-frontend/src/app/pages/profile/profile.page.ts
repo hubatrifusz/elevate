@@ -62,7 +62,7 @@ export class ProfilePage {
           quality: 90,
           allowEditing: true,
           resultType: CameraResultType.Base64,
-          source: CameraSource.Prompt, // Camera, Photos, or Prompt
+          source: CameraSource.Prompt,
         });
 
         if (image.base64String) {
@@ -100,7 +100,6 @@ export class ProfilePage {
         });
       },
       error: (error) => {
-        this.toast.presentToast(error.error);
         console.error('Error loading sent friend requests:', error);
       }
     })

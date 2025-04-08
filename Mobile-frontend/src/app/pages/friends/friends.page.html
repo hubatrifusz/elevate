@@ -215,8 +215,11 @@
             @if(isPendingRequest(user.id)){
             <ion-button fill="solid" slot="end" color="tertiary" disabled>Pending</ion-button>
             }
-            @else {
+            @else if(!isPendingRequest(user.id) && !isFriend(user.id)){
             <ion-button fill="solid" slot="end" (click)="addFriend(user)">Add</ion-button>
+            }
+            @else if(isFriend(user.id)){
+            <ion-button fill="solid" slot="end" color="tertiary" disabled>You're friends</ion-button>
             }
 
           </ion-item>

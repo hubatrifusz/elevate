@@ -26,9 +26,9 @@ import { ToastService } from 'src/app/services/toast.service';
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle, FriendComponent]
 })
-export class TaskCardComponent {
+export class TaskCardComponent implements OnInit {
 
-  @Input() loadMoreHabits!: EventEmitter<void>;
+  @Input() loadMoreHabits?: EventEmitter<void>;
   @Input() set habitlogsDate(value: string | null) {
     this._habitlogsDate = value;
     this.onDateChange(); // Trigger logic when the date changes
@@ -56,8 +56,9 @@ export class TaskCardComponent {
   isModalOpen = false;
   public currentUserId = localStorage.getItem('userId') || '';
   public inviter: User | null = null;
-  public sentChallengeInvites: Challenge[] = []; 
-  public selectedHabit : Habit | null = null; // Track the selected habit for challenge
+  public sentChallengeInvites: Challenge[] = [];
+  public selectedHabit: Habit | null = null; // Track the selected habit for challenge
+  public Disabled: boolean = false;
 
 
   weekDays = [
@@ -73,21 +74,31 @@ export class TaskCardComponent {
 
   constructor(private loadingController: LoadingController, private alertController: AlertController, private modalController: ModalController) {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline, trophySharp });
+   
+  }
+  ngOnInit() {
+    // Subscribe to loadMoreHabits events
+    if (this.loadMoreHabits) {
+      this.loadMoreHabits.subscribe(() => {
+        console.log("loadMore event received");
+        this.loadMore();
+      });
+    }
   }
 
 
   async ionViewWillEnter() {
     const loading = await this.presentLoading();
-
+    await this.loadMoreHabits?.subscribe(() => {
+      console.log("sdfffffffffffffffff");
+      this.loadMore(); // Call loadMore when the event is emitted
+    });
     if (!this.habitlogsDate) {
       await this.loadHabits();
       // Await for better flow control
       loading.dismiss();
 
-      this.loadMoreHabits.subscribe(async () => {
-        await this.loadMore(); // Await loadMore
-        console.log(this.hasMoreHabits);
-      });
+
     } else {
       loading.dismiss();
     }
@@ -102,6 +113,10 @@ export class TaskCardComponent {
 
   async onDateChange() {
     if (this.habitlogsDate) {
+      const selectedDate = new Date(this.habitlogsDate);
+      const today = new Date();
+
+      this.Disabled = selectedDate > today;
       const loading = await this.presentLoading();
       console.log(`Date changed to: ${this.habitlogsDate}`);
       this.pageNumber = 1; // Reset pagination
@@ -164,6 +179,7 @@ export class TaskCardComponent {
 
   async loadMore() {
     this.pageNumber++;
+    console.log('Loading more habits...');
     if (this.habitlogsDate == null) {
       await this.loadHabits(); // Await loadHabitLogs
     }

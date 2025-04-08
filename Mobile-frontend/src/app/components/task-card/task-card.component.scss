@@ -243,10 +243,14 @@ ion-item {
 ion-modal {
     ion-item {
         all: unset;
+        
 
        ion-button{
             width: fit-content;
             margin: auto;
        }
+    }
+    ion-list{
+        border-radius: 15px;
     }
 }

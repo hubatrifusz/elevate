@@ -87,20 +87,9 @@ export class CalendarPage {
     this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
     this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
     this.datestring = this.date.toISOString();
-
-
-    // this.getTodaysHabitlogs(this.date.toISOString());
-    // this.habitService.getTodaysHabitlogs(this.date.toISOString());
   }
 
 
-  handleRefresh(event: CustomEvent) {
-    setTimeout(() => {
-      // Any calls to load data go here
-      window.location.reload();
-      (event.target as HTMLIonRefresherElement).complete();
-    }, 200);
-  }
   newHabit() {
     this.router.navigate(['/create-habit']);
   }

@@ -49,12 +49,10 @@ export class CreateHabitPage implements OnInit {
   createHabit() {
     const userId = localStorage.getItem('userId');
     if (userId) {
-      // Remove '#' if it exists before sending to the backend
       if (this.habit.color.startsWith('#')) {
         this.habit.color = this.habit.color.slice(1);
       }
 
-      // Prepare the habit data for the backend
       const habitData = {
         title: this.habit.title,
         userID: userId, // Map userId to userID
@@ -94,11 +92,6 @@ export class CreateHabitPage implements OnInit {
     binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
     habit.customFrequency = parseInt(binaryArray.join(''), 2);
 
-    // Update the habit in the habits array
-    // const index = this.habits.findIndex(h => h.id === habit.id);
-    // if (index !== -1) {
-    //   this.habits[index] = { ...habit }; // Create a new object
-    // }
 
     console.log(habit.customFrequency);
     console.log(habit);
