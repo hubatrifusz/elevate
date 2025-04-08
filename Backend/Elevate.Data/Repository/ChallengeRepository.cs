@@ -88,5 +88,18 @@ namespace Elevate.Data.Repository
             }
             return null;
         }
+
+        public async void DeleteChallengesForHabitAsync(Guid habitId)
+        {
+            var challenges = await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.Habit.Id == habitId)
+                .ToListAsync();
+            if (challenges != null)
+            {
+                _context.Challenges.RemoveRange(challenges);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

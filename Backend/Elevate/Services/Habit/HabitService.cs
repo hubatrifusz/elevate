@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
 using Elevate.Data.Repository;
+using Elevate.Models.Challenge;
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Services.HabitLog;
@@ -9,13 +10,15 @@ namespace Elevate.Services.Habit
 {
     public class HabitService(
         HabitRepository habitRepository, 
-        HabitLogRepository habitLogRepository, 
+        HabitLogRepository habitLogRepository,
+        ChallengeRepository challengeRepository,
         IHabitLogGeneratorService habitLogGeneratorService, 
         IMapper mapper)
         : IHabitService
     {
         private readonly HabitRepository _habitRepository = habitRepository;
         private readonly HabitLogRepository _habitLogRepository = habitLogRepository;
+        private readonly ChallengeRepository _challengeRepository = challengeRepository;
         private readonly IHabitLogGeneratorService _habitLogGeneratorService = habitLogGeneratorService;
         private readonly IMapper _mapper = mapper;
 
@@ -76,6 +79,7 @@ namespace Elevate.Services.Habit
             habitToDelete.Deleted = true;
 
             await DeleteAllHabitLogsForHabitAsync(habitToDelete.Id);
+            await _challengeRepository.DeleteChallengesForHabitAsync(habitToDelete.Id);
 
             HabitModel? habitModel = await _habitRepository.UpdateHabitAsync(habitToDelete);
 
