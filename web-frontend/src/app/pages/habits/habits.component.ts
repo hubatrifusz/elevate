@@ -106,28 +106,6 @@ export class HabitsComponent implements OnInit {
     this.selectedHabit = null;
   }
 
-  checkChallengedFriends(): void {
-    if (!this.selectedHabit) return;
-
-    this.habitService.getChallengesByHabitId(this.selectedHabit.id).subscribe({
-      next: (challenges) => {
-        this.friendChallengeStatus.clear();
-
-        this.friends.forEach(friend => {
-          const isAlreadyChallenged = challenges.some(challenge =>
-            challenge.friendId === friend.id
-          );
-          this.friendChallengeStatus.set(friend.id, isAlreadyChallenged);
-        });
-      },
-      error: () => {
-        this.friends.forEach(friend => {
-          this.friendChallengeStatus.set(friend.id, false);
-        });
-      }
-    });
-  }
-
   challengeFriend(friendId: string): void {
     if (!this.selectedHabit) return;
 

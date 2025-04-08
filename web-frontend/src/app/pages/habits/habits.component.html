@@ -4,7 +4,7 @@
     <div id="habits">
       <div class="habits-grid">
         @for (habit of habits; track habit.id) {
-        <div class="habit-card {{ habit.color }}">
+        <div class="habit-card" [ngStyle]="{ 'border-left': '5px solid #' + habit.color }">
           <div class="habit-header">
             <h3>{{ habit.title }}</h3>
             <div class="habit-frequency">
