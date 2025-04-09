@@ -16,7 +16,7 @@
       <ion-text color="dark"><strong>{{ dayAndMonth }}</strong></ion-text>
     </div>
 
-    <ion-button fill="clear" (click)="nextDay()" [disabled]="isOneMonthAhead()">
+    <ion-button fill="clear" data-cy="nextDay" (click)="nextDay()" [disabled]="isOneMonthAhead()">
       <ion-icon name="chevron-forward-outline"></ion-icon>
     </ion-button>
   </div>
