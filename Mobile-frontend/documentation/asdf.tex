@@ -1,0 +1,406 @@
+\documentclass[12pt,a4paper]{report}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{float}
+
+% Code listing style
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codegray},
+  keywordstyle=\color{blue},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+\lstset{style=mystyle}
+
+% Document information
+\title{\Huge{\textbf{Elevate Alkalmazás}}\\\Large{Műszaki Dokumentáció}}
+\author{Elevate Projekt Csapat}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\chapter{Bevezetés}
+
+\section{Áttekintés}
+Az Elevate egy Ionic és Angular technológiákkal készült mobilalkalmazás, amelyet arra terveztek, hogy segítsen a felhasználóknak pozitív szokások követésében és fenntartásában. Az alkalmazás lehetővé teszi a felhasználók számára, hogy létrehozzanak, nyomon kövessenek és megosszanak szokásokat barátaikkal, elősegítve ezzel az elszámoltathatóságot és a társadalmi támogatást az egészséges rutinok kialakításában.
+
+\section{Cél}
+Az alkalmazás célja, hogy intuitív és lebilincselő platformot biztosítson a felhasználók számára, ahol:
+\begin{itemize}
+    \item Napi, heti, havi vagy egyéni szokásokat hozhatnak létre és követhetnek
+    \item Figyelemmel kísérhetik előrehaladásukat és fenntarthatják sorozataikat
+    \item Kihívhatják barátaikat pozitív szokások elsajátítására
+    \item Vizualizálhatják a szokások teljesítését naptárnézetben
+    \item Értesítéseket és emlékeztetőket kaphatnak
+\end{itemize}
+
+\chapter{Architektúra}
+
+\section{Technológiai Stack}
+\begin{itemize}
+    \item Frontend: Angular 17 Ionic keretrendszerrel
+    \item UI Komponensek: Ionic UI komponensek
+    \item Állapotkezelés: Angular szolgáltatások és observable-ök
+    \item HTTP Kommunikáció: Angular HttpClient
+    \item Hitelesítés: JWT token-alapú hitelesítés
+\end{itemize}
+
+\section{Projekt Struktúra}
+A projekt a standard Angular komponens-alapú architektúrát követi, szolgáltatásokkal az üzleti logikához:
+
+\begin{lstlisting}[language=bash]
+Mobile-frontend/
+|-- src/
+|   |-- app/
+|   |   |-- components/
+|   |   |   |-- task-card/
+|   |   |   |-- friend/
+|   |   |   |-- header/
+|   |   |-- pages/
+|   |   |   |-- calendar/
+|   |   |   |-- create-habit/
+|   |   |   |-- login-page/
+|   |   |-- services/
+|   |   |   |-- habit.service.ts
+|   |   |   |-- friendship.service.ts
+|   |   |   |-- user.service.ts
+|   |   |-- .models/
+|   |   |   |-- Habit.model.ts
+|   |   |   |-- HabitLog.model.ts
+|   |   |   |-- User.model.ts
+\end{lstlisting}
+
+\chapter{Alap Funkciók}
+
+\section{Szokáskezelés}
+\subsection{Szokások Létrehozása}
+A felhasználók a következő tulajdonságokkal hozhatnak létre szokásokat:
+\begin{itemize}
+    \item Cím és leírás
+    \item Gyakoriság (napi, heti, havi vagy egyéni)
+    \item Egyéni gyakoriság esetén, a hét meghatározott napjai
+    \item Szín a vizuális azonosításhoz
+    \item Pozitív vagy negatív szokások követése
+\end{itemize}
+
+\subsection{Egyéni Gyakoriság Implementációja}
+Az alkalmazás bináris reprezentációt használ az egyéni gyakoriságú szokások követésére:
+
+\begin{lstlisting}[language=typescript]
+// Bináris reprezentáció az egyéni gyakorisághoz
+// Minden bit a hét egy napját jelöli (hétfőtől vasárnapig)
+// 1 = kiválasztott nap, 0 = nem kiválasztott nap
+// Példa: 65 (decimális) = 1000001 (bináris) = hétfő és vasárnap
+
+toggleDay(habit: Habit, dayIndex: number) {
+  if (habit.customFrequency == null) {
+    habit.customFrequency = 0; // Initialize to 0 if null
+  }
+
+  let binaryString = habit.customFrequency.toString(2).padStart(7, '0');
+  let binaryArray = binaryString.split('');
+  binaryArray[dayIndex] = binaryArray[dayIndex] === '1' ? '0' : '1';
+  habit.customFrequency = parseInt(binaryArray.join(''), 2);
+}
+
+isSelectedDay(customFrequency: number, dayIndex: number): boolean {
+  if (customFrequency != null) {
+    const binaryString = customFrequency.toString(2).padStart(7, '0');
+    return binaryString.charAt(dayIndex) === '1';
+  }
+  return false;
+}
+\end{lstlisting}
+
+\section{Szokások Követése}
+\subsection{Naptár Nézet}
+A naptár oldal vizuális reprezentációt nyújt a szokások teljesítéséről:
+\begin{itemize}
+    \item Navigálás a napok között
+    \item Adott napokra esedékes szokások megtekintése
+    \item Szokások teljesítettként jelölése
+    \item Sorozat információk megtekintése
+\end{itemize}
+
+\subsection{Szokás Teljesítése}
+Amikor egy szokást teljesítenek:
+\begin{itemize}
+    \item A sorozat számláló frissül
+    \item A teljesítés rögzítésre kerül a szokásnaplóban
+    \item A felhasználók választhatnak, hogy a teljesítések nyilvánosak vagy privátak legyenek
+\end{itemize}
+
+\section{Közösségi Funkciók}
+\subsection{Barát Rendszer}
+\begin{itemize}
+    \item Barátkérések küldése és elfogadása
+    \item Barátok nyilvános szokásteljesítéseinek megtekintése
+    \item Barátok kihívása szokások elsajátítására
+\end{itemize}
+
+\subsection{Kihívások}
+A felhasználók kihívhatják barátaikat szokásaik átvételére:
+\begin{itemize}
+    \item Szokás kiválasztása megosztásra
+    \item Kihívandó barátok kiválasztása
+    \item Nyomon követés, hogy ki fogadta el a kihívásokat
+\end{itemize}
+
+\chapter{Kulcsfontosságú Komponensek}
+
+\section{Feladat Kártya Komponens}
+A Feladat Kártya komponens egy központi UI elem, amely megjeleníti a szokásokat és azok részleteit:
+
+\begin{lstlisting}[language=html]
+<ion-accordion-group expand="inset">
+  @for(habit of habits ; track $index) {
+  <ion-accordion [disabled]="isHabitCompleted(habit.id) || Disabled">
+    <ion-item slot="header" color="light" class="habit-item">
+      <div class="color" [style.backgroundColor]="habit.color"></div>
+      <ion-input [readonly]="true" type="text" [value]="habit.title"></ion-input>
+      <div class="time" slot="end">
+        <ion-label>{{habit.streak}}</ion-label>
+        <ion-icon name="flame-outline"></ion-icon>
+      </div>
+      <!-- Other elements -->
+    </ion-item>
+    <!-- Accordion content -->
+  </ion-accordion>
+  }
+</ion-accordion-group>
+\end{lstlisting}
+
+\section{Naptár Oldal}
+A Naptár oldal lehetővé teszi a felhasználók számára a dátumok közötti navigálást és a szokások megtekintését:
+
+\begin{lstlisting}[language=typescript]
+previousDay() {
+  this.date.setDate(this.date.getDate() - 1);
+  this.updateDateDisplay();
+  this.cdr.detectChanges();
+}
+
+nextDay() {
+  this.date.setDate(this.date.getDate() + 1);
+  this.updateDateDisplay();
+}
+
+updateDateDisplay() {
+  this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
+  this.dayAndMonth = this.date.toLocaleDateString('en-US', 
+                            { day: '2-digit', month: 'short' });
+  this.datestring = this.date.toISOString();
+}
+\end{lstlisting}
+
+\section{Szokás Létrehozása Oldal}
+A Szokás Létrehozása oldal felületet biztosít a felhasználók számára új szokások definiálásához:
+\begin{itemize}
+    \item Beviteli mezők a szokás tulajdonságaihoz
+    \item Egyéni gyakoriság kiválasztási felület
+    \item Színválasztó a szokás vizualizációjához
+\end{itemize}
+
+\chapter{Adatmodellek}
+
+\section{Szokás Modell}
+\begin{lstlisting}[language=typescript]
+export interface Habit {
+    id: string;
+    created_at: Date;
+    title: string;
+    description?: string;
+    frequencyType: Frequency;
+    customFrequency: number;
+    color: string;
+    is_positive: boolean;
+    streak: number;
+    streak_start?: Date;
+    challengedFriends?: string[];
+    userId?: string;
+}
+
+export enum Frequency {
+    Daily = 'daily',
+    Weekly = 'weekly',
+    Monthly = 'monthly',
+    Custom = 'custom'
+}
+\end{lstlisting}
+
+\section{Szokásnapló Modell}
+\begin{lstlisting}[language=typescript]
+export interface HabitLog {
+    id: string;
+    userId: string;
+    habitId: string;
+    dueDate: Date;
+    completed: boolean;
+    completedAt?: Date | null;
+    notes?: string | null;
+    isPublic: boolean;
+}
+\end{lstlisting}
+
+\chapter{Alap Szolgáltatások}
+
+\section{Szokás Szolgáltatás}
+A Szokás Szolgáltatás kezeli az összes szokással kapcsolatos API műveletet:
+
+\begin{lstlisting}[language=typescript]
+@Injectable({
+  providedIn: 'root'
+})
+export class HabitService {
+  private http = inject(HttpClient);
+  private apiUrl = 'https://elevate.koyeb.app/api/habit';
+
+  getHabits(userId: string, pageNumber: number, pageSize: number): Observable<Habit[]> {
+    // Implementáció
+  }
+  
+  getHabitByID(habitId: string): Observable<any> {
+    // Implementáció
+  }
+  
+  getTodaysHabitlogs(date: string): Observable<any> {
+    // Implementáció
+  }
+
+  createHabit(habitData: any): Observable<Habit> {
+    // Implementáció
+  }
+
+  editHabit(Editedhabit: Habit) {
+    // Implementáció
+  }
+
+  deleteHabit(id: string) {
+    // Implementáció
+  }
+
+  completeHabit(habitLogId: string, Ispublic: boolean): Observable<any> {
+    // Implementáció
+  }
+
+  sendChallenge(habit: Habit, friendId: string): Observable<any> {
+    // Implementáció
+  }
+}
+\end{lstlisting}
+
+\chapter{Felhasználói Élmény}
+
+\section{Navigáció}
+Az alkalmazás intuitív navigációt biztosít:
+\begin{itemize}
+    \item Láblécfülek a fő szekciókhoz
+    \item FAB gombok a gyors műveletekhez
+    \item Csúsztatás gesztusok a dátum navigáláshoz
+    \item Modális párbeszédablakok a gyors adatbevitelhez
+\end{itemize}
+
+\section{Vizuális Visszajelzés}
+\begin{itemize}
+    \item Színkódolt szokások a vizuális azonosításhoz
+    \item Sorozat számlálók láng ikonokkal
+    \item Trófea jelvények a kihívott szokásokhoz
+    \item Toast üzenetek a műveletek megerősítéséhez
+\end{itemize}
+
+\section{Reszponzív Dizájn}
+Az alkalmazást úgy tervezték, hogy különböző képernyőméreteken és tájolásokban működjön:
+\begin{itemize}
+    \item Rugalmas rács elrendezések
+    \item Reszponzív UI komponensek
+    \item Adaptív tipográfia
+    \item Érintésbarát interakciós célpontok
+\end{itemize}
+
+\chapter{Tesztelés}
+
+\section{Egységtesztelés}
+Az alkalmazás egységteszteket tartalmaz a következők használatával:
+\begin{itemize}
+    \item Jasmine tesztelési keretrendszer
+    \item Karma teszt futtató
+    \item Angular tesztelési segédprogramok
+\end{itemize}
+
+\begin{lstlisting}[language=typescript]
+describe('HabitService', () => {
+  let service: HabitService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(HabitService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+\end{lstlisting}
+
+\section{Böngésző Kompatibilitás}
+Az alkalmazást úgy tervezték, hogy támogassa a következő böngészőket:
+\begin{itemize}
+    \item Chrome ≥79
+    \item ChromeAndroid ≥79
+    \item Firefox ≥70
+    \item Edge ≥79
+    \item Safari ≥14
+    \item iOS ≥14
+\end{itemize}
+
+\chapter{Jövőbeli Fejlesztések}
+
+\section{Tervezett Funkciók}
+A projekt munkaterve alapján:
+\begin{itemize}
+    \item Továbbfejlesztett push értesítések
+    \item Sötét/világos téma opciók
+    \item Továbbfejlesztett vizualizáció a naptár nézetben
+    \item További közösségi funkciók
+    \item Átfogóbb tesztelés
+\end{itemize}
+
+\section{Push Értesítési Stratégia}
+Tervezett értesítési típusok:
+\begin{itemize}
+    \item Napi emlékeztetők a szokások teljesítésére
+    \item Sorozat mérföldkövek ünneplése
+    \item Ösztönző üzenetek a negatív szokások elkerülésére
+    \item Kihívás meghívók és frissítések
+\end{itemize}
+
+\chapter{Összegzés}
+Az Elevate átfogó megoldást nyújt a szokások követésére közösségi funkciókkal, segítve a felhasználókat pozitív rutinok kialakításában elszámoltathatóság, vizualizáció és baráti kihívások révén. Az alkalmazás moduláris architektúrája lehetővé teszi a könnyű karbantartást és a funkciók bővítését.
+
+\end{document}

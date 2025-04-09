@@ -50,7 +50,6 @@ export class CalendarPage {
 
   initializeSwipeGesture() {
     if (!this.swipeArea) {
-      console.error('swipeArea is not initialized');
       return;
     }
 
@@ -58,30 +57,24 @@ export class CalendarPage {
       el: this.swipeArea.nativeElement,
       gestureName: 'swipe',
       onEnd: (ev) => {
-        console.log('Gesture detected with deltaX:', ev.deltaX);
-        this.zone.run(() => { // Ensure Angular detects changes
+        this.zone.run(() => { 
           if (ev.deltaX > 50) {
-            console.log('Swiped right');
             this.previousDay();
           } else if (ev.deltaX < -50) {
-            console.log('Swiped left');
             this.nextDay();
           }
         });
       },
     });
     gesture.enable();
-    console.log('Gesture enabled');
   }
   previousDay() {
-    console.log('previousDay called');
     this.date.setDate(this.date.getDate() - 1);
     this.updateDateDisplay();
     this.cdr.detectChanges();
   }
 
   nextDay() {
-    console.log('nextDay called');
     this.date.setDate(this.date.getDate() + 1);
     this.updateDateDisplay();
   }
@@ -97,5 +90,22 @@ export class CalendarPage {
 
   newHabit() {
     this.router.navigate(['/create-habit']);
+  }
+  isToday(): boolean {
+    const today = new Date();
+    return this.date.getDate() === today.getDate() &&
+      this.date.getMonth() === today.getMonth() &&
+      this.date.getFullYear() === today.getFullYear();
+  }
+
+  isOneMonthAhead(): boolean {
+    const today = new Date();
+
+    // Create a date that's one month ahead of today
+    const oneMonthAhead = new Date(today);
+    oneMonthAhead.setMonth(oneMonthAhead.getMonth() + 1);
+
+    // Check if current date is at or beyond the one month limit
+    return this.date >= oneMonthAhead;
   }
 }

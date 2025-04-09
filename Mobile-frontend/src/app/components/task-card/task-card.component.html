@@ -16,7 +16,7 @@
       </ion-badge>
       }
       <ion-checkbox [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)" slot="end"
-        (click)="stopPropagation($event); presentAlert(habit.id)"></ion-checkbox>
+        (click)="stopPropagation($event); presentAlert(habit.id)" [style]="!this.habitlogsDate ? 'display: none;' : ''"></ion-checkbox>
 
     </ion-item>
     <div class="ion-padding content" slot="content">
