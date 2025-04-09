@@ -4,6 +4,11 @@
     <header>Habits</header>
     <div id="habits">
       <div class="habits-grid">
+        @if (isLoading) {
+        <div class="loading-container">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+        } @else {
         @for (habit of habits; track habit.id) {
         <div class="habit-card" [ngStyle]="{ 'border-left': '5px solid #' + habit.color }">
           <div class="owner-header" *ngIf="!isHabitOwner(habit)">
@@ -33,6 +38,7 @@
             </div>
           </div>
         </div>
+        }
         }
 
         @for (challenge of challengeInvites; track challenge.id) {
@@ -67,8 +73,8 @@
         </div>
         }
 
-        @if (habits.length === 0 && challengeInvites.length === 0) {
-        <div class="no-habits" style="width: aut; max-width: 300px; margin: 0 auto;">
+        @if (!isLoading && !isChallengeInvitesLoading && habits.length === 0 && challengeInvites.length === 0) {
+        <div class="no-habits" style="width: auto; max-width: 300px; margin: 0 auto;">
           <h3>No habits found</h3>
           <p>Create a new habit from the dashboard page</p>
         </div>
@@ -82,37 +88,35 @@
     <div class="challenge-modal">
       <div class="challenge-modal-header">
         <h3>Challenge a Friend</h3>
-        <img src="icons/cross.png" alt="close" (click)="closeChallengeModal()" />
+        <button class="close-button" (click)="closeChallengeModal()">×</button>
       </div>
-      <div class="challenge-modal-content">
-        @if (isLoading) {
-        <div class="loading-spinner">
-          <p>Loading friends...</p>
-        </div>
-        } @else if (friends.length > 0) {
-        <div class="friends-list">
-          @for (friend of friends; track friend.id) {
-          <div class="friend-item">
-            <div class="friend-info">
-              <img
-                [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
-                alt="Profile picture" />
-              <span>{{ friend.firstName }} {{ friend.lastName }}</span>
-            </div>
-            <button class="button_primary" [disabled]="friendChallengeStatus.get(friend.id)"
-              (click)="challengeFriend(friend.id)">
-              {{ friendChallengeStatus.get(friend.id) ? 'Already Challenged' : 'Challenge' }}
-            </button>
+      @if (isLoading) {
+      <div class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+      } @else if (friends.length === 0) {
+      <div class="no-friends">
+        <p>You don't have any friends to challenge.</p>
+        <p>Add friends from the Friends page.</p>
+      </div>
+      } @else {
+      <div class="friends-list">
+        @for (friend of friends; track friend.id) {
+        <div class="friend-item">
+          <div class="friend-info">
+            <img
+              [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+              alt="{{ friend.firstName }}'s profile picture" />
+            <span>{{ friend.firstName }} {{ friend.lastName }}</span>
           </div>
-          }
-        </div>
-        } @else {
-        <div class="no-friends">
-          <p>You have no friends to challenge.</p>
-          <p>Add some friends first!</p>
+          <button class="button_primary challenge-button" [disabled]="friendChallengeStatus.get(friend.id)"
+            (click)="challengeFriend(friend.id)">
+            {{ friendChallengeStatus.get(friend.id) ? 'Challenged' : 'Challenge' }}
+          </button>
         </div>
         }
       </div>
+      }
     </div>
   </div>
   }

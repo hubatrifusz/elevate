@@ -3,8 +3,19 @@
   <div id="feed_container">
     <header>Feed</header>
     <div id="feed">
+      @if (isLoading) {
+      <div class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+      } @else if (!posts || posts.length === 0) {
+      <div class="no-posts">
+        <h3>No posts available</h3>
+        <p>There are no public posts to display in your feed right now.</p>
+      </div>
+      } @else {
       @for (post of posts; track $index) {
       <app-task-feed [post]="post"></app-task-feed>
+      }
       }
     </div>
   </div>

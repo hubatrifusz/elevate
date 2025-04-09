@@ -14,13 +14,12 @@
   background-color: $main-color-100;
 
   &:hover {
-    transform: translateY(-3px);
     box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.18);
   }
 
   #task_header {
-    display: grid;  // Changed to grid layout
-    grid-template-columns: auto 1fr auto;  // profile pic | name | title
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     grid-gap: 1.2rem;
     align-items: center;
     padding: 2rem 3.5rem;
@@ -32,7 +31,7 @@
       grid-template-columns: auto 1fr;
       grid-gap: 1.2rem;
       align-items: center;
-      grid-column: 1 / 3;  // Span first two columns
+      grid-column: 1 / 3;
 
       img {
         width: 3.5rem;
@@ -53,13 +52,13 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: block;  // Changed from inline-block
-        width: auto;     // Let it determine its width
+        display: block;
+        width: auto;
       }
     }
 
     #task_title {
-      grid-column: 3 / 4;  // Place in last column
+      grid-column: 3 / 4;
       text-align: right;
 
       h3 {
@@ -69,7 +68,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 20rem;  // Set a maximum width
+        max-width: 20rem;
       }
     }
   }
@@ -94,17 +93,4 @@
       }
     }
   }
-}
-
-// Color classes
-.red {
-  border-left: 0.7rem solid $task-color-red;
-}
-
-.blue {
-  border-left: 0.7rem solid $task-color-blue;
-}
-
-.green {
-  border-left: 0.7rem solid $task-color-green;
 }

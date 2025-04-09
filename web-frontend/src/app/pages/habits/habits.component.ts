@@ -11,11 +11,12 @@ import { map, catchError } from 'rxjs/operators';
 import { Challenge } from '../../models/challenge.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { LoadingSpinnerComponent } from "../../components/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-habits',
   standalone: true,
-  imports: [NavbarComponent, CommonModule],
+  imports: [NavbarComponent, CommonModule, LoadingSpinnerComponent],
   templateUrl: './habits.component.html',
   styleUrl: './habits.component.scss'
 })
@@ -31,7 +32,8 @@ export class HabitsComponent implements OnInit {
 
   showChallengeModal = false;
   selectedHabit: Habit | null = null;
-  isLoading = false;
+  isLoading = true;
+  isChallengeInvitesLoading = true;
 
   constructor(
     private habitService: HabitService,
@@ -48,26 +50,45 @@ export class HabitsComponent implements OnInit {
   }
 
   loadHabits(): void {
+    this.isLoading = true;
     this.habitService.getHabits().subscribe({
       next: (response) => {
         this.habits = response as Habit[];
 
-        this.habits.forEach(habit => {
-          if (habit.userId !== this.currentUserId) {
-            this.userService.getUserData(habit.userId).subscribe({
-              next: (user) => {
-                this.challengeSenders.set(habit.userId, user);
-              },
-              error: (error) => {
-                console.error(`Error fetching user info for habit ${habit.id}:`, error);
-              }
-            });
+        if (this.habits.length > 0) {
+          let loadedUsers = 0;
+          this.habits.forEach(habit => {
+            if (habit.userId !== this.currentUserId) {
+              this.userService.getUserData(habit.userId).subscribe({
+                next: (user) => {
+                  this.challengeSenders.set(habit.userId, user);
+                  loadedUsers++;
+                  if (loadedUsers >= this.habits.filter(h => h.userId !== this.currentUserId).length) {
+                    this.isLoading = false;
+                  }
+                },
+                error: (error) => {
+                  console.error(`Error fetching user info for habit ${habit.id}:`, error);
+                  loadedUsers++;
+                  if (loadedUsers >= this.habits.filter(h => h.userId !== this.currentUserId).length) {
+                    this.isLoading = false;
+                  }
+                }
+              });
+            }
+          });
+
+          if (this.habits.every(habit => habit.userId === this.currentUserId)) {
+            this.isLoading = false;
           }
-        });
+        } else {
+          this.isLoading = false;
+        }
       },
       error: (error) => {
         console.error(error);
         this.alertService.showAlert('Failed to load habits');
+        this.isLoading = false;
       }
     });
   }
@@ -76,10 +97,27 @@ export class HabitsComponent implements OnInit {
     this.habitService.getChallengeInvites().subscribe({
       next: (response) => {
         this.challengeInvites = response as Challenge[];
+
+        if (this.challengeInvites.length > 0) {
+          let loadedSenders = 0;
+          this.challengeInvites.forEach(challenge => {
+            this.userService.getUserData(challenge.userId).subscribe({
+              next: (user) => {
+                this.challengeSenders.set(challenge.userId, user);
+                loadedSenders++;
+              },
+              error: (error) => {
+                console.error(`Error fetching sender info for challenge:`, error);
+                loadedSenders++;
+              }
+            });
+          });
+        }
       },
       error: (error) => {
         console.error('Error loading challenge invites:', error);
         this.alertService.showAlert('Failed to load challenge invites');
+        this.isChallengeInvitesLoading = false;
       }
     });
   }

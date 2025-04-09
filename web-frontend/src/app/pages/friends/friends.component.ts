@@ -6,15 +6,17 @@ import { User } from '../../models/user.model';
 import { FriendRequest } from '../../models/friendRequest.model';
 import { AuthService } from '../../services/auth.service';
 import { Friendship } from '../../models/friendship.model';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-friends',
-  imports: [NavbarComponent, ReactiveFormsModule],
+  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.scss',
 })
 export class FriendsComponent {
-  constructor(private friendsService: FriendsService, private authService: AuthService) {}
+  constructor(private friendsService: FriendsService, private authService: AuthService) { }
 
   search: FormControl = new FormControl();
 
@@ -26,6 +28,12 @@ export class FriendsComponent {
 
   friendToDelete!: User;
 
+  // Loading states
+  isFriendsLoading = true;
+  isFriendRequestsLoading = true;
+  isSentRequestsLoading = true;
+  isSearchLoading = false;
+
   ngOnInit() {
     this.getFriendRequests();
     this.getFriends();
@@ -34,6 +42,7 @@ export class FriendsComponent {
 
   searchUsers() {
     this.searchResult = [];
+    this.isSearchLoading = true;
 
     this.friendsService.getUsersByEmail(this.search.value).subscribe({
       next: (response) => {
@@ -43,13 +52,17 @@ export class FriendsComponent {
         );
       },
       error: (error) => console.log(error),
+      complete: () => (this.isSearchLoading = false),
     });
   }
 
   getFriends() {
+    this.isFriendsLoading = true;
+
     this.friendsService.getFriends().subscribe({
       next: (response) => (this.friends = response as User[]),
       error: (error) => console.log(error),
+      complete: () => (this.isFriendsLoading = false),
     });
   }
 
@@ -57,7 +70,7 @@ export class FriendsComponent {
     const friendRequest: FriendRequest = { friendId: friendId, userId: this.authService.getUserId() as string, status: 'pending' };
 
     this.friendsService.sendFriendRequest(friendRequest).subscribe({
-      next: (response) => {},
+      next: (response) => { },
       error: (error) => console.log(error),
       complete: () => {
         let button = event.target as HTMLImageElement;
@@ -68,16 +81,31 @@ export class FriendsComponent {
   }
 
   getFriendRequests() {
+    this.isFriendRequestsLoading = true;
+
     this.friendsService.getFriendRequests().subscribe({
-      next: (response) => (this.friendRequests = response as User[]),
-      error: (error) => console.log(error),
+      next: (response) => {
+        this.friendRequests = response as User[];
+        this.isFriendRequestsLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        // If the error is that there are no friend requests, we treat it as an empty array
+        if (error.error === "User has no friend requests.") {
+          this.friendRequests = [];
+        }
+        this.isFriendRequestsLoading = false;
+      }
     });
   }
 
   getSentFriendRequests() {
+    this.isSentRequestsLoading = true;
+
     this.friendsService.getSentFriendRequests().subscribe({
       next: (response) => (this.sentFriendRequests = response as Friendship[]),
       error: (error) => console.log(error),
+      complete: () => (this.isSentRequestsLoading = false),
     });
   }
 

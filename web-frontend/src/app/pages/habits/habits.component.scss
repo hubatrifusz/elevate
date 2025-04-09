@@ -351,6 +351,15 @@ button {
   }
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 150px;
+  grid-column: 1 / -1;
+}
+
 .no-friends {
   text-align: center;
   padding: 36px 24px;
