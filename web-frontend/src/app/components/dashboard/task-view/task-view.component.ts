@@ -6,10 +6,11 @@ import { Habit } from '../../../models/habit.model';
 import { AlertService } from '../../../services/alert.service';
 import { UserService } from '../../../services/user.service';
 import { HabitLog } from '../../../models/habitlog.model';
+import { LoadingSpinnerComponent } from "../../loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-task-view',
-  imports: [TaskComponent, ReactiveFormsModule],
+  imports: [TaskComponent, ReactiveFormsModule, LoadingSpinnerComponent],
   templateUrl: './task-view.component.html',
   styleUrl: './task-view.component.scss',
 })
@@ -25,6 +26,7 @@ export class TaskViewComponent {
 
   isPreviousDisabled: boolean = false;
   isNextDisabled: boolean = false;
+  isLoading: boolean = false
 
   addNewTaskForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -59,8 +61,17 @@ export class TaskViewComponent {
 
   getHabitByID(habitId: string) {
     this.userService.getHabitByID(habitId).subscribe({
-      next: (response) => this.habitList.push(response),
-      error: (error) => console.log(error),
+      next: (response) => {
+        this.habitList.push(response);
+
+        if (this.habitList.length >= this.habitlogList.length) {
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
     });
   }
 
@@ -103,21 +114,29 @@ export class TaskViewComponent {
   getTodaysHabitlogs(today: string) {
     this.habitlogList = [];
     this.habitList = [];
+    this.isLoading = true;
 
     this.userService.getTodaysHabitlogs(today).subscribe({
-      next: (response) => (this.habitlogList = response as HabitLog[]),
-      error: (error) => console.log(error),
-      complete: () => {
-        this.habitlogList.forEach((habitlog) => {
-          this.getHabitByID(habitlog.habitId);
-        });
+      next: (response) => {
+        this.habitlogList = response as HabitLog[];
+
+        if (this.habitlogList.length === 0) {
+          this.isLoading = false;
+        } else {
+          this.habitlogList.forEach((habitlog) => {
+            this.getHabitByID(habitlog.habitId);
+          });
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
       },
     });
   }
 
   getAllHabits() {
     this.userService.getHabits().subscribe({
-      // next: (response) => (this.habitList = response as Habit[]),
       next: (response) => console.log(response),
       error: (error) => console.log(error),
     });

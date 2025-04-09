@@ -14,13 +14,19 @@
 
   <!-- Tasks -->
   <div id="tasks_container">
-    @if (habitList.length == 0) {
+    @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+    } @else if (habitlogList.length === 0) {
     <h3>All done! 🎉</h3>
     <p>Click 'Add' to create a new habit.</p>
-    } @else { @for (habitLog of habitlogList; track $index) { @if (getHabitForLog(habitLog)) {
+    } @else {
+    @for (habitLog of habitlogList; track $index) {
+    @if (getHabitForLog(habitLog)) {
     <app-task [habitData]="getHabitForLog(habitLog)!" [habitLogData]="habitLog"
       (dataEmitter)="deleteHabit($event)"></app-task>
-    } } }
+    }
+    }
+    }
   </div>
 
   <!-- Add new task button -->
