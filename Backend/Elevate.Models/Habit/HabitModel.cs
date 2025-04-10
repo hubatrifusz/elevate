@@ -14,6 +14,7 @@ namespace Elevate.Models.Habit
         public sbyte? CustomFrequency { get; set; }
         public required string Color { get; set; }
         public required bool IsPositive { get; set; }
+        public required string StreakProgression { get; set; } = $"0/0";
         public int Streak { get; set; } = 0;
         public DateTime StreakStart { get; set; } = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
         public required bool Deleted { get; set; }
