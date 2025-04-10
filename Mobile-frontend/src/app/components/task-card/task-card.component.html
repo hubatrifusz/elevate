@@ -125,13 +125,13 @@
 </ion-accordion-group>
 }
 @else{
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>No habits found</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <p>Click on the + button to add a new habit</p>
-  </ion-card-content>
-</ion-card>
-
+  <ion-card color="tertiary" class="no-habit-card">
+    <ion-card-header>
+      <ion-card-title color="dark">No habits found</ion-card-title>
+      <ion-card-subtitle color="dark">Click on the + button to add a new habit</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="happy-outline" size="large" color=""></ion-icon>
+    </ion-card-content>
+  </ion-card>
 }

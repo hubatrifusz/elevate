@@ -4,9 +4,21 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
- 
+
+  @if(posts.length == 0) {
+  <ion-card color="tertiary" class="no-feed-card">
+    <ion-card-header>
+      <ion-card-title color="dark">Your feed is empty</ion-card-title>
+      <ion-card-subtitle color="dark">Make the first move!</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="happy-outline" size="large" color=""></ion-icon>
+    </ion-card-content>
+  </ion-card>
+  } @else {
   @for (post of posts; track $index) {
   <app-feed-card [post]="post"></app-feed-card>
+  }
   }
 
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="!hasMorePosts">

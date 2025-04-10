@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle, IonBadge, IonAvatar } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle, IonBadge, IonAvatar, IonCardSubtitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronDownOutline, flameOutline, peopleOutline, starOutline, time, trashOutline, trophyOutline, trophySharp } from 'ionicons/icons';
+import { chevronDownOutline, flameOutline, happyOutline, peopleOutline, starOutline, time, trashOutline, trophyOutline, trophySharp } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -21,10 +21,10 @@ import { ToastService } from 'src/app/services/toast.service';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonAvatar, IonBadge, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
+  imports: [IonCardSubtitle, IonAvatar, IonBadge, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
-    IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle, FriendComponent]
+    IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle]
 })
 export class TaskCardComponent implements OnInit {
 
@@ -73,7 +73,7 @@ export class TaskCardComponent implements OnInit {
 
 
   constructor(private loadingController: LoadingController, private alertController: AlertController, private modalController: ModalController) {
-    addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline, trophySharp });
+    addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline, trophySharp, happyOutline });
    
   }
   ngOnInit() {

@@ -1,18 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuToggle, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonSpinner, LoadingController } from '@ionic/angular/standalone';
+import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuToggle, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonSpinner, LoadingController, IonCardHeader, IonCard, IonCardTitle, IonCardContent, IonCardSubtitle } from '@ionic/angular/standalone';
 import { FriendsFeedService } from 'src/app/services/friends-feed.service';
 import { Post } from 'src/app/.models/post.model';
 import { FeedCardComponent } from "../../components/feed-card/feed-card.component";
 import { HeaderComponent } from "../../components/header/header.component";
+import { addIcons } from 'ionicons';
+import { happyOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-friends-feed',
   templateUrl: './friends-feed.page.html',
   styleUrls: ['./friends-feed.page.scss'],
   standalone: true,
-  imports: [ IonInfiniteScroll, IonInfiniteScrollContent, IonContent, CommonModule, FormsModule, FeedCardComponent, HeaderComponent, IonRefresher, IonRefresherContent]
+  imports: [IonCardSubtitle,IonIcon, IonCardContent, IonCardTitle, IonCard, IonCardHeader,  IonInfiniteScroll, IonInfiniteScrollContent, IonContent, CommonModule, FormsModule, FeedCardComponent, HeaderComponent, IonRefresher, IonRefresherContent]
 })
 export class FriendsFeedPage {
   friendFeedService = inject(FriendsFeedService);
@@ -21,7 +23,9 @@ export class FriendsFeedPage {
   private pageSize = 15;
   hasMorePosts = true; // Flag to track if more posts are available
 
-  constructor(private loadingController: LoadingController) { }
+  constructor(private loadingController: LoadingController) {
+    addIcons({happyOutline});
+   }
   
   async ionViewWillEnter() {
     this.posts = [];
