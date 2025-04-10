@@ -2,7 +2,7 @@
 
 <ion-accordion-group expand="inset">
   @for(habit of habits ; track $index) {
-  <ion-accordion [disabled]="isHabitCompleted(habit.id) || Disabled">
+  <ion-accordion data-cy="habitCard" [disabled]="isHabitCompleted(habit.id) || Disabled">
     <ion-item slot="header" color="light" class="habit-item">
       <div class="color" [style.backgroundColor]="habit.color"></div>
       <ion-input [readonly]="true" type="text" [value]="habit.title"></ion-input>
@@ -15,7 +15,7 @@
         <ion-icon name="trophy-sharp"></ion-icon>
       </ion-badge>
       }
-      <ion-checkbox [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)" slot="end"
+      <ion-checkbox data-cy="checkHabit" [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)" slot="end"
         (click)="stopPropagation($event); presentAlert(habit.id)" [style]="!this.habitlogsDate ? 'display: none;' : ''"></ion-checkbox>
 
     </ion-item>
