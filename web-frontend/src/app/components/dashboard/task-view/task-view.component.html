@@ -22,7 +22,7 @@
     } @else {
     @for (habitLog of habitlogList; track $index) {
     @if (getHabitForLog(habitLog)) {
-    <app-task [habitData]="getHabitForLog(habitLog)!" [habitLogData]="habitLog"
+    <app-task [habitData]="getHabitForLog(habitLog)!" [habitLogData]="habitLog" [isToday]="isCurrentDateToday()"
       (dataEmitter)="deleteHabit($event)"></app-task>
     }
     }

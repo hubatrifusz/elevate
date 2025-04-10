@@ -60,9 +60,17 @@ export class FriendsComponent {
     this.isFriendsLoading = true;
 
     this.friendsService.getFriends().subscribe({
-      next: (response) => (this.friends = response as User[]),
-      error: (error) => console.log(error),
-      complete: () => (this.isFriendsLoading = false),
+      next: (response) => {
+        this.friends = response as User[];
+        this.isFriendsLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.error === "User has no friends.") {
+          this.friends = [];
+        }
+        this.isFriendsLoading = false;
+      }
     });
   }
 

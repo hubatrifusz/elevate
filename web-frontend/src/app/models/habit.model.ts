@@ -11,6 +11,7 @@ export interface Habit {
   streak: number;
   streakStart?: Date;
   deleted: boolean;
+  streakProgression: string; // Format: "x/y" where x is completed and y is total
 }
 
 export enum FrequencyEnum {

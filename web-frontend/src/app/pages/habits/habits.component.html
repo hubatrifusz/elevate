@@ -33,6 +33,9 @@
             <div class="habit-streak">
               <span>Current streak: {{ habit.streak }}</span>
             </div>
+            <div class="habit-streak-progression" *ngIf="habit.streakProgression && habit.streakProgression !== '0/0'">
+              <span>Team progress: {{ habit.streakProgression }}</span>
+            </div>
             <div class="habit-actions" [style.display]="isHabitOwner(habit) ? 'block' : 'none'">
               <button class="button_primary" (click)="openChallengeModal(habit)">Challenge Friend</button>
             </div>
@@ -64,6 +67,10 @@
             <p class="challenge-description">{{ challenge.habit.description }}</p>
             <div class="habit-streak">
               <span>Current streak: {{ challenge.habit.streak }}</span>
+            </div>
+            <div class="habit-streak-progression"
+              *ngIf="challenge.habit.streakProgression && challenge.habit.streakProgression !== '0/0'">
+              <span>Team progress: {{ challenge.habit.streakProgression }}</span>
             </div>
             <div class="challenge-actions">
               <button class="button_delete" (click)="declineChallenge(challenge)">Decline</button>

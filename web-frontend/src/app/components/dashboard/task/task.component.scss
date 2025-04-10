@@ -1,4 +1,4 @@
-@import "../../../../assets/styles/variables";
+@import '../../../../assets/styles/variables';
 
 .task_container {
   display: flex;
@@ -45,7 +45,8 @@
 
       height: 100%;
 
-      #time_container {
+      #time_container,
+      #future_container {
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -57,13 +58,25 @@
         border-radius: 0.7rem;
         background-color: $main-color-200;
 
-        img {
+        img,
+        .calendar-icon {
           height: 100%;
+          display: flex;
+          align-items: center;
+          font-size: 1.2rem;
         }
 
         span {
           color: $main-color-600;
           font-size: $font-size-base;
+        }
+      }
+
+      #future_container {
+        background-color: $accent-color-100;
+
+        span {
+          color: $accent-color-600;
         }
       }
 
@@ -130,4 +143,19 @@
   .task_header_container {
     background-color: $main-color-200;
   }
+}
+
+// Add styles for non-today habits
+.habit-title {
+  font-size: $font-size-lg;
+  color: $text-color-900;
+  font-weight: 500;
+  display: block;
+}
+
+.due-date {
+  font-size: $font-size-sm;
+  color: $text-color-700;
+  display: block;
+  margin-top: 4px;
 }

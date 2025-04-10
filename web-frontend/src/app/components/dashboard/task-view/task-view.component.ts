@@ -169,4 +169,20 @@ export class TaskViewComponent {
 
     this.getTodaysHabitlogs(this.date.toISOString());
   }
+
+  // Check if the given date is today
+  isForToday(date: Date): boolean {
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+  }
+
+  // Method to check if the currently displayed date in the component is today's date
+  isCurrentDateToday(): boolean {
+    const today = new Date();
+    return this.date.getDate() === today.getDate() &&
+      this.date.getMonth() === today.getMonth() &&
+      this.date.getFullYear() === today.getFullYear();
+  }
 }

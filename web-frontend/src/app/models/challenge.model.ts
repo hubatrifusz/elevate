@@ -18,6 +18,7 @@ export interface Challenge {
     streakStart?: Date;
     deleted: boolean;
     challengedFriends?: string[];
+    streakProgression: string; 
   }
   status: string;
 }
