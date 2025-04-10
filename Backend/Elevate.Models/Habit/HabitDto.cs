@@ -24,6 +24,8 @@ namespace Elevate.Models.Habit
         [Required]
         public required bool IsPositive { get; set; }
         [Required]
+        public string StreakProgression { get; set; }
+        [Required]
         public required int Streak { get; set; }
         public DateTime? StreakStart { get; set; }
         [Required]  
