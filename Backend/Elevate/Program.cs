@@ -1,16 +1,12 @@
 using Asp.Versioning;
 using Elevate.Data.Database;
 using Elevate.Extensions;
-using Elevate.Profiles;
-using Elevate.Models;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Elevate.Common.Utilities;
 using Elevate.Middleware;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -107,14 +103,12 @@ namespace Elevate
 
                         try
                         {
-                            // Check if the schema (tables) exists
                             bool hasSchema = dbContext.Database.GetService<IRelationalDatabaseCreator>()
                                 .HasTables();
 
                             if (!hasSchema)
                             {
                                 logger.LogInformation("PostgreSQL database exists but has no tables. Creating schema...");
-                                // This creates all tables according to your model
                                 dbContext.Database.EnsureCreated();
                                 logger.LogInformation("PostgreSQL schema created successfully");
                             }
@@ -126,7 +120,7 @@ namespace Elevate
                         catch (Exception ex)
                         {
                             logger.LogError(ex, "Error initializing PostgreSQL database");
-                            throw; // Critical error - rethrow to prevent app from starting with broken DB
+                            throw;
                         }
                     }
                     else{
@@ -137,6 +131,7 @@ namespace Elevate
                 {
                     logger.LogError(ex, "Database initialization failed");
                 }
+                dbContext.Database.Migrate();
             }
 
             app.Run();

@@ -83,8 +83,6 @@ namespace Elevate.Extensions
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
-            // Add email sending service (example using built-in but consider a library)
         }
 
         public static void AddCorsPolicies(this IServiceCollection services) 

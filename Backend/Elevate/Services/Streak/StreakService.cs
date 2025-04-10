@@ -1,5 +1,4 @@
 ﻿using Elevate.Data.Repository;
-using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
 namespace Elevate.Services.Streak
@@ -16,8 +15,32 @@ namespace Elevate.Services.Streak
             var habit = await _habitRepository.GetHabitByIdAsync(habitLog.HabitId);
             if (habit == null || habit.Deleted) return;
 
-            habit.Streak++;
+            if (habit.ChallengedFriends.Count == 0)
+            {
+                habit.Streak++;
+            }
+            else
+            {
+                var streakProgression = habit.StreakProgression.Split('/');
+
+                int currentProgress = int.Parse(streakProgression[0]) + 1;
+                int requiredProgress = int.Parse(streakProgression[1]) + 1;
+
+                habit.StreakProgression = $"" +
+                    $"{currentProgress}" +
+                    $"/{requiredProgress}";
+
+                if (currentProgress == requiredProgress)
+                {
+                    habit.Streak++;
+                }
+            }
             await _habitRepository.UpdateHabitAsync(habit);
+        }
+
+        public async Task UpdateHighestStreak(Guid userId)
+        {
+            await _habitRepository.UpdateHighestStreak(userId);
         }
 
         public async Task CheckAndResetBrokenStreaks()
