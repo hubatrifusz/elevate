@@ -147,6 +147,8 @@ namespace Elevate.Data.Migrations
                     Color = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsPositive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    StreakProgress = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Streak = table.Column<int>(type: "int", nullable: false),
                     StreakStart = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Deleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
