@@ -1,5 +1,4 @@
 ﻿using Elevate.Data.Repository;
-using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 
 namespace Elevate.Services.Streak
@@ -18,6 +17,11 @@ namespace Elevate.Services.Streak
 
             habit.Streak++;
             await _habitRepository.UpdateHabitAsync(habit);
+        }
+
+        public async Task UpdateHighestStreak(Guid userId)
+        {
+            await _habitRepository.UpdateHighestStreak(userId);
         }
 
         public async Task CheckAndResetBrokenStreaks()

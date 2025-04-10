@@ -48,6 +48,7 @@ namespace Elevate.Services.HabitLog
             {
                 _mapper.Map(habitLogUpdateDto, habitLogModel);
                 await _streakService.UpdateStreakForHabitLog(habitLogModel);
+                await _streakService.UpdateHighestStreak(habitLogModel.UserId);
                 habitLogModel.CompletedAt = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
             }
 

@@ -50,5 +50,22 @@ namespace Elevate.Data.Repository
 
             return null;
         }
+
+        public async Task<int> UpdateHighestStreak(Guid userId)
+        {
+            var habit = await _context.Habits
+                .Where(h => h.UserId == userId && !h.Deleted)
+                .OrderByDescending(h => h.Streak)
+                .FirstOrDefaultAsync();
+            if (habit != null)
+            {
+                await _context.ApplicationUsers
+                    .Where(u => u.Id == userId)
+                    .ExecuteUpdateAsync(u => u.SetProperty(x => x.LongestStreak, habit.Streak));
+                await _context.SaveChangesAsync();
+                return habit.Streak;
+            }
+            return 0;
+        }
     }
 }
