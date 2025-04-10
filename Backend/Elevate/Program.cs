@@ -131,7 +131,6 @@ namespace Elevate
                 {
                     logger.LogError(ex, "Database initialization failed");
                 }
-                dbContext.Database.Migrate();
             }
 
             app.Run();
