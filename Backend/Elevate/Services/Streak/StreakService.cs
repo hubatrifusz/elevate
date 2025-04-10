@@ -24,15 +24,14 @@ namespace Elevate.Services.Streak
                 var streakProgression = habit.StreakProgression.Split('/');
 
                 int currentProgress = int.Parse(streakProgression[0]) + 1;
-                int requiredProgress = int.Parse(streakProgression[1]) + 1;
+                int requiredProgress = habit.ChallengedFriends.Count + 1;
 
-                habit.StreakProgression = $"" +
-                    $"{currentProgress}" +
-                    $"/{requiredProgress}";
+                habit.StreakProgression = $"{currentProgress}/{requiredProgress}";
 
                 if (currentProgress == requiredProgress)
                 {
                     habit.Streak++;
+                    habit.StreakProgression = $"0/{requiredProgress}";
                 }
             }
             await _habitRepository.UpdateHabitAsync(habit);
@@ -51,6 +50,12 @@ namespace Elevate.Services.Streak
             foreach (var habit in habits)
             {
                 if (habit.Deleted) continue;
+
+                if (habit.ChallengedFriends.Count > 0)
+                {
+                    int requiredProgress = habit.ChallengedFriends.Count + 1; 
+                    habit.StreakProgression = $"0/{requiredProgress}";
+                }
 
                 var missedLog = await _habitLogRepository.GetOldestMissedHabitLogAsync(habit.Id, now);
 
