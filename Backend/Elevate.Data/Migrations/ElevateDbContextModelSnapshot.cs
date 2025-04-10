@@ -175,7 +175,7 @@ namespace Elevate.Data.Migrations
 
                     b.Property<string>("StreakProgression")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("StreakStart")
                         .HasColumnType("datetime(6)");

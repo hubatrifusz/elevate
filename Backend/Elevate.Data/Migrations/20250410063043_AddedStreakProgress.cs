@@ -13,9 +13,9 @@ namespace Elevate.Data.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "StreakProgression",
                 table: "Habits",
-                type: "longtext",
-                nullable: false)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                type: "text",
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
