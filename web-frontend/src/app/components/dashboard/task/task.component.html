@@ -1,11 +1,6 @@
-@if (showConfirmDialog){
-<app-confirm-dialog (dataEmitter)="deleteHabit($event)"></app-confirm-dialog>
-}
-
 <div class="task_container" #taskElement [ngStyle]="{ 'border-left': '1rem solid #' + habitData.color }">
   <div class="task_header_container">
     <div id="left">
-      <!-- Checkbox for marking task done -->
       @if (isToday) {
       <div class="input_container" id="remember_me_checkbox_input_container">
         <input type="checkbox" #task_checkbox_input name="task_checkbox_input" id="{{ habitLogData.id }}"
@@ -40,25 +35,15 @@
     </div>
   </div>
   <div class="task_details_container">
-    <!-- Description -->
     <div class="task_description">
       <p class="p_dark">Description:</p>
       <p>{{ habitData.description }}</p>
     </div>
 
-    <!-- Notes -->
     <div class="task_notes">
       <div class="input_container">
-        <!-- TODO make a textarea input -->
         <textarea name="" id="" placeholder="Add some notes" rows="3" [formControl]="notes"
           (blur)="saveNotes()"></textarea>
-      </div>
-    </div>
-
-    <!-- Delete button -->
-    <div id="task_actions">
-      <div class="button_container" (click)="openConfirmationDialog()">
-        <button class="button_delete"><span>Delete</span></button>
       </div>
     </div>
   </div>

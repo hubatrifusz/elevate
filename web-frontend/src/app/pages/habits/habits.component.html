@@ -38,6 +38,7 @@
             </div>
             <div class="habit-actions" [style.display]="isHabitOwner(habit) ? 'block' : 'none'">
               <button class="button_primary" (click)="openChallengeModal(habit)">Challenge Friend</button>
+              <button class="button_delete" style="margin-left: 10px;" (click)="deleteHabit(habit)">Delete</button>
             </div>
           </div>
         </div>

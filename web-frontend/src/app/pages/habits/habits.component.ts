@@ -12,11 +12,12 @@ import { Challenge } from '../../models/challenge.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { LoadingSpinnerComponent } from "../../components/loading-spinner/loading-spinner.component";
+import { AlertComponent } from "../../components/alert/alert.component";
 
 @Component({
   selector: 'app-habits',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, LoadingSpinnerComponent],
+  imports: [NavbarComponent, CommonModule, LoadingSpinnerComponent, AlertComponent],
   templateUrl: './habits.component.html',
   styleUrl: './habits.component.scss'
 })
@@ -233,5 +234,17 @@ export class HabitsComponent implements OnInit {
   isHabitOwner(habit: Habit): boolean {
     const currentUserId = this.authService.getUserId();
     return habit.userId === currentUserId;
+  }
+
+  deleteHabit(habit: Habit): void {
+    this.userService.deleteHabit(habit.id).subscribe({
+      next: () => this.alertService.showAlert('Habit deleted successfully!'),
+      error: (error) => this.alertService.showAlert(error),
+      complete: () =>
+        this.habits.splice(
+          this.habits.findIndex((habit) => habit.id === habit.id),
+          1
+        ),
+    });
   }
 }

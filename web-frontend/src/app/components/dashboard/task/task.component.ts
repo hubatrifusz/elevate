@@ -102,14 +102,4 @@ export class TaskComponent implements OnInit {
       },
     });
   }
-
-  deleteHabit(result: boolean) {
-    if (result) {
-      this.dataEmitter.emit(this.habitData);
-      document.querySelectorAll('.expand').forEach((el) => el.classList.remove('expand'));
-      this.showConfirmDialog = false;
-    } else {
-      this.showConfirmDialog = false;
-    }
-  }
 }
