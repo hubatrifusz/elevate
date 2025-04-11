@@ -75,15 +75,17 @@ namespace Elevate
 
             app.UseMiddleware<GlobalExceptionHandler>();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())  
-                // remove production 
+            if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseCors("DevelopmentPolicy");
             }
-
-            app.UseCors("DevelopmentPolicy");
+            else
+            {
+                app.UseCors("ProductionPolicy");
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
