@@ -31,7 +31,6 @@ namespace Elevate.Services.Streak
                 if (currentProgress == requiredProgress)
                 {
                     habit.Streak++;
-                    habit.StreakProgression = $"0/{requiredProgress}";
                 }
             }
             await _habitRepository.UpdateHabitAsync(habit);
