@@ -67,6 +67,8 @@ export class AppComponent implements OnInit {
     }
   }
   gotofriends() {
+    this.friendRequests = 0; 
+    this.challengeRequests = 0;
     this.menuCtrl.close();
     this.router.navigate(['/footertabs/friends']);
   }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle, IonBadge, IonAvatar, IonCardSubtitle } from '@ionic/angular/standalone';
+import { IonIcon, IonCheckbox, IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton, IonGrid, IonRow, IonCol, IonTextarea, IonList, IonSelect, IonSelectOption, IonContent, IonInput, IonCardHeader, IonCard, IonCardTitle, IonCardContent, LoadingController, IonAlert, IonTabButton, AlertController, ModalController, IonModal, IonHeader, IonButtons, IonToolbar, IonTitle, IonBadge, IonAvatar, IonCardSubtitle, IonProgressBar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, flameOutline, happyOutline, peopleOutline, starOutline, time, trashOutline, trophyOutline, trophySharp } from 'ionicons/icons';
 import { Habit, Frequency } from '../../.models/Habit.model';
@@ -21,7 +21,7 @@ import { ToastService } from 'src/app/services/toast.service';
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
-  imports: [IonCardSubtitle, IonAvatar, IonBadge, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
+  imports: [IonProgressBar, IonCardSubtitle, IonAvatar, IonBadge, IonCardContent, IonCardTitle, IonCard, IonCardHeader, IonIcon, IonCheckbox,
     IonLabel, IonAccordionGroup, IonAccordion, IonItem, IonButton,
     IonGrid, IonRow, IonCol, CommonModule, IonTextarea, IonList,
     IonSelect, IonSelectOption, FormsModule, IonInput, IonModal, IonHeader, IonContent, IonButtons, IonToolbar, IonTitle]
@@ -74,7 +74,7 @@ export class TaskCardComponent implements OnInit {
 
   constructor(private loadingController: LoadingController, private alertController: AlertController, private modalController: ModalController) {
     addIcons({ time, chevronDownOutline, flameOutline, trashOutline, peopleOutline, trophySharp, happyOutline });
-   
+
   }
   ngOnInit() {
     // Subscribe to loadMoreHabits events
@@ -437,20 +437,6 @@ export class TaskCardComponent implements OnInit {
     });
   }
 
-  // onChallengeFriend(friendId: string) {
-  //   if (this.Habit?.color.includes('#')) {
-  //     this.Habit.color = this.Habit.color.slice(1);
-  //     this.challengeService.sendChallenge(this.Habit, friendId).subscribe({
-  //       next: () => {
-  //         this.toast.presentToast('Challenge sent successfully');
-  //       },
-  //       error: (error) => {
-  //         console.error('Error sending challenge:', error);
-  //         this.toast.presentToast(error.error);
-  //       }
-  //     })
-  //   }
-  // }
 
   hasSentInvite(friendId: string): boolean {
     return this.sentChallengeInvites?.some(invite => invite.friendId === friendId) ?? false;
@@ -464,4 +450,43 @@ export class TaskCardComponent implements OnInit {
     this.router.navigate(['/profile', userId]);
   }
 
+  darkenColor(color: string, amount: number = 0.7): string {
+    if (!color) return '';
+    if (!color.startsWith('#')) return color;
+
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+
+    r = Math.floor(r * amount);
+    g = Math.floor(g * amount);
+    b = Math.floor(b * amount);
+
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  }
+  
+  calculateProgressValue(streakProgression?: string): number {
+    if (!streakProgression) {
+      return 0;
+      console.log("SFSDF")
+    }
+
+    try {
+      const [completed, total] = streakProgression.split('/').map(num => parseInt(num.trim(), 10));
+
+      // Validate that we have valid numbers
+      if (isNaN(completed) || isNaN(total) || total === 0) {
+        return 0;
+        console.log("sdf")
+      }
+
+      // Ensure value is between 0 and 1
+      const progress = completed / total;
+      return Math.min(Math.max(progress, 0), 1);
+      console.log(progress)
+    } catch (error) {
+      console.error('Error parsing streak progression:', error);
+      return 0;
+    }
+  }
 }

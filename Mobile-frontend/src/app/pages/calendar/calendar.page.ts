@@ -57,7 +57,7 @@ export class CalendarPage {
       el: this.swipeArea.nativeElement,
       gestureName: 'swipe',
       onEnd: (ev) => {
-        this.zone.run(() => { 
+        this.zone.run(() => {
           if (ev.deltaX > 50) {
             this.previousDay();
           } else if (ev.deltaX < -50) {
@@ -69,9 +69,12 @@ export class CalendarPage {
     gesture.enable();
   }
   previousDay() {
-    this.date.setDate(this.date.getDate() - 1);
-    this.updateDateDisplay();
-    this.cdr.detectChanges();
+    if (this.isToday()) {
+
+      this.date.setDate(this.date.getDate() - 1);
+      this.updateDateDisplay();
+      this.cdr.detectChanges();
+    }
   }
 
   nextDay() {

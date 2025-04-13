@@ -11,6 +11,7 @@ export interface Habit {
     streak_start?: Date;
     challengedFriends?: string[];
     userId?: string;
+    streakProgression? : string;
 }
 export enum Frequency {
     Daily = 'daily',

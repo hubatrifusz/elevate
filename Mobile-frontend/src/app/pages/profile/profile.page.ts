@@ -60,13 +60,22 @@ export class ProfilePage {
       try {
         const image = await Camera.getPhoto({
           quality: 90,
-          allowEditing: true,
+          allowEditing: false,
           resultType: CameraResultType.Base64,
           source: CameraSource.Prompt,
         });
 
         if (image.base64String) {
           this.user!.profilePictureBase64 = image.base64String;
+          this.service.editUser(image.base64String).subscribe({
+            next: () => {
+              this.toast.presentToast('Profile picture updated successfully!');
+            },
+            error: (error) => {
+              console.error('Error updating profile picture:', error);
+              this.toast.presentToast('Error updating profile picture');
+            }
+          });
         }
       } catch (error) {
         console.error('Error selecting image:', error);

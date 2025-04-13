@@ -15,8 +15,9 @@
         <ion-icon name="trophy-sharp"></ion-icon>
       </ion-badge>
       }
-      <ion-checkbox data-cy="checkHabit" [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)" slot="end"
-        (click)="stopPropagation($event); presentAlert(habit.id)" [style]="!this.habitlogsDate ? 'display: none;' : ''"></ion-checkbox>
+      <ion-checkbox data-cy="checkHabit" [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)"
+        slot="end" (click)="stopPropagation($event); presentAlert(habit.id)"
+        [style]="!this.habitlogsDate ? 'display: none;' : ''"></ion-checkbox>
 
     </ion-item>
     <div class="ion-padding content" slot="content">
@@ -36,6 +37,20 @@
       <ion-textarea maxlength="200" inputmode="text" [readonly]="this.habitlogsDate || habit.userId !== currentUserId"
         label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
         (ionBlur)="onDescriptionBlur(habit)" maxlength="100"></ion-textarea>
+      @if(habit.userId !== currentUserId || habit.challengedFriends!.length > 0){
+      <ion-item>
+        <ion-label>Streak Progress</ion-label>
+        <ion-progress-bar [value]="calculateProgressValue(habit.streakProgression)" class="progress-bar" style="--background: {{darkenColor(habit.color, 0.2)}}; 
+                   --progress-background: {{habit.color}};">
+        </ion-progress-bar>
+        @if(calculateProgressValue(habit.streakProgression) >= 1){
+        <ion-label class="progress-text">100%</ion-label>
+        }
+        
+      </ion-item>
+      }
+
+
       <ion-list>
         <ion-item>
           <ion-select [disabled]="true" aria-label="Frequency" interface="popover" label="Frequency:"
@@ -76,7 +91,7 @@
           </ion-button>
         </ion-col>
         <ion-col size="7">
-          <ion-button [disabled]="habit.userId !== currentUserId" expand="block"
+          <ion-button color="tertiary" [disabled]="habit.userId !== currentUserId" expand="block"
             (click)="getFriends(habit); getSentInvites(habit.id)">
             Challenge friend
             <ion-icon slot="end" name="people-outline"></ion-icon>
@@ -99,9 +114,9 @@
             <ion-list color="light">
               @for (friend of friends; track $index) {
 
-              <ion-item >
+              <ion-item>
                 <ion-avatar slot="start">
-                  <img (click)="setOpen(false)" (click)="goToProfile(friend.id)" 
+                  <img (click)="setOpen(false)" (click)="goToProfile(friend.id)"
                     [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
                     alt="Profile Picture" />
                 </ion-avatar>
@@ -109,7 +124,8 @@
                   <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
                   <p>{{ friend.email }}</p>
                 </ion-label>
-                <ion-button [disabled]="hasSentInvite(friend.id)" color="success" slot="end" (click)="onChallengeFriend(friend.id)">
+                <ion-button [disabled]="hasSentInvite(friend.id)" color="success" slot="end"
+                  (click)="onChallengeFriend(friend.id)">
                   {{ hasSentInvite(friend.id) ? 'Invited' : 'Challenge' }}
                 </ion-button>
               </ion-item>
@@ -125,13 +141,13 @@
 </ion-accordion-group>
 }
 @else{
-  <ion-card color="tertiary" class="no-habit-card">
-    <ion-card-header>
-      <ion-card-title color="dark">No habits found</ion-card-title>
-      <ion-card-subtitle color="dark">Click on the + button to add a new habit</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content class="ion-text-center">
-      <ion-icon name="happy-outline" size="large" color=""></ion-icon>
-    </ion-card-content>
-  </ion-card>
+<ion-card color="tertiary" class="no-habit-card">
+  <ion-card-header>
+    <ion-card-title color="dark">No habits found</ion-card-title>
+    <ion-card-subtitle color="dark">Click on the + button to add a new habit</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content class="ion-text-center">
+    <ion-icon name="happy-outline" size="large" color=""></ion-icon>
+  </ion-card-content>
+</ion-card>
 }

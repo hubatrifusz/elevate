@@ -34,4 +34,14 @@ export class UserService {
       }
     });
   }
+  editUser(profilePictureBase64 : string){
+    const token = localStorage.getItem('token'); // Retrieve token dynamically
+    const userId = localStorage.getItem('userId'); // Retrieve userId dynamically
+
+    return this.http.patch<User>(`${this.apiUrl}/user/${userId}`, { profilePictureBase64 }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+  }
 }
