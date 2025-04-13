@@ -84,11 +84,11 @@ namespace Elevate.Data.Repository
                         break;
 
                     case FrequencyEnum.Weekly:
-                        includeDate = currentDate.DayOfWeek == startDate.DayOfWeek;
+                        includeDate = currentDate.DayOfWeek == habit.CreatedAt.DayOfWeek;
                         break;
 
                     case FrequencyEnum.Monthly:
-                        includeDate = currentDate.Day == startDate.Day;
+                        includeDate = currentDate.Day == habit.CreatedAt.Day;
                         break;
                 }
 
@@ -101,13 +101,13 @@ namespace Elevate.Data.Repository
 
                 if (habit.FrequencyType == FrequencyEnum.Monthly &&
                     currentDate.Day == 1 &&
-                    startDate.Day > DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
+                    habit.CreatedAt.Day > DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
                 {
                     var lastDayOfMonth = new DateTime(
                         currentDate.Year,
                         currentDate.Month,
                         DateTime.DaysInMonth(currentDate.Year, currentDate.Month)
-                    ).AddDays(-1);
+                    );
 
                     if (!existingDates.Contains(lastDayOfMonth.Date))
                     {
