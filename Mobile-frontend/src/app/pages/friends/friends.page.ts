@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonListHeader, LoadingController, IonSearchbar, IonAvatar, IonIcon, IonFab, IonFabButton, IonModal, IonImg, IonButtons, IonBackButton, IonRefresher, IonRefresherContent, RefresherEventDetail, IonBadge, IonCard, IonCardContent, IonChip, IonGrid, IonRow, IonCol, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInfiniteScrollContent, IonInfiniteScroll, IonFooter } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonListHeader, LoadingController, IonSearchbar, IonAvatar, IonIcon, IonFab, IonFabButton, IonModal, IonImg, IonButtons, IonBackButton, IonRefresher, IonRefresherContent, RefresherEventDetail, IonBadge, IonCard, IonCardContent, IonChip, IonGrid, IonRow, IonCol, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInfiniteScrollContent, IonInfiniteScroll, IonFooter, IonSpinner } from '@ionic/angular/standalone';
 import { FriendsFeedService } from 'src/app/services/friends-feed.service';
 import { User } from 'src/app/.models/user.model';
 import { FriendshipService } from 'src/app/services/friendship.service';
@@ -23,7 +23,7 @@ import { Friendship } from 'src/app/.models/friendship.model';
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent,
+  imports: [IonSpinner, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent,
     IonCard, IonBadge, IonRefresherContent, IonRefresher, IonButtons, IonModal, IonFabButton, IonFab, IonIcon,
     IonAvatar, IonSearchbar, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
@@ -43,6 +43,7 @@ export class FriendsPage {
   searchedUsers: User[] = [];
   challengeRequests: Challenge[] = [];
   isChallengeModalOpen = false;
+  isLoading = true;
 
   private page = 1;
   private pageSize = 15;
@@ -54,6 +55,7 @@ export class FriendsPage {
   }
 
   async ionViewWillEnter() {
+    this.isLoading = true;
     this.friendRequests = [];
     this.page = 1;
     const loading = await this.presentLoading();
@@ -62,7 +64,7 @@ export class FriendsPage {
     await this.getFriendRequests();
     await this.getFriends(); // Fetch friends after friend requests
     loading.dismiss();
-
+    this.isLoading = false;
   }
 
 
@@ -233,7 +235,9 @@ export class FriendsPage {
     });
   }
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    this.isLoading = true;
     this.ionViewWillEnter().then(() => {
+      this.isLoading = false;
       $event.detail.complete(); // Complete the refresher after data is loaded
     });
   }

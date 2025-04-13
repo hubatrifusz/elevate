@@ -53,9 +53,8 @@
       (profileClick)="goToProfile($event)"></app-friend>
     }
   </ion-list>
-
   }
-  @else {
+  @else if(!isLoading) {
   <ion-card color="tertiary" class="no-friends-card">
     <ion-card-header>
       <ion-card-title color="dark">No Friends Yet</ion-card-title>

@@ -69,7 +69,7 @@ export class CalendarPage {
     gesture.enable();
   }
   previousDay() {
-    if (this.isToday()) {
+    if (!this.isToday()) {
 
       this.date.setDate(this.date.getDate() - 1);
       this.updateDateDisplay();
