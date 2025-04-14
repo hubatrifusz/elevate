@@ -9,6 +9,8 @@
 \usepackage{titlesec}
 \usepackage[hidelinks]{hyperref}
 \usepackage{bookmark}
+\usepackage{tikz}
+\usetikzlibrary{calc}
 \tcbuselibrary{minted}
 
 \renewcommand{\theFancyVerbLine}{\textcolor{gray!50}{\scriptsize\arabic{FancyVerbLine}}}
@@ -51,29 +53,6 @@
   #1
 }
 
-% \begin{codeblock}{MyClass.cs}
-%   \begin{minted}[
-%     style=one-dark,
-%     breaklines,
-%     linenos,
-%     firstline=1,
-%     gobble=0
-%     ]{csharp}
-%   public class MyClass
-%   {
-%       public void MyMethod()
-%       {
-%         List<App> apps = new();
-
-%         for (int i = 0; i < 10; i++)
-%         {
-%             apps.Add(new App());
-%         }
-%       }
-%   }
-%   \end{minted}
-% \end{codeblock}
-
 \begin{document}
 
 \title{Elevate Dokumentáció}
@@ -100,6 +79,57 @@ A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy
 \chapter{Weboldal}
 \chapter{Mobil Applikáció}
 \chapter{Adatbázis}
+\section{Adatbázis tervezés}
+Az Elevate két különböző adatbázis rendszert támogat a különböző környezetekben való futtatáshoz:
+\begin{itemize}
+  \item Fejlesztési környezetben: MySQL
+  \item Production környezetben: PostgreSQL
+\end{itemize}
+
+Erre azért van így, mert a fejlesztést MySQL-el kezdtük, majd a Koyeb-re való publikáláshoz szükségessé vált PostgreSQL kompatibilitás. Az adatbázis migrációk kezelésére az Entity Framework Core migrációs rendszerét használjuk, amely lehetővé teszi a séma verziókövetését és az adatbázis automatikus frissítését, ez kisebb módosításokkal mindkét adatbázis környezettel megfelelően működik.
+
+\section{Entitások és kapcsolatok}
+Az adatbázis séma a következő fő táblákat tartalmazza:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{src/dbdiagram.png}
+    \label{fig:database-diagram}
+\end{figure}
+
+\section{Adatbázis biztonsági megfontolások}
+\begin{itemize}
+  \item A jelszavak hash-elve tárolódnak az adatbázisban (ASP.NET Core Identity)
+  \item Adatbázis migrációk verziókövető rendszerben tárolva
+  \item A kapcsolatok integritása constraint-ekkel biztosítva
+  \item Indexek használata a gyakori lekérdezések optimalizálására
+\end{itemize}
+
+\section{Adatbázis elérés}
+Az adatbázis elérését a DbConnectionManager osztály biztosítja az alábbi módon:
+\begin{codeblock}{DbConnectionManager.cs}
+  \inputminted[
+    style=one-dark,
+    breaklines,
+    linenos,
+    firstline=24,
+    lastline=38,
+    gobble=8
+    ]{csharp}{/home/smapesz/code/elevate/Backend/Elevate.Data/Database/DbConnectionManager.cs}
+\end{codeblock}
+
+Majd az így kapott kapcsolattal a DbContext osztály alkot egy, a későbbiekben feldolgozható adatszerkezetet.
+\begin{codeblock}{ElevateDbContext.cs}
+  \inputminted[
+    style=one-dark,
+    breaklines,
+    linenos,
+    firstline=61,
+    lastline=72,
+    gobble=8
+    ]{csharp}{/home/smapesz/code/elevate/Backend/Elevate.Data/Database/ElevateDbContext.cs}
+\end{codeblock} 
+
 \chapter{Backend}
 
 \section{Technológia}
