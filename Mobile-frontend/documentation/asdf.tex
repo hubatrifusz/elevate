@@ -110,7 +110,7 @@ Az alkalmazás a következő fő komponensekből épül fel:
   \item \textbf{Modulok} - Az alkalmazás funkcionális egységei
   \item \textbf{Komponensek} - Újrafelhasználható UI elemek
   \item \textbf{Oldalak} - Az alkalmazás különböző képernyői
-  \item \textbf{Szolgáltatások} - Üzleti logika és adatkezelés
+  \item \textbf{Service-k} - Üzleti logika és adatkezelés
   \item \textbf{Modellek} - Az adatstruktúrák TypeScript interfészei
   \item \textbf{Stílusok} - SCSS fájlok a megjelenés testreszabásához
   \item \textbf{Capacitor plugin-ok} - Natív funkciók elérése (kamera, értesítések)
@@ -133,7 +133,6 @@ Az Elevate mobilalkalmazás a következő mappastruktúrával rendelkezik:
   \item \textbf{pages/} - Az alkalmazás fő képernyői, minden képernyőhöz tartozik egy Angular komponens
   \item \textbf{services/} - A backend API-val való kommunikációt és egyéb adatkezelési funkciókat megvalósító szolgáltatások
   \item \textbf{guards/} - Útvonalvédelem, amely ellenőrzi a felhasználó jogosultságait az oldalak megtekintéséhez
-  \item \textbf{interceptors/} - HTTP kérések módosítása, például a JWT token automatikus hozzáadása a kérésekhez
 \end{itemize}
 
 \section{Főbb funkciók}
@@ -157,7 +156,6 @@ Az Elevate mobilalkalmazás a következő fő funkciókat kínálja:
 
 \textbf{Feed és közösségi funkciók:}
 \begin{itemize}
-  \item Személyes aktivitás-feed
   \item Barátok tevékenységeinek követése
   \item Barátkérelmek kezelése
   \item Kihívások küldése és fogadása
@@ -166,7 +164,7 @@ Az Elevate mobilalkalmazás a következő fő funkciókat kínálja:
 
 \textbf{Naptár nézet:}
 \begin{itemize}
-  \item Szokások naptár alapú megjelenítése
+  \item Aznap teljesítendő szokások követése
   \item Jövőbeli szokások előnézete
 \end{itemize}
 
@@ -182,13 +180,6 @@ Az alkalmazás felhasználói felülete a következő alapelvekre épül:
 
 Az alkalmazás a Material Design elveit követi, egyedi színpalettával és tipográfiával kiegészítve. A fő színséma lila és kék árnyalatokra épül, ami a motivációt és a fejlődést szimbolizálja.
 
-\section{Offline működés}
-Az alkalmazás részleges offline működést biztosít:
-\begin{itemize}
-  \item Service Worker integrációval a statikus erőforrások gyorsítótárazása
-  \item Lokális adattárolás a bejelentkezett felhasználó adataihoz
-  \item Offline változtatások szinkronizálása, amikor az eszköz újra online állapotba kerül
-\end{itemize}
 
 \section{Natív integráció}
 A Capacitor segítségével az alkalmazás hozzáfér a készülék natív funkcióihoz:
@@ -305,6 +296,295 @@ A biztonság további rétegei:
 
 \chapter{Tesztelés}
 
-\chapter{Használati útmutató mobilhoz}
+End to end tesztelés Cypress használatával:
 
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 114450.png}
+        \caption{Első kép}
+        \label{fig:img1}
+    \end{minipage}
+    \hspace{0.03\textwidth}
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 110124.png}
+        \caption{Második kép}
+        \label{fig:img2}
+    \end{minipage}
+    \hspace{0.03\textwidth}
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 110058.png}
+        \caption{Harmadik kép}
+        \label{fig:img3}
+    \end{minipage}
+\end{figure}
+
+A fenti képeken a Cypress által végrehajtott end-to-end tesztek láthatók, amelyek ellenőrzik az alkalmazás különböző funkcióinak működését. A tesztelés során ellenőriztük a felhasználói bejelentkezést, az adatbevitel validációját és az egyes oldalak közötti navigációt is.
+
+\chapter{Használati útmutató mobilhoz}
+\section{Login}
+A következő képernyőképek a mobilos bejelentkezési folyamat lépéseit mutatják be:
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.23\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 120810.png}
+       1. lépés
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.23\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 120821.png}
+       2. lépés
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.23\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 120848.png}
+        3. lépés
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.23\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 120855.png}
+        4. lépés
+    \end{minipage}
+   Mobilos bejelentkezés lépései
+    \label{fig:login-steps}
+\end{figure}
+
+Amennyiben a felhasználó nem rendelkezik fiókkal, meg kell nyomnia a Create one here! gombot.  A sikeres regisztráció után automatikusan átirányítás történik a bejelntkezési oldalra, ahogy be kell jelentkezni a már meglévő fiókkal. Amennyiben a felhasználó rendelkezik fiókkal, nem kell regisztrálnia. Sikeres bejelentkezés után automatikusan átirányítás történik a Szokások (Habits) oldalra
+\section{Szokás hozzáadás}
+\begin{figure}[H]
+    \centering
+
+    % First row - 3 images
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121001.png}
+       Szokás hozzáadása, meg kell nyomni a + gombot
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121459.png}
+       Szokás adatainak feltöltése
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121610.png}
+        Láthatjuk a frissen hozzáadott szokást
+    \end{minipage}
+
+    \vspace{0.8em}
+
+    % Second row - 2 images
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121618.png}
+        Kattintásra kinyílik a szokás
+    \end{minipage}
+
+    {Szokás létrehozásának lépései a mobilalkalmazásban}
+    \label{fig:habit-creation}
+\end{figure}
+
+A fenti képeken látható, hogyan lehet egy új szokást hozzáadni az alkalmazáson belül. A felhasználó kiválasztja a szokás típusát, megadja a nevet, gyakoriságot, majd elmenti azt. Ez segít abban, hogy a napi célkitűzések következetesen teljesüljenek.
+
+\section{Szokás teljesítés}
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121644.png}
+       Napi nézett, kis kockára kattintva teljesíthető a szokás
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121704.png}
+        Kiválasztás hogy publikus legyen-e a teljesítésünk
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121715.png}
+        Amennyiben publikusat választottunk, a szokás megjelenik a feed oldalon
+    \end{minipage}
+
+
+
+
+\end{figure}
+  A fenti lépések bemutatják, hogyan lehet egy szokást teljesítettként jelölni a naptár nézetben és megjeleniteni feed-ben. Kalendár nézetben válthatjuk a napokat nyílak segítségével. 
+
+\section{Barátok hozzáadása}
+\begin{figure}[H]
+    \centering
+
+    % Első sor - 3 kép
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121728.png}
+
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121737.png}
+
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121807.png}
+
+    \end{minipage}
+
+    \vspace{0.8em} % Kis függőleges térköz a sorok között
+
+    % Második sor - 2 kép
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121821.png}
+
+    \end{minipage} % Üres hely a középső pozícióra
+    \begin{minipage}[b]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121842.png}
+
+    \end{minipage}
+
+\end{figure}
+
+    Profileképre kattintva megjelenik a menü, ahogy Friends gombra kattintva átírányit minket a program Barátok oldalra. Itt láthatjuk hogy nincs barátunk, + gombra kattintva kereshetünk a felhasználók között. Miután megtaláltunk a keresett személyt rákattinthatunk az Add gombra.         Miután megnyomtunk a gomb felírata megváltozik. Keresett felhasználó profilképére kattintva megtekinthetjuk a felhasználó összes adatát és azt is hogy a baráti kérelem el lett küldve.
+
+\section{Baráti kérelem fogadás}
+\begin{figure}[H]
+    \centering
+
+    % Felső sor - 3 kép
+    \begin{minipage}[t]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122022.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122051.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122102.png}
+    \end{minipage}
+
+    \vspace{0.8em}
+
+    % Alsó sor - 2 kép
+    \begin{minipage}[t]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122115.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.25\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122133.png}
+    \end{minipage}
+
+
+\end{figure}
+  Amennyiben a program észlel, hogy valaki küldött nekünk baráti kérelmet vagy challenge kérelmet a profilképnél megjeleník egy kis piros pötty. Miután rákattintunk a profilképünkre a Friends gombon is látni fogjuk a pöttyöt, ami azt jelzi, hogy ezen az oldalon érkezett kérelem. Miután barátok oldalra lépünk láthatjuk a baráti kérelem és challenge gombokat. Piros szám azt jelzi hogy hány kérelem érkezett hozzánk. Friend Requests gombra kattintva megjelennek a beérkezett baráti kérelmek. Elfogadás után a barátunk megjelenik a listában.
+\section{Kihívás}
+% Első oldal - 6 kép
+\begin{figure}[H]
+    \centering
+
+    % 1. sor
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121618.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122147.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122156.png}
+    \end{minipage}
+
+    \vspace{0.8em}
+
+    % 2. sor
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122257.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122306.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.25\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122327.png}
+    \end{minipage}
+\end{figure}
+
+\newpage
+
+% Második oldal - 3 kép
+\begin{figure}[H]
+    \centering
+
+    % 3. sor
+    \begin{minipage}[b]{0.3\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122343.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122358.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 122424.png}
+
+    \end{minipage}
+\end{figure}
+    \footnotesize Amennyiben a felhasználó rendelkezik barátokkal, akkor tud küldeni a barátainak kihívást (challenget) amit onnantól közösen kell elvégezniuk ahhoz, hogy a streak nőjőn. Szokásra kattintva rá kell kattintani a Challenge friend gombra, amely átvisz egy oldalra, ahol kiválaszthatjuk a barátot, akit meg akarjuk hívni. Miután rákattintottunk a challenge gombra, kapunk visszajelzést és a gomb átváltozik Invited-re. További képeken látható, hogy kell elfogadni vagy elutasítani a kihívásokat. Amennyiben elfogadjuk a kihívást az meg fog jelenni a szokásaink közül. Kihívást egy kis ikonnal tudunk megkülönböztetni. Ha valaki meghívott minket, akkor láthatjuk ki volt az és hányan vesznek részt benne. Streak Progress mutatja, hogy eddig hányan teljesítették a resztvevők közül a kihívást.
+
+
+
+\section{Profilkép}
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 121728.png}
+        \par
+        \footnotesize Profileképre kattintva átvisz minket a profil oldalra. 
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 145953.png}
+        \par
+        \footnotesize Profilképre kattintva kiválaszthatjuk, hogy képek közül akarunk választani vagy csinálni akarunk egy képet.
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Képernyőkép 2025-04-15 150008.png}
+        \par
+        \footnotesize Képcsinálásra megnyílik a kamera
+    \end{minipage}
+
+
+\end{figure}
 \end{document}
