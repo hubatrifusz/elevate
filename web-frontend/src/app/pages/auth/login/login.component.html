@@ -4,21 +4,15 @@
     <div id="title_container">
       <h1 class="header_highlight">Welcome back!</h1>
       <p>Small steps lead to big changes. Let’s go!</p>
-      <br /><br />
+      <br />
+      <br />
     </div>
     <!-- Form container -->
     <div id="form_container">
       <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Input (email) -->
         <div class="input_container" id="email_email_input_container" data-cy="email_text_input_container">
-          <input
-            type="email"
-            name="email_text_input"
-            id="email_text_input"
-            placeholder=" "
-            formControlName="email"
-            data-cy="email_text_input"
-          />
+          <input type="email" name="email_text_input" id="email_text_input" placeholder=" " formControlName="email" data-cy="email_text_input" />
           <label for="email_text_input" class="input_title">Enter your email</label>
         </div>
 
@@ -37,22 +31,13 @@
           <app-validation-message message="{{ formErrorMessage }}"></app-validation-message>
         </div>
 
-        <div class="line_container">
-          <!-- Remember me Input (checkbox) -->
-          <div class="input_container" id="remember_me_checkbox_input_container">
-            <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" formControlName="rememberMe" />
-            <label for="remember_me_checkbox_input" class="checkbox">
-              <div class="checkmark"></div>
-            </label>
-            <label for="remember_me_checkbox_input" class="checkbox_label">Remember me</label>
-          </div>
-
-          <!-- Forgot password? button (quaternary) -->
-          <div class="button_container">
-            <button class="button button_quaternary" type="button" [routerLink]="'/password-recovery'" id="forgot_password_button">
-              Forgot password?
-            </button>
-          </div>
+        <!-- Remember me Input (checkbox) -->
+        <div class="input_container" id="remember_me_checkbox_input_container">
+          <input type="checkbox" name="remember_me_checkbox_input" id="remember_me_checkbox_input" formControlName="rememberMe" />
+          <label for="remember_me_checkbox_input" class="checkbox">
+            <div class="checkmark"></div>
+          </label>
+          <label for="remember_me_checkbox_input" class="checkbox_label">Remember me</label>
         </div>
 
         <!-- Login button (primary) -->
@@ -62,22 +47,6 @@
           </button>
         </div>
       </form>
-    </div>
-
-    <!-- Divider line between login options -->
-    <div id="button_divider">
-      <div class="divider_line"></div>
-      <span>Or</span>
-    </div>
-
-    <!-- Sign in with Google button (secondary) -->
-    <div class="button_container" id="google_sign_in_button_container">
-      <button class="button button_secondary" type="button" id="google_sign_in_button" [routerLink]="'/??'">
-        <span>
-          <img src="icons/google.png" alt="google_logo" />
-          <p>Sign in with Google</p>
-        </span>
-      </button>
     </div>
 
     <!-- Create account field -->

@@ -39,6 +39,7 @@
 declare namespace Cypress {
   interface Chainable {
     logout(): void;
+    login(): void;
   }
 }
 
@@ -46,4 +47,14 @@ Cypress.Commands.add('logout', () => {
   localStorage.clear();
   sessionStorage.clear();
   cy.visit('localhost:4200/');
+});
+
+Cypress.Commands.add('login', () => {
+  cy.logout();
+
+  cy.get('[data-cy="email_text_input"]').type('huba.trifusz@gmail.com');
+  cy.get('[data-cy="password_text_input"]').type('Nagyjelszo123!', { log: false });
+  cy.get('[data-cy="login_button"]').click();
+
+  cy.wait(3000);
 });
