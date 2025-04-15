@@ -1,0 +1,47 @@
+@if(challenge!.user != null) {
+<ion-card class="challenge-card" color="light">
+  <!-- Card Header -->
+  <ion-card-header color="tertiary">
+    <ion-item color="tertiary" lines="none" class="challenge-header">
+      <ion-avatar slot="start">
+        <img
+          [src]="challenge!.user.profilePictureBase64 ? 'data:image/jpeg;base64,' + challenge!.user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+          alt="Profile Picture" (click)="goToProfile(challenge!.user.id)" />
+      </ion-avatar>
+      <ion-label color="dark">
+        <h2 class="user-name" (click)="goToProfile(challenge!.user.id)">
+          {{ challenge!.user.firstName }} {{ challenge!.user.lastName }}
+        </h2>
+        <p class="user-email">{{ challenge!.user.email }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-card-header>
+
+  <!-- Card Content -->
+  <ion-card-content>
+    <ion-text color="dark">
+      <strong>Habit:</strong> {{ challenge!.habit.title }}
+    </ion-text>
+    <br />
+    <ion-text color="medium">
+      <strong>Description:</strong> {{ challenge!.habit.description }}
+    </ion-text>
+    <br />
+    <ion-text color="medium">
+      <strong>Frequency:</strong> {{ challenge!.habit.frequencyType }}
+    </ion-text>
+  </ion-card-content>
+
+  <!-- Card Footer -->
+  <ion-footer class="challenge-footer">
+    <ion-button fill="solid" color="success" expand="block" (click)="acceptChallengeRequest(challenge)">
+      <ion-icon slot="start" name="checkmark"></ion-icon>
+      Accept
+    </ion-button>
+    <ion-button fill="outline" color="danger" expand="block" (click)="rejectChallengeRequest(challenge)">
+      <ion-icon slot="start" name="close"></ion-icon>
+      Reject
+    </ion-button>
+  </ion-footer>
+</ion-card>
+}

@@ -6,9 +6,9 @@ ion-accordion {
 
 }
 
-ion-accordion-group{
+ion-accordion-group {
     --ion-background-color: transparent;
-    
+
 }
 
 .accordion-collapsed,
@@ -89,8 +89,6 @@ ion-item {
     .time {
         background-color: $main-color-800;
         border-radius: 10px;
-        margin-left: auto; // Pushes the .time div to the right
-        margin-right: 10px;
         padding: 5px 10px;
         display: flex; // Add Flexbox
         align-items: center; // Center vertically
@@ -148,6 +146,10 @@ ion-item {
         }
     }
 
+    ion-avatar {
+        margin-left: 10px;
+    }
+
     ion-grid {
 
         ion-button {
@@ -200,10 +202,7 @@ ion-item {
         }
     }
 
-    .delete {
-        margin: 15px 0px 5px 10px;
-        width: fit-content;
-    }
+
 
     ion-list {
         background-color: transparent;
@@ -239,4 +238,28 @@ ion-item {
         }
     }
 
+}
+
+ion-modal {
+    ion-item {
+        all: unset;
+        
+
+       ion-button{
+            width: fit-content;
+            margin: auto;
+       }
+    }
+    ion-list{
+        border-radius: 15px;
+    }
+}
+
+.no-habit-card {
+    border-radius: $border-radius;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.274);
+
+    @media (prefers-color-scheme: dark) {
+        box-shadow: 0px 10px 15px rgba(255, 255, 255, 0.1);
+    }
 }

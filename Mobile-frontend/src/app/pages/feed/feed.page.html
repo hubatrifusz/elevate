@@ -1,14 +1,13 @@
 <div class="ion-page" id="main-content">
  <app-header [showGreeting]="true" ></app-header>
   
-  <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="handleScrollStart()"
-    (ionScroll)="handleScroll($any($event))" (ionScrollEnd)="handleScrollEnd()">
+  <ion-content class="ion-padding " [fullscreen]="true" [scrollEvents]="true">
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
 
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab data-cy="fabButton" horizontal="end" vertical="bottom" slot="fixed">
       <ion-fab-button (click)="newHabit()">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
@@ -22,7 +21,6 @@
     <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)" [disabled]="!hasMoreHabits">
       <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-
 
   </ion-content>
 </div>

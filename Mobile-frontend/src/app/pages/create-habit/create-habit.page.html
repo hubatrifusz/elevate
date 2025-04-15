@@ -9,22 +9,19 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-card>
-    <ion-card-header>
+    <ion-card-header color="tertiary">
       <ion-card-title>New Habit</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
 
-      <ion-input label="Habit title" [(ngModel)]="habit.title" label-placement="floating" fill="outline"
+      <ion-input data-cy="habitTitle" class="custom" color="tertiary" maxlength="20" label="Habit title" [(ngModel)]="habit.title" label-placement="floating" fill="outline"
         placeholder="Enter text"></ion-input>
 
-      <ion-textarea label="Habit description" [(ngModel)]="habit.description" label-placement="floating" fill="outline"
+      <ion-textarea label="Habit description" maxlength="100" [(ngModel)]="habit.description" label-placement="floating" fill="outline"
         placeholder="Enter text" autoGrow="true"></ion-textarea>
 
-      <!-- <ion-item>
-        <ion-label position="floating">Description</ion-label>
-        <ion-textarea [(ngModel)]="habit.description"></ion-textarea>
-      </ion-item> -->
+    
       <ion-list>
         <ion-item>
           <ion-label>Frequency</ion-label>
@@ -62,7 +59,7 @@
         <ion-checkbox slot="end" [(ngModel)]="habit.is_positive"></ion-checkbox>
       </ion-item>
 
-      <ion-button expand="full" (click)="createHabit()">Create</ion-button>
+      <ion-button data-cy="createHabit" expand="full" (click)="createHabit()">Create</ion-button>
     </ion-card-content>
   </ion-card>
 

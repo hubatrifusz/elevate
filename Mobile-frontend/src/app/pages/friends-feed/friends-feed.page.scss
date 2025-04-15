@@ -1,2 +1,11 @@
 @use "../feed/feed.page.scss" as *;
+@use "../../../theme/variables.scss" as *;
 
+.no-feed-card {
+    border-radius: $border-radius;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.274);
+
+    @media (prefers-color-scheme: dark) {
+        box-shadow: 0px 10px 15px rgba(255, 255, 255, 0.1);
+    }
+}

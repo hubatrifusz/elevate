@@ -8,18 +8,17 @@
   </ion-refresher>
 
   <ion-grid>
-    <ion-row class="align-center">
-      <ion-col>
-        <ion-label>
-          @if(friends.length > 0) {
-          <h1>Friends</h1>
-          <p>See your friends and their habits.</p>
+    <ion-row class="align-center chips-row">
+      <ion-col size="auto">
+        <ion-chip (click)="setChallengeModalOpen(true)">
+          <ion-icon name="trophy"></ion-icon>
+          <ion-label>Challenge Requests</ion-label>
+          @if(challengeRequests.length > 0) {
+          <ion-badge color="danger">
+            {{ challengeRequests.length }}
+          </ion-badge>
           }
-          @else {
-          <h1>Find Friends</h1>
-          <p>Search for users to add as friends.</p>
-          }
-        </ion-label>
+        </ion-chip>
       </ion-col>
       <ion-col size="auto">
         <ion-chip (click)="setOpen(true)">
@@ -34,6 +33,19 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Friends     -----------------------------      -->
+
+  <ion-label class="ion-padding">
+    @if(friends.length > 0) {
+    <h1>Friends</h1>
+    <p>See your friends and their habits.</p>
+    }
+    @else {
+    <h1>Find Friends</h1>
+    <p>Search for users to add as friends.</p>
+    }
+  </ion-label>
   @if(friends.length > 0){
   <ion-list>
     @for (friend of friends; track $index) {
@@ -41,9 +53,8 @@
       (profileClick)="goToProfile($event)"></app-friend>
     }
   </ion-list>
-
   }
-  @else {
+  @else if(!isLoading) {
   <ion-card color="tertiary" class="no-friends-card">
     <ion-card-header>
       <ion-card-title color="dark">No Friends Yet</ion-card-title>
@@ -55,7 +66,56 @@
   </ion-card>
   }
 
+  <!-- Challenges -->
 
+  <ion-modal [isOpen]="isChallengeModalOpen" class="challenge-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Challenge Requests</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setChallengeModalOpen(false)">
+              Close
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-card class="modal-card">
+          <ion-card-header>
+            <ion-card-title>Pending Challenge Requests</ion-card-title>
+            <ion-card-subtitle>Accept or reject challenges from your friends.</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            @if(challengeRequests.length > 0) {
+            <ion-list>
+              @for (challenge of challengeRequests; track $index) {
+              <app-challenge-request (acceptChallenge)="acceptChallengeRequest(challenge)"
+                (rejectChallenge)="rejectChallengeRequest(challenge)" (profileClick)="goToProfile(challenge.userId)"
+                [challenge]="challenge"></app-challenge-request>
+
+              }
+            </ion-list>
+            }
+            @else {
+            <ion-card color="tertiary" class="no-challenges-card">
+              <ion-card-header>
+                <ion-card-title color="dark">No Challenge Requests</ion-card-title>
+                <ion-card-subtitle color="dark">Check back later!</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content class="ion-text-center">
+                <ion-icon name="trophy-outline" size="large" color=""></ion-icon>
+              </ion-card-content>
+            </ion-card>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 
   <ion-modal [isOpen]="isModalOpen" class="friend-modal">
@@ -143,7 +203,7 @@
           @for(user of searchedUsers; track $index) {
           <ion-item>
             <ion-avatar slot="start">
-              <img
+              <img (click)="goToProfile(user.id)" (click)="modal.setCurrentBreakpoint(0)"
                 [src]="user.profilePictureBase64 ? 'data:image/jpeg;base64,' + user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
                 alt="Profile Picture" />
             </ion-avatar>
@@ -151,7 +211,16 @@
               <h2>{{user.firstName}} {{user.lastName}}</h2>
               <p>{{user.email}}</p>
             </ion-label>
+            @if(isPendingRequest(user.id)){
+            <ion-button fill="solid" slot="end" color="tertiary" disabled>Pending</ion-button>
+            }
+            @else if(!isPendingRequest(user.id) && !isFriend(user.id)){
             <ion-button fill="solid" slot="end" (click)="addFriend(user)">Add</ion-button>
+            }
+            @else if(isFriend(user.id)){
+            <ion-button fill="solid" slot="end" color="tertiary" disabled>You're friends</ion-button>
+            }
+
           </ion-item>
           }
         </ion-list>

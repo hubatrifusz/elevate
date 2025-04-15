@@ -7,19 +7,24 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   @if(!user){
-
-  <ion-spinner></ion-spinner>
+  <ion-grid class="ion-text-center">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="auto">
+        <ion-spinner name="crescent"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   }
   @else if(user){
-
   <ion-card>
-    <ion-item>
+    <ion-item lines="none">
       <ion-avatar slot="start">
-        <img
+        <ion-img
           [src]="user.profilePictureBase64 ? 'data:image/png;base64,' + user.profilePictureBase64 : 'https://www.gravatar.com/avatar?d=mp'"
-          alt="Profile Picture" (click)="changeProfilePicture()" />
+          alt="Profile Picture" (click)="changeProfilePicture()">
+        </ion-img>
       </ion-avatar>
       <ion-label>
         <h2>{{ user.firstName }} {{ user.lastName }}</h2>
@@ -28,15 +33,50 @@
     </ion-item>
 
     <ion-card-content>
-      <p><strong>Joined:</strong> {{ user.createdAt ? (user.createdAt | date:'longDate') : 'Unknown' }}</p>
-      <p><strong>Longest Streak:</strong> {{ user.longestStreak }} days</p>
+      <ion-text>
+        <p><strong>Joined:</strong> {{ user.createdAt ? (user.createdAt | date:'longDate') : 'Unknown' }}</p>
+        <p><strong>Longest Streak:</strong> {{ user.longestStreak }} days</p>
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  @if(loginedUserId != user.id){
+  <ion-card size="auto" color="light">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Friendship</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      @if(isFriend){
+      <ion-text color="success" class="ion-text-center">
+        <p>You are friends with this user.</p>
+      </ion-text>
+      }
+      @else if(isPending){
+      <ion-text color="warning" class="ion-text-center">
+        <p>Friend request pending.</p>
+      </ion-text>
+      }
+      @else {
+      <ion-text class="ion-text-center">
+        <p>You are not friends with this user.</p>
+      </ion-text>
+      <ion-button expand="block" fill="solid" color="tertiary" (click)="sendFriendRequest(user.id)">
+        <ion-icon slot="start" name="person-add-outline"></ion-icon>
+        Send Friend Request
+      </ion-button>
+      }
     </ion-card-content>
   </ion-card>
   }
-
-
-  @if(user == null){
-  <p style="text-align: center; color: red;">User not found</p>
-
+  }
+  @else{
+  <ion-grid class="ion-text-center">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="auto">
+        <ion-label color="danger"><strong>User not found</strong></ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   }
 </ion-content>

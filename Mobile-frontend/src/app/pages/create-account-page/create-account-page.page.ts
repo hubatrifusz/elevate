@@ -6,7 +6,7 @@ import { addIcons } from 'ionicons';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -23,7 +23,7 @@ export const passwordMatchValidator = (control: AbstractControl): ValidationErro
   templateUrl: './create-account-page.page.html',
   styleUrls: ['./create-account-page.page.scss'],
   standalone: true,
-  imports: [IonToast, IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonIcon, IonContent, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class CreateAccountPagePage implements OnInit {
   showPassword = false;
@@ -31,7 +31,7 @@ export class CreateAccountPagePage implements OnInit {
   private auth = inject(AuthService);
   private http = inject(HttpClient);
   fb = inject(NonNullableFormBuilder)
-  
+
   form = this.fb.group({
     firstName: this.fb.control('', { validators: [Validators.required] }),
     lastName: this.fb.control('', { validators: [Validators.required] }),
@@ -68,7 +68,13 @@ export class CreateAccountPagePage implements OnInit {
         },
         error: (e) => {
           console.error('Error creating account:', e);
-          this.toastService.presentToast('Error in creating account');
+          if (e.status == 409) {
+            this.toastService.presentToast('Email is already taken');
+          }
+          if (e instanceof HttpErrorResponse && e.status === 400) {
+            this.toastService.presentToast('Invalid credentials');
+          }
+         
         }
       });
     } else {
@@ -78,5 +84,5 @@ export class CreateAccountPagePage implements OnInit {
   }
 
 
- 
+
 }

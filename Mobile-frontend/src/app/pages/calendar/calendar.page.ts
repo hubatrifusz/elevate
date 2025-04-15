@@ -1,7 +1,7 @@
-import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, NgZone, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton, GestureController, Gesture } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonRow, IonDatetime, IonIcon, IonButtons, IonButton, IonMenuToggle, IonModal, IonList, IonItem, IonAvatar, IonImg, IonLabel, ModalController, IonText, IonInfiniteScrollContent, IonInfiniteScroll, InfiniteScrollCustomEvent, IonFab, IonFabButton, GestureController, Gesture, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/angular/standalone';
 import { MenuController } from '@ionic/angular';
 import { TaskCardComponent } from "../../components/task-card/task-card.component";
 import { HabitService } from 'src/app/services/habit.service';
@@ -10,33 +10,27 @@ import { addIcons } from 'ionicons';
 import { chevronBackOutline, chevronForwardOutline, personCircleOutline, add } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { HeaderComponent } from "../../components/header/header.component";
+import { IonRefresherCustomEvent } from '@ionic/core';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
   standalone: true,
-  imports: [IonFabButton, IonFab, IonInfiniteScroll, IonInfiniteScrollContent, IonText, IonAvatar,
+  imports: [IonRefresherContent, IonRefresher, IonFabButton, IonFab, IonText,
     IonButton,
     IonContent,
-    IonHeader,
-    IonImg,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonModal,
-    IonTitle,
-    IonToolbar,
-    IonMenuToggle, IonButtons, IonIcon, IonDatetime, TaskCardComponent, HeaderComponent]
+    IonIcon, TaskCardComponent, HeaderComponent]
 })
 export class CalendarPage {
+
   selectedDate: IonDatetime | null = null;
   private habitService = inject(HabitService);
   private modalController = inject(ModalController);
   private router = inject(Router);
   habitLogs: HabitLog[] = [];
 
-  @Output() loadMoreHabits = new EventEmitter<void>();
+  @ViewChild('swipeArea', { static: true }) swipeArea!: ElementRef;
   @Output() refreshHabits = new EventEmitter<void>();
   public hasMoreHabits: boolean = true;
 
@@ -44,15 +38,43 @@ export class CalendarPage {
   datestring = this.date.toISOString()
   weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
   dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-  constructor(private menuCtrl: MenuController, private gestureCtrl: GestureController) {
+  constructor(private menuCtrl: MenuController, private zone: NgZone,
+    private cdr: ChangeDetectorRef, private gestureCtrl: GestureController) {
     addIcons({ personCircleOutline, chevronBackOutline, chevronForwardOutline, add });
+
+  }
+  ngOnInit() {
+    this.initializeSwipeGesture();
   }
 
 
+  initializeSwipeGesture() {
+    if (!this.swipeArea) {
+      return;
+    }
 
+    const gesture: Gesture = this.gestureCtrl.create({
+      el: this.swipeArea.nativeElement,
+      gestureName: 'swipe',
+      onEnd: (ev) => {
+        this.zone.run(() => {
+          if (ev.deltaX > 50) {
+            this.previousDay();
+          } else if (ev.deltaX < -50) {
+            this.nextDay();
+          }
+        });
+      },
+    });
+    gesture.enable();
+  }
   previousDay() {
-    this.date.setDate(this.date.getDate() - 1);
-    this.updateDateDisplay();
+    if (!this.isToday()) {
+
+      this.date.setDate(this.date.getDate() - 1);
+      this.updateDateDisplay();
+      this.cdr.detectChanges();
+    }
   }
 
   nextDay() {
@@ -63,21 +85,30 @@ export class CalendarPage {
     this.weekday = this.date.toLocaleDateString('en-US', { weekday: 'short' });
     this.dayAndMonth = this.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
     this.datestring = this.date.toISOString();
-
-
-    // this.getTodaysHabitlogs(this.date.toISOString());
-    // this.habitService.getTodaysHabitlogs(this.date.toISOString());
   }
 
-
-  handleRefresh(event: CustomEvent) {
-    setTimeout(() => {
-      // Any calls to load data go here
-      window.location.reload();
-      (event.target as HTMLIonRefresherElement).complete();
-    }, 200);
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    window.location.reload();
   }
+
   newHabit() {
     this.router.navigate(['/create-habit']);
+  }
+  isToday(): boolean {
+    const today = new Date();
+    return this.date.getDate() === today.getDate() &&
+      this.date.getMonth() === today.getMonth() &&
+      this.date.getFullYear() === today.getFullYear();
+  }
+
+  isOneMonthAhead(): boolean {
+    const today = new Date();
+
+    // Create a date that's one month ahead of today
+    const oneMonthAhead = new Date(today);
+    oneMonthAhead.setMonth(oneMonthAhead.getMonth() + 1);
+
+    // Check if current date is at or beyond the one month limit
+    return this.date >= oneMonthAhead;
   }
 }
