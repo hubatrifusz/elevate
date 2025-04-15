@@ -9,6 +9,7 @@
 \usepackage{titlesec}
 \usepackage[hidelinks]{hyperref}
 \usepackage{bookmark}
+\usepackage{pdfpages}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \tcbuselibrary{minted}
@@ -55,15 +56,7 @@
 
 \begin{document}
 
-\title{Elevate Dokumentáció}
-\author{Somlói Dávid
-        \and
-        Trifusz Huba
-        \and
-        Verba Viktor}
-\date{\today}
-
-\maketitle
+\includepdf[pages=-]{src/cover.pdf}
 
 \setcounter{tocdepth}{3}
 \tableofcontents
