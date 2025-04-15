@@ -1,0 +1,41 @@
+@use "../../../theme/variables" as *;
+@use "../../../theme/fab.scss" as *;
+
+
+.date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // gap: 10px;
+    margin: 10px auto;
+    width: 60%;
+    background: var(--ion-color-light);
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 0px $shadow;
+
+    @media(prefers-color-scheme: dark) {
+        box-shadow: 0px 0px 10px 0px black;
+    }
+}
+
+.date-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 16px;
+}
+
+ion-button {
+    --color: gray;
+    --padding-start: 8px;
+    --padding-end: 8px;
+}
+
+
+
+.icon {
+    font-size: 50px;
+    margin: 10px 0; // Adjust the size of the icon as needed
+}
+
