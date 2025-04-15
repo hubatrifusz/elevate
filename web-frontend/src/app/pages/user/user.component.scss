@@ -1,0 +1,69 @@
+@import "../../../assets/styles/variables";
+
+#user_page_container {
+  #user_details_container {
+    height: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: $main-color-200;
+
+    #profile_picture_container {
+      margin-bottom: 4rem;
+
+      position: relative;
+
+      #banner {
+        height: 6rem;
+
+        background-color: $accent-color-100;
+
+        border-radius: 0 0 1rem 1rem;
+      }
+
+      #profile_picture {
+        position: absolute;
+        bottom: 0;
+        left: 3rem;
+
+        transform: translateY(50%);
+
+        img {
+          height: 5rem;
+
+          border-radius: 100rem;
+          border: 5px solid $main-color-200;
+        }
+      }
+    }
+
+    #user_details {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      padding: 0 3rem 0 3rem;
+
+      hr {
+        border: 0;
+        border-top: 1px solid $main-color-300;
+      }
+
+      .settings_block {
+        display: flex;
+        flex-direction: row;
+
+        .color_theme_picker {
+          height: 10rem;
+          aspect-ratio: 3/2;
+
+          background-color: red;
+
+          border-radius: 2rem;
+        }
+      }
+    }
+  }
+}

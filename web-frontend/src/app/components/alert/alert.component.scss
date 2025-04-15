@@ -1,0 +1,13 @@
+@import "../../../assets/styles/variables";
+
+#alert {
+  position: absolute;
+  bottom: 0;
+
+  margin: auto;
+
+  height: 10rem;
+  width: 20rem;
+
+  background-color: $main-color-100;
+}

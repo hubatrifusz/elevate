@@ -1,0 +1,10 @@
+@import './variables';
+
+p {
+  color: $text-color-700;
+}
+
+.p_dark {
+  color: $text-color-900;
+  font-weight: bold;
+}

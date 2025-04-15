@@ -1,0 +1,43 @@
+@import "../styles/variables";
+
+h1 {
+  font-size: $font-size-3xl;
+  color: $text-color-900;
+}
+
+h2 {
+  font-size: $font-size-2xl;
+  color: $text-color-900;
+}
+
+h3 {
+  font-size: $font-size-xl;
+  color: $text-color-900;
+}
+
+h4 {
+  font-size: $font-size-lg;
+  color: $text-color-900;
+}
+
+h5 {
+  font-size: $font-size-md;
+  color: $text-color-900;
+}
+
+h6 {
+  font-size: $font-size-base;
+  color: $text-color-900;
+}
+
+.header_highlight {
+  color: $accent-color-900;
+}
+
+.header_light {
+  color: $text-color-700;
+}
+
+.header_bold {
+  font-weight: bold;
+}

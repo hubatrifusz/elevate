@@ -1,0 +1,36 @@
+@import "../../../assets/styles/variables";
+
+#feed_page_container {
+  #feed_container {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: $main-color-200;
+
+    #feed {
+      flex: a1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem;
+      overflow-y: auto;
+      width: 100%;
+    }
+  }
+}
+
+/* Media query for larger screens */
+@media (min-width: 1400px) {
+  #feed_page_container {
+    #feed_container {
+      #feed {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(65rem, 1fr));
+        grid-gap: 2.5rem;
+        justify-items: center;
+        align-items: start;
+      }
+    }
+  }
+}
