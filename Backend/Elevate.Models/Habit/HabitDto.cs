@@ -22,8 +22,6 @@ namespace Elevate.Models.Habit
         [Required, MaxLength(6)]
         public required string Color { get; set; }
         [Required]
-        public required bool IsPositive { get; set; }
-        [Required]
         public string StreakProgression { get; set; }
         [Required]
         public required int Streak { get; set; }
