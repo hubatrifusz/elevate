@@ -3,6 +3,7 @@
     public class NegativeHabitModel
     {
         public required Guid Id { get; set; }
+        public required Guid UserId { get; set; }
         public required DateTime UpdatedAt { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
