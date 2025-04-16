@@ -21,8 +21,5 @@ namespace Elevate.Models.Habit
 
         [Required, StringLength(6)]
         public required string Color { get; set; }
-
-        [Required]
-        public required bool IsPositive { get; set; }
     }
 }
