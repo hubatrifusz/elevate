@@ -7,6 +7,8 @@ namespace Elevate.Models.NegativeHabit
         [Required]
         public required Guid Id { get; set; }
         [Required]
+        public required Guid UserId { get; set; }
+        [Required]
         public required DateTime UpdatedAt { get; set; }
         [Required, MaxLength(20)]
         public required string Title { get; set; }
