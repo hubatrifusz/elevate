@@ -64,7 +64,7 @@ namespace Elevate.Controllers
         }
 
         [HttpGet("negative/{userId:guid}")]
-        public async Task<ActionResult<List<HabitDto>>> GetNegativeHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
+        public async Task<ActionResult<List<NegativeHabitDto>>> GetNegativeHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
         {
             UserPermissionUtility.IsCurrentUser(userId, User);
             List<NegativeHabitDto> habits = await _habitService.GetNegativeHabitsByUserIdAsync(userId, pageNumber, pageSize);
@@ -76,7 +76,7 @@ namespace Elevate.Controllers
         {
             UserPermissionUtility.IsCurrentUser(habitCreateDto.UserId, User);
             NegativeHabitDto createdHabit = await _habitService.AddNegativeHabitAsync(habitCreateDto);
-            return CreatedAtRoute(nameof(GetNegativeHabitsByUserIdAsync), new { userId = habitCreateDto.UserId }, createdHabit);
+            return createdHabit;
         }
 
         [HttpPatch("negative/{id:guid}")]

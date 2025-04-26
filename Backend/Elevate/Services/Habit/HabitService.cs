@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
+using Elevate.Common.Utilities;
 using Elevate.Data.Repository;
 using Elevate.Models.Challenge;
 using Elevate.Models.Habit;
@@ -115,6 +116,8 @@ namespace Elevate.Services.Habit
         public async Task<NegativeHabitDto> AddNegativeHabitAsync(NegativeHabitCreateDto habit)
         {
             NegativeHabitModel habitModel = _mapper.Map<NegativeHabitModel>(habit);
+            habitModel.UpdatedAt = DateTime.UtcNow;
+
             NegativeHabitModel savedHabit = await _habitRepository.AddNegativeHabitAsync(habitModel)
                 ?? throw new BadRequestException("Failed to create negative habit.");
 
