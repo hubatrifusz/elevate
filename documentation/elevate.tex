@@ -11,6 +11,7 @@
 \usepackage{bookmark}
 \usepackage{pdfpages}
 \usepackage{tikz}
+\usepackage{float}
 \usetikzlibrary{calc}
 \tcbuselibrary{minted}
 
@@ -65,9 +66,9 @@
 \begin{sloppypar}
 A téma kiválasztásánál arra törekedtünk, hogy egy, a hétköznapi élet során alkalmazható szoftvert készítsünk. Több opció is felmerült, azonban végül egy szokásformáló felület mellett döntöttünk, amit Elevate-nek neveztünk el, az egészséges, felemelő életmód jegyében. Az Elevate ösztönzi a felhasználókat, hogy új, pozitív szokásokat vezessenek be, miközben hatékonyan követhetik saját fejlődésüket, emellett hozzájárul életminőségük javításához és a fenntartható fejlődéshez.
 \end{sloppypar}
-\section{Az Elevate célja}
+\section{Az Elevate célja és funkciói}
 \begin{sloppypar}
-A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását és különféle jutal-makat kap, ha tartja a felállított célját. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Egy szokás tartásához elengedhet-etlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben jeleníti meg a teendőket és emlékeztet azok elvégzésére. 
+A szoftver célja, hogy a kliens az általa kívánt szokásokat fejlessze, vagy újakat építsen be a napirendjébe. Például, ha a felhasználó a dohányzásról szeretne leszokni, akkor monitorozni tudja a fogyasztását, nyomon követheti haladását a felálított célja felé. Nem csak a rossz szokások követését biztosítja az applikáció, pozitív célokat is ki lehet tűzni, mint “Napi 10 fekvőtámasz" vagy “Hetente kitakarítani”. Új szokásokat napi, heti, havi vagy egyéni rendszerességgel lehet felvenni. Az egyéni opció választása esetén a felhasználó megadhatja, hogy a hét melyik napjain szeretné elvégezni a feladatot. Egy szokás tartásához elengedhet-etlen, hogy a beállított gyakorisággal teljesítsük a kitűzött kihívásokat. Ennek megkönnyítése érdekében az Elevate egy naptárszerű nézetben, színkódolva jeleníti meg a teendőket és emlékeztet azok elvégzésére. Minden elvégzett feladat után növekedik az adott szokáshoz tartozó streakje, ezzel ösztönözve arra, hogy megszakítás nélkül, konzisztensen küzdjön a céljáért. Ezen felül barátokat is hozzáadhatunk, akikkel kihívásokat indíthatunk, így még inkább motiválva egymást a célok elérésére.
 \end{sloppypar}
 \chapter{Weboldal}
 \chapter{Mobil Applikáció}
@@ -86,11 +87,17 @@ Az adatbázis séma a következő fő táblákat tartalmazza:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{src/dbdiagram.png}
-    \label{fig:database-diagram}
+    \includegraphics[width=0.5\textwidth, height=0.5\textheight, keepaspectratio]{src/diagram_min.png}
 \end{figure}
 
-\section{Adatbázis biztonsági megfontolások}
+Emellett az ASP.NET Core Identity által biztosított felhasználói táblák is megtalálhatóak, amelyek a felhasználók kezeléséért felelősek. A teljes adatbázis séma így néz ki:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth, height=0.8\textheight, keepaspectratio]{src/diagram_full.png}
+\end{figure}
+
+\section{Adatbázis biztonság}
 \begin{itemize}
   \item A jelszavak hash-elve tárolódnak az adatbázisban (ASP.NET Core Identity)
   \item Adatbázis migrációk verziókövető rendszerben tárolva
@@ -118,7 +125,7 @@ Majd az így kapott kapcsolattal a DbContext osztály alkot egy, a későbbiekbe
     breaklines,
     linenos,
     firstline=61,
-    lastline=72,
+    lastline=86,
     gobble=8
     ]{csharp}{/home/smapesz/code/elevate/Backend/Elevate.Data/Database/ElevateDbContext.cs}
 \end{codeblock} 
@@ -163,6 +170,11 @@ A Backend API részletes dokumentációja a \href{https://elevate.koyeb.app/swag
       \item Új szokás létrehozása (\httpPost{/api/habit})
       \item Szokás módosítása (\httpPatch{/api/habit/:id})
       \item Szokás törlése (\httpDelete{/api/habit/:id})
+      
+      \item Negatív szokások listázása (\httpGet{/api/habit/negative/:userId})
+      \item Negatív szokás léztrehozása (\httpPost{/api/habit/negative})
+      \item Negatív szokás módosítása (\httpPatch{/api/habit/negative/:id})
+      \item Negatív szokás törlése (\httpDelete{/api/habit/negative/:id})
     \end{itemize}
   \item \textbf{Szokás napló}
     \begin{itemize}
@@ -211,6 +223,9 @@ A biztonság további rétegei:
 \end{itemize}
 
 \chapter{Tesztelés}
+
+\section{Unit tesztelés}
+A backend tesztelésére az xUnit keretrendszert használtuk, amellyel a Service réteg metódusait teszteltük mockolt adatokkal. 
 
 \chapter{Források}
 \begin{itemize}
