@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment.prod';
 export class UserService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getAuthHeaders() {
     const token = this.authService.getToken();
@@ -41,6 +41,12 @@ export class UserService {
 
   addNewHabit(formResult: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/habit`, formResult, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  addNewNegativeHabit(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/habit/negative`, formResult, {
       headers: this.getAuthHeaders(),
     });
   }

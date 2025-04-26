@@ -90,4 +90,16 @@ export class HabitService {
       headers: this.getAuthHeaders(),
     });
   }
+
+  getNegativeHabits(): Observable<Habit[]> {
+    const userId = this.authService.getUserId();
+    const params = new HttpParams()
+      .set('pageNumber', 1)
+      .set('pageSize', 20);
+
+    return this.http.get<Habit[]>(`${this.apiUrl}/habit/negative/${userId}`, {
+      params,
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

@@ -62,7 +62,17 @@
       <label for="color_picker_input">Pick an indicator color</label>
     </div>
 
-    <!-- Frequency selector -->
+    <!-- Habit Type Toggle -->
+    <div class="input_container habit_type_toggle">
+      <div class="checkbox_container">
+        <input type="checkbox" id="negative_habit_toggle" [formControlName]="'isNegativeHabit'" />
+        <label for="negative_habit_toggle">{{ addNewTaskForm.get('isNegativeHabit')?.value ? 'Negative habit (to avoid)'
+          : 'Positive habit (to build)' }}</label>
+      </div>
+    </div>
+
+    <!-- Frequency selector - only show for positive habits -->
+    @if (!addNewTaskForm.get('isNegativeHabit')?.value) {
     <div class="input_container">
       <select name="frequency_selector" id="frequency_selector" [formControlName]="'frequencyType'">
         <option value="" disabled selected>Select Frequency</option>
@@ -72,10 +82,12 @@
         <option value="Custom">Custom</option>
       </select>
     </div>
+    }
 
     <!-- Submit button -->
     <div class="button_container">
-      <button class="button_secondary"><span>Add new task!</span></button>
+      <button class="button_secondary"><span>Add new {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'negative' :
+          'positive' }} habit</span></button>
     </div>
   </form>
   }

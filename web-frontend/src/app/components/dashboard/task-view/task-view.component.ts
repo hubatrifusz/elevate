@@ -26,7 +26,7 @@ export class TaskViewComponent {
 
   isPreviousDisabled: boolean = false;
   isNextDisabled: boolean = false;
-  isLoading: boolean = false
+  isLoading: boolean = false;
 
   addNewTaskForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -34,8 +34,8 @@ export class TaskViewComponent {
     description: new FormControl('', [Validators.required]),
     frequencyType: new FormControl('', [Validators.required]),
     customFrequency: new FormControl(0), //TODO
-    color: new FormControl('000000', [Validators.required]),
-    isPositive: new FormControl(true),
+    color: new FormControl('#000000', [Validators.required]),
+    isNegativeHabit: new FormControl(false),
   });
 
   ngOnInit() {
@@ -44,18 +44,49 @@ export class TaskViewComponent {
       userID: this.userId,
     });
     this.getTodaysHabitlogs(this.date.toISOString());
+
+    this.addNewTaskForm.get('isNegativeHabit')?.valueChanges.subscribe(isNegative => {
+      const frequencyControl = this.addNewTaskForm.get('frequencyType');
+
+      if (isNegative) {
+        frequencyControl?.clearValidators();
+        frequencyControl?.updateValueAndValidity();
+      } else {
+        frequencyControl?.setValidators([Validators.required]);
+        frequencyControl?.updateValueAndValidity();
+      }
+    });
+  }
+
+  toggleNegativeHabit() {
+    const currentValue = this.addNewTaskForm.get('isNegativeHabit')?.value;
+    this.addNewTaskForm.patchValue({
+      isNegativeHabit: !currentValue
+    });
   }
 
   onSubmit() {
-    if (!this.addNewTaskForm.valid) {
-      console.log('form is not valid');
+    const isNegativeHabit = this.addNewTaskForm.get('isNegativeHabit')?.value;
+
+    if (isNegativeHabit) {
+      const { title, description, color } = this.addNewTaskForm.controls;
+      if (!title.valid || !description.valid || !color.valid) {
+        this.alertService.showAlert('Please fill in all required fields');
+        return;
+      }
+    } else if (!this.addNewTaskForm.valid) {
+      this.alertService.showAlert('Please fill in all required fields');
       return;
     }
-    this.addNewTaskForm.patchValue({
-      color: this.addNewTaskForm.value.color!.replace('#', ''),
-    });
-    console.log(this.addNewTaskForm.value);
 
+    let colorValue = this.addNewTaskForm.value.color || '';
+    if (colorValue.startsWith('#')) {
+      this.addNewTaskForm.patchValue({
+        color: colorValue.substring(1),
+      });
+    }
+
+    console.log(this.addNewTaskForm.value);
     this.addNewHabit();
   }
 
@@ -80,14 +111,46 @@ export class TaskViewComponent {
   }
 
   addNewHabit() {
-    this.userService.addNewHabit(this.addNewTaskForm.value).subscribe({
-      next: (response) => this.habitList.push(response as Habit),
-      error: (error) => console.log(error),
-      complete: () => {
-        this.getTodaysHabitlogs(this.date.toISOString());
-      },
-    });
+    const formData = this.addNewTaskForm.value;
+    const isNegative = formData.isNegativeHabit === true;
 
+    if (isNegative) {
+      const negativeHabitData = {
+        userId: formData.userID,
+        title: formData.title,
+        description: formData.description,
+        color: formData.color
+      };
+
+      this.userService.addNewNegativeHabit(negativeHabitData).subscribe({
+        next: (response) => this.habitList.push(response as Habit),
+        error: (error) => {
+          console.log(error);
+          this.alertService.showAlert('Failed to create negative habit');
+        },
+        complete: () => {
+          this.alertService.showAlert('Negative habit created successfully!');
+          this.getTodaysHabitlogs(this.date.toISOString());
+        },
+      });
+    } else {
+      this.userService.addNewHabit(formData).subscribe({
+        next: (response) => this.habitList.push(response as Habit),
+        error: (error) => {
+          console.log(error);
+          this.alertService.showAlert('Failed to create habit');
+        },
+        complete: () => {
+          this.alertService.showAlert('Habit created successfully!');
+          this.getTodaysHabitlogs(this.date.toISOString());
+        },
+      });
+    }
+
+    this.addNewTaskForm.reset({
+      color: '#000000',
+      isNegativeHabit: false
+    });
     this.toggleFormVisibility();
   }
 
@@ -170,7 +233,6 @@ export class TaskViewComponent {
     this.getTodaysHabitlogs(this.date.toISOString());
   }
 
-  // Check if the given date is today
   isForToday(date: Date): boolean {
     const today = new Date();
     return date.getDate() === today.getDate() &&
@@ -178,7 +240,6 @@ export class TaskViewComponent {
       date.getFullYear() === today.getFullYear();
   }
 
-  // Method to check if the currently displayed date in the component is today's date
   isCurrentDateToday(): boolean {
     const today = new Date();
     return this.date.getDate() === today.getDate() &&

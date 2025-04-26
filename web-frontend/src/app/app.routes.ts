@@ -8,6 +8,7 @@ import { UserComponent } from './pages/user/user.component';
 import { FeedComponent } from './pages/feed/feed.component';
 import { FriendsComponent } from './pages/friends/friends.component';
 import { HabitsComponent } from './pages/habits/habits.component';
+import { NegativeHabitsComponent } from './pages/negative-habits/negative-habits.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -22,6 +23,7 @@ export const routes: Routes = [
 
   // Habits
   { path: 'habits', component: HabitsComponent, canActivate: [authGuard] }, // Habits Page
+  { path: 'negative-habits', component: NegativeHabitsComponent, canActivate: [authGuard] }, // Negative Habits Page
 
   // User
   { path: 'user/:id', component: UserComponent, canActivate: [authGuard] }, // User controls

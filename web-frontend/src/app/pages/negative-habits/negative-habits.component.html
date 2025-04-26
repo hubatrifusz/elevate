@@ -1,0 +1,54 @@
+<div id="negative_habits_page_container" class="page_container">
+    <app-navbar></app-navbar>
+    <div id="habits_container">
+        <header>Negative Habits</header>
+        <div id="habits">
+            <div class="habits-grid">
+                @if (isLoading) {
+                <div class="loading-container">
+                    <app-loading-spinner></app-loading-spinner>
+                </div>
+                } @else if (errorMessage) {
+                <div class="error-message">
+                    {{ errorMessage }}
+                    <button class="button_primary" (click)="loadNegativeHabits()">Try Again</button>
+                </div>
+                } @else if (negativeHabits.length === 0) {
+                <div class="no-habits">
+                    <h3>No negative habits found</h3>
+                    <p>Create a new negative habit from the dashboard page</p>
+                </div>
+                } @else {
+                @for (habit of negativeHabits; track habit.id) {
+                <div class="habit-card" [ngStyle]="{ 'border-left': '5px solid #' + habit.color }">
+                    <div class="habit-header">
+                        <h3>{{ habit.title }}</h3>
+                        <div class="habit-frequency">
+                            <img src="icons/clock.png" alt="clock" />
+                            <span>{{ habit.frequencyType }}</span>
+                        </div>
+                    </div>
+                    <div class="habit-details">
+                        <p>{{ habit.description || 'No description provided' }}</p>
+
+                        <div class="horseshoe-container">
+                            <app-horseshoe-visualization [updatedAt]="habit.createdAt"
+                                [primaryColor]="'#' + habit.color" [size]="180">
+                            </app-horseshoe-visualization>
+                        </div>
+
+                        <div class="habit-streak">
+                            <span>Current streak: {{ habit.streak }}</span>
+                        </div>
+                        <div class="habit-streak-progression"
+                            *ngIf="habit.streakProgression && habit.streakProgression !== '0/0'">
+                            <span>Team progress: {{ habit.streakProgression }}</span>
+                        </div>
+                    </div>
+                </div>
+                }
+                }
+            </div>
+        </div>
+    </div>
+</div>
