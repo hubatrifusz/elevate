@@ -1,0 +1,30 @@
+<app-header title="Negative habits">
+
+</app-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-fab data-cy="fabButton" horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="newNegativeHabit()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <h1 class="styled-heading">Control all your negative habits here</h1>
+
+
+  <ion-list>
+
+    @for (habit of negativeHabits; track $index) {
+    <app-negative-habit-card [habit]="habit" (deleteHabit)="deleteHabit($event)"
+      (updateHabit)="updateHabit($event)"></app-negative-habit-card>
+    }
+  </ion-list>
+
+
+
+</ion-content>

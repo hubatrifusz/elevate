@@ -1,0 +1,15 @@
+@use "../../../theme/variables.scss" as *;
+@use "../../../theme/fab.scss" as *;
+.styled-heading {
+    font-size: $font-size-xl;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 30px;
+    padding: 0px 20px;
+    border-radius: 10px;
+    font-variant: small-caps;
+    text-transform: uppercase;
+}
+ion-list{
+    background-color: transparent;
+}

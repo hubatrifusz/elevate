@@ -26,7 +26,12 @@ export const routes: Routes = [
   {
     path: 'profile/:id',
     loadComponent: () => import('./pages/profile/profile.page').then( m => m.ProfilePage)
+  },  {
+    path: 'create-negative-habit',
+    loadComponent: () => import('./pages/create-negative-habit/create-negative-habit.page').then( m => m.CreateNegativeHabitPage)
   }
+
+
 
 
 

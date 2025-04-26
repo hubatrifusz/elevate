@@ -383,6 +383,9 @@ export class TaskCardComponent implements OnInit {
       },
       (error) => {
         console.error('Error loading friends:', error);
+        if(error.status === 404) {
+          this.toast.presentToast("No friends found.");
+        }
       }
     );
   }

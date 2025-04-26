@@ -23,6 +23,10 @@ export const routes: Routes = [
             {
                 path:"friends",
                 loadComponent: () => import('../../pages/friends/friends.page').then(m => m.FriendsPage)
+            },
+            {
+                path: 'negative-habits',
+                loadComponent: () => import('../../pages/negative-habits/negative-habits.page').then(m => m.NegativeHabitsPage)
             }
         ]
     },

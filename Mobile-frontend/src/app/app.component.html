@@ -12,18 +12,18 @@
 
       <ion-button data-cy="FriendsPage" shape="round" (click)="gotofriends()" fill="clear" class="menu-item">
         <div class="button-container">
-          <ion-icon name="person-add-outline"></ion-icon>
+          <ion-icon color="tertiary" name="person-add-outline"></ion-icon>
           <span>Friends</span>
           @if(friendRequests > 0 || challengeRequests > 0) {
           <ion-badge color="danger" class="menu-badge">d</ion-badge>
           }
         </div>
       </ion-button>
-      <!-- <hr class="divider"> -->
-      <!-- <ion-button shape="round" fill="clear" class="menu-item">
-        <ion-icon name="settings"></ion-icon>
-        <span>Settings</span>
-      </ion-button> -->
+      <hr class="divider">
+      <ion-button (click)="goToNegativeHabits()" shape="round" fill="clear" class="menu-item">
+        <ion-icon color="danger" name="ban-outline"></ion-icon>
+        <span>Negative habits</span>
+      </ion-button>
       <ion-button shape="round" (click)="Logout()" fill="clear" class="menu-item">
         <ion-icon name="log-out-outline"></ion-icon>
         <span>Log out</span>

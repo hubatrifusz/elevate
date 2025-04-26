@@ -1,0 +1,28 @@
+<ion-card class="negative-habit-card">
+  <ion-card-content>
+    <div class="card-header">
+      <div class="color-indicator"
+        [style.backgroundColor]="habit?.color?.startsWith('#') ? habit?.color : '#' + habit?.color"></div>
+      <ion-label>
+        <h2>{{ habit?.title }}</h2>
+        <p>{{ habit!.updatedAt | date: 'MMM d, y • HH:mm' : 'UTC'}}</p>
+      </ion-label>
+    </div>
+
+    <div class="card-actions">
+      <ion-button fill="clear" color="danger">
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
+        Delete
+      </ion-button>
+      <ion-button fill="clear" color="tertiary">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Reset
+      </ion-button>
+    </div>
+    <div class="streak-container">
+      <span class="days-count">{{ daysSinceLastOccurrence }}</span>
+      <span class="days-label">days</span>
+      <ion-icon name="calendar-outline"></ion-icon>
+    </div>
+  </ion-card-content>
+</ion-card>
