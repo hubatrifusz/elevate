@@ -23,11 +23,14 @@ export class HorseshoeVisualizationComponent implements OnInit, AfterViewInit, O
   elapsedMinutes: number = 0;
   elapsedSeconds: number = 0;
   elapsedTimeText: string = '';
+  pixelRatio: number = 1;
 
   constructor() { }
 
   ngOnInit(): void {
     this.calculateElapsedTime();
+    // Get device pixel ratio for high-DPI screens
+    this.pixelRatio = window.devicePixelRatio || 1;
   }
 
   ngAfterViewInit(): void {
@@ -85,16 +88,27 @@ export class HorseshoeVisualizationComponent implements OnInit, AfterViewInit, O
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Scale for high-DPI displays
+    const displayWidth = this.size;
+    const displayHeight = this.size;
+
+    // Set canvas dimensions with device pixel ratio
+    canvas.width = displayWidth * this.pixelRatio;
+    canvas.height = displayHeight * this.pixelRatio;
+
+    // Set the CSS size
+    canvas.style.width = `${displayWidth}px`;
+    canvas.style.height = `${displayHeight}px`;
+
+    // Scale the context to account for the device pixel ratio
+    ctx.scale(this.pixelRatio, this.pixelRatio);
+
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
 
-    // Set canvas dimensions
-    canvas.width = this.size;
-    canvas.height = this.size;
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = (canvas.width - this.strokeWidth) / 2;
+    const centerX = displayWidth / 2;
+    const centerY = displayHeight / 2;
+    const radius = (displayWidth - this.strokeWidth) / 2;
 
     // Calculate progress (max is 30 days, after that it stays at 100%)
     const totalSeconds = this.elapsedDays * 24 * 60 * 60 +
@@ -121,21 +135,32 @@ export class HorseshoeVisualizationComponent implements OnInit, AfterViewInit, O
     ctx.lineCap = 'round';
     ctx.stroke();
 
-    // Draw text in the center
-    ctx.font = '14px Arial';
+    // Improved text rendering
+    ctx.font = '600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
     ctx.fillStyle = '#333';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // Draw elapsed time
+    // Enable font smoothing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Align text on pixel boundaries for crisp rendering
+    const drawText = (text: string, x: number, y: number) => {
+      const roundedX = Math.round(x);
+      const roundedY = Math.round(y);
+      ctx.fillText(text, roundedX, roundedY);
+    };
+
+    // Draw elapsed time with sharper text
     if (this.elapsedDays > 0) {
-      ctx.fillText(`${this.elapsedDays} days`, centerX, centerY - 10);
-      ctx.fillText(`${this.elapsedHours}h ${this.elapsedMinutes}m`, centerX, centerY + 10);
+      drawText(`${this.elapsedDays} day${this.elapsedDays > 1 ? 's' : ''}`, centerX, centerY - 12);
+      drawText(`${this.elapsedHours}h ${this.elapsedMinutes}m`, centerX, centerY + 12);
     } else if (this.elapsedHours > 0) {
-      ctx.fillText(`${this.elapsedHours}h ${this.elapsedMinutes}m`, centerX, centerY - 5);
-      ctx.fillText(`${this.elapsedSeconds}s`, centerX, centerY + 15);
+      drawText(`${this.elapsedHours}h ${this.elapsedMinutes}m`, centerX, centerY - 8);
+      drawText(`${this.elapsedSeconds}s`, centerX, centerY + 12);
     } else {
-      ctx.fillText(this.elapsedTimeText, centerX, centerY);
+      drawText(this.elapsedTimeText, centerX, centerY);
     }
   }
 }

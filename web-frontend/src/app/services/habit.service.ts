@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment.prod';
-import { Habit } from '../models/habit.model';
+import { Habit, NegativeHabit } from '../models/habit.model';
 import { Challenge } from '../models/challenge.model';
 
 @Injectable({
@@ -91,13 +91,13 @@ export class HabitService {
     });
   }
 
-  getNegativeHabits(): Observable<Habit[]> {
+  getNegativeHabits(): Observable<NegativeHabit[]> {
     const userId = this.authService.getUserId();
     const params = new HttpParams()
       .set('pageNumber', 1)
       .set('pageSize', 20);
 
-    return this.http.get<Habit[]>(`${this.apiUrl}/habit/negative/${userId}`, {
+    return this.http.get<NegativeHabit[]>(`${this.apiUrl}/habit/negative/${userId}`, {
       params,
       headers: this.getAuthHeaders(),
     });

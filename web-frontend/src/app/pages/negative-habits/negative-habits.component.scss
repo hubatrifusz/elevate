@@ -120,6 +120,34 @@ header {
   align-self: flex-start;
 }
 
+.elapsed-time-container {
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-color-800;
+  background-color: $main-color-300;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  align-self: flex-start;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: $accent-color-400;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+}
+
 .habit-streak-progression {
   margin-bottom: 18px;
   font-size: 14px;
