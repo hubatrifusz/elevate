@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { ToolbarComponent } from "../../components/dashboard/toolbar/toolbar.component";
-import { TaskFeedComponent } from "../../components/feed/task/task.component";
+import { TaskFeedComponent } from "../../components/feed/task-feed/task.component";
 import { FeedService } from '../../services/feed.service';
 import { Post } from '../../models/post.model';
 import { LoadingSpinnerComponent } from "../../components/loading-spinner/loading-spinner.component";

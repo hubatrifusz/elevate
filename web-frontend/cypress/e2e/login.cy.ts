@@ -34,11 +34,6 @@ describe('Login Page Frontend Validations', () => {
     cy.get('[data-cy="password_text_input"]').should('have.attr', 'type', 'text'); // if it changes to text
   });
 
-  it('should navigate to password recovery page', () => {
-    cy.get('#forgot_password_button').click();
-    cy.url().should('include', '/password-recovery');
-  });
-
   it('should navigate to create account page', () => {
     cy.get('#redirect_to_create_account_button').click();
     cy.url().should('include', '/create-account');

@@ -1,0 +1,5 @@
+<div id="negative_habits_container">
+@for (habit of negativeHabits; track $index) {
+  <app-negative-habit [habitData]="habit"></app-negative-habit>
+}
+</div>

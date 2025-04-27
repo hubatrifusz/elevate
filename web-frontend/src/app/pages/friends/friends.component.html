@@ -17,7 +17,7 @@
           <app-loading-spinner></app-loading-spinner>
         </div>
         } @else if (friends.length == 0) {
-        <p>You don't have any friends. :(</p>
+        <p data-cy="no-friends-message">You don't have any friends. :(</p>
         } @else {
         @for (friend of friends; track $index) {
         <div class="friend">

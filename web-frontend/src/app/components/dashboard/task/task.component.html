@@ -3,9 +3,16 @@
     <div id="left">
       @if (isToday) {
       <div class="input_container" id="remember_me_checkbox_input_container">
-        <input type="checkbox" #task_checkbox_input name="task_checkbox_input" id="{{ habitLogData.id }}"
-          data-cy="task_checkbox_input" [checked]="habitLogData.completed" [formControl]="taskCheckbox"
-          (change)="taskDone($event)" />
+        <input
+          type="checkbox"
+          #task_checkbox_input
+          name="task_checkbox_input"
+          id="{{ habitLogData.id }}"
+          data-cy="task_checkbox_input"
+          [checked]="habitLogData.completed"
+          [formControl]="taskCheckbox"
+          (change)="taskDone($event)"
+        />
         <label for="{{ habitLogData.id }}" class="checkbox" #checkbox>
           <div class="checkmark" #checkmark></div>
         </label>
@@ -18,17 +25,11 @@
       }
     </div>
     <div id="right">
-      @if (isToday) {
       <div id="time_container">
         <img src="icons/flame.png" alt="clock" />
         <span>{{ habitData.streak }}</span>
       </div>
-      } @else {
-      <div id="future_container">
-        <img src="icons/calendar.png" alt="calendar" />
-        <span>Not for today</span>
-      </div>
-      }
+
       <div id="options_container">
         <img src="icons/menu-dots-vertical.png" alt="menu-dots-vertical" (click)="expandTask()" />
       </div>
@@ -38,13 +39,6 @@
     <div class="task_description">
       <p class="p_dark">Description:</p>
       <p>{{ habitData.description }}</p>
-    </div>
-
-    <div class="task_notes">
-      <div class="input_container">
-        <textarea name="" id="" placeholder="Add some notes" rows="3" [formControl]="notes"
-          (blur)="saveNotes()"></textarea>
-      </div>
     </div>
   </div>
 </div>

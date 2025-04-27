@@ -52,9 +52,15 @@ Cypress.Commands.add('logout', () => {
 Cypress.Commands.add('login', () => {
   cy.logout();
 
-  cy.get('[data-cy="email_text_input"]').type('huba.trifusz@gmail.com');
-  cy.get('[data-cy="password_text_input"]').type('Nagyjelszo123!', { log: false });
-  cy.get('[data-cy="login_button"]').click();
+  // Wait for login form to appear
+  cy.get('[data-cy="email_text_input"]', { timeout: 10000 }).should('be.visible');
+  cy.get('[data-cy="password_text_input"]').should('be.visible');
 
-  cy.wait(3000);
+  // Fill in the form
+  cy.get('[data-cy="email_text_input"]').clear().type('huba.trifusz@gmail.com');
+  cy.get('[data-cy="password_text_input"]').clear().type('Nagyjelszo123!', { log: false });
+  cy.get('[data-cy="login_button"]').should('not.be.disabled').click();
+
+  // Wait for successful login (example: check if dashboard is loaded or token exists)
+  cy.url({ timeout: 10000 }).should('include', '/dashboard'); // or wherever you land after login
 });

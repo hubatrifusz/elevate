@@ -1,0 +1,48 @@
+@import '../../../../assets/styles/variables';
+
+.negative_habit_container {
+  width: 50%;
+  aspect-ratio: 1/1;
+
+  padding: 2rem;
+
+  border-radius: 2rem;
+
+  background-color: $main-color-100;
+
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+
+  .negative_habit_counter {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    margin-top: 1rem;
+
+    .counter_circle {
+      width: 80%;
+      aspect-ratio: 1/1;
+
+      border-radius: 100rem;
+
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      h5 {
+        width: 87%;
+        aspect-ratio: 1/1;
+        background-color: $main-color-200;
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        text-align: center;
+      }
+    }
+  }
+}

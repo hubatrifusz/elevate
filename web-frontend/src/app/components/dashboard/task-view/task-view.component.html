@@ -1,15 +1,24 @@
 <div id="task_view_container">
   <!-- Todays date -->
   <div id="date_container">
-    <img src="icons/left-arrow.png" alt="Previous Day" (click)="previousDay()"
+    <img
+      src="icons/left-arrow.png"
+      alt="Previous Day"
+      (click)="previousDay()"
       [style.pointer-events]="isPreviousDisabled ? 'none' : 'auto'"
-      [style.opacity]="isPreviousDisabled ? '0.5' : '1'" />
+      [style.opacity]="isPreviousDisabled ? '0.5' : '1'"
+    />
     <div>
       <h4 class="header_light">{{ weekday }},</h4>
       <h4 class="header_bold">{{ dayAndMonth }}</h4>
     </div>
-    <img src="icons/right-arrow.png" alt="Next Day" (click)="nextDay()"
-      [style.pointer-events]="isNextDisabled ? 'none' : 'auto'" [style.opacity]="isNextDisabled ? '0.5' : '1'" />
+    <img
+      src="icons/right-arrow.png"
+      alt="Next Day"
+      (click)="nextDay()"
+      [style.pointer-events]="isNextDisabled ? 'none' : 'auto'"
+      [style.opacity]="isNextDisabled ? '0.5' : '1'"
+    />
   </div>
 
   <!-- Tasks -->
@@ -17,16 +26,16 @@
     @if (isLoading) {
     <app-loading-spinner></app-loading-spinner>
     } @else if (habitlogList.length === 0) {
-    <h3>All done! 🎉</h3>
+    <h3>No tasks for today!</h3>
     <p>Click 'Add' to create a new habit.</p>
-    } @else {
-    @for (habitLog of habitlogList; track $index) {
-    @if (getHabitForLog(habitLog)) {
-    <app-task [habitData]="getHabitForLog(habitLog)!" [habitLogData]="habitLog" [isToday]="isCurrentDateToday()"
-      (dataEmitter)="deleteHabit($event)"></app-task>
-    }
-    }
-    }
+    } @else { @for (habitLog of habitlogList; track $index) { @if (getHabitForLog(habitLog)) {
+    <app-task
+      [habitData]="getHabitForLog(habitLog)!"
+      [habitLogData]="habitLog"
+      [isToday]="isCurrentDateToday()"
+      (dataEmitter)="deleteHabit($event)"
+    ></app-task>
+    } } }
   </div>
 
   <!-- Add new task button -->
@@ -51,8 +60,7 @@
 
     <!-- Description -->
     <div class="input_container" id="description_text_input_container" data-cy="description_text_input_container">
-      <input type="text" name="description_text_input" id="description_text_input" placeholder=" "
-        [formControlName]="'description'" />
+      <input type="text" name="description_text_input" id="description_text_input" placeholder=" " [formControlName]="'description'" />
       <label for="title" class="input_title">Add a description</label>
     </div>
 
@@ -66,8 +74,9 @@
     <div class="input_container habit_type_toggle">
       <div class="checkbox_container">
         <input type="checkbox" id="negative_habit_toggle" [formControlName]="'isNegativeHabit'" />
-        <label for="negative_habit_toggle">{{ addNewTaskForm.get('isNegativeHabit')?.value ? 'Negative habit (to avoid)'
-          : 'Positive habit (to build)' }}</label>
+        <label for="negative_habit_toggle">
+          {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'Negative habit (to avoid)' : 'Positive habit (to build)' }}
+        </label>
       </div>
     </div>
 
@@ -86,8 +95,9 @@
 
     <!-- Submit button -->
     <div class="button_container">
-      <button class="button_secondary"><span>Add new {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'negative' :
-          'positive' }} habit</span></button>
+      <button class="button_secondary">
+        <span>Add new {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'negative' : 'positive' }} habit</span>
+      </button>
     </div>
   </form>
   }

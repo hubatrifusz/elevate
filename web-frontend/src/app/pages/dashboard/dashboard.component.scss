@@ -1,4 +1,4 @@
-@import "../../../assets/styles/variables";
+@import '../../../assets/styles/variables';
 
 #dashboard_page_container {
   #dashboard_container {
@@ -9,7 +9,7 @@
     flex-direction: column;
 
     background-color: $main-color-200;
-    
+
     header {
       height: 6rem;
       flex-grow: 0;
@@ -29,6 +29,10 @@
       padding: 2rem;
 
       app-task-view {
+        flex-grow: 1;
+      }
+
+      app-negative-habits {
         flex-grow: 1;
       }
     }
