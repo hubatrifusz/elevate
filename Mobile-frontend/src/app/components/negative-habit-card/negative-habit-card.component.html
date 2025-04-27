@@ -1,28 +1,54 @@
-<ion-card class="negative-habit-card">
-  <ion-card-content>
-    <div class="card-header">
-      <div class="color-indicator"
-        [style.backgroundColor]="habit?.color?.startsWith('#') ? habit?.color : '#' + habit?.color"></div>
-      <ion-label>
-        <h2>{{ habit?.title }}</h2>
-        <p>{{ habit!.updatedAt | date: 'MMM d, y • HH:mm' : 'UTC'}}</p>
-      </ion-label>
-    </div>
+<ion-card class="negative-habit-card"
+  [style.border-left-color]="habit?.color?.startsWith('#') ? habit?.color : '#' + habit?.color">
+  <ion-item lines="none">
+    <div slot="start" class="color-indicator"
+      [style.backgroundColor]="habit?.color?.startsWith('#') ? habit?.color : '#' + habit?.color"></div>
+    <ion-label>
+      <h2>{{ habit?.title }}</h2>
+      <p class="ion-text-wrap description">{{habit?.description}}</p>
+      <p class="ion-text-wrap last-update">{{ habit!.updatedAt | date: 'MMM d, y • HH:mm' : 'UTC'}}</p>
+    </ion-label>
+  </ion-item>
 
-    <div class="card-actions">
-      <ion-button fill="clear" color="danger">
-        <ion-icon name="trash-outline" slot="start"></ion-icon>
-        Delete
-      </ion-button>
-      <ion-button fill="clear" color="tertiary">
-        <ion-icon name="refresh-outline" slot="start"></ion-icon>
-        Reset
-      </ion-button>
-    </div>
-    <div class="streak-container">
-      <span class="days-count">{{ daysSinceLastOccurrence }}</span>
-      <span class="days-label">days</span>
-      <ion-icon name="calendar-outline"></ion-icon>
-    </div>
+  <ion-card-content>
+    <ion-row class="ion-align-items-center ion-justify-content-between">
+      <ion-col size="auto">
+        <ion-chip color="success">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <ion-label><strong>{{ daysSinceLastOccurrence }}</strong> days</ion-label>
+        </ion-chip>
+      </ion-col>
+
+      <ion-col size="auto">
+        <ion-text color="medium">Goal: {{currentGoal}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="goal-progress ion-margin-top">
+      <ion-col>
+        <div class="progress-container">
+          <ion-progress-bar [value]="progressValue" color="success"></ion-progress-bar>
+          <div class="milestone-labels">
+            <span class="current-progress">{{daysSinceLastOccurrence}} days</span>
+            <span class="goal-days">{{nextGoalDays}} days</span>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-top ion-justify-content-between">
+      <ion-col size="6">
+        <ion-button (click)="deleteHabit(habit!.id)" expand="block" fill="outline" color="danger" size="small">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Delete
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button (click)="resetHabit(habit!.id)" expand="block" fill="outline" color="tertiary" size="small">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Reset
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-card-content>
 </ion-card>

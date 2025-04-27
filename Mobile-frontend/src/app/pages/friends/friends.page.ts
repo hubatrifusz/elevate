@@ -23,7 +23,7 @@ import { Friendship } from 'src/app/.models/friendship.model';
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
   standalone: true,
-  imports: [IonSpinner, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent,
+  imports: [IonCardSubtitle, IonCardTitle, IonCardHeader, IonCol, IonRow, IonGrid, IonChip, IonCardContent,
     IonCard, IonBadge, IonRefresherContent, IonRefresher, IonButtons, IonModal, IonFabButton, IonFab, IonIcon,
     IonAvatar, IonSearchbar, IonButton, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, HeaderComponent, FriendComponent, ChallengeRequestComponent]
@@ -252,7 +252,7 @@ export class FriendsPage {
   isPendingRequest(userId: string | number): boolean {
     return this.sentFriendRequests?.some(request => request.friendId === userId) ?? false;
   }
-  isFriend(userId: string): boolean{
+  isFriend(userId: string): boolean {
 
     return this.friends?.some(friend => friend.id === userId) ?? false;
   }

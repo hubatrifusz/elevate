@@ -1,4 +1,4 @@
-<app-header title="Negative habits">
+<app-header title="Negative Habits">
 
 </app-header>
 
@@ -16,15 +16,27 @@
 
   <h1 class="styled-heading">Control all your negative habits here</h1>
 
-
+  @if(noData){
+    <ion-card color="tertiary" class="no-friends-card">
+      <ion-card-header>
+        <ion-card-title color="dark">No Habits Yet</ion-card-title>
+        <ion-card-subtitle color="dark">Start adding negative habits!</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        <ion-icon name="happy-outline" size="large" color=""></ion-icon>
+      </ion-card-content>
+    </ion-card>
+  }
   <ion-list>
-
     @for (habit of negativeHabits; track $index) {
-    <app-negative-habit-card [habit]="habit" (deleteHabit)="deleteHabit($event)"
-      (updateHabit)="updateHabit($event)"></app-negative-habit-card>
+    <app-negative-habit-card [habit]="habit" (deleteHabitEvent)="deleteHabit($event)"
+      (resetHabitEvent)="resetHabit($event)"></app-negative-habit-card>
     }
   </ion-list>
 
+  <ion-infinite-scroll [disabled]="noMoreData" threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 
 </ion-content>

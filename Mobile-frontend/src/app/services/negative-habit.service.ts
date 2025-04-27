@@ -31,4 +31,19 @@ export class NegativeHabitService {
     });
     return this.http.post<NegativeHabit>(this.apiUrl, habit, { headers: headers });
   }
+
+  resetHabit(habitId: string): Observable<NegativeHabit> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` 
+    });
+    return this.http.patch<NegativeHabit>(`${this.apiUrl}/${habitId}`, {}, { headers: headers });
+  }
+  deleteHabit(habitId: string): Observable<NegativeHabit> {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` 
+    });
+    return this.http.delete<NegativeHabit>(`${this.apiUrl}/${habitId}`, { headers: headers });
+  }
 }
