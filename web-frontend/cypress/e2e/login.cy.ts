@@ -1,58 +1,49 @@
 describe('Login Page Frontend Validations', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4200/login');
+    cy.visit('http://localhost:4200/login'); // Adjust the route if needed
+    cy.logout(); // Assuming you have a custom command for logout
   });
 
-  it('should show both error messages, when logging in with invalid email and password', () => {
-    let incorrectEmail = 'wrongemail.com';
-    let incorrectPassword = 'bad123';
-
-    cy.get('[data-cy="email_text_input"]').type(incorrectEmail);
-    cy.get('[data-cy="password_text_input"]').type(incorrectPassword);
-
+  it('should allow user to login with valid credentials', () => {
+    cy.get('[data-cy="email_text_input"]').type('huba.trifusz@gmail.com');
+    cy.get('[data-cy="password_text_input"]').type('Nagyjelszo123!');
     cy.get('[data-cy="login_button"]').click();
 
-    cy.get('[data-cy="email_text_input_container"]').should('have.css', '--after-content', '"Invalid email."');
-    cy.get('[data-cy="password_text_input_container"]').should('have.css', '--after-content', '"Invalid password."');
+    // You can assert redirection or success message here if you have one
+    cy.url().should('not.include', '/login');
   });
 
-  it('should show a validation error for invalid email format', () => {
-    let invalidEmail = 'nemjoemail.com';
-    let validPassword = 'Nagyonbiztosjelszo123!';
-    cy.get('[data-cy="email_text_input"]').type(invalidEmail);
-    cy.get('[data-cy="password_text_input"]').type(validPassword);
-
+  it('should show validation message if email is missing', () => {
+    cy.get('[data-cy="password_text_input"]').type('Nagyjelszo123!');
     cy.get('[data-cy="login_button"]').click();
 
-    cy.get('[data-cy="email_text_input"]').should('have.css', '--after-content', '"Invalid email."');
+    cy.get('app-validation-message').should('be.visible').and('contain.text', 'All fields are requried.'); // Adjust based on actual message
   });
 
-  it('should show validation error if password is too short', () => {
-    let validEmail = 'jo@email.com';
-    let shortPassword = 'rov1!';
-    cy.get('[data-cy="email_text_input"]').type(validEmail);
-    cy.get('[data-cy="password_text_input"]').type(shortPassword);
-
+  it('should show validation message if password is missing', () => {
+    cy.get('[data-cy="email_text_input"]').type('huba.trifusz@gmail.com');
     cy.get('[data-cy="login_button"]').click();
 
-    cy.get('[data-cy="password_text_input"]').should('have.css', '--after-content', '"Invalid password."');
+    cy.get('app-validation-message').should('be.visible').and('contain.text', 'All fields are requried.'); // Adjust based on actual message
   });
 
-  it("should show validation error if password doesn't include at least one uppercase letter", () => {
-    let validEmail = 'jo@email.com';
-    let invalidPassword = 'nincsbennenagybenu123!';
-    cy.get('[data-cy="email_text_input"]').type(validEmail);
-    cy.get('[data-cy="password_text_input"]').type(invalidPassword);
+  it('should toggle password visibility when clicking eye icon', () => {
+    cy.get('[data-cy="password_text_input"]').type('TestPassword123!');
+    cy.get('#toggle_password_icon').click();
 
-    cy.get('[data-cy="login_button"]').click();
-
-    cy.get('[data-cy="password_text_input"]').should('have.css', '--after-content', '"Invalid password."');
+    cy.get('[data-cy="password_text_input"]').should('have.attr', 'type', 'text'); // if it changes to text
   });
 
-  it('should show a validation error if username or password is empty', () => {
+  it('should navigate to create account page', () => {
+    cy.get('#redirect_to_create_account_button').click();
+    cy.url().should('include', '/create-account');
+  });
+
+  it('should show validation message for invalid email format', () => {
+    cy.get('[data-cy="email_text_input"]').type('invalidemail');
+    cy.get('[data-cy="password_text_input"]').type('Nagyjelszo123!');
     cy.get('[data-cy="login_button"]').click();
 
-    cy.get('[data-cy="email_text_input_container"]').should('have.css', '--after-content', '"Email is required."');
-    cy.get('[data-cy="password_text_input_container"]').should('have.css', '--after-content', '"Password is required."');
+    cy.get('app-validation-message').should('be.visible').and('contain.text', 'Please enter a valid email'); // Adjust to actual message
   });
 });

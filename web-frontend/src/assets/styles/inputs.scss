@@ -1,4 +1,4 @@
-@import "../styles/variables";
+@import '../styles/variables';
 
 // Input container
 .input_container {
@@ -39,7 +39,7 @@
   }
 
   // Text input
-  input[type="text"] {
+  input[type='text'] {
     height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
@@ -69,7 +69,7 @@
   }
 
   // Email input
-  input[type="email"] {
+  input[type='email'] {
     height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
@@ -99,7 +99,7 @@
   }
 
   // Password input
-  input[type="password"] {
+  input[type='password'] {
     height: $input_height;
     width: 100%;
     padding: 1.5rem 1rem;
@@ -129,8 +129,8 @@
   }
 
   // Checkbox input
-  input[type="checkbox"] {
-    display: none;
+  input[type='checkbox'] {
+    opacity: 0;
     cursor: pointer;
 
     &:checked + .checkbox {
@@ -200,10 +200,54 @@
       font-weight: 500;
     }
   }
+
+  // Search input
+  input[type='search'] {
+    height: $input_height;
+    width: 100%;
+    padding: 1.5rem 1rem;
+
+    border: 1px solid $main-color-600;
+    border-radius: $border_radius;
+
+    // In focus
+    &:focus {
+      border: 2px solid $accent-color-400;
+      outline: none;
+    }
+
+    // Animate title on focus
+    &:focus + .input_title,
+    &:not(:placeholder-shown) + .input_title {
+      top: -15%;
+      color: $accent-color-400;
+      font-size: smaller;
+      font-weight: 500;
+    }
+
+    // Remove accent color if filled but not in focus
+    &:not(:focus):not(:placeholder-shown) + .input_title {
+      color: $text-color-700;
+    }
+  }
+
+  // Textarea
+  textarea {
+    width: 100%;
+    padding: 1rem 1rem;
+
+    border: 1px solid $main-color-600;
+    border-radius: $border_radius;
+
+    color: $text-color-900;
+    font-size: $font-size-base;
+    font-weight: 500;
+    background-color: $main-color-100;
+  }
 }
 
 .input_container::after {
-  content: var(--after-content, "");
+  content: var(--after-content, '');
 
   position: absolute;
   padding-left: 1rem;

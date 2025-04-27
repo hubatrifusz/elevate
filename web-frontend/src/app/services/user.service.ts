@@ -1,16 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getAuthHeaders() {
     const token = this.authService.getToken();
@@ -24,7 +24,7 @@ export class UserService {
   }
 
   getHabits(): Observable<any> {
-    const userId = localStorage.getItem('id') ?? '';
+    const userId = this.authService.getUserId() ?? '';
     const params = new HttpParams().set('userId', userId).set('pageNumber', 1).set('pageSize', 20);
 
     return this.http.get(`${this.apiUrl}/habit`, {
@@ -40,9 +40,13 @@ export class UserService {
   }
 
   addNewHabit(formResult: any): Observable<any> {
-    const token = this.authService.getToken();
-
     return this.http.post(`${this.apiUrl}/habit`, formResult, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  addNewNegativeHabit(formResult: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/habit/negative`, formResult, {
       headers: this.getAuthHeaders(),
     });
   }
@@ -54,11 +58,23 @@ export class UserService {
   }
 
   getTodaysHabitlogs(date: string): Observable<any> {
-    const userId = localStorage.getItem('id') ?? '';
+    const userId = this.authService.getUserId() ?? '';
     const params = new HttpParams().set('userId', userId);
 
     return this.http.get(`${this.apiUrl}/habitlog/${date}`, {
       params,
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  updateHabitLog(habitlogId: string, formResult: any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/habitlog/${habitlogId}`, formResult, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  updateUser(id: string | null, updatedUser: any) {
+    return this.http.patch(`${this.apiUrl}/user/${id}`, updatedUser, {
       headers: this.getAuthHeaders(),
     });
   }

@@ -1,0 +1,193 @@
+@import '../../../assets/styles/variables';
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100px;
+  padding: 20px 0;
+}
+
+#friends_page_container {
+  #content_container {
+    background-color: $main-color-200;
+    width: 100%;
+
+    #content {
+      height: calc(100% - 6rem);
+      padding: 2rem;
+      display: flex;
+      gap: 2rem;
+
+      #friends_container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        height: 100%;
+        width: calc(3 / 5 * 100%);
+
+        padding: 2rem;
+
+        border-radius: 2rem;
+
+        background-color: $main-color-100;
+
+        .section_title {
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+          text-underline-offset: 5px;
+          margin-bottom: 1rem;
+        }
+
+        #options {
+          position: absolute;
+          top: 0;
+          left: 0;
+
+          width: 12rem;
+
+          background-color: $main-color-400;
+          border-radius: 1rem;
+
+          box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.2);
+
+          overflow: hidden;
+
+          z-index: 10;
+
+          display: none;
+
+          button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+
+            width: 100%;
+            height: 3rem;
+
+            border: none;
+            background-color: transparent;
+
+            cursor: pointer;
+
+            &:hover {
+              background-color: $main-color-300;
+            }
+          }
+        }
+
+        .friend {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          width: 100%;
+          height: 6rem;
+
+          padding: 2rem;
+
+          background-color: $main-color-200;
+
+          border-radius: 1rem;
+          box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.2);
+
+          .profile_picture_and_action {
+            display: flex;
+            align-items: center;
+
+            .profile_picture {
+              width: 4rem;
+              height: 4rem;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+
+            .action_button {
+              height: 1.5rem;
+              margin-left: 1.5rem;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      #friends_actions {
+        width: calc(2 / 5 * 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .section_title {
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+          text-underline-offset: 5px;
+          margin-bottom: 1rem;
+        }
+
+        .friend_action {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          align-items: center;
+          height: 50%;
+
+          padding: 2rem;
+
+          border-radius: 2rem;
+
+          background-color: $main-color-100;
+
+          #search_icon {
+            height: 1.3rem;
+
+            right: 1rem;
+            position: absolute;
+
+            cursor: pointer;
+          }
+
+          #search_result_container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            gap: 1rem;
+
+            .search_result {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+          }
+
+          #friend_requests_container {
+            width: 100%;
+            #friend_request {
+              position: relative;
+              display: flex;
+              justify-content: space-between;
+              width: 100%;
+
+              padding: 1rem;
+
+              border-radius: 1rem;
+              overflow: hidden;
+
+              #friend_request_actions {
+                display: flex;
+                gap: 1.5rem;
+              }
+            }
+          }
+        }
+
+        .input_container {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

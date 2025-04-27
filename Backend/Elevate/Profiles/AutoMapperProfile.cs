@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Elevate.Common.Utilities;
-using Elevate.Models.Achievement;
-using Elevate.Models.AchievementProgress;
 using Elevate.Models.Challenge;
 using Elevate.Models.Friendship;
 using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
+using Elevate.Models.NegativeHabit;
 using Elevate.Models.Post;
 using Elevate.Models.User;
 
@@ -76,8 +75,8 @@ public class AutoMapperProfile : Profile
 
         CreateMap<PostModel, PostDto>();
 
-        CreateMap<AchievementModel, AchievementDto>();
-
-        CreateMap<AchievementProgressModel, AchievementProgressDto>();
+        CreateMap<NegativeHabitModel, NegativeHabitDto>();
+        CreateMap<NegativeHabitDto, NegativeHabitModel>();
+        CreateMap<NegativeHabitCreateDto, NegativeHabitModel>();
     }
 }

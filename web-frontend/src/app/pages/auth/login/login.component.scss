@@ -1,4 +1,4 @@
-@import "../../../../assets/styles/variables";
+@import '../../../../assets/styles/variables';
 #login_page_container {
   display: flex;
   flex-direction: row;
@@ -48,12 +48,6 @@
 
             cursor: pointer;
           }
-        }
-
-        .line_container {
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
         }
       }
     }

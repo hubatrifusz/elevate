@@ -22,56 +22,6 @@ namespace Elevate.Data.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Elevate.Models.Achievement.AchievementModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Achievements");
-                });
-
-            modelBuilder.Entity("Elevate.Models.AchievementProgress.AchievementProgressModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("AchievementId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Progress")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Target")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AchievementProgresses");
-                });
-
             modelBuilder.Entity("Elevate.Models.Challenge.ChallengeModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -167,15 +117,12 @@ namespace Elevate.Data.Migrations
                     b.Property<int>("FrequencyType")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsPositive")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("Streak")
                         .HasColumnType("int");
 
                     b.Property<string>("StreakProgression")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StreakStart")
                         .HasColumnType("datetime(6)");
@@ -229,6 +176,37 @@ namespace Elevate.Data.Migrations
                     b.HasIndex("UserId", "HabitId");
 
                     b.ToTable("HabitLogs");
+                });
+
+            modelBuilder.Entity("Elevate.Models.NegativeHabit.NegativeHabitModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NegativeHabits");
                 });
 
             modelBuilder.Entity("Elevate.Models.User.ApplicationUser", b =>

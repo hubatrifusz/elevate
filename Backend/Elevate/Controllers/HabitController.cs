@@ -1,6 +1,7 @@
 ﻿using Elevate.Common.Exceptions;
 using Elevate.Common.Utilities;
 using Elevate.Models.Habit;
+using Elevate.Models.NegativeHabit;
 using Elevate.Services.Habit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,40 @@ namespace Elevate.Controllers
             HabitDto habit = await _habitService.GetHabitByIdAsync(id);
             UserPermissionUtility.IsCurrentUser(habit.UserId, User);
             HabitDto deletedHabit = await _habitService.DeleteHabitAsync(habit);
+            return Ok(deletedHabit);
+        }
+
+        [HttpGet("negative/{userId:guid}")]
+        public async Task<ActionResult<List<NegativeHabitDto>>> GetNegativeHabitsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
+        {
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<NegativeHabitDto> habits = await _habitService.GetNegativeHabitsByUserIdAsync(userId, pageNumber, pageSize);
+            return Ok(habits);
+        }
+
+        [HttpPost("negative")]
+        public async Task<ActionResult<NegativeHabitDto>> AddNegativeHabitAsync(NegativeHabitCreateDto habitCreateDto)
+        {
+            UserPermissionUtility.IsCurrentUser(habitCreateDto.UserId, User);
+            NegativeHabitDto createdHabit = await _habitService.AddNegativeHabitAsync(habitCreateDto);
+            return createdHabit;
+        }
+
+        [HttpPatch("negative/{id:guid}")]
+        public async Task<ActionResult<NegativeHabitDto>> UpdateNegativeHabitAsync(Guid id)
+        {
+            NegativeHabitDto habit = await _habitService.GetNegativeHabitByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            NegativeHabitDto updatedHabit = await _habitService.UpdateNegativeHabitAsync(id);
+            return Ok(updatedHabit);
+        }
+
+        [HttpDelete("negative/{id:guid}")]
+        public async Task<ActionResult<NegativeHabitDto>> DeleteNegativeHabitAsync(Guid id)
+        {
+            NegativeHabitDto habit = await _habitService.GetNegativeHabitByIdAsync(id);
+            UserPermissionUtility.IsCurrentUser(habit.UserId, User);
+            NegativeHabitDto deletedHabit = await _habitService.DeleteNegativeHabitAsync(habit);
             return Ok(deletedHabit);
         }
     }

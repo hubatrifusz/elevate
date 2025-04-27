@@ -35,3 +35,32 @@
 //     }
 //   }
 // }
+
+declare namespace Cypress {
+  interface Chainable {
+    logout(): void;
+    login(): void;
+  }
+}
+
+Cypress.Commands.add('logout', () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  cy.visit('localhost:4200/');
+});
+
+Cypress.Commands.add('login', () => {
+  cy.logout();
+
+  // Wait for login form to appear
+  cy.get('[data-cy="email_text_input"]', { timeout: 10000 }).should('be.visible');
+  cy.get('[data-cy="password_text_input"]').should('be.visible');
+
+  // Fill in the form
+  cy.get('[data-cy="email_text_input"]').clear().type('huba.trifusz@gmail.com');
+  cy.get('[data-cy="password_text_input"]').clear().type('Nagyjelszo123!', { log: false });
+  cy.get('[data-cy="login_button"]').should('not.be.disabled').click();
+
+  // Wait for successful login (example: check if dashboard is loaded or token exists)
+  cy.url({ timeout: 10000 }).should('include', '/dashboard'); // or wherever you land after login
+});

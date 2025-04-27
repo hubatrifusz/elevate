@@ -1,0 +1,91 @@
+<div id="friends_page_container" class="page_container">
+  <app-navbar></app-navbar>
+  <div id="content_container">
+    <header>Friends</header>
+    <div id="content">
+      <!-- List friends -->
+      <div id="friends_container">
+        <div id="options">
+          <button (click)="deleteFriend(friendToDelete)">
+            <p class="p_dark">Delete</p>
+            <img class="ui_image" src="icons/trash.png" alt="" />
+          </button>
+        </div>
+        <h4 class="section_title">Friends list</h4>
+        @if (isFriendsLoading) {
+        <div class="loading-container">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+        } @else if (friends.length == 0) {
+        <p data-cy="no-friends-message">You don't have any friends. :(</p>
+        } @else {
+        @for (friend of friends; track $index) {
+        <div class="friend">
+          <div class="name_and_email">
+            <h4>{{ friend.firstName }} {{ friend.lastName }}</h4>
+            <p>{{ friend.email }}</p>
+          </div>
+          <div class="profile_picture_and_action">
+            <img class="profile_picture"
+              [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : '/images/default_profile_picture.jpg'"
+              alt="" />
+            <img class="action_button" src="icons/menu-dots-vertical.png" alt=""
+              (click)="showOptions($event, friend)" />
+          </div>
+        </div>
+        }
+        }
+      </div>
+      <div id="friends_actions">
+        <!-- Add friend -->
+        <div id="add_friend" class="friend_action">
+          <h4 class="section_title">Add friends</h4>
+          <div class="input_container">
+            <input type="search" id="search_friend" name="search_friend" data-cy="search_friend_search_input"
+              placeholder=" " [formControl]="search" (keydown.enter)="searchUsers()" />
+            <label for="search_friend" class="input_title">Search for a friends email</label>
+            <img src="icons/search-bold.png" alt="search_icon" id="search_icon" (click)="searchUsers()" />
+          </div>
+          <div id="search_result_container">
+            @if (isSearchLoading) {
+            <div class="loading-container">
+              <app-loading-spinner></app-loading-spinner>
+            </div>
+            } @else if (searchResult.length != 0) {
+            @for (user of searchResult; track $index) {
+            <div class="search_result">
+              <p>{{ user.email }}</p>
+              <img src="icons/follow.png" alt="" (click)="sendFriendsRequest(user.id, $event)" class="ui_image" />
+            </div>
+            }
+            }
+          </div>
+        </div>
+
+        <!-- List friend requests -->
+        <div id="friend_requests" class="friend_action">
+          <h4 class="section_title">Friend requests</h4>
+          <div id="friend_requests_container">
+            @if (isFriendRequestsLoading) {
+            <div class="loading-container">
+              <app-loading-spinner></app-loading-spinner>
+            </div>
+            } @else if (friendRequests.length == 0) {
+            <p>You have no pending friend requests.</p>
+            } @else {
+            @for (user of friendRequests; track $index) {
+            <div id="friend_request">
+              <p>{{ user.email }}</p>
+              <div id="friend_request_actions">
+                <img class="ui_image" src="icons/check-bold.png" alt="" (click)="acceptFriendRequest(user)" />
+                <img class="ui_image" src="icons/cross.png" alt="" (click)="declineFriendRequest(user)" />
+              </div>
+            </div>
+            }
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
