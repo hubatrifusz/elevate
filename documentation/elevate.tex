@@ -61,7 +61,7 @@
 
 \includepdf[pages=-]{src/cover.pdf}
 
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 \tableofcontents
 
 \chapter{A projektről}
@@ -466,61 +466,57 @@ A backend a következő komponensekből épül fel:
 \section{Végpontok}
 A Backend API részletes dokumentációja a \href{https://elevate.koyeb.app/swagger}{\textcolor{blue}{\underline{Swagger}}} felületen érhető el. Az alábbiakban a főbb végpontok láthatóak:
 
-\begin{itemize}
-  \item \textbf{Autentikáció}
-    \begin{itemize}
-      \item Regisztráció (\httpPost{/api/auth/register})
-      \item Bejelentkezés (\httpPost{/api/auth/login})
-    \end{itemize}
-  \item \textbf{Felhasználó}
-    \begin{itemize}
-      \item Felhasználó adatainak lekérése email alapján (\httpGet{/api/user})
-      \item Felhasználó adatainak lekérése id alapján (\httpGet{/api/user/:id})
-      \item Felhasználó adatainak frissítése (\httpPatch{/api/user/:id})
-    \end{itemize}
-  \item \textbf{Szokások}
-    \begin{itemize}
-      \item Szokások listázása (\httpGet{/api/habit})
-
-      \item Szokás lekérése azonosító alapján (\httpGet{/api/habit/:id})
-      \item Új szokás létrehozása (\httpPost{/api/habit})
-      \item Szokás módosítása (\httpPatch{/api/habit/:id})
-      \item Szokás törlése (\httpDelete{/api/habit/:id})
-      
-      \item Negatív szokások listázása (\httpGet{/api/habit/negative/:userId})
-      \item Negatív szokás léztrehozása (\httpPost{/api/habit/negative})
-      \item Negatív szokás módosítása (\httpPatch{/api/habit/negative/:id})
-      \item Negatív szokás törlése (\httpDelete{/api/habit/negative/:id})
-    \end{itemize}
-  \item \textbf{Szokás napló}
-    \begin{itemize}
-      \item Szokás naplók listázása (\httpGet{/api/habitlog})
-      \item Szokás napló lekérése azonosító alapján (\httpGet{/api/habitlog/:id})
-      \item Napi szokás naplók lekérése (\httpGet{/api/habitlog/:dueDate})
-      \item Szokás napló frissítése (\httpPatch{/api/habitlog/:id})
-    \end{itemize}
-  \item \textbf{Kihívások}
-    \begin{itemize}
-      \item Kihívások lekérése felhasználó azonosító alapján (\httpGet{/api/challenge/:userId/challenges})
-      \item Kihívás meghívók listázása (\httpGet{/api/challenge/:userId/challenge-invites})
-      \item Elküldött kihívás meghívók listázása (\httpGet{/api/challenge/:userId/sent-challenge-invites})
-      \item Új kihívás létrehozása (\httpPost{/api/challenge})
-      \item Kihívás státuszának frissítése (\httpPatch{/api/challenge})
-      \item Kihívás törlése (\httpDelete{/api/challenge})
-    \end{itemize}
-  \item \textbf{Feed}
-    \begin{itemize}
-      \item Feed bejegyzések lekérése (\httpGet{/api/feed})        
-    \end{itemize}
-  \item \textbf{Barátok}
-    \begin{itemize}
-      \item Barátok listázása (\httpGet{/api/friendship/:userId/friends})
-      \item Beérkezett barátkérések lekérése (\httpGet{/api/friendship/:userId/fried-requests})
-      \item Küldött barátkérések lekérése (\httpGet{/api/friendship/:userId/friend-requests-sent})
-      \item Barátkérés küldése (\httpPost{/api/friendship})
-      \item Barátkérés elfogadása/elutasítása (\httpPatch{/api/friendship})
-      \item Barátság törlése (\httpDelete{/api/friendship})
-    \end{itemize}
+\subsection{Autentikáció}
+  \begin{itemize}
+    \item Regisztráció (\httpPost{/api/auth/register})
+    \item Bejelentkezés (\httpPost{/api/auth/login})
+  \end{itemize}
+\subsection{Felhasználó}
+  \begin{itemize}
+    \item Felhasználó adatainak lekérése email alapján (\httpGet{/api/user})
+    \item Felhasználó adatainak lekérése id alapján (\httpGet{/api/user/:id})
+    \item Felhasználó adatainak frissítése (\httpPatch{/api/user/:id})
+  \end{itemize}
+\subsection{Szokások}
+  \begin{itemize}
+    \item Szokások listázása (\httpGet{/api/habit})
+    \item Szokás lekérése azonosító alapján (\httpGet{/api/habit/:id})
+    \item Új szokás létrehozása (\httpPost{/api/habit})
+    \item Szokás módosítása (\httpPatch{/api/habit/:id})
+    \item Szokás törlése (\httpDelete{/api/habit/:id})
+    \item Negatív szokások listázása (\httpGet{/api/habit/negative/:userId})
+    \item Negatív szokás léztrehozása (\httpPost{/api/habit/negative})
+    \item Negatív szokás módosítása (\httpPatch{/api/habit/negative/:id})
+    \item Negatív szokás törlése (\httpDelete{/api/habit/negative/:id})
+  \end{itemize}
+\subsection{Szokás napló}
+  \begin{itemize}
+    \item Szokás naplók listázása (\httpGet{/api/habitlog})
+    \item Szokás napló lekérése azonosító alapján (\httpGet{/api/habitlog/:id})
+    \item Napi szokás naplók lekérése (\httpGet{/api/habitlog/:dueDate})
+    \item Szokás napló frissítése (\httpPatch{/api/habitlog/:id})
+  \end{itemize}
+\subsection{Kihívások}
+  \begin{itemize}
+    \item Kihívások lekérése felhasználó azonosító alapján (\httpGet{/api/challenge/:userId/challenges})
+    \item Kihívás meghívók listázása (\httpGet{/api/challenge/:userId/challenge-invites})
+    \item Elküldött kihívás meghívók listázása (\httpGet{/api/challenge/:userId/sent-challenge-invites})
+    \item Új kihívás létrehozása (\httpPost{/api/challenge})
+    \item Kihívás státuszának frissítése (\httpPatch{/api/challenge})
+    \item Kihívás törlése (\httpDelete{/api/challenge})
+  \end{itemize}
+\subsection{Feed}
+  \begin{itemize}
+    \item Feed bejegyzések lekérése (\httpGet{/api/feed})        
+  \end{itemize}
+\subsection{Barátok}
+  \begin{itemize}
+    \item Barátok listázása (\httpGet{/api/friendship/:userId/friends})
+    \item Beérkezett barátkérések lekérése (\httpGet{/api/friendship/:userId/fried-requests})
+    \item Küldött barátkérések lekérése (\httpGet{/api/friendship/:userId/friend-requests-sent})
+    \item Barátkérés küldése (\httpPost{/api/friendship})
+    \item Barátkérés elfogadása/elutasítása (\httpPatch{/api/friendship})
+    \item Barátság törlése (\httpDelete{/api/friendship})
 \end{itemize}
 
 \section{Autentikáció és biztonság}
