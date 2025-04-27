@@ -116,7 +116,7 @@ namespace Elevate.Services.Habit
         public async Task<NegativeHabitDto> AddNegativeHabitAsync(NegativeHabitCreateDto habit)
         {
             NegativeHabitModel habitModel = _mapper.Map<NegativeHabitModel>(habit);
-            habitModel.UpdatedAt = DateTime.UtcNow;
+            habitModel.UpdatedAt = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
 
             NegativeHabitModel savedHabit = await _habitRepository.AddNegativeHabitAsync(habitModel)
                 ?? throw new BadRequestException("Failed to create negative habit.");
@@ -130,7 +130,7 @@ namespace Elevate.Services.Habit
                 ?? throw new ResourceNotFoundException("Negative habit was not found.");
 
             NegativeHabitModel habitModel = _mapper.Map<NegativeHabitModel>(existingHabit);
-            habitModel.UpdatedAt = DateTime.UtcNow;
+            habitModel.UpdatedAt = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
 
             NegativeHabitModel updatedHabit = await _habitRepository.UpdateNegativeHabitAsync(habitModel)
                 ?? throw new BadRequestException("Failed to update negative habit.");
