@@ -76,6 +76,7 @@ public class AutoMapperProfile : Profile
         CreateMap<PostModel, PostDto>();
 
         CreateMap<NegativeHabitModel, NegativeHabitDto>();
+        CreateMap<NegativeHabitDto, NegativeHabitModel>();
         CreateMap<NegativeHabitCreateDto, NegativeHabitModel>();
     }
 }
