@@ -25,14 +25,12 @@ export class ChallengeRequestComponent implements OnInit {
     this.profileClick.emit(this.challenge?.friendId);
   }
 
-  //need work
   acceptChallengeRequest(arg0: Challenge | null) {
     if (this.challenge) {
       this.service.statusChallenge(this.challenge, 'accepted').subscribe({
         next: () => {
-          console.log('Challenge accepted successfully');
           this.toast.presentToast('Challenge accepted successfully');
-          this.acceptChallenge.emit(); // Emit the accepted challenge
+          this.acceptChallenge.emit(); 
         },
         error: (error) => {
           console.error('Error accepting challenge:', error);
@@ -45,9 +43,8 @@ export class ChallengeRequestComponent implements OnInit {
     if(this.challenge){
       this.service.statusChallenge(this.challenge, 'declined').subscribe({
         next: () => {
-          console.log('Challenge rejected successfully');
           this.toast.presentToast('Challenge rejected successfully');
-          this.rejectChallenge.emit(); // Emit the rejected challenge
+          this.rejectChallenge.emit(); 
         },
         error: (error) => {
           console.error('Error rejecting challenge:', error);
