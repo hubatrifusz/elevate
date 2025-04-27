@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Elevate.Common.Exceptions;
+using Elevate.Common.Utilities;
 using Elevate.Data.Repository;
 using Elevate.Models.HabitLog;
 using Elevate.Services.Streak;
@@ -45,9 +46,14 @@ namespace Elevate.Services.HabitLog
 
             if (habitLogUpdateDto.Completed.HasValue && habitLogUpdateDto.Completed.Value && !existingHabitLog.Completed)
             {
+                if (habitLogModel.DueDate.Date != DateTimeConverter.GetCetTime().Date)
+                {
+                    throw new BadRequestException("You can only mark a habit log as completed on the due date.");
+                }
                 _mapper.Map(habitLogUpdateDto, habitLogModel);
                 await _streakService.UpdateStreakForHabitLog(habitLogModel);
-                habitLogModel.CompletedAt = DateTime.UtcNow;
+                await _streakService.UpdateHighestStreak(habitLogModel.UserId);
+                habitLogModel.CompletedAt = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
             }
 
             HabitLogModel updatedHabitLog = await _habitLogRepository.UpdateHabitLogAsync(habitLogModel)

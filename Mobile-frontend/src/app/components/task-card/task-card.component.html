@@ -1,0 +1,153 @@
+@if(habits.length > 0){
+
+<ion-accordion-group expand="inset">
+  @for(habit of habits ; track $index) {
+  <ion-accordion data-cy="habitCard" [disabled]="isHabitCompleted(habit.id) || Disabled">
+    <ion-item slot="header" color="light" class="habit-item">
+      <div class="color" [style.backgroundColor]="habit.color"></div>
+      <ion-input [readonly]="true" type="text" [value]="habit.title"></ion-input>
+      <div class="time" slot="end">
+        <ion-label>{{habit.streak}}</ion-label>
+        <ion-icon name="flame-outline"></ion-icon>
+      </div>
+      @if(habit.userId !== currentUserId || habit.challengedFriends!.length > 0){
+      <ion-badge color="warning" slot="end">
+        <ion-icon name="trophy-sharp"></ion-icon>
+      </ion-badge>
+      }
+      <ion-checkbox data-cy="checkHabit" [disabled]="!this.habitlogsDate" [checked]="isHabitCompleted(habit.id)"
+        slot="end" (click)="stopPropagation($event); presentAlert(habit.id)"
+        [style]="!this.habitlogsDate ? 'display: none;' : ''"></ion-checkbox>
+
+    </ion-item>
+    <div class="ion-padding content" slot="content">
+      @if(habit.userId !== currentUserId){
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img (click)="goToProfile(inviter!.id)"
+            [src]="inviter?.profilePictureBase64 ? 'data:image/jpeg;base64,' + inviter?.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+            alt="Inviter's Profile Picture" />
+        </ion-avatar>
+        <ion-label>
+          <h3>Invited by {{ inviter?.firstName }} {{ inviter?.lastName }}</h3>
+          <p>{{ habit.challengedFriends?.length ?? 0 }} friend(s) are part of this challenge</p>
+        </ion-label>
+      </ion-item>
+      }
+      <ion-textarea maxlength="200" inputmode="text" [readonly]="this.habitlogsDate || habit.userId !== currentUserId"
+        label="Description:" inputmode="text" [autoGrow]="true" [(ngModel)]="habit.description"
+        (ionBlur)="onDescriptionBlur(habit)" maxlength="100"></ion-textarea>
+      @if(habit.userId !== currentUserId || habit.challengedFriends!.length > 0){
+      <ion-item>
+        <ion-label>Streak Progress</ion-label>
+        <ion-progress-bar [value]="calculateProgressValue(habit.streakProgression)" class="progress-bar" style="--background: {{darkenColor(habit.color, 0.2)}}; 
+                   --progress-background: {{habit.color}};">
+        </ion-progress-bar>
+        @if(calculateProgressValue(habit.streakProgression) >= 1){
+        <ion-label class="progress-text">100%</ion-label>
+        }
+        
+      </ion-item>
+      }
+
+
+      <ion-list>
+        <ion-item>
+          <ion-select [disabled]="true" aria-label="Frequency" interface="popover" label="Frequency:"
+            placeholder="Select frequency" [(ngModel)]="habit.frequencyType" [value]="habit.frequencyType"
+            (ionChange)="onFrequencyChange(habit, $event)">
+            <ion-select-option value="Daily">Daily</ion-select-option>
+            <ion-select-option value="Weekly">Weekly</ion-select-option>
+            <ion-select-option value="Monthly">Montly</ion-select-option>
+            <ion-select-option value="Custom">Custom</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      @if(habit.frequencyType.toString() == "Custom"){
+      <ion-grid>
+        <ion-row class="day-selector">
+          @for(day of weekDays ; track $index) {
+          <ion-col>
+            <ion-button [disabled]="true" [ngClass]="{'selected': isSelectedDay(habit.customFrequency, $index)}"
+              (click)="toggleDay(habit, $index)" fill="clear">
+              {{ day.label }}
+            </ion-button>
+          </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+      }
+      <ion-item>
+        <ion-label>Color:</ion-label>
+        <ion-input [disabled]="!!this.habitlogsDate || habit.userId !== currentUserId" type="color"
+          [(ngModel)]="habit.color" (ionChange)="onColorChange(habit, $event)"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col size="5">
+          <ion-button class="delete" expand="block" color="danger" (click)="deleteHabit(habit)">
+            Delete
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="7">
+          <ion-button color="tertiary" [disabled]="habit.userId !== currentUserId" expand="block"
+            (click)="getFriends(habit); getSentInvites(habit.id)">
+            Challenge friend
+            <ion-icon slot="end" name="people-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-modal [isOpen]="isModalOpen">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Challenge Friends</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="setOpen(false)">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <h3>Friends</h3>
+            <ion-list color="light">
+              @for (friend of friends; track $index) {
+
+              <ion-item>
+                <ion-avatar slot="start">
+                  <img (click)="setOpen(false)" (click)="goToProfile(friend.id)"
+                    [src]="friend.profilePictureBase64 ? 'data:image/jpeg;base64,' + friend.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+                    alt="Profile Picture" />
+                </ion-avatar>
+                <ion-label>
+                  <h2>{{ friend.firstName }} {{ friend.lastName }}</h2>
+                  <p>{{ friend.email }}</p>
+                </ion-label>
+                <ion-button [disabled]="hasSentInvite(friend.id)" color="success" slot="end"
+                  (click)="onChallengeFriend(friend.id)">
+                  {{ hasSentInvite(friend.id) ? 'Invited' : 'Challenge' }}
+                </ion-button>
+              </ion-item>
+              }
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+
+    </div>
+  </ion-accordion>
+  }
+</ion-accordion-group>
+}
+@else{
+<ion-card color="tertiary" class="no-habit-card">
+  <ion-card-header>
+    <ion-card-title color="dark">No habits found</ion-card-title>
+    <ion-card-subtitle color="dark">Click on the + button to add a new habit</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content class="ion-text-center">
+    <ion-icon name="happy-outline" size="large" color=""></ion-icon>
+  </ion-card-content>
+</ion-card>
+}

@@ -24,6 +24,22 @@ namespace Elevate.Controllers
             return Ok(challengeInvites);
         }
 
+        [HttpGet("{userId:guid}/challenge-invites-sent")]
+        public async Task<ActionResult<List<ChallengeDto>>> GetSentChallengeInvitesAsync(Guid userId)
+        {
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<ChallengeDto> challengeInvites = await _challengeService.GetSentChallengeInvitesAsync(userId);
+            return Ok(challengeInvites);
+        }
+
+        [HttpGet("{userId:guid}/challenges")]
+        public async Task<ActionResult<List<ChallengeDto>>> GetChallengesByUserIdAsync(Guid userId)
+        {
+            UserPermissionUtility.IsCurrentUser(userId, User);
+            List<ChallengeDto> challenges = await _challengeService.GetChallengeInvitesAsync(userId);
+            return Ok(challenges);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ChallengeDto>> AddChallengeAsync(ChallengeCreateDto challengeCreateDto)
         {

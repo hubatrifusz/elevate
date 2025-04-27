@@ -1,0 +1,32 @@
+<app-header title="Calendar Page" [showGreeting]="false"></app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="date-picker" #swipeArea>
+    <ion-button fill="clear" (click)="previousDay()" [disabled]="isToday()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </ion-button>
+
+    <div class="date-text">
+      <ion-text color="medium">{{ weekday }}</ion-text>
+      <ion-text color="dark"><strong>{{ dayAndMonth }}</strong></ion-text>
+    </div>
+
+    <ion-button fill="clear" data-cy="nextDay" (click)="nextDay()" [disabled]="isOneMonthAhead()">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <app-task-card [habitlogsDate]="datestring" (hasMoreHabitsChange)="hasMoreHabits = $event"></app-task-card>
+
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="newHabit()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

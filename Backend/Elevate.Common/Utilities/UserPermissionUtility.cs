@@ -23,5 +23,21 @@ namespace Elevate.Common.Utilities
                 throw new AuthorizationException();
             }
         }
+
+        public static Guid GetCurrentUserId(ClaimsPrincipal user)
+        {
+            if (user == null || !user.Identity!.IsAuthenticated)
+            {
+                throw new AuthorizationException();
+            }
+
+            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                throw new AuthorizationException();
+            }
+
+            return userId;
+        }
     }
 }

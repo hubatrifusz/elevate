@@ -83,8 +83,6 @@ namespace Elevate.Extensions
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
-            // Add email sending service (example using built-in but consider a library)
         }
 
         public static void AddCorsPolicies(this IServiceCollection services) 
@@ -94,10 +92,15 @@ namespace Elevate.Extensions
                 options.AddPolicy("DevelopmentPolicy", builder =>
                 {
 
-                    builder.WithOrigins(["http://localhost:8080", "http://localhost:81", "http://localhost:4200", "http://localhost:8100"])
+                    builder.AllowAnyOrigin()
                            .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                           .AllowAnyHeader();
+                });
+                options.AddPolicy("ProductionPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
                 });
             });
         }
@@ -105,7 +108,7 @@ namespace Elevate.Extensions
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var publicKeyPem = configuration["Jwt:PublicKey"]
-                ?? throw new InvalidOperationException("Public key not configured.");
+                ?? throw new InvalidOperationException($"Public key not configured.");
 
             var rsa = RSA.Create();
             rsa.ImportRSAPublicKeyPem(publicKeyPem);

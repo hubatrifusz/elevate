@@ -1,15 +1,14 @@
-﻿using Elevate.Models.Achievement;
-using Elevate.Models.Habit;
+﻿using Elevate.Models.Habit;
 using Elevate.Models.HabitLog;
 using Elevate.Models.User;
 using Microsoft.EntityFrameworkCore;
-using Elevate.Models.AchievementProgress;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Elevate.Models.Friendship;
 using Elevate.Common.Exceptions;
 using Elevate.Models.Challenge;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Elevate.Models.NegativeHabit;
 
 namespace Elevate.Data.Database
 {
@@ -22,10 +21,9 @@ namespace Elevate.Data.Database
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<HabitModel> Habits { get; set; }
         public DbSet<ChallengeModel> Challenges { get; set; }
-        public DbSet<AchievementModel> Achievements { get; set; }
         public DbSet<HabitLogModel> HabitLogs { get; set; }
-        public DbSet<AchievementProgressModel> AchievementProgresses { get; set; }
         public DbSet<FriendshipModel> Friendships { get; set; }
+        public DbSet<NegativeHabitModel> NegativeHabits { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -77,9 +75,8 @@ namespace Elevate.Data.Database
                 modelBuilder.Entity<HabitModel>().ToTable("habits");
                 modelBuilder.Entity<HabitLogModel>().ToTable("habitlogs");
                 modelBuilder.Entity<ChallengeModel>().ToTable("challenges");
-                modelBuilder.Entity<AchievementModel>().ToTable("achievements");
-                modelBuilder.Entity<AchievementProgressModel>().ToTable("achievementprogresses");
                 modelBuilder.Entity<FriendshipModel>().ToTable("friendships");
+                modelBuilder.Entity<NegativeHabitModel>().ToTable("negativehabits");
             }
 
             modelBuilder.Entity<ApplicationUser>(b =>
@@ -91,8 +88,6 @@ namespace Elevate.Data.Database
 
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => new { h.UserId, h.HabitId });
             modelBuilder.Entity<HabitLogModel>().HasIndex(h => h.DueDate);
-
-            modelBuilder.Entity<AchievementProgressModel>().HasIndex(a => a.UserId);
 
             modelBuilder.Entity<FriendshipModel>()
                 .HasIndex(f => new { f.UserId, f.FriendId })
@@ -111,8 +106,10 @@ namespace Elevate.Data.Database
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ChallengeModel>()
-                .HasIndex(c => new { c.UserId, c.FriendId })
-                .IsUnique();
+                .HasIndex(c => c.UserId);
+
+            modelBuilder.Entity<ChallengeModel>()
+                .HasIndex(c => c.FriendId);
 
             modelBuilder.Entity<ChallengeModel>()
                 .HasOne<ApplicationUser>()

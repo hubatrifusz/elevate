@@ -23,11 +23,33 @@ namespace Elevate.Services.Challenge
                 : _mapper.Map<List<ChallengeDto>>(challenges);
         }
 
+        public async Task<List<ChallengeDto>> GetSentChallengeInvitesAsync(Guid userId)
+        {
+            List<ChallengeModel> invites = await _challengeRepository.GetSentChallengeInvitesAsync(userId);
+
+            return invites.Count == 0
+                ? throw new ResourceNotFoundException("User sent no challenge invites.")
+                : _mapper.Map<List<ChallengeDto>>(invites);
+        }
+
+        public async Task<List<ChallengeDto>> GetChallengesByUserIdAsync(Guid userId)
+        {
+            List<ChallengeModel> challenges = await _challengeRepository.GetChallengesByUserIdAsync(userId);
+
+            return challenges.Count == 0
+                ? throw new ResourceNotFoundException("User has no challenges.")
+                : _mapper.Map<List<ChallengeDto>>(challenges);
+        }
+
         public async Task<ChallengeDto> AddChallengeAsync(ChallengeCreateDto challengeCreateDto)
         {
             if (challengeCreateDto.UserId == challengeCreateDto.FriendId)
             {
                 throw new BadRequestException("User cannot challenge themself.");
+            }
+            if (await _challengeRepository.IsChallengeRequestSent(challengeCreateDto.UserId, challengeCreateDto.FriendId, challengeCreateDto.Habit.Id))
+            {
+                throw new BadRequestException("Challenge request already sent.");
             }
 
             var existingHabit = await _habitRepository.GetHabitByIdAsync(challengeCreateDto.Habit.Id);

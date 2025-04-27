@@ -1,4 +1,6 @@
-﻿namespace Elevate.Models.Friendship
+﻿using Elevate.Common.Utilities;
+
+namespace Elevate.Models.Friendship
 {
     public class FriendshipModel
     {
@@ -9,7 +11,7 @@
 
         public FriendshipStatus Status { get; set; } = FriendshipStatus.Pending;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
+        public DateTime? UpdatedAt { get; set; } = DateTime.SpecifyKind(DateTimeConverter.UtcToCetTime(DateTime.UtcNow), DateTimeKind.Utc);
     }
 }

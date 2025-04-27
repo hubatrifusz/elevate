@@ -1,0 +1,7 @@
+{
+  "name": "Mobile-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,22 @@
+<ion-card (click)="goToProfile(post.user.id)" [style.border-left]="'6px solid #' + post.habit.color">
+  <ion-item>
+    <ion-avatar slot="start">
+      <img
+        [src]="post.user.profilePictureBase64 ? 'data:image/jpeg;base64,' + post.user.profilePictureBase64 : 'assets/default_profile_picture.jpg'"
+        alt="Profile Picture" />
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ post.user.firstName }} {{ post.user.lastName }}</h2>
+      <p>Habit: {{ post.habit.title || 'No title' }} </p>
+      <div class="time">
+        <ion-label>{{post.habit.streak}}</ion-label>
+        <ion-icon name="flame-outline"></ion-icon>
+      </div>
+    </ion-label>
+  </ion-item>
+
+  <ion-card-content>
+    <p><strong>Notes:</strong> {{ post.habitLog.notes || 'No notes available' }}</p>
+    <p><strong>Completed At:</strong> {{ post.habitLog.completedAt | date: 'MMM d, y • HH:mm' : 'UTC' }}</p>
+  </ion-card-content>
+</ion-card>

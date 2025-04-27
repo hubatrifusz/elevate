@@ -1,5 +1,6 @@
 ﻿using Elevate.Data.Database;
 using Elevate.Models.Challenge;
+using Elevate.Models.Friendship;
 using Microsoft.EntityFrameworkCore;
 
 namespace Elevate.Data.Repository
@@ -17,17 +18,49 @@ namespace Elevate.Data.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<ChallengeModel>> GetSentChallengeInvitesAsync(Guid userId)
+        {
+            return await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<List<ChallengeModel>> GetChallengesByUserIdAsync(Guid userId)
+        {
+            return await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.Habit.ChallengedFriends.Contains(userId) &&
+                    c.Status == ChallengeInviteStatus.Accepted)
+                .ToListAsync();
+        }
+
+        public async Task<bool> IsChallengeRequestSent(Guid userId, Guid friendId, Guid habitId)
+        {
+            return await _context.Challenges
+                .Include(c => c.Habit)
+                .AnyAsync(c =>
+                    c.UserId == userId && c.FriendId == friendId &&
+                    c.Habit.Id == habitId &&
+                    c.Status == ChallengeInviteStatus.Pending
+                );
+        }
+
         public async Task<ChallengeModel?> AddChallengeAsync(ChallengeModel challenge)
         {
             await _context.Challenges.AddAsync(challenge);
             await _context.SaveChangesAsync();
-            return challenge;
+            return await _context.Challenges.SingleAsync(c => c.Id == challenge.Id);
         }
 
         public async Task<ChallengeModel?> UpdateChallengeAsync(ChallengeModel challenge)
         {
             var existingChallenge = await _context.Challenges
-                .FirstOrDefaultAsync(c => c.UserId == challenge.UserId && c.FriendId == challenge.FriendId);
+                .Include(c => c.Habit)
+                .FirstOrDefaultAsync(c => 
+                c.UserId == challenge.UserId && 
+                c.FriendId == challenge.FriendId &&
+                c.Habit.Id == challenge.Habit.Id);
 
             if (existingChallenge != null)
             {
@@ -42,6 +75,7 @@ namespace Elevate.Data.Repository
         public async Task<ChallengeModel?> DeleteChallengeAsync(Guid challengeId)
         {
             var challenge = await _context.Challenges
+                .Include(c => c.Habit)
                 .FirstOrDefaultAsync(c => c.Id == challengeId);
 
             if (challenge != null)
@@ -53,6 +87,21 @@ namespace Elevate.Data.Repository
                 return challenge;
             }
             return null;
+        }
+
+        public async Task<bool> DeleteChallengesForHabitAsync(Guid habitId)
+        {
+            var challenges = await _context.Challenges
+                .Include(c => c.Habit)
+                .Where(c => c.Habit.Id == habitId)
+                .ToListAsync();
+            if (challenges != null)
+            {
+                _context.Challenges.RemoveRange(challenges);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,0 +1,224 @@
+@use "./variables.scss" as *;
+
+
+
+
+.input_container {
+    position: relative;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 auto 30px auto;
+
+    // General input
+    input {
+        color: $text-color-900;
+        font-size: $font-size-base;
+        font-weight: 500;
+
+        &:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px $main-color-100 inset;
+            -webkit-text-fill-color: $text-color-900;
+
+            @media(prefers-color-scheme: dark) {
+                -webkit-box-shadow: 0 0 0 30px $main-color-900 inset;
+                -webkit-text-fill-color: $text-color-200;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-900;
+            color: $text-color-200;
+        }
+
+    }
+
+    // Input title
+    .input_title {
+        position: absolute;
+        left: 1rem;
+        top: calc($input_height / 2);
+        transform: translateY(-1px);
+
+        padding: 0 0.5rem;
+
+        background-color: $main-color-100;
+        color: $text-color-700;
+
+        pointer-events: none;
+
+        transition: all 100ms ease-in-out;
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-900;
+            color: $text-color-100;
+        }
+
+
+    }
+
+    // Text input
+    input[type="text"] {
+        height: $input_height;
+        width: 100%;
+        padding: 1.5rem 1rem;
+
+        border: 1px solid $main-color-600;
+        border-radius: $border_radius;
+
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
+        // In focus
+        &:focus {
+            border: 2px solid $accent-color-400;
+            outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
+        }
+
+        // Animate title on focus
+        &:focus+.input_title,
+        &:not(:placeholder-shown)+.input_title {
+            top: -15%;
+            color: $accent-color-400;
+            font-size: smaller;
+            font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: $main-color-900;
+                border-radius: 15px;
+                color: $accent-color-100;
+            }
+        }
+
+        // Remove accent color if filled but not in focus
+        &:not(:focus):not(:placeholder-shown)+.input_title {
+            color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                color: $text-color-300;
+            }
+        }
+    }
+
+    // Email input
+    input[type="email"] {
+        height: $input_height;
+        width: 100%;
+        padding: 1.5rem 1rem;
+
+        border: 1px solid $main-color-600;
+        border-radius: $border_radius;
+
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
+        // In focus
+        &:focus {
+            border: 2px solid $accent-color-400;
+            outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
+        }
+
+        // Animate title on focus
+        &:focus+.input_title,
+        &:not(:placeholder-shown)+.input_title {
+            top: -15%;
+            color: $accent-color-400;
+            font-size: smaller;
+            font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: $main-color-900;
+                border-radius: 15px;
+                color: $accent-color-200;
+            }
+        }
+
+        // Remove accent color if filled but not in focus
+        &:not(:focus):not(:placeholder-shown)+.input_title {
+            color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                    color: $text-color-300;
+                }
+        }
+
+        @media (prefers-color-scheme: dark) {
+
+            background-color: $main-color-900;
+        }
+    }
+
+    // Password input
+    input[type="password"] {
+        height: $input_height;
+        width: 100%;
+        padding: 1.5rem 1rem;
+
+        border: 1px solid $main-color-600;
+        border-radius: $border_radius;
+
+        @media (prefers-color-scheme: dark) {
+            border: 1px solid $main-color-900;
+        }
+
+
+        // In focus
+        &:focus {
+            border: 2px solid $accent-color-400;
+            outline: none;
+
+            @media(prefers-color-scheme: dark) {
+                border: 2px solid $accent-color-200;
+            }
+        }
+
+        // Animate title on focus
+        &:focus+.input_title,
+        &:not(:placeholder-shown)+.input_title {
+            top: -15%;
+            color: $accent-color-400;
+            font-size: smaller;
+            font-weight: 500;
+
+            @media (prefers-color-scheme: dark) {
+                background-color: $main-color-900;
+                border-radius: 15px;
+                color: $accent-color-200;
+            }
+        }
+
+        // Remove accent color if filled but not in focus
+        &:not(:focus):not(:placeholder-shown)+.input_title {
+            color: $text-color-700;
+            @media(prefers-color-scheme: dark) {
+                    color: $text-color-300;
+                }
+        }
+    }
+}
+
+.password-toggle {
+    position: absolute;
+    right: 5px;
+    top: 25px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2rem;
+    color: var(--ion-color-medium);
+
+    &:hover {
+        color: var(--ion-color-primary);
+    }
+}
