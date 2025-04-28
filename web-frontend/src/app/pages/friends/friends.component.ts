@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './friends.component.scss',
 })
 export class FriendsComponent {
-  constructor(private friendsService: FriendsService, private authService: AuthService) { }
+  constructor(private friendsService: FriendsService, private authService: AuthService) {}
 
   search: FormControl = new FormControl();
 
@@ -66,11 +66,11 @@ export class FriendsComponent {
       },
       error: (error) => {
         console.log(error);
-        if (error.error === "User has no friends.") {
+        if (error.error === 'User has no friends.') {
           this.friends = [];
         }
         this.isFriendsLoading = false;
-      }
+      },
     });
   }
 
@@ -78,7 +78,7 @@ export class FriendsComponent {
     const friendRequest: FriendRequest = { friendId: friendId, userId: this.authService.getUserId() as string, status: 'pending' };
 
     this.friendsService.sendFriendRequest(friendRequest).subscribe({
-      next: (response) => { },
+      next: (response) => {},
       error: (error) => console.log(error),
       complete: () => {
         let button = event.target as HTMLImageElement;
@@ -99,11 +99,11 @@ export class FriendsComponent {
       error: (error) => {
         console.log(error);
         // If the error is that there are no friend requests, we treat it as an empty array
-        if (error.error === "User has no friend requests.") {
+        if (error.error === 'User has no friend requests.') {
           this.friendRequests = [];
         }
         this.isFriendRequestsLoading = false;
-      }
+      },
     });
   }
 
