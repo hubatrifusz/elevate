@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { Habit } from '../../models/habit.model';
+import { Habit, NegativeHabit } from '../../models/habit.model';
 import { User } from '../../models/user.model';
 import { HabitService } from '../../services/habit.service';
 import { FriendsService } from '../../services/friends.service';
@@ -25,6 +25,7 @@ export class HabitsComponent implements OnInit {
   currentUserId: string | null = null;
 
   habits: Habit[] = [];
+  negativeHabits: NegativeHabit[] = [];
   friends: User[] = [];
   challengeInvites: Challenge[] = [];
 

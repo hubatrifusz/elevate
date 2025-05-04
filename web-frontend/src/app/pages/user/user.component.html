@@ -4,10 +4,10 @@
     <div id="profile_picture_container">
       <div id="banner"></div>
       <div id="profile_picture" (click)="triggerFileInput()">
-        <img [src]="imageSrc" alt="pfp" id="profile_picture_image" #profilePicture/>
-        <img src="icons/pencil.png" alt="" id="edit_profile_picture_icon">
+        <img [src]="imageSrc" alt="pfp" id="profile_picture_image" #profilePicture />
+        <img src="icons/pencil.png" alt="" id="edit_profile_picture_icon" />
       </div>
-      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*">
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" />
     </div>
     <div id="user_details">
       <div>
@@ -15,20 +15,7 @@
         <p>{{ userData?.email }}</p>
       </div>
       <hr />
-      <div>
-        <p>Name: {{ userData?.firstName }} {{ userData?.lastName }}</p>
-        <p>Email: {{ userData?.email }}</p>
-      </div>
-      <hr />
-      <div class="settings_block">
-        <div class="setting_title">
-          <p class="p_dark">Interface theme</p>
-          <p>Select or customize your UI theme.</p>
-        </div>
-        <div class="color_theme_picker"></div>
-        <div class="color_theme_picker"></div>
-        <div class="color_theme_picker"></div>
-      </div>
+
       <div class="button_container">
         <button (click)="logout()" class="button_secondary"><span>Logout</span></button>
       </div>

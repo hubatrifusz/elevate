@@ -91,6 +91,37 @@
         <option value="Custom">Custom</option>
       </select>
     </div>
+    } @if (addNewTaskForm.get('frequencyType')?.value == "Custom") {
+    <div class="frequency_days">
+      <div class="day_container">
+        <input type="checkbox" id="monday" />
+        <label for="monday">Mon</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="tuesday" />
+        <label for="tuesday">Tue</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="wednesday" />
+        <label for="wednesday">Wed</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="thursday" />
+        <label for="thursday">Thu</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="friday" />
+        <label for="friday">Fri</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="saturday" />
+        <label for="saturday">Sat</label>
+      </div>
+      <div class="day_container">
+        <input type="checkbox" id="sunday" />
+        <label for="sunday">Sun</label>
+      </div>
+    </div>
     }
 
     <!-- Submit button -->

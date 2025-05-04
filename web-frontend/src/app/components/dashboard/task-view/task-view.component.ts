@@ -6,7 +6,7 @@ import { Habit } from '../../../models/habit.model';
 import { AlertService } from '../../../services/alert.service';
 import { UserService } from '../../../services/user.service';
 import { HabitLog } from '../../../models/habitlog.model';
-import { LoadingSpinnerComponent } from "../../loading-spinner/loading-spinner.component";
+import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-task-view',
@@ -15,7 +15,7 @@ import { LoadingSpinnerComponent } from "../../loading-spinner/loading-spinner.c
   styleUrl: './task-view.component.scss',
 })
 export class TaskViewComponent {
-  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) { }
+  constructor(private alertService: AlertService, private userService: UserService, private authService: AuthService) {}
 
   userId!: string | null;
   habitlogList: HabitLog[] = [];
@@ -33,7 +33,7 @@ export class TaskViewComponent {
     userID: new FormControl(),
     description: new FormControl('', [Validators.required]),
     frequencyType: new FormControl('', [Validators.required]),
-    customFrequency: new FormControl(0), //TODO
+    customFrequency: new FormControl(),
     color: new FormControl('#000000', [Validators.required]),
     isNegativeHabit: new FormControl(false),
   });
@@ -45,7 +45,7 @@ export class TaskViewComponent {
     });
     this.getTodaysHabitlogs(this.date.toISOString());
 
-    this.addNewTaskForm.get('isNegativeHabit')?.valueChanges.subscribe(isNegative => {
+    this.addNewTaskForm.get('isNegativeHabit')?.valueChanges.subscribe((isNegative) => {
       const frequencyControl = this.addNewTaskForm.get('frequencyType');
 
       if (isNegative) {
@@ -61,12 +61,18 @@ export class TaskViewComponent {
   toggleNegativeHabit() {
     const currentValue = this.addNewTaskForm.get('isNegativeHabit')?.value;
     this.addNewTaskForm.patchValue({
-      isNegativeHabit: !currentValue
+      isNegativeHabit: !currentValue,
     });
   }
 
   onSubmit() {
     const isNegativeHabit = this.addNewTaskForm.get('isNegativeHabit')?.value;
+    const frequencyType = this.addNewTaskForm.get('frequencyType')?.value;
+
+    if (frequencyType == 'Custom') {
+      const customFrequencyValue = this.getCustomFrequency();
+      this.addNewTaskForm.get('customFrequency')?.setValue(customFrequencyValue);
+    }
 
     if (isNegativeHabit) {
       const { title, description, color } = this.addNewTaskForm.controls;
@@ -119,7 +125,7 @@ export class TaskViewComponent {
         userId: formData.userID,
         title: formData.title,
         description: formData.description,
-        color: formData.color
+        color: formData.color,
       };
 
       this.userService.addNewNegativeHabit(negativeHabitData).subscribe({
@@ -149,7 +155,7 @@ export class TaskViewComponent {
 
     this.addNewTaskForm.reset({
       color: '#000000',
-      isNegativeHabit: false
+      isNegativeHabit: false,
     });
     this.toggleFormVisibility();
   }
@@ -226,24 +232,31 @@ export class TaskViewComponent {
 
     const today = new Date();
     this.isPreviousDisabled = this.date.toDateString() === today.toDateString();
-    this.isNextDisabled =
-      this.date.getDate() === today.getDate() &&
-      this.date.getMonth() === (today.getMonth() + 1) % 12;
+    this.isNextDisabled = this.date.getDate() === today.getDate() && this.date.getMonth() === (today.getMonth() + 1) % 12;
 
     this.getTodaysHabitlogs(this.date.toISOString());
   }
 
   isForToday(date: Date): boolean {
     const today = new Date();
-    return date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear();
+    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
   }
 
   isCurrentDateToday(): boolean {
     const today = new Date();
-    return this.date.getDate() === today.getDate() &&
-      this.date.getMonth() === today.getMonth() &&
-      this.date.getFullYear() === today.getFullYear();
+    return this.date.getDate() === today.getDate() && this.date.getMonth() === today.getMonth() && this.date.getFullYear() === today.getFullYear();
+  }
+
+  getCustomFrequency(): number {
+    const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+    const binaryString = daysOrder
+      .map((dayId) => {
+        const checkbox = document.getElementById(dayId) as HTMLInputElement;
+        return checkbox?.checked ? '1' : '0';
+      })
+      .join('');
+
+    return +binaryString;
   }
 }
