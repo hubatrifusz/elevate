@@ -8,7 +8,7 @@ import{ NegativeHabit } from '../.models/NegativeHabit.model';
 })
 export class NegativeHabitService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://elevate.koyeb.app/api/habit/negative';
+  private apiUrl = 'https://elevate-backend.koyeb.app/api/habit/negative';
   
   constructor() { }
 

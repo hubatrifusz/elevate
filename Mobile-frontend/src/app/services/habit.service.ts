@@ -11,13 +11,13 @@ import { HabitLog } from '../.models/HabitLog.model';
 export class HabitService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'https://elevate.koyeb.app/api/habit';  // Replace with your API URL
+  private apiUrl = 'https://elevate-backend.koyeb.app/api/habit'; 
 
   getHabits(userId: string, pageNumber: number, pageSize: number): Observable<Habit[]> {
     const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+      'Authorization': `Bearer ${token}` 
     });
 
     let params = new HttpParams()
@@ -31,7 +31,7 @@ export class HabitService {
     const token = localStorage.getItem('token');
 
     let headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Or however your backend expects the token
+      'Authorization': `Bearer ${token}` 
     });
 
     return this.http.get(`${this.apiUrl}/${habitId}`, { headers: headers });
@@ -44,7 +44,7 @@ export class HabitService {
     const userId = localStorage.getItem('userId') ?? '';
     const params = new HttpParams().set('userId', userId);
 
-    return this.http.get(`https://elevate.koyeb.app/api/habitlog/${date}`, { headers: headers, params: params });
+    return this.http.get(`https://elevate-backend.koyeb.app/api/habitlog/${date}`, { headers: headers, params: params });
   }
 
   createHabit(habitData: any): Observable<Habit> {
@@ -92,7 +92,7 @@ export class HabitService {
       isPublic: Ispublic
     };
 
-    return this.http.patch(`https://elevate.koyeb.app/api/habitlog/${habitLogId}`, body, { headers: headers });
+    return this.http.patch(`https://elevate-backend.koyeb.app/api/habitlog/${habitLogId}`, body, { headers: headers });
   }
 
   sendChallenge(habit: Habit, friendId: string):Observable<any> {
@@ -108,6 +108,6 @@ export class HabitService {
       habit: habit
     };
 
-    return this.http.post(`https://elevate.koyeb.app/api/challenge`, body, { headers: headers });
+    return this.http.post(`https://elevate-backend.koyeb.app/api/challenge`, body, { headers: headers });
   }
 }

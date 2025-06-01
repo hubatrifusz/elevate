@@ -9,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private router = inject(Router);
   private http= inject(HttpClient)
-  private apiUrl = 'https://elevate.koyeb.app/api';  
+  private apiUrl = 'https://elevate-backend.koyeb.app/api';  
   userUpdated = new EventEmitter<void>();
 
 

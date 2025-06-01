@@ -11,7 +11,7 @@ import { Challenge } from '../.models/challenge.model';
 export class ChallengeService {
   private router = inject(Router);
   private http = inject(HttpClient)
-  private apiUrl = 'https://elevate.koyeb.app/api';
+  private apiUrl = 'https://elevate-backend.koyeb.app/api';
   constructor() { }
 
   sendChallenge(habit: Habit, friendId: string): Observable<any> {
