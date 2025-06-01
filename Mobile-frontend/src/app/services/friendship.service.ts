@@ -9,7 +9,7 @@ import { Friendship } from '../.models/friendship.model';
 })
 export class FriendshipService {
 
-  private apiUrl = 'https://elevate.koyeb.app/api';
+  private apiUrl = 'https://elevate-backend.koyeb.app/api';
 
   constructor(private http: HttpClient) { }
 

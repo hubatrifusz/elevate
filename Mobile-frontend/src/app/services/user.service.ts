@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class UserService {
 
 
-  private apiUrl = 'https://elevate.koyeb.app/api';
+  private apiUrl = 'https://elevate-backend.koyeb.app/api';
 
   constructor(private http: HttpClient) { }
   getUserById(userId: string): Observable<User> {
