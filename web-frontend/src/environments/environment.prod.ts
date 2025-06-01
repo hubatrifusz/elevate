@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://elevate.koyeb.app/api',
+  apiUrl: 'https://elevate-backend.koyeb.app/api',
 };

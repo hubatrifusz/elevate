@@ -72,12 +72,9 @@
 
     <!-- Habit Type Toggle -->
     <div class="input_container habit_type_toggle">
-      <div class="checkbox_container">
-        <input type="checkbox" id="negative_habit_toggle" [formControlName]="'isNegativeHabit'" />
-        <label for="negative_habit_toggle">
-          {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'Negative habit (to avoid)' : 'Positive habit (to build)' }}
-        </label>
-      </div>
+      <mat-slide-toggle [formControlName]="'isNegativeHabit'" color="primary">
+        {{ addNewTaskForm.get('isNegativeHabit')?.value ? 'Negative habit' : 'Positive habit' }}
+      </mat-slide-toggle>
     </div>
 
     <!-- Frequency selector - only show for positive habits -->

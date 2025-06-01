@@ -32,6 +32,15 @@ nav {
 
   #section_top {
     height: 6rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 4rem;
+      border-radius: 100rem;
+    }
   }
 
   #section_center {

@@ -7,10 +7,11 @@ import { AlertService } from '../../../services/alert.service';
 import { UserService } from '../../../services/user.service';
 import { HabitLog } from '../../../models/habitlog.model';
 import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-task-view',
-  imports: [TaskComponent, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [TaskComponent, ReactiveFormsModule, LoadingSpinnerComponent, MatSlideToggleModule],
   templateUrl: './task-view.component.html',
   styleUrl: './task-view.component.scss',
 })

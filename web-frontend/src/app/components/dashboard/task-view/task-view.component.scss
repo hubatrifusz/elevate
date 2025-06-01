@@ -317,3 +317,8 @@
     }
   }
 }
+
+::ng-deep .mdc-label {
+  color: rgba(0, 0, 0, 1); // Material Design high-emphasis text
+  font-weight: 500; // Optional: make it stronger
+}

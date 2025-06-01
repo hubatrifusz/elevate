@@ -8,12 +8,12 @@ import { Habit, NegativeHabit } from '../models/habit.model';
 import { Challenge } from '../models/challenge.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HabitService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getAuthHeaders() {
     const token = this.authService.getToken();
@@ -39,7 +39,7 @@ export class HabitService {
     const challenge = {
       userId: userId,
       friendId: friendId,
-      habit: habit
+      habit: habit,
     };
 
     return this.http.post(`${this.apiUrl}/challenge`, challenge, {
@@ -50,30 +50,32 @@ export class HabitService {
   getChallengesByHabitId(habitId: string): Observable<Challenge[]> {
     const userId = this.authService.getUserId();
 
-    return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites-sent`, {
-      headers: this.getAuthHeaders(),
-    }).pipe(
-      map((response: Challenge[]) => {
-        return response.filter(invite => invite.habit.id === habitId);
-      }),
-      catchError(error => {
-        console.log('No challenges found, returning empty array');
-        return of([]);
+    return this.http
+      .get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites-sent`, {
+        headers: this.getAuthHeaders(),
       })
-    );
+      .pipe(
+        map((response: Challenge[]) => {
+          return response.filter((invite) => invite.habit.id === habitId);
+        }),
+        catchError((error) => {
+          console.log('No challenges found, returning empty array');
+          return of([]);
+        })
+      );
   }
 
   getChallengeInvites(): Observable<Challenge[]> {
     const userId = this.authService.getUserId();
 
     return this.http.get<Challenge[]>(`${this.apiUrl}/challenge/${userId}/challenge-invites`, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
   }
 
   acceptChallenge(challenge: Challenge): Observable<Challenge> {
     const userId = this.authService.getUserId();
-    challenge.status = "Accepted";
+    challenge.status = 'Accepted';
     challenge.friendId = userId!;
 
     return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
@@ -83,7 +85,7 @@ export class HabitService {
 
   declineChallenge(challenge: Challenge): Observable<Challenge> {
     const userId = this.authService.getUserId();
-    challenge.status = "Declined";
+    challenge.status = 'Declined';
     challenge.friendId = userId!;
 
     return this.http.patch<Challenge>(`${this.apiUrl}/challenge`, challenge, {
@@ -93,12 +95,16 @@ export class HabitService {
 
   getNegativeHabits(): Observable<NegativeHabit[]> {
     const userId = this.authService.getUserId();
-    const params = new HttpParams()
-      .set('pageNumber', 1)
-      .set('pageSize', 20);
+    const params = new HttpParams().set('pageNumber', 1).set('pageSize', 20);
 
     return this.http.get<NegativeHabit[]>(`${this.apiUrl}/habit/negative/${userId}`, {
       params,
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  updateNegativeHabit(habitId: string, updateData: Partial<NegativeHabit>): Observable<NegativeHabit> {
+    return this.http.patch<NegativeHabit>(`${this.apiUrl}/habit/negative/${habitId}`, updateData, {
       headers: this.getAuthHeaders(),
     });
   }

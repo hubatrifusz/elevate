@@ -1,4 +1,4 @@
-@import "../../../../assets/styles/variables";
+@import '../../../../assets/styles/variables';
 
 #login_feature_list_container {
   height: 100%;
@@ -61,10 +61,13 @@
           width: 100%;
           height: 100%;
 
-          background-color: blue;
+          background-image: url('/images/icon-512.webp');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
           border-radius: 2rem;
 
-          animation: item-card-animation 10s ease-in-out infinite;
+          animation: item-card-animation 15s ease-in-out infinite;
         }
 
         @keyframes item-card-animation {

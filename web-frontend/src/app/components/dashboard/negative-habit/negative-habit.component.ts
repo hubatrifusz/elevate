@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { NegativeHabit } from '../../../models/habit.model';
+import { HabitService } from '../../../services/habit.service';
 
 @Component({
   selector: 'app-negative-habit',
@@ -12,6 +13,8 @@ export class NegativeHabitComponent {
   @ViewChild('counter', { static: true }) counter!: ElementRef;
   differenceInDays: number = 0;
   private intervalId: any;
+
+  constructor(private habitService: HabitService) {}
 
   private updateTimeDifference() {
     let targetDate = new Date(this.habitData.updatedAt);
@@ -42,5 +45,10 @@ export class NegativeHabitComponent {
         this.differenceInDays / 3.65
       }% 100%)`;
     }
+  }
+
+  resetCounter() {
+    const habitId = this.habitData.id;
+    this.habitService.updateNegativeHabit(habitId, { updatedAt: new Date().toISOString() }).subscribe({});
   }
 }
