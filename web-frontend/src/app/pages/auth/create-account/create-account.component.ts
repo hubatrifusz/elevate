@@ -32,10 +32,13 @@ export class CreateAccountComponent {
     }
   );
 
+  submitting = false;
+
   onSubmit() {
     this.handleFormValidationErrors();
     if (!this.loginForm.valid) return;
 
+    this.submitting = true;
     this.authService.crateAccount(this.loginForm.value).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (error) => {
@@ -44,6 +47,7 @@ export class CreateAccountComponent {
         } else {
           this.formErrorMessage = 'An error occurred. Please try again later.';
         }
+        this.submitting = false;
       },
     });
   }

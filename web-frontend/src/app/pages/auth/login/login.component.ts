@@ -25,9 +25,12 @@ export class LoginComponent {
     rememberMe: new FormControl(false),
   });
 
+  submitting = false;
+
   onSubmit() {
     this.handleLoginErrors();
     if (!this.loginForm.valid) return;
+    this.submitting = true;
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
@@ -40,6 +43,7 @@ export class LoginComponent {
         } else {
           this.formErrorMessage = 'An error occurred. Please try again later.';
         }
+        this.submitting = false;
       },
       complete: () => this.router.navigate(['/dashboard']),
     });

@@ -72,7 +72,7 @@
 
         <!-- Create Account button (primary) -->
         <div class="button_container" id="login_button_container">
-          <button class="button button_primary" type="submit" id="login_button" data-cy="create_account_button">
+          <button class="button button_primary" type="submit" id="login_button" data-cy="create_account_button" [disabled]="submitting">
             <span>Create Account</span>
           </button>
         </div>

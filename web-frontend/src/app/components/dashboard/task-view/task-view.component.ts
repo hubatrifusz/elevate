@@ -31,7 +31,7 @@ export class TaskViewComponent {
 
   addNewTaskForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
-    userID: new FormControl(),
+    userID: new FormControl(localStorage.getItem('id') || sessionStorage.getItem('id')),
     description: new FormControl('', [Validators.required]),
     frequencyType: new FormControl('', [Validators.required]),
     customFrequency: new FormControl(),
@@ -40,7 +40,6 @@ export class TaskViewComponent {
   });
 
   ngOnInit() {
-    this.userId = this.authService.getUserId();
     this.addNewTaskForm.patchValue({
       userID: this.userId,
     });
